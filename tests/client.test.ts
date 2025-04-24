@@ -1,5 +1,8 @@
-import { A2AClient, RpcError } from "../src/index.js";
+import { jest } from "@jest/globals";
 import {
+  A2AClient,
+  SystemError,
+  logger,
   AgentCard,
   Message,
   Task,
@@ -11,10 +14,15 @@ import {
   TaskIdParams,
   TaskQueryParams,
   PushNotificationConfig,
-} from "../src/lib/schema.js";
+} from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { ReadableStream } from "stream/web";
+
+// Mock logger to suppress output during tests
+jest.spyOn(logger, "info").mockImplementation(() => {});
+jest.spyOn(logger, "debug").mockImplementation(() => {});
+jest.spyOn(logger, "error").mockImplementation(() => {});
+jest.spyOn(logger, "warn").mockImplementation(() => {});
 
 const MOCK_AGENT_CARD: AgentCard = {
   name: "Test Agent",
@@ -575,7 +583,7 @@ describe("A2AClient", () => {
     );
 
     await expect(client.getTask({ id: "nonexistent-task" })).rejects.toThrow(
-      RpcError
+      SystemError
     );
   });
 

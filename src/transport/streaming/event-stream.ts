@@ -1,34 +1,36 @@
 /**
- * Event stream utilities for handling Server-Sent Events (SSE) from Artinet API.
+ * Event stream utilities for handling Server-Sent Events (SSE).
  */
-import { parseResponse } from "./parser.js";
+import { parseResponse } from "../rpc/parser.js";
 import { createParser } from "eventsource-parser";
-import type { JSONRPCResponse, A2ARequest } from "../lib/schema.js";
-import { sendJsonRpcRequest } from "./rpc-client.js";
-import { logger } from "../utils/logger.js";
+import type {
+  JSONRPCResponse,
+  A2ARequest,
+} from "../../types/extended-schema.js";
+import { sendJsonRpcRequest } from "../rpc/rpc-client.js";
+import { logError, logWarn, logDebug } from "../../utils/logging/log.js";
 
 /**
  * Creates an async generator for processing task events from an SSE stream
  *
  * @template T The type of task event to process (TaskStatusUpdateEvent or TaskArtifactUpdateEvent)
  * @param response The fetch Response object containing the event stream
- * @param eventType 'status' for status events or 'artifact' for artifact events
  * @returns An async generator yielding the specified type of task events from StreamingResponse
  */
 export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
-  response: Response,
-  eventType: "status" | "artifact"
+  response: Response
 ): AsyncGenerator<NonNullable<StreamRes["result"]>> {
-  // Ensure the response is valid for SSE processing
   if (!response.ok || !response.body) {
     let errorText: string | null = null;
     try {
       errorText = await response.text();
-    } catch (_) {
-      /* Ignore read error */
-    }
-    logger.error(
-      `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
+    } catch (_) {}
+    logError(
+      "handleEventStream",
+      `HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
+      new Error(
+        `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
+      )
     );
     throw new Error(
       `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
@@ -37,7 +39,7 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
   // Use eventsource-parser to process the SSE stream
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
-  let events: StreamRes["result"][] = [];
+  const events: StreamRes["result"][] = [];
 
   const parser = createParser((event) => {
     if (event.type === "event" && event.data) {
@@ -47,10 +49,10 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
         if (eventResult) {
           events.push(eventResult as StreamRes["result"]);
         } else {
-          logger.warn("Failed to parse SSE data[", eventType, "]:", parsedData);
+          logWarn("handleEventStream", "Failed to parse SSE data", parsedData);
         }
       } catch (e) {
-        logger.warn("Failed to parse SSE data[", eventType, "]:", e);
+        logWarn("handleEventStream", "Failed to parse SSE data", e);
       }
     }
   });
@@ -63,7 +65,6 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
       const chunk = decoder.decode(value, { stream: true });
       parser.feed(chunk);
 
-      // Yield any new events
       while (events.length > 0) {
         yield events.shift()!;
       }
@@ -93,6 +94,11 @@ export async function* executeStreamEvents<
   params: Req["params"],
   customHeaders: Record<string, string>
 ): AsyncIterable<NonNullable<StreamRes["result"]>> {
+  logDebug(
+    "executeStreamEvents",
+    `Sending streaming request to: ${baseUrl.toString()}, method: ${method}`
+  );
+
   const responsePromise = sendJsonRpcRequest(
     baseUrl,
     method,
@@ -101,5 +107,5 @@ export async function* executeStreamEvents<
     "text/event-stream"
   );
   const response = await responsePromise;
-  yield* handleEventStream<StreamRes>(response, "status");
+  yield* handleEventStream<StreamRes>(response);
 }

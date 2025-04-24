@@ -12,13 +12,9 @@ import { A2AClient } from "../dist/index.js";
 
 async function main() {
   try {
-    // Create a new client instance
-    // Replace with your actual A2A server URL
-    const client = new A2AClient("https://your-a2a-server.com");
+    // Create a new client instance pointing to our local server
+    const client = new A2AClient("http://localhost:3000/api");
     console.log("Client initialized");
-
-    // You can add authentication if required
-    client.addHeader("Authorization", "Bearer your-token-here");
 
     // Check if streaming is supported
     let streamingSupported = false;

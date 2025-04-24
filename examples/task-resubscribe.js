@@ -11,13 +11,9 @@ import { A2AClient } from "../dist/index.js";
 
 async function main() {
   try {
-    // Create a new client instance
-    // Replace with your actual A2A server URL
-    const client = new A2AClient("https://your-a2a-server.com");
+    // Create a new client instance pointing to our local server
+    const client = new A2AClient("http://localhost:3000/api");
     console.log("Client initialized");
-
-    // You can add authentication if required
-    client.addHeader("Authorization", "Bearer your-token-here");
 
     // Create a message to send
     const message = {
@@ -51,7 +47,7 @@ async function main() {
     console.log("Client reconnected, resubscribing to task...");
 
     // Now resubscribe to the task to get updates
-    const stream = client.resubscribeTask(taskId);
+    const stream = client.resubscribeTask({ id: taskId });
     console.log("Resubscribed to task");
 
     // Process the updates as they arrive
