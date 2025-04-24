@@ -1,0 +1,3 @@
+[submodule "deps/a2a"]
+	path = deps/a2a
+	url = https://github.com/google/A2A.git
