@@ -1,0 +1,69 @@
+# Artinet SDK (@artinet/sdk) High-Level Summary
+
+This project provides the **Artinet SDK**, a production-ready, feature-rich TypeScript library for building clients and servers compliant with the Agent2Agent (A2A) protocol. Developed by the Artinet Team, it aims to simplify A2A implementation by offering robust, easy-to-use components with a focus on developer experience and reliability, significantly enhancing the foundational concepts presented in the official A2A samples.
+
+The SDK is distributed as the `@artinet/sdk` npm package.
+
+## 1. Core Components & Purpose
+
+*   **Purpose:** Enable developers to easily create A2A-compliant AI agent clients and servers in TypeScript/JavaScript environments.
+*   **Target Audience:** Developers building AI agents or applications that need to communicate using the standardized A2A protocol.
+*   **Key Modules:**
+    *   **`@artinet/sdk/client`**: Provides `A2AClient` for interacting with A2A servers.
+    *   **`@artinet/sdk/server`**: Provides `A2AServer` for implementing A2A agent endpoints.
+    *   **`@artinet/sdk/types`**: Contains TypeScript interfaces for all A2A protocol structures derived from the official JSON schema, plus extended types for SDK usage.
+    *   **`@artinet/sdk/transport`**: Handles underlying communication logic (JSON-RPC, SSE streaming).
+    *   **`@artinet/sdk/utils`**: Includes common utilities, error definitions, and logging integration.
+
+## 2. Features & Enhancements (vs. Basic A2A Samples)
+
+*   **Production-Grade Server (`A2AServer`):**
+    *   Built on **Express.js**, providing a robust and familiar foundation.
+    *   Simplifies setup: Handles JSON-RPC request/response/error handling, SSE stream management, and routing automatically.
+    *   Requires only a core `TaskHandler` (async generator function) for agent logic implementation.
+    *   Manages task state transitions based on `TaskHandler` yields.
+    *   Configurable Agent Card served automatically (`/.well-known/agent.json`).
+    *   Integrated support for CORS configuration.
+    *   Optional custom JSON-RPC server implementation via `createJSONRPCServer` factory function parameter.
+*   **Enhanced Client (`A2AClient`):**
+    *   Reliable streaming support (`sendTaskSubscribe`) using `eventsource-parser`.
+    *   Convenience methods for capability checking (`supports`).
+    *   Flexible header management for authentication (`addHeader`, `setHeaders`).
+    *   Informative client-side error handling (`RpcError`).
+*   **Developer Experience:**
+    *   **Strong Typing:** Comprehensive TypeScript types for the entire A2A protocol and SDK interfaces.
+    *   **Simplified APIs:** Abstracts protocol complexities for both client and server.
+    *   **Structured Logging:** Integrated, configurable logging using `pino`. Defaults to `error` level, configurable via `configureLogger`.
+*   **Reliability & Testing:**
+    *   **High Test Coverage:** (>95% reported) using Jest, covering core logic, streaming, error handling, push notification config, and edge cases.
+    *   Standardized error classes (`A2AError`, `RpcError`) mapped to JSON-RPC error codes.
+*   **Flexible Storage:**
+    *   Pluggable `TaskStore` interface.
+    *   Includes `InMemoryTaskStore` (default, for development/testing).
+    *   Includes `FileStore` for basic file-based persistence. Easily extensible for custom database integrations.
+*   **Protocol Compliance:**
+    *   Full implementation based on the official A2A JSON Schema (`a2a.json`).
+    *   Supports core methods: `tasks/send`, `tasks/get`, `tasks/cancel`.
+    *   Supports streaming method: `tasks/sendSubscribe`.
+    *   Supports push notification configuration methods: `tasks/pushNotification/set`, `tasks/pushNotification/get` (though full push *sending* logic might be agent-specific).
+    *   Supports streaming resubscription: `tasks/resubscribe`.
+
+## 3. Technical Details
+
+*   **Language:** TypeScript
+*   **Module System:** ES Modules (ESM) (`"type": "module"` in `package.json`). Requires Node.js >= 16.
+*   **Build System:** Uses `tsc` to compile TypeScript to JavaScript in the `dist` directory.
+*   **Testing:** Jest (`ts-jest`).
+*   **Linting:** ESLint with TypeScript-ESLint (Flat Config `eslint.config.js`).
+*   **Core Dependencies:** `express`, `jayson` (for JSON-RPC server), `pino`, `eventsource-parser`, `cors`.
+
+## 4. Usage (High-Level)
+
+*   **Server:** Instantiate `A2AServer`, providing a `TaskHandler` async generator function and optionally a `TaskStore` and other configurations. Call `server.start()`.
+*   **Client:** Instantiate `A2AClient` with the server's A2A endpoint URL. Use methods like `sendTask`, `sendTaskSubscribe`, `getTask`, `cancelTask`, `supports`.
+
+## 5. Project Goals
+
+*   Provide a reliable, easy-to-use, and fully-typed SDK for A2A development in the Node.js ecosystem.
+*   Offer a more complete and production-oriented solution compared to basic protocol samples.
+*   Encourage adoption of the A2A standard by lowering the barrier to implementation.

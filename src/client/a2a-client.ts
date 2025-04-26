@@ -25,19 +25,23 @@ import type {
   TaskStatusUpdateEvent,
   SendTaskStreamingRequest,
   TaskResubscriptionRequest,
-} from "./lib/schema.js";
-
-import { RpcError } from "./lib/errors.js";
-import { logger } from "./utils/logger.js";
+} from "../types/extended-schema.js";
 
 // Import RPC client helpers
-import { executeJsonRpcRequest, executeGetRequest } from "./http/rpc-client.js";
-import { executeStreamEvents } from "./http/event-stream.js";
+import {
+  executeJsonRpcRequest,
+  executeGetRequest,
+} from "../transport/rpc/rpc-client.js";
+import { executeStreamEvents } from "../transport/streaming/event-stream.js";
+import { logError } from "../utils/logging/log.js";
+import { INTERNAL_ERROR } from "../utils/common/errors.js";
+
+import type { Client } from "./interfaces/client.js";
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
  * It provides methods for sending tasks, retrieving statuses, canceling operations, and handling streaming responses.
  */
-export class A2AClient {
+export class A2AClient implements Client {
   private baseUrl: URL;
   private cachedAgentCard: AgentCard | null = null;
   private customHeaders: Record<string, string> = {};
@@ -66,7 +70,6 @@ export class A2AClient {
     const wellKnownUrl = new URL("/.well-known/agent.json", this.baseUrl);
 
     try {
-      // First try the well-known URL
       try {
         const card = await executeGetRequest<AgentCard>(
           wellKnownUrl,
@@ -76,7 +79,6 @@ export class A2AClient {
         this.cachedAgentCard = card;
         return this.cachedAgentCard;
       } catch (error) {
-        // If this fails, try the fallback URL
         const fallbackUrl = new URL("/agent-card", this.baseUrl);
         const fallbackCard = await executeGetRequest<AgentCard>(
           fallbackUrl,
@@ -87,13 +89,15 @@ export class A2AClient {
         return this.cachedAgentCard;
       }
     } catch (error) {
-      logger.error("Failed to fetch or parse agent card:", error);
-      throw new RpcError(
-        -32603, // Internal error
+      logError(
+        "A2AClient:agentCard",
+        "Failed to fetch or parse agent card:",
+        error
+      );
+      throw INTERNAL_ERROR(
         `Could not retrieve agent card: ${
           error instanceof Error ? error.message : String(error)
-        }`,
-        error
+        }`
       );
     }
   }
@@ -231,7 +235,8 @@ export class A2AClient {
           return false;
       }
     } catch (error) {
-      logger.error(
+      logError(
+        "A2AClient:supports",
         `Failed to determine support for capability '${capability}':`,
         error
       );

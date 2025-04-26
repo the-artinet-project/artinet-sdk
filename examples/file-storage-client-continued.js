@@ -1,56 +1,44 @@
 /**
- * Basic usage example for the Artinet SDK
- *
- * This example demonstrates how to:
- * - Create an A2AClient instance
- * - Get the agent card
- * - Send a simple task
- * - Handle the response
+ * Test client for the file storage server example - part 2
+ * This test demonstrates history retrieval after server restart
  */
 
 import { A2AClient } from "../dist/index.js";
 
+// Use the same task ID as in the previous run
+const taskId = `conversation-1745596127049`;
+
 async function main() {
   try {
-    // Create a new client instance pointing to our local server
-    const client = new A2AClient("http://localhost:3000/api");
+    // Create a new client instance
+    const client = new A2AClient("http://localhost:3000");
     console.log("Client initialized");
 
     // Get the agent card to discover capabilities
     try {
       const agentCard = await client.agentCard();
       console.log(`Connected to agent: ${agentCard.name}`);
-      console.log(`Agent version: ${agentCard.version}`);
-      console.log(
-        `Streaming supported: ${
-          agentCard.capabilities.streaming ? "Yes" : "No"
-        }`
-      );
     } catch (error) {
       console.log("Could not retrieve agent card, continuing anyway...");
-      console.error(error);
     }
 
-    // Create a message to send
-    const message = {
-      role: "user",
-      parts: [
-        {
-          type: "text",
-          text: "Hello! Can you help me with a question about climate change?",
-        },
-      ],
-    };
-
-    // Generate a unique task ID
-    const taskId = `task-${Date.now()}`;
+    console.log(`\nSending third message with task ID: ${taskId}`);
+    const message =
+      "This is my third message. The server was restarted. Do you still remember our conversation?";
+    console.log(`Message: "${message}"`);
 
     // Send a task
-    console.log(`Sending task with ID: ${taskId}...`);
-
     const task = await client.sendTask({
       id: taskId,
-      message,
+      message: {
+        role: "user",
+        parts: [
+          {
+            type: "text",
+            text: message,
+          },
+        ],
+      },
     });
 
     if (task) {

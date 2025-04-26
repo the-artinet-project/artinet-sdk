@@ -3,20 +3,22 @@
  * Handles the common pattern of sending JSON-RPC requests and processing responses.
  */
 import { v4 as uuidv4 } from "uuid";
-import { RpcError } from "../lib/errors.js";
+import {
+  SystemError,
+  INTERNAL_ERROR,
+  PARSE_ERROR,
+} from "../../utils/common/errors.js";
 import type {
   JSONRPCRequest,
   JSONRPCResponse,
   A2ARequest,
-} from "../lib/schema.js";
-// Import error codes as values, not types
-import { ErrorCodeInternalError, ErrorCodeParseError } from "../lib/schema.js";
+} from "../../types/extended-schema.js";
 import { parseResponse } from "./parser.js";
-import { logger } from "../utils/logger.js";
+import { logError, logWarn } from "../../utils/logging/log.js";
 
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
- *
+ *, ErrorCodeParseError
  * @param method The JSON-RPC method name
  * @param params The parameters for the method
  * @param requestId Optional request ID (generates a UUID v4 if not provided)
@@ -66,17 +68,13 @@ export async function sendJsonRpcRequest<Req extends A2ARequest>(
       body: JSON.stringify(requestBody),
     });
   } catch (networkError) {
-    logger.error("Network error during RPC call:", networkError);
-    // Wrap network errors into a standard error format
-    throw new RpcError(
-      -32603, // Internal error
-      `Network error: ${
-        networkError instanceof Error
-          ? networkError.message
-          : String(networkError)
-      }`,
+    logError(
+      "SendJsonRpcRequest",
+      "Network error during RPC call:",
       networkError
     );
+    // Wrap network errors into a standard error format
+    throw INTERNAL_ERROR(networkError);
   }
 }
 
@@ -102,16 +100,12 @@ export async function sendGetRequest(
       },
     });
   } catch (networkError) {
-    logger.error("Network error during GET request:", networkError);
-    throw new RpcError(
-      -32603, // Internal error
-      `Network error: ${
-        networkError instanceof Error
-          ? networkError.message
-          : String(networkError)
-      }`,
+    logError(
+      "SendGetRequest",
+      "Network error during GET request:",
       networkError
     );
+    throw INTERNAL_ERROR(networkError);
   }
 }
 
@@ -138,7 +132,11 @@ export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
         // If we get here, it means there was no error in the response
         // But the HTTP status was not OK, so we throw a generic error
       } catch (parseError) {
-        // Just continue to throw the HTTP error
+        logWarn(
+          "handleJsonRpcResponse",
+          "Error parsing JSON-RPC response:",
+          parseError
+        );
       }
 
       // Throw a generic HTTP error if we couldn't extract an RPC error
@@ -158,17 +156,16 @@ export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
     // NonNullable is used in the return type to ensure TypeScript knows this
     return jsonResponse.result as NonNullable<Res["result"]>;
   } catch (error) {
+    logError(
+      "handleJsonRpcResponse",
+      `Error processing response [${expectedMethod}]:`,
+      error
+    );
     // Re-throw RpcError instances directly, wrap others
-    if (error instanceof RpcError) {
+    if (error instanceof SystemError) {
       throw error;
     } else {
-      throw new RpcError(
-        ErrorCodeInternalError, // Internal error
-        `Failed to process response [${expectedMethod}]: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        error
-      );
+      throw INTERNAL_ERROR(error);
     }
   }
 }
@@ -200,21 +197,16 @@ export async function handleJsonResponse<T>(
 
     return JSON.parse(responseBody) as T;
   } catch (error) {
-    logger.error(
+    logError(
+      "handleJsonResponse",
       `Error processing response for ${endpoint || "unknown endpoint"}:`,
       error
     );
 
-    if (error instanceof RpcError) {
+    if (error instanceof SystemError) {
       throw error;
     } else {
-      throw new RpcError(
-        ErrorCodeParseError,
-        `Failed to process response: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        error
-      );
+      throw PARSE_ERROR(error);
     }
   }
 }

@@ -1,5 +1,4 @@
 /**
- * Type definitions for the Artinet API.
  * This file contains Artinet-specific schema definitions separate from the A2A protocol.
  * These are extensions to the standard A2A protocol defined by Google:
  * @see https://github.com/google/A2A/blob/main/samples/js/src/schema.ts
@@ -10,7 +9,9 @@ import type {
   JSONRPCError,
   TaskStatusUpdateEvent,
   TaskArtifactUpdateEvent,
-} from "../../deps/a2a/samples/js/src/schema.js";
+  TaskStatus,
+  Artifact,
+} from "./schema.js";
 
 /**
  * Improved JSON-RPC Response types using discriminated unions
@@ -56,3 +57,14 @@ export type ExtendedJSONRPCResponse<R = any, E = any> =
   | JSONRPCErrorResponse<E>;
 
 export type TaskEvent = TaskStatusUpdateEvent | TaskArtifactUpdateEvent;
+/**
+ * Represents the possible types of updates a TaskHandler can yield.
+ * Either a partial TaskStatus (without the server-managed timestamp)
+ * or a complete Artifact object.
+ */
+export type TaskYieldUpdate = Omit<TaskStatus, "timestamp"> | Artifact;
+
+export type ExtendedTaskStatusUpdate = Omit<TaskStatus, "timestamp">;
+
+export * from "./schema.js";
+export type { A2AError as A2AErrorType } from "./schema.js";
