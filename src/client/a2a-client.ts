@@ -1,42 +1,36 @@
-// Import necessary types from schema.ts
 import type {
-  // Core types
   AgentCard,
-  // Full Request types (needed for internal generics)
   SendTaskRequest,
   GetTaskRequest,
   CancelTaskRequest,
   SetTaskPushNotificationRequest,
   GetTaskPushNotificationRequest,
-  // Specific Params types (used directly in public method signatures)
   TaskSendParams,
-  TaskQueryParams, // Used by get, resubscribe
-  TaskIdParams, // Used by cancel, getTaskPushNotificationConfig
-  TaskPushNotificationConfig, // Used by setTaskPushNotificationConfig
-  // Full Response types (needed for internal generics and result extraction)
+  TaskQueryParams,
+  TaskIdParams,
+  TaskPushNotificationConfig,
   SendTaskResponse,
   GetTaskResponse,
   CancelTaskResponse,
   SetTaskPushNotificationResponse,
   GetTaskPushNotificationResponse,
-  // Response Payload types (used in public method return signatures)
   Task,
   TaskArtifactUpdateEvent,
   TaskStatusUpdateEvent,
   SendTaskStreamingRequest,
   TaskResubscriptionRequest,
-} from "../types/extended-schema.js";
+} from "../types/index.js";
 
-// Import RPC client helpers
 import {
   executeJsonRpcRequest,
   executeGetRequest,
-} from "../transport/rpc/rpc-client.js";
-import { executeStreamEvents } from "../transport/streaming/event-stream.js";
-import { logError } from "../utils/logging/log.js";
-import { INTERNAL_ERROR } from "../utils/common/errors.js";
+  executeStreamEvents,
+} from "../transport/index.js";
+
+import { logError, INTERNAL_ERROR } from "../utils/index.js";
 
 import type { Client } from "./interfaces/client.js";
+
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
  * It provides methods for sending tasks, retrieving statuses, canceling operations, and handling streaming responses.
@@ -45,15 +39,20 @@ export class A2AClient implements Client {
   private baseUrl: URL;
   private cachedAgentCard: AgentCard | null = null;
   private customHeaders: Record<string, string> = {};
-
+  private fallbackPath: string;
   /**
    * Creates a new A2AClient instance.
    * @param baseUrl The base URL for the A2A server.
    * @param headers Optional custom headers to include in all requests.
    */
-  constructor(baseUrl: URL | string, headers: Record<string, string> = {}) {
+  constructor(
+    baseUrl: URL | string,
+    headers: Record<string, string> = {},
+    fallbackPath?: string
+  ) {
     this.baseUrl = typeof baseUrl === "string" ? new URL(baseUrl) : baseUrl;
     this.customHeaders = headers;
+    this.fallbackPath = fallbackPath ?? "/agent-card";
   }
 
   /**
@@ -76,16 +75,21 @@ export class A2AClient implements Client {
           this.customHeaders,
           "agent card (well-known)"
         );
+
         this.cachedAgentCard = card;
+
         return this.cachedAgentCard;
       } catch (error) {
-        const fallbackUrl = new URL("/agent-card", this.baseUrl);
+        const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
+
         const fallbackCard = await executeGetRequest<AgentCard>(
           fallbackUrl,
           this.customHeaders,
           "agent card (fallback)"
         );
+
         this.cachedAgentCard = fallbackCard;
+
         return this.cachedAgentCard;
       }
     } catch (error) {
@@ -94,6 +98,7 @@ export class A2AClient implements Client {
         "Failed to fetch or parse agent card:",
         error
       );
+
       throw INTERNAL_ERROR(
         `Could not retrieve agent card: ${
           error instanceof Error ? error.message : String(error)

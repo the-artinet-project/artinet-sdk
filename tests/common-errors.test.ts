@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import {
   SystemError,
   PARSE_ERROR,
@@ -11,9 +10,6 @@ import {
   UNSUPPORTED_OPERATION,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   FAILED_UPDATE,
-  errorHandler,
-} from "../src/utils/common/errors.js";
-import {
   ErrorCodeParseError,
   ErrorCodeInvalidParams,
   ErrorCodeInternalError,
@@ -23,8 +19,10 @@ import {
   ErrorCodeTaskNotCancelable,
   ErrorCodeUnsupportedOperation,
   ErrorCodePushNotificationNotSupported,
-  TaskYieldUpdate,
-} from "../src/types/extended-schema.js";
+  configureLogger,
+} from "../src/index.js";
+
+configureLogger({ level: "silent" });
 
 describe("Error Handling Utilities", () => {
   describe("SystemError", () => {

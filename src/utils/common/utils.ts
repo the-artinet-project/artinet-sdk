@@ -30,7 +30,7 @@ export function isObject(value: unknown): value is Record<string, any> {
  * Used to differentiate yielded updates from the handler.
  */
 export function isTaskStatusUpdate(
-  update: TaskYieldUpdate  
+  update: TaskYieldUpdate
 ): update is ExtendedTaskStatusUpdate {
   return isObject(update) && "state" in update && !("parts" in update);
 }
@@ -39,9 +39,7 @@ export function isTaskStatusUpdate(
  * Type guard to check if an object is an Artifact update (has 'parts').
  * Used to differentiate yielded updates from the handler.
  */
-export function isArtifactUpdate(
-  update: TaskYieldUpdate  
-): update is Artifact {
+export function isArtifactUpdate(update: TaskYieldUpdate): update is Artifact {
   return isObject(update) && "parts" in update && !("state" in update);
 }
 
@@ -89,4 +87,14 @@ export function validateTaskSendParams(
   ) {
     throw INVALID_PARAMS();
   }
+}
+
+export function extractTaskId(id: number | string | null | undefined): string {
+  if (!id) {
+    throw INVALID_PARAMS("Missing task ID");
+  }
+  if (typeof id === "number") {
+    return id.toString();
+  }
+  return id;
 }

@@ -6,17 +6,12 @@ import {
   InMemoryTaskStore,
   TaskContext,
   TaskYieldUpdate,
-  logger,
+  configureLogger,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Specialized task handler for streaming tests
 async function* streamingTestHandler(
@@ -281,7 +276,9 @@ describe("Streaming API Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602); // Invalid params
+      expect(response.body.error.code).toBe(-32602);
+      expect(response.body.error.message).toBe("Invalid parameters");
+      // Invalid params
     });
   });
 
@@ -376,7 +373,8 @@ describe("Streaming API Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001); // Task not found
+      expect(response.body.error.code).toBe(-32001);
+      expect(response.body.error.message).toBe("Task not found");
     });
   });
 

@@ -10,6 +10,7 @@ import type {
   SendTaskStreamingRequest,
   TaskResubscriptionRequest,
 } from "../types/index.js";
+
 import {
   getCurrentTimestamp,
   validateTaskSendParams,
@@ -21,7 +22,9 @@ import {
   FINAL_STATES,
   WORKING_UPDATE,
   logDebug,
+  register,
 } from "../utils/index.js";
+
 import {
   sendSSEEvent,
   setupSseStream,
@@ -51,8 +54,8 @@ export class A2AServer implements Server {
   private port: number;
   private rpcServer: JSONRPCServerType;
   private serverInstance: http.Server | undefined;
-
-  // Track active cancellations
+  private fallbackPath: string;
+  private register: boolean;
   private activeCancellations: Set<string> = new Set();
   private activeStreams: Map<string, Response[]> = new Map();
 
@@ -197,6 +200,10 @@ export class A2AServer implements Server {
           closeStreamsForTask: this.closeStreamsForTask.bind(this),
         });
 
+    this.fallbackPath = params.fallbackPath ?? "/agent-card";
+    //register your server with the A2A registry on startup
+    this.register = params.register ?? false;
+
     logDebug("A2AServer", "Server initialized", {
       basePath: this.basePath,
       port: this.port,
@@ -218,11 +225,18 @@ export class A2AServer implements Server {
       basePath: this.basePath,
       port: this.port,
       rpcServer: this.rpcServer,
+      fallbackPath: this.fallbackPath,
       errorHandler: errorHandler,
       onTaskSendSubscribe: this.handleTaskSendSubscribe.bind(this),
       onTaskResubscribe: this.handleTaskResubscribe.bind(this),
     });
     this.serverInstance = server;
+    //lazily register your server with the A2A registry on startup
+    //this is so that you can start the server without having to wait for registration
+    //you can call also call this.registerServer() later to register your server
+    if (this.register) {
+      this.registerServer();
+    }
     return app;
   }
 
@@ -259,6 +273,17 @@ export class A2AServer implements Server {
       this.serverInstance = undefined;
       throw err;
     }
+  }
+
+  /**
+   * Registers the server with the A2A registry.
+   * @returns A promise that resolves to the registration ID or an empty string if registration fails.
+   */
+  public async registerServer(): Promise<string> {
+    if (this.card) {
+      return await register(this.card);
+    }
+    return "";
   }
 
   /**

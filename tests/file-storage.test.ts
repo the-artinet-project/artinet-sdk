@@ -2,9 +2,15 @@ import { jest } from "@jest/globals";
 import { join } from "path";
 import { mkdtemp, rm } from "fs/promises";
 import * as os from "os";
-import { TaskStore } from "../src/index.js";
-import { FileStore } from "../src/server/lib/storage/file.js";
-import { Task, TaskState, Message } from "../src/types/extended-schema.js";
+import {
+  configureLogger,
+  FileStore,
+  Task,
+  TaskState,
+  Message,
+} from "../src/index.js";
+
+configureLogger({ level: "silent" });
 
 describe("FileStore", () => {
   let tempDir: string;

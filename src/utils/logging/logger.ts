@@ -8,7 +8,7 @@ export type LogLevel = "silent" | "error" | "warn" | "info" | "debug" | "trace";
 
 // Create the base logger with default configuration
 const baseLogger = pino({
-  name: "A2AClient",
+  name: "A2A",
   level: "error", // Default level
   // In production, don't use the pretty transport by default
   ...(process.env.NODE_ENV !== "production" && {
@@ -42,7 +42,6 @@ export function configureLogger(options: {
   if (options.level) {
     logger.level = options.level;
   }
-
   // Return the logger instance for chaining
   return logger;
 }

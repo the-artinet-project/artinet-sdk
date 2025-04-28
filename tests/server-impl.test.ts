@@ -1,31 +1,19 @@
 import { jest } from "@jest/globals";
 import express from "express";
 import request from "supertest";
-import http from "http";
 import {
   A2AServer,
   InMemoryTaskStore,
   TaskContext,
   TaskYieldUpdate,
-  logger,
-  TASK_NOT_FOUND,
-  TASK_NOT_CANCELABLE,
-  PUSH_NOTIFICATION_NOT_SUPPORTED,
   INTERNAL_ERROR,
-  INVALID_PARAMS,
-  METHOD_NOT_FOUND,
-  SystemError,
   AgentCard,
+  configureLogger,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
 async function* serverImplTestHandler(
@@ -242,7 +230,8 @@ describe("Server Implementation Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32603); // Internal error
+      expect(response.body.error.code).toBe(-32603);
+      expect(response.body.error.message).toBe("Internal error");
     });
 
     it("returns TASK_NOT_FOUND error for non-existent task", async () => {
@@ -258,10 +247,10 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001); // Task not found
+      expect(response.body.error.code).toBe(-32001);
+      expect(response.body.error.message).toBe("Task not found"); //todo not returning error message
     });
 
     it("returns METHOD_NOT_FOUND error for invalid method", async () => {
@@ -280,7 +269,8 @@ describe("Server Implementation Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32601); // Method not found
+      expect(response.body.error.code).toBe(-32601);
+      expect(response.body.error.message).toBe("Method not found");
     });
 
     it("returns INVALID_PARAMS error for missing params", async () => {
@@ -297,7 +287,8 @@ describe("Server Implementation Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602); // Invalid params
+      expect(response.body.error.code).toBe(-32602);
+      expect(response.body.error.message).toBe("Invalid parameters");
     });
 
     it("returns INVALID_PARAMS error for invalid task ID", async () => {
@@ -316,7 +307,8 @@ describe("Server Implementation Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602); // Invalid params
+      expect(response.body.error.code).toBe(-32602);
+      expect(response.body.error.message).toBe("Invalid parameters");
     });
   });
 

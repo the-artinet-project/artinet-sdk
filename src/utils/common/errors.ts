@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
   A2AErrorType,
-  JSONRPCError,
   ErrorCodeInvalidParams,
   ErrorCodeInvalidRequest,
   ErrorCodeParseError,
@@ -14,80 +13,90 @@ import {
   TaskYieldUpdate,
 } from "../../types/extended-schema.js";
 import { logError } from "../../utils/logging/log.js";
+import { JSONRPCError } from "../../types/schema.js";
 
-export class SystemError<E = unknown | null, C extends number = number>
+export class SystemError<ErrorData = unknown | null, C extends number = number>
   extends Error
-  implements JSONRPCError<E, C>, A2AErrorType
+  implements A2AErrorType
 {
   code: C;
-  data?: E;
+  data?: ErrorData;
 
-  constructor(message: string, code: C, data?: E) {
+  constructor(message: string, code: C, data?: ErrorData) {
     super(message);
     this.name = "RpcError";
+    this.message = message;
     this.code = code;
     this.data = data;
   }
 }
 // Factory methods for common errors
-export const PARSE_ERROR = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeParseError>(
+export const PARSE_ERROR = <ErrorData = unknown | null>(data?: ErrorData) =>
+  new SystemError<ErrorData, ErrorCodeParseError>(
     "Invalid JSON payload",
     ErrorCodeParseError,
     data
   );
 
-export const METHOD_NOT_FOUND = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeMethodNotFound>(
+export const METHOD_NOT_FOUND = <ErrorData = unknown | null>(
+  data?: ErrorData
+) =>
+  new SystemError<ErrorData, ErrorCodeMethodNotFound>(
     "Method not found",
     ErrorCodeMethodNotFound,
     data
   );
 
-export const INVALID_REQUEST = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeInvalidRequest>(
+export const INVALID_REQUEST = <ErrorData = unknown | null>(data?: ErrorData) =>
+  new SystemError<ErrorData, ErrorCodeInvalidRequest>(
     "Request payload validation error",
     ErrorCodeInvalidRequest,
     data
   );
 
-export const INVALID_PARAMS = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeInvalidParams>(
+export const INVALID_PARAMS = <ErrorData = unknown | null>(data?: ErrorData) =>
+  new SystemError<ErrorData, ErrorCodeInvalidParams>(
     "Invalid parameters",
     ErrorCodeInvalidParams,
     data
   );
 
-export const INTERNAL_ERROR = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeInternalError>(
+export const INTERNAL_ERROR = <ErrorData = unknown | null>(data?: ErrorData) =>
+  new SystemError<ErrorData, ErrorCodeInternalError>(
     "Internal error",
     ErrorCodeInternalError,
     data
   );
 
-export const TASK_NOT_FOUND = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeTaskNotFound>(
+export const TASK_NOT_FOUND = <ErrorData = unknown | null>(data?: ErrorData) =>
+  new SystemError<ErrorData, ErrorCodeTaskNotFound>(
     "Task not found",
     ErrorCodeTaskNotFound,
     data
   );
 
-export const TASK_NOT_CANCELABLE = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeTaskNotCancelable>(
+export const TASK_NOT_CANCELABLE = <ErrorData = unknown | null>(
+  data?: ErrorData
+) =>
+  new SystemError<ErrorData, ErrorCodeTaskNotCancelable>(
     "Task cannot be canceled",
     ErrorCodeTaskNotCancelable,
     data
   );
 
-export const UNSUPPORTED_OPERATION = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodeUnsupportedOperation>(
+export const UNSUPPORTED_OPERATION = <ErrorData = unknown | null>(
+  data?: ErrorData
+) =>
+  new SystemError<ErrorData, ErrorCodeUnsupportedOperation>(
     "This operation is not supported",
     ErrorCodeUnsupportedOperation,
     data
   );
 
-export const PUSH_NOTIFICATION_NOT_SUPPORTED = <E = unknown | null>(data?: E) =>
-  new SystemError<E, ErrorCodePushNotificationNotSupported>(
+export const PUSH_NOTIFICATION_NOT_SUPPORTED = <ErrorData = unknown | null>(
+  data?: ErrorData
+) =>
+  new SystemError<ErrorData, ErrorCodePushNotificationNotSupported>(
     "Push Notification is not supported",
     ErrorCodePushNotificationNotSupported,
     data
@@ -135,9 +144,14 @@ export function errorHandler(
 
   let jsonRpcError: JSONRPCError<unknown | null, number>;
   if (err instanceof SystemError) {
-    jsonRpcError = err;
+    jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {
-    jsonRpcError = INTERNAL_ERROR(err.stack);
+    const internalError = INTERNAL_ERROR(err.stack);
+    jsonRpcError = {
+      code: internalError.code,
+      message: internalError.message,
+      data: internalError.data,
+    };
   }
 
   const errorResponse = {

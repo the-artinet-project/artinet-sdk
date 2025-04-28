@@ -2,7 +2,6 @@ import { jest } from "@jest/globals";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import {
-  A2AError,
   sendJsonRpcRequest,
   sendGetRequest,
   handleJsonRpcResponse,
@@ -12,13 +11,13 @@ import {
   createJsonRpcRequest,
   parseResponse,
   handleEventStream,
-  executeStreamEvents,
   ErrorCodeParseError,
   JSONRPCRequest,
   JSONRPCResponse,
   SystemError,
-  logger,
+  configureLogger,
 } from "../src/index.js";
+
 // Define a TestRequest type that matches JSONRPCRequest constraint
 type TestMethod =
   | "test/method"
@@ -38,11 +37,7 @@ interface TestRequest extends JSONRPCRequest {
   };
 }
 
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Setup MSW server for mocking HTTP requests
 const server = setupServer(

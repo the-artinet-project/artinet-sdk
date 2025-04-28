@@ -6,17 +6,12 @@ import {
   InMemoryTaskStore,
   TaskContext,
   TaskYieldUpdate,
-  logger,
+  configureLogger,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// // Mock logger to prevent noise during tests
-// jest.spyOn(logger, "info").mockImplementation(() => {});
-// jest.spyOn(logger, "debug").mockImplementation(() => {});
-// jest.spyOn(logger, "error").mockImplementation(() => {});
-// jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 /**
  * Simple echo task handler for testing

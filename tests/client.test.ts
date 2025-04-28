@@ -1,8 +1,6 @@
-import { jest } from "@jest/globals";
 import {
   A2AClient,
   SystemError,
-  logger,
   AgentCard,
   Message,
   Task,
@@ -14,15 +12,12 @@ import {
   TaskIdParams,
   TaskQueryParams,
   PushNotificationConfig,
+  configureLogger,
 } from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 const MOCK_AGENT_CARD: AgentCard = {
   name: "Test Agent",

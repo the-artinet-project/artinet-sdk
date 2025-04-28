@@ -6,17 +6,13 @@ import {
   InMemoryTaskStore,
   TaskContext,
   TaskYieldUpdate,
-  logger,
+  configureLogger,
 } from "../src/index.js";
+
+configureLogger({ level: "silent" });
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
 
 // Define a comprehensive task handler for A2A protocol testing
 async function* a2aProtocolTestHandler(
@@ -486,6 +482,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32001); // Task not found error
+      expect(response.body.error.message).toBe("Task not found");
     });
 
     it("cancels a task with tasks/cancel", async () => {
@@ -542,6 +539,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32001); // Task not found error
+      expect(response.body.error.message).toBe("Task not found");
     });
 
     it("returns error when canceling completed task", async () => {
@@ -577,7 +575,8 @@ describe("A2A Protocol Specification Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32002); // Task not cancelable error
+      expect(response.body.error.code).toBe(-32002);
+      expect(response.body.error.message).toBe("Task cannot be canceled");
     });
   });
 
@@ -722,6 +721,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32601); // Method not found error
+      expect(response.body.error.message).toBe("Method not found");
     });
 
     it("handles invalid params", async () => {
@@ -745,6 +745,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602); // Invalid params error
+      expect(response.body.error.message).toBe("Invalid parameters");
     });
   });
 });

@@ -2,7 +2,11 @@
  * Event stream utilities for handling Server-Sent Events (SSE).
  */
 import { parseResponse } from "../rpc/parser.js";
-import { createParser } from "eventsource-parser";
+import {
+  createParser,
+  EventSourceMessage,
+  ParseError,
+} from "eventsource-parser";
 import type {
   JSONRPCResponse,
   A2ARequest,
@@ -41,20 +45,40 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
   const decoder = new TextDecoder();
   const events: StreamRes["result"][] = [];
 
-  const parser = createParser((event) => {
-    if (event.type === "event" && event.data) {
-      try {
-        const parsedData = parseResponse<StreamRes>(event.data);
-        const eventResult = parsedData.result;
-        if (eventResult) {
-          events.push(eventResult as StreamRes["result"]);
-        } else {
-          logWarn("handleEventStream", "Failed to parse SSE data", parsedData);
+  const parser = createParser({
+    onEvent: (event: EventSourceMessage) => {
+      if (event.data) {
+        if (event.event === "close") {
+          logDebug("handleEventStream", "Stream closed");
+          return;
         }
-      } catch (e) {
-        logWarn("handleEventStream", "Failed to parse SSE data", e);
+        try {
+          const parsedData = parseResponse<StreamRes>(event.data);
+          const eventResult = parsedData.result;
+          if (eventResult) {
+            events.push(eventResult as StreamRes["result"]);
+          } else {
+            logWarn(
+              "handleEventStream",
+              "Failed to parse SSE data",
+              parsedData
+            );
+          }
+          // if (parsedData.final && parsedData.final === true) {
+          //   logDebug("handleEventStream", "Stream completed");
+          //   return;
+          // }
+        } catch (e) {
+          logWarn("handleEventStream", "Failed to parse SSE data", e);
+        }
       }
-    }
+    },
+    onError: (error: ParseError) => {
+      logError("handleEventStream", "Error parsing SSE data", error);
+    },
+    onRetry: (retry: number) => {
+      logWarn("handleEventStream", "Retrying SSE connection", retry);
+    },
   });
 
   try {
@@ -107,5 +131,6 @@ export async function* executeStreamEvents<
     "text/event-stream"
   );
   const response = await responsePromise;
+  logDebug("executeStreamEvents", "Response", response);
   yield* handleEventStream<StreamRes>(response);
 }

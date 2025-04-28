@@ -1,18 +1,9 @@
 import { jest } from "@jest/globals";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { logger } from "../src/index.js";
+import { configureLogger, SystemError } from "../src/index.js";
 
-// Import directly from the modules rather than through index to avoid strict typing
-import { SystemError } from "../src/utils/common/errors.js";
-import { createJsonRpcRequest } from "../src/transport/rpc/rpc-client.js";
-import { parseResponse } from "../src/transport/rpc/parser.js";
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Override the createJsonRpcRequest for testing to avoid type checking
 function createTestRequest(

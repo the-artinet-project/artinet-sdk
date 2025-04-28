@@ -12,49 +12,54 @@ Artinet SDK is a [Agent2Agent (A2A) Protocol](https://github.com/google/A2A) com
 This SDK significantly enhances the foundational A2A concepts and samples provided by Google, offering a production-ready solution with a focus on developer experience, reliability, and comprehensive features.
 
 ## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Requirements](#requirements)
-- [Example](#example)
-- [Class Documentation](#class-documentation)
-  - [Core Classes](#core-classes)
-  - [Key Types & Interfaces](#key-types--interfaces)
-- [Running Tests](#running-tests)
-- [Typescript](#typescript)
-- [Usage](#usage)
-  - [Client](#client)
-    - [Basic Usage](#basic-client-usage)
-    - [Streaming Updates](#streaming-updates)
-    - [Authentication](#authentication)
-  - [Server](#server)
-    - [Implementing an A2A Agent](#implementing-an-a2a-agent)
-    - [Persistent Storage](#persistent-storage)
-    - [Logging](#logging)
-    - [Advanced Server Customization](#advanced-server-customization)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Artinet SDK](#artinet-sdk)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Requirements](#requirements)
+  - [Example](#example)
+  - [Class Documentation](#class-documentation)
+    - [Core Classes](#core-classes)
+    - [Key Types \& Interfaces](#key-types--interfaces)
+  - [Running Tests](#running-tests)
+  - [Typescript](#typescript)
+  - [Usage](#usage)
+    - [Client](#client)
+      - [Basic Client Usage](#basic-client-usage)
+      - [Streaming Updates](#streaming-updates)
+      - [Authentication](#authentication)
+    - [Server](#server)
+      - [Implementing an A2A Agent](#implementing-an-a2a-agent)
+      - [Persistent Storage](#persistent-storage)
+      - [Logging](#logging)
+      - [Server Registration \& Discovery](#server-registration--discovery)
+      - [Advanced Server Customization](#advanced-server-customization)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Acknowledgements](#acknowledgements)
 
 ## Features
 
-- **Plug-and-Play Server:** Built on Express.js, the `A2AServer` handles JSON-RPC complexity, routing, protocol compliance, and streaming mechanics automatically. Just provide your core agent logic (`TaskHandler`) and basic configuration.
-- **Enhanced Client:** Features refined error handling, flexible header management for authentication, and clear separation of concerns.
-- **Comprehensive Testing:** Ensuring reliability and maintainability.
-- **Simplified Developer Experience:** Start quickly with clear TypeScript types, intuitive APIs, and minimal setup.
-- **Flexible Storage:** Offers built-in `InMemoryTaskStore` for development/testing and `FileStore` for persistent task storage, easily extensible.
-- **Full Protocol Compliance:** Implements the complete A2A specification using the official JSON schema.
-- **Server-Sent Events (SSE):** Reliable streaming support (`tasks/sendSubscribe` & `tasks/resubscribe`) with robust handling using `eventsource-parser`.
-- **Configurable Logging:** Integrated structured logging via `pino`, configurable levels.
+- **Plug-and-Play Server:** Built on Express.js, the `A2AServer` handles JSON-RPC complexity, routing, protocol compliance, and Server-Sent Events (SSE) streaming mechanics automatically. Just provide your core agent logic (`TaskHandler`) and configuration via `A2AServerParams`.
+- **Enhanced Client:** `A2AClient` features refined error handling (`RpcError`), flexible header management for authentication, and clear separation of concerns.
+- **TypeScript First:** Fully written in TypeScript with comprehensive type definitions for a robust developer experience.
+- **Flexible Storage:** Offers built-in `InMemoryTaskStore` (development/testing) and `FileStore` (persistent), with the `TaskStore` interface allowing custom storage solutions.
+- **Protocol Compliance:** Implements the complete A2A specification using the official JSON schema, ensuring interoperability.
+- **Robust Streaming:** Reliable SSE support for `tasks/sendSubscribe` & `tasks/resubscribe` using `eventsource-parser`.
+- **Configurable Logging:** Integrated structured logging via `pino`. Configurable levels using `configureLogger` and `LogLevel`.
+- **Advanced Customization:** Allows providing a custom `JSONRPCServerFactory` for fine-grained control over the JSON-RPC server, enabling integration with existing Express apps or adding custom methods.
+- **Comprehensive Testing:** Includes a suite of tests to ensure reliability and maintainability.
 
-| Component/Feature | Description                                                                 | Key Classes/Types                                  |
-| :---------------- | :-------------------------------------------------------------------------- | :------------------------------------------------- |
-| **Client**        | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`, `SystemError`                         |
-| **Server**        | Host A2A-compliant agents. Handles protocol details & routing.              | `A2AServer`, `A2AError`                            |
-| **Task Handling** | Define agent logic using async generators.                                  | `TaskHandler`, `TaskContext`                       |
-| **Storage**       | Persist task state. In-memory and file-based options included.              | `ITaskStore`, `InMemoryTaskStore`, `FileStore`     |
-| **Streaming**     | Handle real-time updates via SSE for `tasks/sendSubscribe`.                 | `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent` |
-| **Logging**       | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`            |
+| Component/Feature   | Description                                                                 | Key Classes/Types                                                                            |
+| :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
+| **Client**          | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`, `RpcError`                                                                      |
+| **Server**          | Host A2A-compliant agents. Handles protocol details, routing, SSE.          | `A2AServer`, `A2AServerParams`                                                               |
+| **Task Handling**   | Define agent logic using async generators.                                  | `TaskHandler`, `TaskContext`, `TaskYieldUpdate`                                              |
+| **Storage**         | Persist task state. In-memory and file-based options included.              | `TaskStore`, `InMemoryTaskStore`, `FileStore`                                                |
+| **Streaming (SSE)** | Handle real-time updates via SSE for `tasks/sendSubscribe`/`resubscribe`.   | `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`                                           |
+| **Logging**         | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                      |
+| **Advanced Server** | Customize the underlying JSON-RPC server or integrate into existing apps.   | `JSONRPCServerFactory`, `CreateJSONRPCServerParams`, `createJSONRPCMethod`, A2A Method Types |
+| **Core Types**      | Based on the official A2A JSON Schema.                                      | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                     |
 
 ## Installation
 
@@ -64,10 +69,10 @@ npm install @artinet/sdk
 
 ## Requirements
 
-- Node.js (v16.0.0 or higher recommended, check `package.json` engines for exact requirement)
+- Node.js (v22.0.0 or higher recommended, check `package.json` engines for exact requirement)
 
 ## Example
-
+ 
 A basic A2A server and client interaction. For more detailed examples, see the `examples/` directory.
 
 **1. Server (`quick-server.ts`)**
@@ -99,7 +104,7 @@ const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
 
 const server = new A2AServer({
   taskHandler: quickAgentLogic,
-  taskStore: new InMemoryTaskStore(), // Use FileStore for persistence
+  taskStore: new InMemoryTaskStore(),
   port: 4000,
   basePath: "/a2a",
   card: {
@@ -122,22 +127,17 @@ import { A2AClient, TaskStatusUpdateEvent } from "@artinet/sdk";
 
 async function runClient() {
   const client = new A2AClient("http://localhost:4000/a2a");
-  const message = {
+
+   const message = {
     role: "user" as const,
     parts: [{ type: "text" as const, text: "Hello Quick Start!" }],
   };
 
   const stream = client.sendTaskSubscribe({ id: "quick-task-1", message });
 
-  console.log("Processing stream...");
   for await (const update of stream) {
-    // Process TaskStatusUpdateEvent or TaskArtifactUpdateEvent
-    if ((update as TaskStatusUpdateEvent).status) {
-      const statusUpdate = update as TaskStatusUpdateEvent;
-      console.log("-> Status Update:", statusUpdate.status.state);
-      // Check statusUpdate.status.message if needed
-    }
-    // else if ((update as TaskArtifactUpdateEvent).artifact) { ... }
+    // process the update
+    ...
   }
   console.log("Stream finished.");
 }
@@ -151,27 +151,30 @@ The Artinet SDK provides several core classes and interfaces for building A2A cl
 
 ### Core Classes
 
-| Class               | Description                                                  |
-| :------------------ | :----------------------------------------------------------- |
-| `A2AClient`         | Client for interacting with A2A servers.                     |
-| `A2AServer`         | Express-based server implementation for hosting A2A agents.  |
-| `RpcError`          | Client-side A2A protocol errors.                             |
-| `A2AError`          | Server-side A2A protocol errors (used internally).           |
-| `InMemoryTaskStore` | Simple in-memory task persistence (for development/testing). |
-| `FileStore`         | File-based task persistence.                                 |
+| Class               | Description                                                         |
+| :------------------ | :------------------------------------------------------------------ |
+| `A2AClient`         | Client for interacting with A2A servers.                            |
+| `A2AServer`         | Express-based server implementation for hosting A2A agents.         |
+| `RpcError`          | Represents client-side errors encountered during A2A communication. |
+| `InMemoryTaskStore` | Simple in-memory task persistence (ideal for development/testing).  |
+| `FileStore`         | File-based task persistence (stores task data in the filesystem).   |
 
 ### Key Types & Interfaces
 
-| Type/Interface                                            | Description                                                                                                               |
-| :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------ |
-| `TaskHandler`                                             | Async generator function defining agent logic (`async function*(context: TaskContext): AsyncGenerator<TaskYieldUpdate>`). |
-| `TaskContext`                                             | Provides task details (`taskId`, `userMessage`, `isCancelled`, `metadata`, `store`) to the `TaskHandler`.                 |
-| `TaskStore`                                               | Interface for task persistence implementations.                                                                           |
-| `TaskYieldUpdate`                                         | Union type for updates yielded by `TaskHandler` (status changes or artifacts).                                            |
-| `A2AServerOptions`                                        | Configuration for `A2AServer` (port, store, card, basePath, handler, etc.).                                               |
-| `AgentCard`                                               | Describes the agent's capabilities and metadata.                                                                          |
-| `Message`, `Part`, `Artifact`, `Task`, `TaskStatus`, etc. | Types mirroring the A2A JSON Schema structures.                                                                           |
-| `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`        | Specific types for events received during streaming (`sendTaskSubscribe`).                                                |
+| Type/Interface                                            | Description                                                                                                                        |
+| :-------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `TaskHandler`                                             | Async generator function defining the core agent logic (`async function*(context: TaskContext): AsyncGenerator<TaskYieldUpdate>`). |
+| `TaskContext`                                             | Provides task details (`task`, `userMessage`, `history`, `isCancelled()`) to the `TaskHandler`.                                    |
+| `TaskStore`                                               | Interface defining the contract for task persistence implementations (like `InMemoryTaskStore`, `FileStore`).                      |
+| `TaskYieldUpdate`                                         | Union type for updates yielded by a `TaskHandler` (representing status changes or generated artifacts).                            |
+| `A2AServerParams`                                         | Configuration object passed to the `A2AServer` constructor (port, store, card, basePath, handler, etc.).                           |
+| `AgentCard`                                               | Describes the agent's capabilities, metadata, skills, and endpoint URL.                                                            |
+| `Message`, `Part`, `Artifact`, `Task`, `TaskStatus`, etc. | Core types mirroring the structures defined in the A2A JSON Schema specification. Used for requests, responses, and task state.    |
+| `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`        | Specific types for Server-Sent Events (SSE) received during streaming operations (`tasks/sendSubscribe`, `tasks/resubscribe`).     |
+| `LogLevel`                                                | Enum defining logging levels (`error`, `warn`, `info`, `debug`, `trace`) used with the built-in logger.                            |
+| `JSONRPCServerFactory`                                    | Function signature for providing a custom JSON-RPC server creation logic to `A2AServer` for advanced customization.                |
+| `CreateJSONRPCServerParams`                               | Object containing dependencies provided _to_ a `JSONRPCServerFactory` function.                                                    |
+| `SendTaskMethod`, `GetTaskMethod`, ...                    | Type signatures for specific A2A method handlers, used when implementing custom server logic with `createJSONRPCMethod`.           |
 
 ## Running Tests
 
@@ -197,7 +200,7 @@ Interact with A2A-compliant agents using the `A2AClient`. See `examples/` for mo
 
 #### Basic Client Usage
 
-Send a task using `tasks/send` (requires server support).
+Send a task using `tasks/send`.
 
 ```typescript
 import { A2AClient, Message } from "@artinet/sdk";
@@ -208,12 +211,10 @@ async function runBasicTask() {
     role: "user",
     parts: [{ type: "text", text: "What is the capital of France?" }],
   };
-  // Assumes server implements tasks/send
+
   const task = await client.sendTask({ id: "basic-task-1", message });
   console.log("Task Completed:", task);
 }
-
-// runBasicTask(); // Requires a server supporting tasks/send
 ```
 
 #### Streaming Updates
@@ -249,8 +250,6 @@ async function runStreamingTask() {
   }
   console.log("Stream finished.");
 }
-
-// runStreamingTask();
 ```
 
 #### Authentication
@@ -267,8 +266,6 @@ client.addHeader("Authorization", "Bearer your-api-token");
 
 // Set multiple headers (overwrites existing)
 client.setHeaders({ Authorization: "Bearer ...", "X-Custom": "value" });
-
-// Now make requests...
 ```
 
 ### Server
@@ -287,9 +284,9 @@ import {
   InMemoryTaskStore,
 } from "@artinet/sdk";
 
-// Minimal agent logic
-const myAgentLogic: TaskHandler = async function* (context: TaskContext) {
-  console.log(`Task ${context.taskId} started.`);
+
+const myAgent: TaskHandler = async function* (context: TaskContext) {
+
   yield {
     state: "working",
     message: {
@@ -300,6 +297,7 @@ const myAgentLogic: TaskHandler = async function* (context: TaskContext) {
 
   // Check context.isCancelled() if operation is long
   // await someAsyncTask();
+  ...
 
   yield {
     name: "result.txt",
@@ -314,11 +312,10 @@ const myAgentLogic: TaskHandler = async function* (context: TaskContext) {
       parts: [{ type: "text", text: "Finished processing." }],
     },
   };
-  console.log(`Task ${context.taskId} completed.`);
 };
 
-const server = new A2AServer({
-  taskHandler: myAgentLogic,
+const myServer = new A2AServer({
+  taskHandler: myAgent,
   taskStore: new InMemoryTaskStore(),
   port: 3000,
   basePath: "/a2a",
@@ -331,7 +328,7 @@ const server = new A2AServer({
   },
 });
 
-server.start();
+myServer.start();
 console.log("A2A Server running on http://localhost:3000/a2a");
 ```
 
@@ -340,31 +337,20 @@ console.log("A2A Server running on http://localhost:3000/a2a");
 Use `FileStore` for file-based persistence. Ensure the directory exists.
 
 ```typescript
-import { A2AServer, FileStore, TaskHandler } from "@artinet/sdk";
 import path from "path";
 import fs from "fs";
-
-// Define your TaskHandler (myAgentLogic)
-// const myAgentLogic: TaskHandler = ...;
 
 const dataDir = path.join(process.cwd(), "a2a-data");
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-const store = new FileStore(dataDir);
+const myStore = new FileStore(dataDir);
 
-const server = new A2AServer({
-  taskHandler: myAgentLogic, // Your agent logic here
-  taskStore: store, // Use FileStore instance
-  port: 3001,
-  basePath: "/a2a-persistent",
-  card: {
-    /* ... agent card details ... */
-  },
+const myServer = new A2AServer({
+  taskStore: myStore,
+  ...
 });
-server.start();
-console.log("Persistent A2A Server running...");
 ```
 
 #### Logging
@@ -372,87 +358,111 @@ console.log("Persistent A2A Server running...");
 Use the built-in `pino`-based logger. Configure with `configureLogger`.
 
 ```typescript
-import { logger, configureLogger, LogLevel } from "@artinet/sdk";
+import { logger, configureLogger, LogLevel, logDebug } from "@artinet/sdk";
 
 // Configure logging level (optional)
 configureLogger({ level: "debug" });
 
 logger.info("Server starting...");
-try {
-  /* ... */
-} catch (err) {
-  logger.error({ err }, "Setup failed");
-}
-logger.debug({ taskId: "task-123" }, "Task status updated.");
+//use helper functions
+logDebug("LoggerTest", { taskId: "task-123" }, "Task status updated.");
 
 // Create child logger with bound context
 const taskLogger = logger.child({ taskId: "abc" });
 taskLogger.info("Processing step X");
 ```
 
-#### Advanced Server Customization
+#### Server Registration & Discovery
 
-Provide a custom `createJSONRPCServer` function (implementing `JSONRPCServerFactory`) for fine-grained control over the underlying Jayson server or to integrate with existing Express apps. See `examples/` for a potential use case.
+The SDK includes features to help make your agent discoverable:
+
+- **Automatic Registration:** You can configure your `A2AServer` to automatically register your `AgentCard` with the [A2A Registry](https://artinet.io) upon startup by setting `register: true` (default: `false`) in the server parameters.
 
 ```typescript
-import {
-  CreateJSONRPCServerParams,
-  JSONRPCServerType,
-  JSONRPCServerFactory,
-  A2AServer, // Import A2AServer to use it
-  TaskHandler, // Needed for the example usage
-  InMemoryTaskStore, // Needed for the example usage
-} from "@artinet/sdk";
-import jayson from "jayson";
-import { A2AMethods } from "@artinet/sdk/dist/server/a2a-methods";
-
-// Define your TaskHandler
-// const myAgentLogic: TaskHandler = ...;
-
-const myCustomCreateServer: JSONRPCServerFactory = (
-  params: CreateJSONRPCServerParams
-): JSONRPCServerType => {
-  const a2aMethods = new A2AMethods(
-    params.taskHandler,
-    params.taskStore,
-    params.agentCard
-  );
-  const jaysonServer = new jayson.Server({
-    // Standard A2A methods
-    "tasks/send": a2aMethods.send.bind(a2aMethods),
-    "tasks/get": a2aMethods.get.bind(a2aMethods),
-    "tasks/cancel": a2aMethods.cancel.bind(a2aMethods),
-    // ... other A2A methods ...
-
-    // Custom non-A2A method
-    myCustomMethod: (
-      args: { value: number },
-      callback: jayson.JSONRPCCallbackType
-    ) => {
-      callback(null, { result: `Custom result: ${args.value * 2}` });
+  const myServer = new A2AServer({
+    ...
+    card: {
+      ...
+      url: "http://my-public-domain:3000/my-agent", // Publicly accessible URL
+      ...
     },
+    register: true, // Enable automatic registration on start
   });
-  return jaysonServer;
+```
+
+- **Custom Agent Card Path:** By default, the server exposes its `AgentCard` at `/.well-known/agent.json` [RFC8615](https://datatracker.ietf.org/doc/html/rfc8615) and a fallback at `/agent-card`. You can specify a different fallback path using the `fallbackPath` option in `A2AServerParams`.
+
+```typescript
+  const myServer = new A2AServer({
+    ...
+    basePath: "/apiV2"
+    fallbackPath: "/apiV2/custom-card-info", // Agent card available here
+    ...
+  });
+// The AgentCard is now accessible at http://localhost:3001/apiV2/custom-card-info
+```
+
+#### Advanced Server Customization
+
+Provide a custom `createJSONRPCServer` function (implementing `JSONRPCServerFactory`) for fine-grained control over the underlying RPC server.
+
+This factory function receives objects of type `CreateJSONRPCServerParams` & `RequestParams` containing the necessary SDK dependencies (`taskHandler`, `taskStore`, `agentCard`, `activeCancellations`, `createTaskContext`, `closeStreamsForTask`) and the specific method paramaters (i.e. `SendTaskRequest["params"]`). You can use these dependencies to configure the standard A2A methods and add your own custom JSON-RPC methods.
+
+The SDK exports default handlers for the standard A2A methods (e.g., `defaultSendTaskMethod`), create your own using dedicated A2A method types(`SendTaskMethod`) and use `createJSONRPCMethod` to easily wrap these methods with dependency injection and error handling.
+
+See `src/server/lib/middleware/factory.ts` and `src/server/lib/middleware/a2a-methods.ts` for implementation details.
+
+**Example:**
+
+```typescript
+
+const myCustomSendMethod: SendTaskMethod = (
+  deps,
+  requestParams,
+  callback
+) => {
+  const { taskStore, taskHandler, createTaskContext } = deps;
+  const taskId = extractTaskId(requestParams.id);
+  const { message, sessionId, metadata } = requestParams;
+  ...
+  callback(null, ...);
 };
 
-// Example usage:
-/*
+const myCustomRPCServer: JSONRPCServerFactory = (
+  params: CreateJSONRPCServerParams
+): JSONRPCServerType => {
+  //Use a custom task/send method
+  const taskSendMethod = createJSONRPCMethod(params, myCustomSendMethod, "tasks/send");
+  const taskGetMethod = createJSONRPCMethod(params, defaultGetTaskMethod, "tasks/get");
+  const taskCancelMethod = createJSONRPCMethod(params, defaultCancelTaskMethod, "tasks/cancel");
+
+  // Note: Push notifications are not fully implemented yet
+  const taskPushNotificationSetMethod = createJSONRPCMethod(params, defaultSetTaskPushNotificationMethod, "tasks/pushNotification/set");
+  const taskPushNotificationGetMethod = createJSONRPCMethod(params, defaultGetTaskPushNotificationMethod, "tasks/pushNotification/get");
+
+  const rpcServer = new JSONRPCServer({
+    "tasks/send": taskSendMethod,
+    "tasks/get": taskGetMethod,
+    "tasks/cancel": taskCancelMethod,
+    "tasks/pushNotification/set": taskPushNotificationSetMethod,
+    "tasks/pushNotification/get": taskPushNotificationGetMethod,
+  });
+
+  return rpcServer;
+};
+
+
 const server = new A2AServer({
-  taskHandler: myAgentLogic,
-  taskStore: new InMemoryTaskStore(),
-  port: 3002,
-  basePath: "/a2a-custom",
-  createJSONRPCServer: myCustomCreateServer, // Pass the factory
-  card: { ... },
+  createJSONRPCServer: myCustomRPCServer,
+  ...
 });
-server.start();
-console.log("Custom A2A Server running...");
-*/
 ```
 
 **Using the Custom Factory**
 
-Pass your factory during `A2AServer` initialization. Note that `A2AServer` adds Express middleware for SSE (`tasks/sendSubscribe`) and the `/agent/card` GET endpoint, which your custom setup might need to replicate if not using `A2AServer` directly.
+Pass your factory function via the `createJSONRPCServer` option during `A2AServer` initialization.
+
+**Important:** The default `A2AServer` setup automatically adds Express middleware to handle Server-Sent Events (SSE) for `tasks/sendSubscribe` and `tasks/resubscribe`, as well as the `/agent/card` (and `/.well-known/agent.json`) GET endpoints. If you are **not** using `A2AServer` and integrating the Jayson server middleware into your own Express application, you **must** implement these SSE and card endpoints yourself to maintain full A2A compliance, especially for streaming functionality. See `src/server/lib/express-server.ts` for how the default server handles these routes.
 
 ## Contributing
 

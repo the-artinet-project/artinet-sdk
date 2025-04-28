@@ -19,6 +19,7 @@ export function createExpressServer(params: CreateExpressServerParams): {
     basePath,
     port,
     rpcServer,
+    fallbackPath,
     errorHandler,
     onTaskSendSubscribe,
     onTaskResubscribe,
@@ -33,7 +34,7 @@ export function createExpressServer(params: CreateExpressServerParams): {
     res.json(card);
   });
 
-  app.get("/agent-card", (_, res) => {
+  app.get(fallbackPath, (_, res) => {
     res.json(card);
   });
 

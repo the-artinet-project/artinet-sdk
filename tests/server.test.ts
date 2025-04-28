@@ -7,17 +7,12 @@ import {
   TaskContext,
   TaskYieldUpdate,
   TaskStore,
-  logger,
+  configureLogger,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Define test task handler
 async function* basicTaskHandler(
@@ -169,6 +164,7 @@ describe("A2AServer", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32600); // Invalid request error
+      expect(response.body.error.message).toBe("Invalid request"); //todo expected "Request payload validation error" but may be caused by the jsonrpc middleware
     });
 
     it("returns an error for missing task ID", async () => {
@@ -191,7 +187,8 @@ describe("A2AServer", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602); // Invalid params error
+      expect(response.body.error.code).toBe(-32602);
+      expect(response.body.error.message).toBe("Invalid parameters");
     });
   });
 
@@ -249,7 +246,8 @@ describe("A2AServer", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001); // Task not found error (updated code)
+      expect(response.body.error.code).toBe(-32001);
+      expect(response.body.error.message).toBe("Task not found");
     });
   });
 
@@ -289,7 +287,8 @@ describe("A2AServer", () => {
       // in which case we'll get a "task not cancelable" error,
       // but that's also a valid test result
       if (response.body.error) {
-        expect(response.body.error.code).toBe(-32002); // Task not cancelable error (updated code)
+        expect(response.body.error.code).toBe(-32002);
+        expect(response.body.error.message).toBe("Task cannot be canceled");
       } else {
         expect(response.status).toBe(200);
         expect(response.body.result).toBeDefined();
@@ -314,7 +313,8 @@ describe("A2AServer", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32601); // Method not found error
+      expect(response.body.error.code).toBe(-32601);
+      expect(response.body.error.message).toBe("Method not found");
     });
   });
 });

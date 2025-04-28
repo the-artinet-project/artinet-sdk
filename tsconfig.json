@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
@@ -14,7 +14,7 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "outDir": "./dist",
-    "lib": ["ES2020", "DOM"],
+    "lib": ["ES2022", "DOM"],
     "isolatedModules": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

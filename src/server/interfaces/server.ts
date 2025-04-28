@@ -19,6 +19,7 @@ import { TaskContext } from "./context.js";
 export interface Server {
   start(): express.Express;
   stop(): Promise<void>;
+  registerServer(): Promise<string>;
   getBasePath(): string;
   getCorsOptions(): CorsOptions;
   getCard(): AgentCard;

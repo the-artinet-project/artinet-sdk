@@ -11,6 +11,7 @@ import type {
   TaskArtifactUpdateEvent,
   TaskStatus,
   Artifact,
+  A2ARequest,
 } from "./schema.js";
 
 /**
@@ -65,6 +66,7 @@ export type TaskEvent = TaskStatusUpdateEvent | TaskArtifactUpdateEvent;
 export type TaskYieldUpdate = Omit<TaskStatus, "timestamp"> | Artifact;
 
 export type ExtendedTaskStatusUpdate = Omit<TaskStatus, "timestamp">;
+export type RequestParams = Required<Pick<A2ARequest, "params">>["params"];
 
 export * from "./schema.js";
 export type { A2AError as A2AErrorType } from "./schema.js";

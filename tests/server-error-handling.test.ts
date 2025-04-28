@@ -6,17 +6,12 @@ import {
   InMemoryTaskStore,
   TaskContext,
   TaskYieldUpdate,
-  logger,
+  configureLogger,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
-// Mock logger to suppress output during tests
-jest.spyOn(logger, "info").mockImplementation(() => {});
-jest.spyOn(logger, "debug").mockImplementation(() => {});
-jest.spyOn(logger, "error").mockImplementation(() => {});
-jest.spyOn(logger, "warn").mockImplementation(() => {});
+configureLogger({ level: "silent" });
 
 // Define an error-prone task handler for testing
 async function* errorProneTaskHandler(
@@ -131,6 +126,7 @@ describe("A2AServer Error Handling", () => {
         // Or it might return an internal error
         expect(response.body.error).toBeDefined();
         expect(response.body.error.code).toBe(-32603); // Internal error
+        expect(response.body.error.message).toBe("Internal error");
       }
     });
 
@@ -177,6 +173,7 @@ describe("A2AServer Error Handling", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32700); // JSON parse error
+      expect(response.body.error.message).toBe("Invalid JSON payload");
     });
 
     it("returns error for empty request body", async () => {
