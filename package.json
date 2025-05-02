@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "TypeScript SDK for the Agent2Agent (A2A) Protocol",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,7 +14,6 @@
     }
   },
   "files": [
-    "bin",
     "dist",
     "README.md",
     "CHANGELOG.md",
@@ -39,7 +38,7 @@
     "protocol"
   ],
   "author": "Artinet Team",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/the-artinet-project/artinet-sdk"
@@ -49,7 +48,7 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@artinet/metadata-validator": "file:bin/artinet-metadata-validator-0.0.1.tgz",
+    "@artinet/metadata-validator": "^0.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/pino": "^7.0.4",
