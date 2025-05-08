@@ -1,7 +1,5 @@
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
-import { logInfo } from "../../utils/logging/log.js";
-import http from "http";
 import { CreateExpressServerParams } from "../interfaces/params.js";
 
 /**
@@ -11,13 +9,11 @@ import { CreateExpressServerParams } from "../interfaces/params.js";
  */
 export function createExpressServer(params: CreateExpressServerParams): {
   app: express.Express;
-  server: http.Server;
 } {
   const {
     card,
     corsOptions,
     basePath,
-    port,
     rpcServer,
     fallbackPath,
     errorHandler,
@@ -64,13 +60,5 @@ export function createExpressServer(params: CreateExpressServerParams): {
   // Fallback error handler
   app.use(errorHandler);
 
-  // Start listening
-  const server = app.listen(port, () => {
-    logInfo("A2AServer", `A2A Server started and listening`, {
-      port,
-      path: basePath,
-    });
-  });
-
-  return { app, server };
+  return { app };
 }

@@ -29,6 +29,7 @@ export interface Server {
   getActiveStreams(): Map<string, Response[]>;
   getPort(): number;
   getRpcServer(): JSONRPCServerType;
+  getExpressApp(): express.Express;
   getServerInstance(): http.Server | undefined;
   getTaskContext(
     task: Task,

@@ -23,6 +23,7 @@ import {
   WORKING_UPDATE,
   logDebug,
   register,
+  logInfo,
 } from "../utils/index.js";
 
 import {
@@ -54,6 +55,7 @@ export class A2AServer implements Server {
   private port: number;
   private rpcServer: JSONRPCServerType;
   private serverInstance: http.Server | undefined;
+  private app: express.Express;
   private fallbackPath: string;
   private register: boolean;
   private activeCancellations: Set<string> = new Set();
@@ -133,6 +135,13 @@ export class A2AServer implements Server {
   }
 
   /**
+   * Returns the Express app
+   */
+  getExpressApp(): express.Express {
+    return this.app;
+  }
+
+  /**
    * Returns a task context for the specified task and messages
    */
   getTaskContext(
@@ -201,6 +210,20 @@ export class A2AServer implements Server {
         });
 
     this.fallbackPath = params.fallbackPath ?? "/agent-card";
+
+    const { app } = createExpressServer({
+      card: this.card,
+      corsOptions: this.corsOptions,
+      basePath: this.basePath,
+      port: this.port,
+      rpcServer: this.rpcServer,
+      fallbackPath: this.fallbackPath,
+      errorHandler: errorHandler,
+      onTaskSendSubscribe: this.handleTaskSendSubscribe.bind(this),
+      onTaskResubscribe: this.handleTaskResubscribe.bind(this),
+    });
+    this.app = app;
+
     //register your server with the A2A registry on startup
     this.register = params.register ?? false;
 
@@ -219,17 +242,14 @@ export class A2AServer implements Server {
     if (this.serverInstance) {
       throw new Error("Server already started");
     }
-    const { app, server } = createExpressServer({
-      card: this.card,
-      corsOptions: this.corsOptions,
-      basePath: this.basePath,
-      port: this.port,
-      rpcServer: this.rpcServer,
-      fallbackPath: this.fallbackPath,
-      errorHandler: errorHandler,
-      onTaskSendSubscribe: this.handleTaskSendSubscribe.bind(this),
-      onTaskResubscribe: this.handleTaskResubscribe.bind(this),
+
+    const server = this.app.listen(this.port, () => {
+      logInfo("A2AServer", `A2A Server started and listening`, {
+        port: this.port,
+        path: this.basePath,
+      });
     });
+
     this.serverInstance = server;
     //lazily register your server with the A2A registry on startup
     //this is so that you can start the server without having to wait for registration
@@ -237,7 +257,7 @@ export class A2AServer implements Server {
     if (this.register) {
       this.registerServer();
     }
-    return app;
+    return this.app;
   }
 
   /**
