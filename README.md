@@ -34,7 +34,7 @@ This SDK significantly enhances the foundational A2A concepts and samples provid
       - [Logging](#logging)
       - [Server Registration \& Discovery](#server-registration--discovery)
       - [Advanced Server Customization](#advanced-server-customization)
-    - [Agent Code Deployment (Beta)](#agent-code-deployment-beta)
+    - [Quick-Agents (Alpha)](#quick-agents-alpha)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
@@ -466,24 +466,61 @@ Pass your factory function via the `createJSONRPCServer` option during `A2AServe
 
 **Important:** The default `A2AServer` setup automatically adds Express middleware to handle Server-Sent Events (SSE) for `tasks/sendSubscribe` and `tasks/resubscribe`, as well as the `/agent/card` (and `/.well-known/agent.json`) GET endpoints. If you are **not** using `A2AServer` and integrating the Jayson server middleware into your own Express application, you **must** implement these SSE and card endpoints yourself to maintain full A2A compliance, especially for streaming functionality. See `src/server/lib/express-server.ts` for how the default server handles these routes.
 
-### Agent Code Deployment (Beta)
+### Quick-Agents (Alpha)
 
-We are excited to introduce new capabilities for deploying agent code directly through the Artinet SDK. Currently, a `testDeployment` utility is available for all users to bundle and test their agent logic in a sandboxed environment. 
+We are excited to introduce new capabilities for deploying agents directly onto the artinet. 
 
-**BETA USERS!** You'll soon be getting access to full deployment functionalities allowing you to host your agents on the Artinet platform.
+In this weeks release, we've added a `testDeployment` utility which is available for all users letting you bundle and test your agent logic in a temporary sandboxed environment. 
+
+**ARTINET BETA USERS!** You'll soon be getting access to full deployment functionalities allowing you to host your agents on the artinet for free!
 
 To join the beta waitlist, please email us at humans@artinet.io and stay tuned for more updates!
 
 Key features include:
 
--   **Bundling Agent Code:** The SDK now includes an `esbuild`-based utility (`src/utils/deployment/bundler.ts`) to bundle your agent's JavaScript or TypeScript code and its local dependencies into a single, minified file. This is essential for deployment.
+-   **Easy Agent Bundling:** Bundle your agent's code and dependencies into a single file using the `bundle` utility.
+    ```typescript
+    import { bundle } from "@artinet/sdk";
 
--   **Task Wrapper:** Helper utilities like `taskHandlerProxy` and `fetchResponseProxy` (available in `src/utils/deployment/task-wrapper.ts` and demonstrated in `examples/task-wrapper.js`) are provided to streamline the agent code structure for deployment. These wrappers help manage the task context and yield operations within the deployment environment.
+    const bundledCode = await bundle(new URL('./your-agent.ts', import.meta.url));
+    ```
 
--   **Testing Deployments:** Use the `testDeployment` function (from `src/utils/deployment/test-deployment.ts`) to simulate the deployment of your bundled agent code. This function sends your code to a dedicated test endpoint (e.g., `https://agents.artinet.io/test/deploy`), deploys it in a sandboxed environment, and allows you to run test tasks against the provisionally deployed agent. This is invaluable for verifying your agent's behavior before full-scale deployment.
-    You can see examples of this in action in `examples/code-deployment.js`, `examples/code-deployment.ts`, and the tests under `tests/deployment.test.ts`.
+-   **Sandboxed Enviroments:** Utilities like `taskHandlerProxy` and `fetchResponseProxy` streamline agent logic for quick and easy deployments.
+    ```typescript
+    import { taskHandlerProxy, fetchResponseProxy } from "@artinet/sdk/";
+
+    async function myAgent(context) {
+      //call any other agent in the artinet with fetchResponseProxy
+      const friendResponse = await fetchResponseProxy("MyFriendlyAgent", 
+        [{ role: "user", content: "Tell me a joke."}]
+      );
+      yield { state: "completed", message: { role: "agent", parts: [{type: "text", text: freiendResponse.choices[0].message.content }] } };
+    }
+
+    await taskHandlerProxy(myAgent);
+    ```
+
+-   **Test-Agents:** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
+    ```typescript
+    import { testDeployment, ServerDeploymentRequestParams, SendTaskRequest } from "@artinet/sdk";
+
+    const deploymentParams: ServerDeploymentRequestParams = {
+      code: "/* bundled code string */",
+    };
+    //create a list of tasks for your agent to complete once deployed
+    const testRequests: SendTaskRequest[] = [
+      { id: "t1", message: { role: "user", parts: [{ type: "text", text: "Hi!" }] } }
+    ];
+
+    for await (const result of testDeployment(deploymentParams, testRequests)) {
+      console.log(result); //process the task completion requests as they come in to confirm your agents logic
+    }
+    ```
 
 -   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`.
+-   **QUICK-AGENT FAQs**
+-   Test-Agents expire after 60s (need more time? let us know @humans@artinet.io)
+-   Quick-Agents do not have access to a filesystem or networking (limited persistance & networking capabalities are on the project roadmap).
 
 ## Contributing
 
