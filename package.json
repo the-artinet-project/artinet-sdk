@@ -1,18 +1,19 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "description": "TypeScript SDK for the Agent2Agent (A2A) Protocol",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
   },
+  "rootDir": ".",
   "files": [
     "dist",
     "README.md",
@@ -53,6 +54,7 @@
     "@types/express": "^5.0.1",
     "@types/pino": "^7.0.4",
     "cors": "^2.8.5",
+    "esbuild": "^0.25.4",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
     "jayson": "^4.2.0",

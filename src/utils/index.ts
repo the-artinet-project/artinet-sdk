@@ -4,3 +4,6 @@ export * from "./common/utils.js";
 export * from "./logging/log.js";
 export * from "./logging/logger.js";
 export * from "./api/register.js";
+export * from "./deployment/test-deployment.js";
+export * from "./deployment/task-wrapper.js";
+export * from "./deployment/bundler.js";

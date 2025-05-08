@@ -5,13 +5,16 @@
  */
 
 import type {
-  JSONRPCMessage,
-  JSONRPCError,
   TaskStatusUpdateEvent,
   TaskArtifactUpdateEvent,
   TaskStatus,
   Artifact,
   A2ARequest,
+  JSONRPCRequest,
+  JSONRPCResponse,
+  AgentCard,
+  JSONRPCMessage,
+  JSONRPCError,
 } from "./schema.js";
 
 /**
@@ -20,6 +23,7 @@ import type {
  */
 
 /**
+ * @deprecated Use JSONRPCResponse instead
  * Represents a successful JSON-RPC response with a result.
  */
 export interface JSONRPCSuccessResponse<R = any> extends JSONRPCMessage {
@@ -35,6 +39,7 @@ export interface JSONRPCSuccessResponse<R = any> extends JSONRPCMessage {
 }
 
 /**
+ * @deprecated Use JSONRPCResponse instead
  * Represents an error JSON-RPC response.
  */
 export interface JSONRPCErrorResponse<E = any> extends JSONRPCMessage {
@@ -50,6 +55,7 @@ export interface JSONRPCErrorResponse<E = any> extends JSONRPCMessage {
 }
 
 /**
+ * @deprecated Use JSONRPCResponse instead
  * Combined JSON-RPC response type as a discriminated union.
  * This ensures a response is either a success with a result, or an error.
  */
@@ -67,6 +73,78 @@ export type TaskYieldUpdate = Omit<TaskStatus, "timestamp"> | Artifact;
 
 export type ExtendedTaskStatusUpdate = Omit<TaskStatus, "timestamp">;
 export type RequestParams = Required<Pick<A2ARequest, "params">>["params"];
+
+export interface ServerDeploymentRequestParams {
+  /**
+   * The name of the server
+   */
+  name: string;
+  /**
+   * The agent card of the server
+   */
+  agentCard: AgentCard;
+  /**
+   * The minified code of the server
+   */
+  code: string;
+  /**
+   * The NPM dependencies of the server
+   */
+  dependencies?: string[];
+}
+
+export interface BaseServerDeploymentResponseParams {
+  /**
+   * The deployment ID
+   */
+  deploymentId: string;
+
+  /**
+   * Whether the deployment was successful
+   */
+  success: boolean;
+}
+
+export interface ServerDeploymentSuccessResponseParams
+  extends BaseServerDeploymentResponseParams {
+  /**
+   * The name of the server
+   */
+  name: string;
+  /**
+   * The URL of the server
+   */
+  url: string;
+  /**
+   * The base path of the server
+   */
+  basePath: string;
+}
+
+export interface ServerDeploymentRequest extends JSONRPCRequest {
+  /**
+   * The method name
+   */
+  method: "/deploy";
+  /**
+   * The parameters
+   */
+  params: ServerDeploymentRequestParams;
+}
+
+export interface TestServerDeploymentRequest extends JSONRPCRequest {
+  /**
+   * The method name
+   */
+  method: "/test/deploy";
+  /**
+   * The parameters
+   */
+  params: ServerDeploymentRequestParams;
+}
+
+export type ServerDeploymentResponse =
+  JSONRPCResponse<ServerDeploymentSuccessResponseParams>;
 
 export * from "./schema.js";
 export type { A2AError as A2AErrorType } from "./schema.js";

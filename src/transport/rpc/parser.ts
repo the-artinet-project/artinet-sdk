@@ -1,6 +1,6 @@
 import { JSONRPCResponse } from "../../types/extended-schema.js";
 import { SystemError, PARSE_ERROR } from "../../utils/common/errors.js";
-
+import { logError } from "../../utils/logging/log.js";
 /**
  * Parses a JSON-RPC response string and validates its structure.
  * If the response contains an error, it is thrown as an A2AError.
@@ -39,6 +39,7 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
 
     return parsed;
   } catch (error) {
+    logError("parseResponse", "Error parsing response:", data);
     if (error instanceof SystemError) {
       throw error;
     }
