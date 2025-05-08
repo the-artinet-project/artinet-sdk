@@ -34,6 +34,7 @@ This SDK significantly enhances the foundational A2A concepts and samples provid
       - [Logging](#logging)
       - [Server Registration \& Discovery](#server-registration--discovery)
       - [Advanced Server Customization](#advanced-server-customization)
+    - [Agent Code Deployment (Beta)](#agent-code-deployment-beta)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
@@ -49,6 +50,7 @@ This SDK significantly enhances the foundational A2A concepts and samples provid
 - **Configurable Logging:** Integrated structured logging via `pino`. Configurable levels using `configureLogger` and `LogLevel`.
 - **Advanced Customization:** Allows providing a custom `JSONRPCServerFactory` for fine-grained control over the JSON-RPC server, enabling integration with existing Express apps or adding custom methods.
 - **Comprehensive Testing:** Includes a suite of tests to ensure reliability and maintainability.
+- **Code Deployment (Beta)** | Bundle, test, and (soon) deploy agent code. Includes bundler, task wrapper, and test deployment utility.           | `bundle`, `testDeployment`, `taskHandlerProxy`, `fetchResponseProxy`, `ServerDeploymentRequestParams`, `ServerDeploymentResponse` |
 
 | Component/Feature   | Description                                                                 | Key Classes/Types                                                                            |
 | :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
@@ -463,6 +465,25 @@ const server = new A2AServer({
 Pass your factory function via the `createJSONRPCServer` option during `A2AServer` initialization.
 
 **Important:** The default `A2AServer` setup automatically adds Express middleware to handle Server-Sent Events (SSE) for `tasks/sendSubscribe` and `tasks/resubscribe`, as well as the `/agent/card` (and `/.well-known/agent.json`) GET endpoints. If you are **not** using `A2AServer` and integrating the Jayson server middleware into your own Express application, you **must** implement these SSE and card endpoints yourself to maintain full A2A compliance, especially for streaming functionality. See `src/server/lib/express-server.ts` for how the default server handles these routes.
+
+### Agent Code Deployment (Beta)
+
+We are excited to introduce new capabilities for deploying agent code directly through the Artinet SDK. Currently, a `testDeployment` utility is available for all users to bundle and test their agent logic in a sandboxed environment. 
+
+**BETA USERS!** You'll soon be getting access to full deployment functionalities allowing you to host your agents on the Artinet platform.
+
+To join the beta waitlist, please email us at humans@artinet.io and stay tuned for more updates!
+
+Key features include:
+
+-   **Bundling Agent Code:** The SDK now includes an `esbuild`-based utility (`src/utils/deployment/bundler.ts`) to bundle your agent's JavaScript or TypeScript code and its local dependencies into a single, minified file. This is essential for deployment.
+
+-   **Task Wrapper:** Helper utilities like `taskHandlerProxy` and `fetchResponseProxy` (available in `src/utils/deployment/task-wrapper.ts` and demonstrated in `examples/task-wrapper.js`) are provided to streamline the agent code structure for deployment. These wrappers help manage the task context and yield operations within the deployment environment.
+
+-   **Testing Deployments:** Use the `testDeployment` function (from `src/utils/deployment/test-deployment.ts`) to simulate the deployment of your bundled agent code. This function sends your code to a dedicated test endpoint (e.g., `https://agents.artinet.io/test/deploy`), deploys it in a sandboxed environment, and allows you to run test tasks against the provisionally deployed agent. This is invaluable for verifying your agent's behavior before full-scale deployment.
+    You can see examples of this in action in `examples/code-deployment.js`, `examples/code-deployment.ts`, and the tests under `tests/deployment.test.ts`.
+
+-   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`.
 
 ## Contributing
 

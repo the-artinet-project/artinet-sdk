@@ -5,7 +5,26 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2025-28-04
+## [0.4.1] - 2025-05-08
+
+### Added
+
+- Utility for bundling agent code using `esbuild` (`src/utils/deployment/bundler.ts`).
+- Task handler wrapper (`taskHandlerProxy`) and `fetchResponseProxy` for streamlined agent deployment logic (`src/utils/deployment/task-wrapper.ts`, `examples/task-wrapper.js`).
+- Test deployment functionality (`testDeployment`) to test agent deployments in a sandboxed environment (`src/utils/deployment/test-deployment.ts`).
+- New types for server deployment requests and responses (`ServerDeploymentRequestParams`, `ServerDeploymentResponse`, etc. in `src/types/extended-schema.ts`).
+- Comprehensive tests for the new bundler and deployment features (`tests/bundler.test.ts`, `tests/deployment.test.ts`).
+- Example agents demonstrating code deployment: `examples/code-deployment.js` and `examples/code-deployment.ts`.
+- `esbuild` dependency for bundling.
+
+### Changed
+
+- **BREAKING**: Updated `rootDir` in `tsconfig.json` to `src` and `declarationDir` to `./dist/types`. This changes the output structure for type declarations.
+- Type declaration paths in `package.json` updated to `dist/types/index.d.ts` to reflect `tsconfig.json` changes.
+- Deprecated `JSONRPCSuccessResponse`, `JSONRPCErrorResponse` in `src/types/extended-schema.ts` in favor of the more general `JSONRPCResponse`.
+- Enhanced error logging in `src/transport/rpc/parser.ts` by adding response data to parse errors.
+
+## [0.3.0] - 2025-04-28
 
 ### Added
 
