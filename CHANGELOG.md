@@ -5,6 +5,30 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-05-10
+
+### Added
+- `A2AServer.getExpressApp()`: New method to access the underlying Express application instance, allowing for more flexible server customization and middleware integration.
+- More specific error messages for various RPC errors (e.g., `TASK_NOT_FOUND`, `INVALID_PARAMS`, `PARSE_ERROR`), providing better debugging information and context.
+
+### Changed
+- **BREAKING**: The `data` parameter in the `SystemError` constructor and all specific error factory functions (e.g., `PARSE_ERROR()`, `INVALID_PARAMS()`, `TASK_NOT_FOUND()`) is now mandatory. This change aims to enhance error reporting by ensuring contextual information is always provided with errors.
+- **BREAKING**: Refactored the `createExpressServer` utility (`src/server/lib/express-server.ts`):
+    - It no longer accepts a `port` parameter.
+    - It no longer creates or returns an `http.Server` instance (i.e., it doesn't call `app.listen()`). It now solely configures and returns the Express `app` instance.
+    - The responsibility of starting the HTTP server is now fully handled within the `A2AServer.start()` method, which uses the `app` configured by `createExpressServer`.
+- Updated numerous TypeScript type definitions in `src/types/schema.ts` to more strictly define optional properties. Many properties that were previously `type | null` are now just `type?`, and JSDoc `@default null` comments have been removed. This aligns with standard TypeScript practices where optional properties are either present with a value or absent (undefined), rather than being explicitly `null`.
+- When a task is initiated via `A2AServer.sendTaskAndStore()`, the initial task status (`Task.status`) no longer includes a `message: null` field.
+- In `src/server/lib/state.ts`, when creating a new task object during `loadState`, `sessionId` and `metadata` properties are assigned directly if provided, without defaulting to `null` if they are undefined.
+- Replaced generic `METHOD_NOT_FOUND()` errors with more specific `PUSH_NOTIFICATION_NOT_SUPPORTED()` errors in `defaultSetTaskPushNotificationMethod` and `defaultGetTaskPushNotificationMethod` when the agent's card indicates that push notifications are not supported.
+
+### Removed
+- The test file `tests/deployment.test.ts` has been removed. The `testDeployment` utility and related "Quick-Agents" features remain.
+
+### Improved
+- The documentation section in `README.md` regarding agent code deployment has been renamed from "Agent Code Deployment (Beta)" to "Quick-Agents (Alpha)". This section includes updated descriptions, code examples for bundling and testing agents, and a new FAQ.
+- Server startup logging in `A2AServer` now consistently uses `logInfo` for messages like "A2A Server started and listening".
+
 ## [0.4.1] - 2025-05-08
 
 ### Added
