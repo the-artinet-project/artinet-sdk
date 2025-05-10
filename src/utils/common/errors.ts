@@ -15,14 +15,14 @@ import {
 import { logError } from "../../utils/logging/log.js";
 import { JSONRPCError } from "../../types/schema.js";
 
-export class SystemError<ErrorData = unknown | null, C extends number = number>
+export class SystemError<ErrorData = unknown, C extends number = number>
   extends Error
   implements A2AErrorType
 {
   code: C;
-  data?: ErrorData;
+  data: ErrorData;
 
-  constructor(message: string, code: C, data?: ErrorData) {
+  constructor(message: string, code: C, data: ErrorData) {
     super(message);
     this.name = "RpcError";
     this.message = message;
@@ -31,70 +31,64 @@ export class SystemError<ErrorData = unknown | null, C extends number = number>
   }
 }
 // Factory methods for common errors
-export const PARSE_ERROR = <ErrorData = unknown | null>(data?: ErrorData) =>
+export const PARSE_ERROR = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeParseError>(
     "Invalid JSON payload",
     ErrorCodeParseError,
     data
   );
 
-export const METHOD_NOT_FOUND = <ErrorData = unknown | null>(
-  data?: ErrorData
-) =>
+export const METHOD_NOT_FOUND = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeMethodNotFound>(
     "Method not found",
     ErrorCodeMethodNotFound,
     data
   );
 
-export const INVALID_REQUEST = <ErrorData = unknown | null>(data?: ErrorData) =>
+export const INVALID_REQUEST = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeInvalidRequest>(
     "Request payload validation error",
     ErrorCodeInvalidRequest,
     data
   );
 
-export const INVALID_PARAMS = <ErrorData = unknown | null>(data?: ErrorData) =>
+export const INVALID_PARAMS = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeInvalidParams>(
     "Invalid parameters",
     ErrorCodeInvalidParams,
     data
   );
 
-export const INTERNAL_ERROR = <ErrorData = unknown | null>(data?: ErrorData) =>
+export const INTERNAL_ERROR = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeInternalError>(
     "Internal error",
     ErrorCodeInternalError,
     data
   );
 
-export const TASK_NOT_FOUND = <ErrorData = unknown | null>(data?: ErrorData) =>
+export const TASK_NOT_FOUND = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeTaskNotFound>(
     "Task not found",
     ErrorCodeTaskNotFound,
     data
   );
 
-export const TASK_NOT_CANCELABLE = <ErrorData = unknown | null>(
-  data?: ErrorData
-) =>
+export const TASK_NOT_CANCELABLE = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeTaskNotCancelable>(
     "Task cannot be canceled",
     ErrorCodeTaskNotCancelable,
     data
   );
 
-export const UNSUPPORTED_OPERATION = <ErrorData = unknown | null>(
-  data?: ErrorData
-) =>
+export const UNSUPPORTED_OPERATION = <ErrorData = unknown>(data: ErrorData) =>
   new SystemError<ErrorData, ErrorCodeUnsupportedOperation>(
     "This operation is not supported",
     ErrorCodeUnsupportedOperation,
     data
   );
 
-export const PUSH_NOTIFICATION_NOT_SUPPORTED = <ErrorData = unknown | null>(
-  data?: ErrorData
+export const PUSH_NOTIFICATION_NOT_SUPPORTED = <ErrorData = unknown>(
+  data: ErrorData
 ) =>
   new SystemError<ErrorData, ErrorCodePushNotificationNotSupported>(
     "Push Notification is not supported",

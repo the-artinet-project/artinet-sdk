@@ -12,7 +12,7 @@ import { logError } from "../../utils/logging/log.js";
  */
 export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
   if (!data) {
-    throw PARSE_ERROR();
+    throw PARSE_ERROR("Invalid response data");
   }
 
   try {
@@ -30,11 +30,11 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
       parsed === null ||
       parsed.jsonrpc !== "2.0"
     ) {
-      throw PARSE_ERROR();
+      throw PARSE_ERROR<string>("invalid jsonrpc");
     }
 
     if (parsed.result === undefined) {
-      throw PARSE_ERROR();
+      throw PARSE_ERROR("result is undefined");
     }
 
     return parsed;

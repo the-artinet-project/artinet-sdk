@@ -48,10 +48,10 @@ export function validateTaskResubscribeParams(
 ): asserts params is TaskQueryParams {
   // Structure validation
   if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid parameters");
   }
   if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid task ID");
   }
 }
 /**
@@ -64,20 +64,20 @@ export function validateTaskSendParams(
 ): asserts params is TaskSendParams {
   // Structure validation
   if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid parameters");
   }
   if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid task ID");
   }
 
   // Message validation
   if (!params.message || typeof params.message !== "object") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid message");
   }
 
   // Role validation
   if (params.message.role !== "user") {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid message role");
   }
 
   // Parts validation
@@ -85,13 +85,13 @@ export function validateTaskSendParams(
     !Array.isArray(params.message.parts) ||
     params.message.parts.length === 0
   ) {
-    throw INVALID_PARAMS();
+    throw INVALID_PARAMS<string>("Invalid message parts");
   }
 }
 
 export function extractTaskId(id: number | string | null | undefined): string {
   if (!id) {
-    throw INVALID_PARAMS("Missing task ID");
+    throw INVALID_PARAMS<string>("Missing task ID");
   }
   if (typeof id === "number") {
     return id.toString();

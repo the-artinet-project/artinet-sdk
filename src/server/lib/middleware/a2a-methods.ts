@@ -5,7 +5,6 @@ import { loadState, updateState } from "../state.js";
 import {
   INTERNAL_ERROR,
   INVALID_PARAMS,
-  METHOD_NOT_FOUND,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   TASK_NOT_CANCELABLE,
   TASK_NOT_FOUND,
@@ -89,7 +88,7 @@ export const defaultCancelTaskMethod: CancelTaskMethod = async (
   const data = await taskStore.load(taskId);
   if (!data) throw TASK_NOT_FOUND("Task Id: " + taskId);
   if (FINAL_STATES.includes(data.task.status.state)) {
-    throw TASK_NOT_CANCELABLE();
+    throw TASK_NOT_CANCELABLE("Task is in a final state");
   }
 
   activeCancellations.add(taskId);
@@ -118,16 +117,16 @@ export const defaultSetTaskPushNotificationMethod: SetTaskPushNotificationMethod
       "Push notifications not fully implemented."
     );
     if (!card.capabilities?.pushNotifications) {
-      throw METHOD_NOT_FOUND();
+      throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }
     const config = requestParams;
     const taskId = extractTaskId(config.id);
     if (!taskId || !config.pushNotificationConfig?.url) {
-      throw INVALID_PARAMS();
+      throw INVALID_PARAMS("Missing task ID or push notification URL");
     }
     const data = await taskStore.load(taskId);
     if (!data) {
-      throw TASK_NOT_FOUND();
+      throw TASK_NOT_FOUND("Task Id: " + taskId);
     }
     return callback(null, config);
   };
@@ -140,15 +139,15 @@ export const defaultGetTaskPushNotificationMethod: GetTaskPushNotificationMethod
       "Push notifications not fully implemented."
     );
     if (!card.capabilities?.pushNotifications) {
-      throw PUSH_NOTIFICATION_NOT_SUPPORTED();
+      throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }
     const taskId = extractTaskId(requestParams.id);
     if (!taskId) {
-      throw INVALID_PARAMS();
+      throw INVALID_PARAMS("Missing task ID");
     }
     const data = await taskStore.load(taskId);
     if (!data) {
-      throw TASK_NOT_FOUND();
+      throw TASK_NOT_FOUND("Task Id: " + taskId);
     }
     return callback(null, null);
   };

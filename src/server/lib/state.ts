@@ -118,7 +118,7 @@ export async function updateState(
       update
     );
     if (!replaced) {
-      throw INVALID_REQUEST();
+      throw INVALID_REQUEST("Invalid artifact update");
     }
     newTask.artifacts = newArtifacts;
   }
@@ -142,7 +142,7 @@ export async function loadState(
   taskId: string,
   message: Message,
   sessionId?: string,
-  metadata?: Record<string, unknown> | null
+  metadata?: Record<string, unknown>
 ): Promise<TaskAndHistory> {
   const existingData = await taskStore.load(taskId);
   if (existingData) {
@@ -151,12 +151,12 @@ export async function loadState(
   const timestamp = getCurrentTimestamp();
   const newTask: Task = {
     id: taskId,
-    sessionId: sessionId || null,
+    sessionId: sessionId,
     status: {
       state: "submitted",
       timestamp,
     },
-    metadata: metadata || null,
+    metadata: metadata,
   };
   const newHistory: Message[] = [message];
   return { task: newTask, history: newHistory };

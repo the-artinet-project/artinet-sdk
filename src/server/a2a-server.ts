@@ -355,7 +355,6 @@ export class A2AServer implements Server {
         status: {
           state: "submitted",
           timestamp: getCurrentTimestamp(),
-          message: null,
         },
       },
       this.addStreamForTask.bind(this)
@@ -415,13 +414,13 @@ export class A2AServer implements Server {
     const { id: taskId } = req.params;
     if (!taskId) {
       console.error("Task ID is required", req);
-      throw INVALID_PARAMS();
+      throw INVALID_PARAMS("Missing task ID");
     }
 
     // Try to load the task
     const data = await this.taskStore.load(taskId);
     if (!data) {
-      throw TASK_NOT_FOUND();
+      throw TASK_NOT_FOUND("Task Id: " + taskId);
     }
 
     // Set up SSE stream with current task status
@@ -462,7 +461,7 @@ export class A2AServer implements Server {
       .filter((msg) => msg.role === "user")
       .pop();
     if (!lastUserMessage) {
-      throw INVALID_REQUEST();
+      throw INVALID_REQUEST("No user message found");
     }
 
     const context = this.createTaskContext(
