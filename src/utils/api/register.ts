@@ -49,6 +49,7 @@ export function convert(card: AgentCard): IRegistration {
       card.description ?? "sdk-generated registration for " + card.name,
     version: card.version,
     capabilities: capabilities,
+    tags: ["a2a"],
     communication: {
       endpoints: [
         {
