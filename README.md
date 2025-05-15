@@ -317,7 +317,7 @@ const myAgent: TaskHandler = async function* (context: TaskContext) {
 };
 
 const myServer = new A2AServer({
-  taskHandler: myAgent,
+  handler: myAgent,
   taskStore: new InMemoryTaskStore(),
   port: 3000,
   basePath: "/a2a",
