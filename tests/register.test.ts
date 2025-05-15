@@ -30,7 +30,7 @@ describe("register Function", () => {
     sampleAgentCard = {
       name: "Test Agent",
       description: "A test agent card",
-      url: "http://localhost:8080/agent",
+      url: "https://agents.artinet.io/agent",
       version: "1.0.0",
       capabilities: {
         streaming: false,
@@ -136,5 +136,20 @@ describe("register Function", () => {
     } as Response);
     await register(sampleAgentCard);
     expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+  test("should return empty string if URL is localhost", async () => {
+    sampleAgentCard.url = "http://localhost:8080/agent";
+    const result = await register(sampleAgentCard);
+    expect(result).toBe("");
+  });
+  test("should return empty string if URL is 127.0.0.1", async () => {
+    sampleAgentCard.url = "http://127.0.0.1:8080/agent";
+    const result = await register(sampleAgentCard);
+    expect(result).toBe("");
+  });
+  test("should return empty string if URL is empty", async () => {
+    sampleAgentCard.url = "";
+    const result = await register(sampleAgentCard);
+    expect(result).toBe("");
   });
 });
