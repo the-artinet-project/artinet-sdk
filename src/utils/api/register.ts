@@ -79,6 +79,17 @@ export async function register(card: AgentCard): Promise<string> {
     return "";
   }
 
+  if (
+    card.url === undefined ||
+    card.url === null ||
+    card.url === "" ||
+    card.url.includes("localhost") ||
+    card.url.includes("127.0.0.1")
+  ) {
+    logDebug("A2AServer", "Invalid URL provided", card.url);
+    return "";
+  }
+
   try {
     const registration = convert(card);
     logInfo("A2AServer", "Registration", registration);
