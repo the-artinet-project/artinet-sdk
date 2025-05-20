@@ -88,14 +88,14 @@ export interface ServerDeploymentRequestParams {
    */
   code: string;
   /**
-   * The NPM dependencies of the server
+   * The NPM dependencies of the server(currently unsupported)
    */
   dependencies?: string[];
 }
 
 export interface BaseServerDeploymentResponseParams {
   /**
-   * The deployment ID
+   * The deployment ID(for full deployments the deployment ID is the same as the agent/registration ID)
    */
   deploymentId: string;
 

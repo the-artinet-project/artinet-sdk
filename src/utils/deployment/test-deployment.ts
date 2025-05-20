@@ -75,6 +75,7 @@ export async function* testDeployment(
     const deploymentEvent: ServerDeploymentResponse =
       event as ServerDeploymentResponse;
     if (
+      deploymentEvent &&
       deploymentEvent.result &&
       deploymentEvent.result.deploymentId &&
       deploymentEvent.result.url
