@@ -7,3 +7,4 @@ export * from "./api/register.js";
 export * from "./deployment/test-deployment.js";
 export * from "./deployment/task-wrapper.js";
 export * from "./deployment/bundler.js";
+export * from "./deployment/full-deployment.js";

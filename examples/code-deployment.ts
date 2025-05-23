@@ -49,7 +49,7 @@ export async function* coderAgent({
     ...messages,
   ]);
 
-  console.log("response: ", response);
+  console.log("coderAgent", "response: ", response);
   yield {
     state: "completed",
     message: {

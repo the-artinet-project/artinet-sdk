@@ -39,10 +39,11 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
 
     return parsed;
   } catch (error) {
-    logError("parseResponse", "Error parsing response:", data);
     if (error instanceof SystemError) {
+      logError("parseResponse", "SystemError:", error.message);
       throw error;
     }
+    logError("parseResponse", "Error parsing response:", data);
     throw PARSE_ERROR(error);
   }
 }

@@ -67,27 +67,37 @@ export class A2AClient implements Client {
 
     // Standard location for agent cards
     const wellKnownUrl = new URL("/.well-known/agent.json", this.baseUrl);
-
     try {
       try {
-        const card = await executeGetRequest<AgentCard>(
+        if (!URL.canParse(wellKnownUrl)) {
+          throw new Error("Invalid well-known URL");
+        }
+        const card: AgentCard = await executeGetRequest<AgentCard>(
           wellKnownUrl,
           this.customHeaders,
           "agent card (well-known)"
         );
+        if (!card.name || card.name === null || card.name === undefined) {
+          throw new Error("No agent card found");
+        }
 
-        this.cachedAgentCard = card;
-
+        this.cachedAgentCard = card as AgentCard;
         return this.cachedAgentCard;
       } catch (error) {
         const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
-
-        const fallbackCard = await executeGetRequest<AgentCard>(
+        const fallbackCard: AgentCard = await executeGetRequest<AgentCard>(
           fallbackUrl,
           this.customHeaders,
           "agent card (fallback)"
         );
 
+        if (
+          !fallbackCard.name ||
+          fallbackCard.name === null ||
+          fallbackCard.name === undefined
+        ) {
+          throw new Error("No fallback agent card found");
+        }
         this.cachedAgentCard = fallbackCard;
 
         return this.cachedAgentCard;

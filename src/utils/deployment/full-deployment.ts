@@ -46,8 +46,6 @@ const executeFullDeploymentRequest = executeJsonRpcRequest as <
  * @returns The response from the server.
  */
 export async function fullDeployment(params: ServerDeploymentRequestParams) {
-  throw new Error("not-implemented");
-
   if (!API_KEY) {
     throw new Error("ARTINET_API_KEY is not set");
   }
