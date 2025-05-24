@@ -538,9 +538,9 @@ Key features include:
 -   Test-Agents expire after 60s (need more time? let us know @humans@artinet.io)
 -   Quick-Agents do not have access to a filesystem or networking (limited persistance & networking capabalities are on the project roadmap).
 -   Quick-Agents v0 does not support streaming, push notifications or state transition history (these capabilities are on the project roadmap).
--   Larger deployments may cause calls to `fullDeployment` to timeout. In such cases check to see if the listing has been added to your account before trying to deploy again.
+-   Larger deployments can take significant time to deploy which may cause `fullDeployment` to timeout. In such cases wait to see if the listing has been added to your account before trying to deploy again.
 -   Quick-Agent logic is public, therefore the artinet project is not liable for any sensitive material held within a deployment.
--   v0.0.5c of the artinet platform will enable search by registrationId.
+-   v0.0.5c of the artinet platform will enable search by registrationId/agentId.
   
 Sign-up at [artinet.io](https://artinet.io/) to deploy your Quick-Agent today!
 

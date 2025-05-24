@@ -177,7 +177,7 @@ describe("TestDeployment", () => {
 
 describe("FullDeployment", () => {
   //ensure valid API Key is set
-  it("should fully deploy test logic", async () => {
+  it.skip("should fully deploy test logic", async () => {
     logDebug("testDeployment", "Starting fullDeployment test...");
     const deployment = await fullDeployment(fullTestParams);
     expect(deployment).toBeDefined();
