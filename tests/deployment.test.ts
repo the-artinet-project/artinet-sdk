@@ -29,7 +29,7 @@ const ts_coderCode = await bundle(
 );
 
 const MOCK_AGENT_CARD: AgentCard = {
-  name: "Test Agent 3",
+  name: "Test Agent 4",
   description: "A test agent for unit tests",
   url: "https://test-agent.example.com/api",
   version: "1.0.0",
@@ -177,7 +177,7 @@ describe("TestDeployment", () => {
 
 describe("FullDeployment", () => {
   //ensure valid API Key is set
-  it.skip("should fully deploy test logic", async () => {
+  it("should fully deploy test logic", async () => {
     logDebug("testDeployment", "Starting fullDeployment test...");
     const deployment = await fullDeployment(fullTestParams);
     expect(deployment).toBeDefined();

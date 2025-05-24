@@ -1,54 +1,5 @@
 import { Task, TaskContext, TaskYieldUpdate } from "../../index.js";
 import { env } from "process";
-import { logDebug, logError } from "../../utils/logging/log.js";
-//todo: remove this function
-export async function fetchAgentResponse(
-  agentID: string,
-  messages: { role: string; content: string }[]
-): Promise<string> {
-  try {
-    logDebug("fetchAgentResponse: ", "messages: ", messages);
-    const restResponse: any = await fetch("https://api.artinet.io/connect", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Credentials": "true",
-      },
-      body: JSON.stringify({
-        identifier: agentID,
-        session: messages,
-        preferredEndpoint: "hf-inference",
-        options: {
-          isAuthRequired: false,
-          isFallbackAllowed: true,
-        },
-      }),
-    });
-
-    logDebug("fetchAgentResponse: ", "restResponse: ", restResponse);
-    if (!restResponse.ok) {
-      throw new Error("Failed to fetch agent response");
-    }
-
-    const bodyJson = await restResponse.json();
-    const innerResponse = JSON.parse(bodyJson.body);
-    logDebug("fetchAgentResponse: ", "innerResponse:", innerResponse);
-
-    const agentResponseArray = JSON.parse(innerResponse.agentResponse);
-    logDebug("fetchAgentResponse: ", "agentResponseArray:", agentResponseArray);
-
-    const generatedText = agentResponseArray[0]?.generated_text;
-    logDebug("fetchAgentResponse: ", "generatedText:", generatedText);
-
-    return generatedText;
-  } catch (error: any) {
-    logError("fetchAgentResponse: ", "Error fetching agent response:", error);
-    return `Client error: Unfortunately, this agent is currently experiencing issues. Please try again later.`;
-  }
-}
 
 /**
  * @fileoverview This module provides proxy functions for agent task handling and

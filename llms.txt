@@ -25,6 +25,7 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   Configurable Agent Card served automatically (`/.well-known/agent.json`).
     *   Integrated support for CORS configuration.
     *   Optional custom JSON-RPC server implementation via `createJSONRPCServer` factory function parameter.
+    *   Corrected internal parameter name from `taskHandler` to `handler` for consistency, though `taskHandler` might have worked due to JS flexibility.
 *   **Enhanced Client (`A2AClient`):**
     *   Reliable streaming support (`sendTaskSubscribe`) using `eventsource-parser`.
     *   Convenience methods for capability checking (`supports`).
@@ -41,12 +42,21 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   Pluggable `TaskStore` interface.
     *   Includes `InMemoryTaskStore` (default, for development/testing).
     *   Includes `FileStore` for basic file-based persistence. Easily extensible for custom database integrations.
+*   **Code Deployment & Management (Alpha/Beta):**
+    *   `bundle`: Utility to bundle agent code using `esbuild`.
+    *   `taskHandlerProxy`, `fetchResponseProxy`, `fetchAgentResponse` (experimental): Utilities to assist in creating deployable agent logic, including inter-agent communication.
+    *   `testDeployment`: Utility to test agent deployments in a sandboxed environment.
+    *   `fullDeployment` (Beta): Utility to deploy bundled agent code and its `AgentCard` directly to the Artinet platform (requires `ARTINET_API_KEY`).
+    *   New types: `ServerDeploymentRequestParams`, `ServerDeploymentResponse`.
 *   **Protocol Compliance:**
     *   Full implementation based on the official A2A JSON Schema (`a2a.json`).
     *   Supports core methods: `tasks/send`, `tasks/get`, `tasks/cancel`.
     *   Supports streaming method: `tasks/sendSubscribe`.
     *   Supports push notification configuration methods: `tasks/pushNotification/set`, `tasks/pushNotification/get` (though full push *sending* logic might be agent-specific).
     *   Supports streaming resubscription: `tasks/resubscribe`.
+    *   Agent registration now includes `tags: ["a2a"]`.
+    *   Improved agent card fetching in client with URL validation and checks for card content.
+    *   Registration attempts with localhost/empty URLs are now prevented.
 
 ## 3. Technical Details
 

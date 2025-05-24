@@ -5,6 +5,27 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2025-05-12
+
+### Added
+- `fullDeployment` utility (`src/utils/deployment/full-deployment.ts`): Enables direct deployment of bundled agent code and its `AgentCard` to the Artinet platform. Requires an `ARTINET_API_KEY`.
+- New comprehensive test suite for deployment features (`tests/deployment.test.ts`), covering `testDeployment` and `fullDeployment`.
+- Agents registered via `A2AServer.registerServer()` or `register: true` now include `tags: ["a2a"]` in their registration payload.
+
+### Changed
+- The `handler` property in `A2AServerParams` (used to pass the agent's core logic) was previously documented and used in some examples as `taskHandler`. This has been corrected to `handler` consistently. While `taskHandler` might have worked due to object flexibility, `handler` is the intended property name.
+- Clarified type description for `ServerDeploymentRequestParams.dependencies` to note it is "currently unsupported".
+- Clarified type description for `BaseServerDeploymentResponseParams.deploymentId` regarding its value in full deployments.
+
+### Fixed
+- Improved error handling in `A2AClient` during `agentCard()` fetching:
+    - Validates parsed URLs before use.
+    - Ensures `AgentCard` objects contain a `name` property.
+- Enhanced error logging in `src/transport/rpc/parser.ts` to include `error.message` for `SystemError` instances.
+- Prevented agent registration via `register()` utility if the `AgentCard.url` is localhost, 127.0.0.1, or empty, returning an empty string instead of attempting registration.
+- Corrected an issue in an example in `README.md` where `taskHandler` was used instead of `handler` for the `A2AServer` constructor (matches the breaking change clarification above).
+- Minor stability improvement in `testDeployment` utility's event handling logic.
+
 ## [0.5.0] - 2025-05-10
 
 ### Added
@@ -114,6 +135,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for streaming responses and push notifications
 - Comprehensive test suite and documentation
 
-<!-- [Unreleased]: https://github.com/artinet/sdk/compare/v0.2.0...HEAD -->
+<!-- [Unreleased]: https://github.com/artinet/sdk/compare/v0.5.1...HEAD -->
+[0.5.1]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.4.1...v0.5.0
+[0.4.1]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.3.0...v0.4.1
+[0.3.0]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/the-artinet-project/artinet-sdk/commit/e0b908327e0251d6f6241f9b0294e16bc07fa527
 [0.1.0]: https://github.com/the-artinet-project/artinet-sdk/commit/c07bd01a225b09de65b70144e8963b8a1143d324

@@ -40,7 +40,7 @@ export async function bundle(filePath: URL): Promise<string> {
       entryPoints: [entryPath],
       bundle: true,
       minify: true,
-      sourcemap: true,
+      sourcemap: false,
       platform: "node",
       format: "esm",
       write: false,

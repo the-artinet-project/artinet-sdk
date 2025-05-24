@@ -470,9 +470,9 @@ Pass your factory function via the `createJSONRPCServer` option during `A2AServe
 
 We are excited to introduce new capabilities for deploying agents directly onto the artinet. 
 
-In this weeks release, we've added a `testDeployment` utility which is available for all users letting you bundle and test your agent logic in a temporary sandboxed environment. 
+We've added a `testDeployment` utility which is available for all users letting you bundle and test your agent logic in a temporary sandboxed environment. 
 
-**ARTINET BETA USERS!** You'll soon be getting access to full deployment functionalities allowing you to host your agents on the artinet for free!
+**QUICK-AGENTS ARE HERE!** Use the new `fullDeployment` utility, which allows direct deployment of your bundled agent code and `AgentCard` to the Artinet platform (requires an `ARTINET_API_KEY`).
 
 To join the beta waitlist, please email us at humans@artinet.io and stay tuned for more updates!
 
@@ -500,7 +500,7 @@ Key features include:
     await taskHandlerProxy(myAgent);
     ```
 
--   **Test-Agents:** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
+-   **Test-Agents (Experimental):** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
     ```typescript
     import { testDeployment, ServerDeploymentRequestParams, SendTaskRequest } from "@artinet/sdk";
 
@@ -517,10 +517,32 @@ Key features include:
     }
     ```
 
+-   **Full Deployment (Experimental):** Deploy your agent to the Artinet platform using the `fullDeployment` utility.
+    ```typescript
+    import { fullDeployment, ServerDeploymentRequestParams } from "@artinet/sdk";
+
+    const deploymentParams: ServerDeploymentRequestParams = {
+      name: "My Awesome Agent",
+      agentCard: { /* your agent card */ },
+      code: "/* bundled code string */",
+    };
+
+    const deploymentResult = await fullDeployment(deploymentParams); // Requires an ARTINET_API_KEY environment variable
+    console.log("Deployment Result:", deploymentResult);
+    ```
+
+-   **Dedicated Endpoints:** Once deployed your agent will be available On-Demand at its dedicated enpoint. (e.g. "https://agents.stage.artinet.io/agentId=0xabf698845743538727a81352bfcfdb724e5c2bbe3113a26362482248f9f3e5fa/.well-known/agent.json")
 -   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`.
+
 -   **QUICK-AGENT FAQs**
 -   Test-Agents expire after 60s (need more time? let us know @humans@artinet.io)
 -   Quick-Agents do not have access to a filesystem or networking (limited persistance & networking capabalities are on the project roadmap).
+-   Quick-Agents v0 does not support streaming, push notifications or state transition history (these capabilities are on the project roadmap).
+-   Larger deployments may cause calls to `fullDeployment` to timeout. In such cases check to see if the listing has been added to your account before trying to deploy again.
+-   Quick-Agent logic is public, therefore the artinet project is not liable for any sensitive material held within a deployment.
+-   v0.0.5c of the artinet platform will enable search by registrationId.
+  
+Sign-up at [artinet.io](https://artinet.io/) to deploy your Quick-Agent today!
 
 ## Contributing
 
