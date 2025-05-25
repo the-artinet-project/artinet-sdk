@@ -3,8 +3,7 @@ import { Artifact, JSONRPCError, JSONRPCResponse } from "../../types/schema.js";
 import { TaskEvent } from "../../types/extended-schema.js";
 import { updateState } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";
-import { TaskContext } from "../../server/interfaces/context.js";
-import { TaskHandler } from "../../server/interfaces/context.js";
+import { TaskContext, TaskHandler } from "../../types/context.js";
 import { FAILED_UPDATE, INTERNAL_ERROR } from "../../utils/common/errors.js";
 import {
   isArtifactUpdate,

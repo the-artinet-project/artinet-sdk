@@ -1,8 +1,4 @@
-import type {
-  Task,
-  Message,
-  TaskYieldUpdate,
-} from "../../types/extended-schema.js";
+import type { Task, Message, TaskYieldUpdate } from "./extended-schema.js";
 
 /**
  * Context object provided to the TaskHandler.

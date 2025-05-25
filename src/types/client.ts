@@ -3,13 +3,13 @@ import {
   TaskArtifactUpdateEvent,
   TaskIdParams,
   Task,
-} from "../../types/extended-schema.js";
+} from "./extended-schema.js";
 import type {
   AgentCard,
   TaskQueryParams,
   TaskSendParams,
   TaskStatusUpdateEvent,
-} from "../../types/extended-schema.js";
+} from "./extended-schema.js";
 
 /**
  * @interface Client

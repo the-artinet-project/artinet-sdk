@@ -1,5 +1,6 @@
-import { Task, TaskContext, TaskYieldUpdate } from "../../index.js";
-import { env } from "process";
+import { Task, TaskYieldUpdate } from "../../types/index.js";
+import { TaskContext } from "../../types/context.js";
+import { artinet } from "./agents.js";
 
 /**
  * @fileoverview This module provides proxy functions for agent task handling and
@@ -16,7 +17,7 @@ import { env } from "process";
  * made available in the `env` by the host environment.
  *
  * The `Context` (TaskContext) is also expected to be provided by the host environment via `env`.
- *
+ * @deprecated This function is deprecated and will be removed in a future version. Use the `Artinet.v0.taskManager` function instead.
  * @param taskHandler - An asynchronous generator function that takes a `TaskContext`
  *                      and yields `TaskYieldUpdate` objects, eventually returning a `Task` or void.
  * @throws An error if the required `env.hostOnYield` or `env.Context` are not found,
@@ -27,23 +28,7 @@ export const taskHandlerProxy = async (
     context: TaskContext
   ) => AsyncGenerator<TaskYieldUpdate, Task | void, unknown>
 ) => {
-  if (!env.hostOnYield && !env.Context) {
-    const err = new Error("invalid runtime environment");
-    throw err;
-  }
-  const context = env.Context as unknown as TaskContext;
-  const onYieldProxy = env.hostOnYield as unknown as (
-    yieldValue: TaskYieldUpdate
-  ) => Promise<void>;
-
-  if (!onYieldProxy || !context) {
-    const err = new Error("invalid runtime environment");
-    throw err;
-  }
-  const generator = taskHandler(context);
-  for await (const yieldValue of generator) {
-    onYieldProxy(yieldValue);
-  }
+  return await artinet.v0.taskManager({ taskHandler });
 };
 
 /**
@@ -51,7 +36,7 @@ export const taskHandlerProxy = async (
  * This allows agents in a managed environment to make external calls (e.g., to an LLM)
  * without needing direct network access or credentials. The actual implementation of fetching
  * the response is delegated to `env.hostFetchResponse`, provided by the host environment.
- *
+ * @deprecated This function is deprecated and will be removed in a future version. Use the `Artinet.v0.connect` function instead.
  * @param agentID - The identifier of the target agent or LLM to which the request is directed.
  * @param messages - An array of messages forming the conversation history or prompt.
  * @returns A promise that resolves to the string response from the target agent/LLM.
@@ -62,13 +47,5 @@ export const fetchResponseProxy = async (
   agentID: string,
   messages: { role: string; content: string }[]
 ): Promise<string> => {
-  if (!env.hostFetchResponse) {
-    const err = new Error("invalid runtime environment");
-    throw err;
-  }
-  const fetchResponseImpl = env.hostFetchResponse as unknown as (
-    agentID: string,
-    messages: { role: string; content: string }[]
-  ) => Promise<string>;
-  return fetchResponseImpl(agentID, messages);
+  return artinet.v0.connect({ agentId: agentID, messages });
 };

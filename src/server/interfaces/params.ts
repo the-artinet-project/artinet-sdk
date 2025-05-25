@@ -19,7 +19,7 @@ import {
   TaskResubscriptionRequest,
 } from "../../types/extended-schema.js";
 import { TaskStore } from "./store.js";
-import { TaskHandler, TaskContext } from "./context.js";
+import { TaskHandler, TaskContext } from "../../types/context.js";
 import jayson from "jayson";
 import { ErrorHandler } from "../../utils/common/errors.js";
 import { JSONRPCError } from "../../types/extended-schema.js";

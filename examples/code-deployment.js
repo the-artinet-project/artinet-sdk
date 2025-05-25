@@ -1,4 +1,7 @@
-const { taskHandlerProxy, fetchResponseProxy } = require("./task-wrapper.js");
+const {
+  taskHandlerProxy,
+  fetchResponseProxy,
+} = require("../dist/utils/deployment/task-wrapper.js");
 
 console.log("[CoderAgent] Starting");
 export async function* coderAgent({ task, history }) {

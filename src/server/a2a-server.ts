@@ -33,7 +33,7 @@ import {
 } from "../transport/index.js";
 
 import { TaskStore, TaskAndHistory } from "./interfaces/store.js";
-import { TaskHandler, TaskContext } from "./interfaces/context.js";
+import { TaskHandler, TaskContext } from "../types/context.js";
 import { A2AServerParams, JSONRPCServerType } from "./interfaces/params.js";
 import { Server } from "./interfaces/server.js";
 

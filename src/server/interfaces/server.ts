@@ -11,10 +11,9 @@ import {
 } from "../../types/index.js";
 
 import { TaskStore } from "./store.js";
-import { TaskHandler } from "./context.js";
 import { JSONRPCServerType } from "./params.js";
 import { TaskAndHistory } from "./store.js";
-import { TaskContext } from "./context.js";
+import { TaskContext, TaskHandler } from "../../types/context.js";
 
 export interface Server {
   start(): express.Express;
