@@ -50,7 +50,7 @@ This SDK significantly enhances the foundational A2A concepts and samples provid
 - **Configurable Logging:** Integrated structured logging via `pino`. Configurable levels using `configureLogger` and `LogLevel`.
 - **Advanced Customization:** Allows providing a custom `JSONRPCServerFactory` for fine-grained control over the JSON-RPC server, enabling integration with existing Express apps or adding custom methods.
 - **Comprehensive Testing:** Includes a suite of tests to ensure reliability and maintainability.
-- **Code Deployment (Beta)** | Bundle, test, and (soon) deploy agent code. Includes bundler, task wrapper, and test deployment utility.           | `bundle`, `testDeployment`, `taskHandlerProxy`, `fetchResponseProxy`, `ServerDeploymentRequestParams`, `ServerDeploymentResponse` |
+- **Code Deployment (Experimental)** | Bundle, test, and deploy agent code onto the artinet. Includes bundler, task wrapper, and deployment utilities.           | `bundle`, `test/fullDeployment`, `ServerDeploymentRequestParams`, `ServerDeploymentResponse`, `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent` |
 
 | Component/Feature   | Description                                                                 | Key Classes/Types                                                                            |
 | :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
@@ -62,6 +62,7 @@ This SDK significantly enhances the foundational A2A concepts and samples provid
 | **Logging**         | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                      |
 | **Advanced Server** | Customize the underlying JSON-RPC server or integrate into existing apps.   | `JSONRPCServerFactory`, `CreateJSONRPCServerParams`, `createJSONRPCMethod`, A2A Method Types |
 | **Core Types**      | Based on the official A2A JSON Schema.                                      | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                     |
+| **Agent Utilities (for Sandboxed Environments)** | Standardized utilities for agents in managed environments to interact with the host system for task lifecycle, inter-agent communication, and external API calls. | `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent`, `TaskProxy`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory` |
 
 ## Installation
 
@@ -485,20 +486,39 @@ Key features include:
     const bundledCode = await bundle(new URL('./your-agent.ts', import.meta.url));
     ```
 
--   **Sandboxed Enviroments:** Utilities like `taskHandlerProxy` and `fetchResponseProxy` streamline agent logic for quick and easy deployments.
-    ```typescript
-    import { taskHandlerProxy, fetchResponseProxy } from "@artinet/sdk/";
+-   **Sandboxed Enviroments:** Streamline agent logic for quick and easy deployments. The new `artinet.v0` namespace (accessible via `@artinet/sdk/agents`) provides `taskManager`, `connect`, and `agent`.
+    -   `artinet.v0.taskManager`: Replaces the deprecated `taskHandlerProxy`. Manages the agent's task lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
+    -   `artinet.v0.connect`: Replaces the deprecated `fetchResponseProxy`. Allows agents to make proxied calls to other agents or LLMs via the host environment.
+    -   `artinet.v0.agent`: A factory function to obtain a `ClientProxy` for type-safe communication with other agents, managed by the host environment.
 
-    async function myAgent(context) {
-      //call any other agent in the artinet with fetchResponseProxy
-      const friendResponse = await fetchResponseProxy("MyFriendlyAgent", 
-        [{ role: "user", content: "Tell me a joke."}]
-      );
-      yield { state: "completed", message: { role: "agent", parts: [{type: "text", text: freiendResponse.choices[0].message.content }] } };
+    Example of using the new `artinet.v0` utilities in an agent:
+    ```typescript
+    import { TaskContext, TaskYieldUpdate, Task } from "@artinet/sdk";
+    import { artinet } from "@artinet/sdk/agents";
+
+    export async function* myAgentLogic(context: TaskContext): AsyncGenerator<TaskYieldUpdate, Task | void, unknown> {
+      yield { state: "working" };
+
+      // Call another agent/LLM using artinet.v0.connect
+      const llmResponse = await artinet.v0.connect({
+        agentId: "SomeLLMAgentID",
+        messages: [{ role: "user", content: "Tell me a joke." }]
+      });
+
+      // Or communicate tasks with artinet.v0.agent
+      const anotherAgent = artinet.v0.agent({
+        baseUrl: "https://agents.artinet.io/agentId=456",
+      });
+      const taskResult = await anotherAgent.sendTask({
+        ...
+      });
+
     }
 
-    await taskHandlerProxy(myAgent);
+    // The host environment will invoke this taskManager with the agent's logic.
+    await artinet.v0.taskManager({ taskHandler: myAgentLogic });
     ```
+    *Note: The `taskHandlerProxy` and `fetchResponseProxy` utilities are now deprecated in favor of `artinet.v0.taskManager` and `artinet.v0.connect` respectively.*
 
 -   **Test-Agents (Experimental):** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
     ```typescript
@@ -532,9 +552,9 @@ Key features include:
     ```
 
 -   **Dedicated Endpoints:** Once deployed your agent will be available On-Demand at its dedicated enpoint. (e.g. "https://agents.stage.artinet.io/agentId=0xabf698845743538727a81352bfcfdb724e5c2bbe3113a26362482248f9f3e5fa/.well-known/agent.json")
--   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`.
+-   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`. New types for sandboxed agent interactions (`TaskProxy`, `ConnectAPICallback`, `ClientProxy`, etc.) are in `src/types/proxy.ts`.
 
--   **QUICK-AGENT FAQs**
+  **QUICK-AGENT FAQs**
 -   Test-Agents expire after 60s (need more time? let us know @humans@artinet.io)
 -   Quick-Agents do not have access to a filesystem or networking (limited persistance & networking capabalities are on the project roadmap).
 -   Quick-Agents v0 does not support streaming, push notifications or state transition history (these capabilities are on the project roadmap).

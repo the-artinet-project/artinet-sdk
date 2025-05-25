@@ -5,6 +5,32 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2025-05-25 (Please fill in the date)
+
+### Added
+- New `artinet.v0` namespace in `src/utils/deployment/agents.ts` providing `taskManager`, `connect`, and `agent` utilities. These are designed for agents running in sandboxed or managed environments, offering a standardized way to interact with the host system for task execution, inter-agent communication, and external API calls.
+- Corresponding types for the new agent utilities in `src/types/proxy.ts`: `TaskProxy`, `TaskManagerProps`, `TaskManager`, `ConnectProps`, `ConnectAPICallback`, `ClientProxy`, `ClientProps`, `ClientFactory`.
+- New `exports` path `./agents` in `package.json` to expose the `artinet.v0` utilities.
+- New example file `examples/nested-deployment.ts` demonstrating how to use `artinet.v0.agent` for an agent to call another agent, and `artinet.v0.taskManager` for managing the agent's lifecycle.
+- New `dev-pack` script in `package.json` for easier local development and packaging.
+
+### Changed
+- **Refactoring**:
+    - `src/client/interfaces/client.ts` has been moved to `src/types/client.ts`.
+    - `src/server/interfaces/context.ts` has been moved to `src/types/context.ts`.
+    - Internal type imports throughout the codebase have been updated to reflect these changes.
+- Examples `examples/code-deployment.js` and `examples/code-deployment.ts` have been updated to use the new `artinet.v0.taskManager` and `artinet.v0.connect` utilities instead of the deprecated proxy functions.
+- Updated `@types/node` dependency to `^20.17.50`.
+
+### Deprecated
+- The `taskHandlerProxy` and `fetchResponseProxy` functions in `src/utils/deployment/task-wrapper.ts` are now deprecated. Developers should migrate to the new `artinet.v0.taskManager` and `artinet.v0.connect` utilities respectively.
+
+### Removed
+- Removed `json-schema-to-typescript` from `devDependencies` as it's no longer directly used.
+
+### Fixed
+- Minor wording update in the "QUICK-AGENT FAQs" section of `README.md` for clarity on searching by `registrationId/agentId`.
+
 ## [0.5.1] - 2025-05-12
 
 ### Added
@@ -136,6 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite and documentation
 
 <!-- [Unreleased]: https://github.com/artinet/sdk/compare/v0.5.1...HEAD -->
+[0.5.2]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.3.0...v0.4.1

@@ -11,9 +11,10 @@ The SDK is distributed as the `@artinet/sdk` npm package.
 *   **Key Modules:**
     *   **`@artinet/sdk/client`**: Provides `A2AClient` for interacting with A2A servers.
     *   **`@artinet/sdk/server`**: Provides `A2AServer` for implementing A2A agent endpoints.
-    *   **`@artinet/sdk/types`**: Contains TypeScript interfaces for all A2A protocol structures derived from the official JSON schema, plus extended types for SDK usage.
+    *   **`@artinet/sdk/types`**: Contains TypeScript interfaces for all A2A protocol structures derived from the official JSON schema, plus extended types for SDK usage (e.g., `TaskYieldUpdate`, `ServerDeploymentRequestParams`, `ClientProxy`, `TaskContext`).
     *   **`@artinet/sdk/transport`**: Handles underlying communication logic (JSON-RPC, SSE streaming).
-    *   **`@artinet/sdk/utils`**: Includes common utilities, error definitions, and logging integration.
+    *   **`@artinet/sdk/utils`**: Includes common utilities, error definitions, logging integration, and deployment utilities.
+        *   **`@artinet/sdk/agents`**: A sub-path providing the `artinet.v0` namespace with `taskManager`, `connect`, and `agent` for sandboxed/managed agent environments.
 
 ## 2. Features & Enhancements (vs. Basic A2A Samples)
 
@@ -44,10 +45,13 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   Includes `FileStore` for basic file-based persistence. Easily extensible for custom database integrations.
 *   **Code Deployment & Management (Alpha/Beta):**
     *   `bundle`: Utility to bundle agent code using `esbuild`.
-    *   `taskHandlerProxy`, `fetchResponseProxy`, `fetchAgentResponse` (experimental): Utilities to assist in creating deployable agent logic, including inter-agent communication.
+    *   `taskHandlerProxy`, `fetchResponseProxy` (**DEPRECATED**): Older utilities to assist in creating deployable agent logic. Developers should migrate to `artinet.v0.taskManager` and `artinet.v0.connect`.
+    *   **`artinet.v0.taskManager`**: Standard utility for agents in managed environments to interact with the host for task lifecycle management. Replaces `taskHandlerProxy`.
+    *   **`artinet.v0.connect`**: Standard utility for agents in managed environments to make proxied calls to other agents or LLMs. Replaces `fetchResponseProxy`.
+    *   **`artinet.v0.agent`**: Factory function for agents in managed environments to obtain a `ClientProxy` for type-safe, host-managed communication with other A2A services.
     *   `testDeployment`: Utility to test agent deployments in a sandboxed environment.
     *   `fullDeployment` (Beta): Utility to deploy bundled agent code and its `AgentCard` directly to the Artinet platform (requires `ARTINET_API_KEY`).
-    *   New types: `ServerDeploymentRequestParams`, `ServerDeploymentResponse`.
+    *   New types: `ServerDeploymentRequestParams`, `ServerDeploymentResponse` in `src/types/extended-schema.ts`. New proxy-related types (`TaskProxy`, `TaskManagerProps`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory`, etc.) in `src/types/proxy.ts`.
 *   **Protocol Compliance:**
     *   Full implementation based on the official A2A JSON Schema (`a2a.json`).
     *   Supports core methods: `tasks/send`, `tasks/get`, `tasks/cancel`.
@@ -61,8 +65,13 @@ The SDK is distributed as the `@artinet/sdk` npm package.
 ## 3. Technical Details
 
 *   **Language:** TypeScript
-*   **Module System:** ES Modules (ESM) (`"type": "module"` in `package.json`). Requires Node.js >= 16.
+*   **Module System:** ES Modules (ESM) (`"type": "module"` in `package.json`). Requires Node.js >= 16 (Node.js 22 recommended).
 *   **Build System:** Uses `tsc` to compile TypeScript to JavaScript in the `dist` directory.
+*   **Exports:** Provides main SDK exports from `./dist/index.js` and agent utilities from `./dist/utils/deployment/agents.js` (accessible via `@artinet/sdk/agents`).
+*   **Type Definitions:** Main type definitions are in `dist/types/index.d.ts`. Agent utility types are in `dist/utils/deployment/agents.d.ts`.
+*   **File Structure Changes:**
+    *   `src/client/interfaces/client.ts` moved to `src/types/client.ts`.
+    *   `src/server/interfaces/context.ts` moved to `src/types/context.ts`.
 *   **Testing:** Jest (`ts-jest`).
 *   **Linting:** ESLint with TypeScript-ESLint (Flat Config `eslint.config.js`).
 *   **Core Dependencies:** `express`, `jayson` (for JSON-RPC server), `pino`, `eventsource-parser`, `cors`.
