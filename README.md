@@ -11,8 +11,19 @@ Artinet SDK is a [Agent2Agent (A2A) Protocol](https://github.com/google/A2A) com
 
 This SDK significantly enhances the foundational A2A concepts and samples provided by Google, offering a production-ready solution with a focus on developer experience, reliability, and comprehensive features.
 
+### Quick Start
+
+To build your own agent/server use the [`create-quick-agent`](https://www.npmjs.com/package/@artinet/create-quick-agent) command:
+
+```bash
+npx @artinet/create-quick-agent@latest
+```
+
+Its got [serveral template projects](https://github.com/the-artinet-project/create-quick-agent) that you can use to get started building agents today.
+
 ## Table of Contents
 - [Artinet SDK](#artinet-sdk)
+    - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
@@ -551,7 +562,7 @@ Key features include:
     console.log("Deployment Result:", deploymentResult);
     ```
 
--   **Dedicated Endpoints:** Once deployed your agent will be available On-Demand at its dedicated enpoint. (e.g. "https://agents.stage.artinet.io/agentId=0xabf698845743538727a81352bfcfdb724e5c2bbe3113a26362482248f9f3e5fa/.well-known/agent.json")
+-   **Dedicated Endpoints:** Once deployed your agent will be available On-Demand at its dedicated enpoint. (e.g. "https://agents.artinet.io/agentId=0xabf698845743538727a81352bfcfdb724e5c2bbe3113a26362482248f9f3e5fa/.well-known/agent.json")
 -   **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`. New types for sandboxed agent interactions (`TaskProxy`, `ConnectAPICallback`, `ClientProxy`, etc.) are in `src/types/proxy.ts`.
 
   **QUICK-AGENT FAQs**

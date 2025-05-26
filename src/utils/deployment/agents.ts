@@ -12,7 +12,9 @@ import { TaskContext } from "../../types/context.js";
 
 const env = process.env;
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace artinet {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   export namespace v0 {
     /**
      * Manages the execution of an agent's task.

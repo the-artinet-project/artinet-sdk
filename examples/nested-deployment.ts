@@ -30,7 +30,7 @@ export async function* simpleEchoAgent(
   try {
     const agentClient: ClientProxy = artinet.v0.agent({
       baseUrl:
-        "https://agents.stage.artinet.io/agentId=0x88a03f820c633d580f37e9dae1487a32ae2f59b42eafe0f8396c5a902507f349",
+        "https://agents.artinet.io/agentId=0x88a03f820c633d580f37e9dae1487a32ae2f59b42eafe0f8396c5a902507f349",
       headers: {},
       fallback:
         "/agentId=0x88a03f820c633d580f37e9dae1487a32ae2f59b42eafe0f8396c5a902507f349/agent-card",

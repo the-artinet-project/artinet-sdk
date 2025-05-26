@@ -64,6 +64,7 @@ export type ConnectAPICallback = (props: ConnectProps) => Promise<string>;
  * This interface omits methods related to direct task management and header manipulation,
  * focusing on core interaction capabilities suitable for a proxied environment.
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ClientProxy
   extends Omit<
     Client,

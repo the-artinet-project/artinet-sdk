@@ -142,12 +142,15 @@ describe("TestDeployment", () => {
     logDebug("testDeployment", "Starting testDeployment test...");
     const results: (Task | ServerDeploymentResponse)[] = [];
     for await (const result of testDeployment(testParams, requests)) {
-      logDebug("testDeployment", "Received result:", JSON.stringify(result));
       if (result) {
         results.push(result);
       }
     }
-    logDebug("testDeployment", "testDeployment test finished.");
+    console.log(
+      "testDeployment completed",
+      "testDeployment test finished.",
+      results
+    );
     expect(results.length).toBeGreaterThanOrEqual(4);
   });
 
