@@ -10,9 +10,9 @@ import {
   GetTaskRequest,
   GetTaskResponse,
   Message,
-  SendTaskRequest,
-  SendTaskResponse,
-  SendTaskStreamingRequest,
+  SendMessageRequest,
+  SendMessageResponse,
+  SendMessageStreamingRequest,
   SetTaskPushNotificationRequest,
   SetTaskPushNotificationResponse,
   Task,
@@ -126,7 +126,7 @@ export type CreateExpressServerParams = Omit<
     rpcServer: JSONRPCServerType;
     errorHandler: ErrorHandler;
     onTaskSendSubscribe: (
-      req: SendTaskStreamingRequest,
+      req: SendMessageStreamingRequest,
       res: Response
     ) => Promise<void>;
     onTaskResubscribe: (
@@ -152,8 +152,8 @@ export type A2AMethodHandler<
  * This can be used by consumers to implement their own server solutions
  */
 export type SendTaskMethod = A2AMethodHandler<
-  SendTaskRequest["params"],
-  SendTaskResponse | null
+  SendMessageRequest["params"],
+  SendMessageResponse | null
 >;
 
 /**

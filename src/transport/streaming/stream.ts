@@ -1,5 +1,9 @@
 import { Response } from "express";
-import { Artifact, JSONRPCError, JSONRPCResponse } from "../../types/schema.js";
+import {
+  Artifact,
+  JSONRPCError,
+  JSONRPCResponse,
+} from "../../types/schema/index.js";
 import { TaskEvent } from "../../types/extended-schema.js";
 import { updateState } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";
@@ -58,7 +62,7 @@ export function sendSSEEvent(res: Response, update: TaskEvent): void {
 
   const response: JSONRPCResponse<TaskEvent> = {
     jsonrpc: "2.0",
-    id: update.id,
+    id: update.taskId,
     result: update,
   };
 
@@ -122,7 +126,9 @@ export async function processTaskStream(
 
       if (isTaskStatusUpdate(yieldValue)) {
         sendSSEEvent(res, {
-          id: taskId,
+          taskId: taskId,
+          contextId: context.contextId,
+          kind: "status-update",
           status: currentData.task.status,
           final: FINAL_STATES.includes(currentData.task.status.state),
         });
@@ -140,9 +146,11 @@ export async function processTaskStream(
           artifactIndex < currentData.task.artifacts.length
         ) {
           sendSSEEvent(res, {
-            id: taskId,
+            taskId: taskId,
+            contextId: context.contextId,
+            kind: "artifact-update",
             artifact: currentData.task.artifacts[artifactIndex],
-            final: FINAL_STATES.includes(currentData.task.status.state),
+            lastChunk: FINAL_STATES.includes(currentData.task.status.state),
           });
         }
       }

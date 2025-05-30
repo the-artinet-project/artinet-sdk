@@ -9,10 +9,12 @@ import {
   Artifact,
   Message,
   TaskYieldUpdate,
+  TaskState,
 } from "../../types/extended-schema.js";
 import { TaskAndHistory } from "../interfaces/store.js";
 import { INVALID_REQUEST } from "../../utils/common/errors.js";
 import { TaskStore } from "../interfaces/store.js";
+import { v4 as uuidv4 } from "uuid";
 
 export function updateTaskStatus(
   task: Task,
@@ -133,7 +135,7 @@ export async function updateState(
  * Loads or creates a task and its history.
  * @param taskId The task ID
  * @param message The message to process
- * @param sessionId Optional session ID
+ * @param contextId Optional context ID
  * @param metadata Optional metadata
  * @returns The task and history
  */
@@ -141,19 +143,21 @@ export async function loadState(
   taskStore: TaskStore,
   taskId: string,
   message: Message,
-  sessionId?: string,
+  contextId?: string,
   metadata?: Record<string, unknown>
 ): Promise<TaskAndHistory> {
-  const existingData = await taskStore.load(taskId);
+  const existingData: TaskAndHistory | null = await taskStore.load(taskId);
   if (existingData) {
     return existingData;
   }
+
   const timestamp = getCurrentTimestamp();
   const newTask: Task = {
     id: taskId,
-    sessionId: sessionId,
+    contextId: contextId ?? uuidv4(),
+    kind: "task",
     status: {
-      state: "submitted",
+      state: TaskState.Submitted,
       timestamp,
     },
     metadata: metadata,

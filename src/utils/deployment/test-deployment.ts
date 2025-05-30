@@ -5,7 +5,7 @@ import {
   A2ARequest,
   JSONRPCResponse,
   Task,
-  SendTaskRequest,
+  SendMessageRequest,
 } from "../../types/index.js";
 import { A2AClient } from "../../client/a2a-client.js";
 import { executeStreamEvents } from "../../transport/index.js";
@@ -49,7 +49,7 @@ const testExecuteStreamEvents = executeStreamEvents as <
  */
 export async function* testDeployment(
   params: ServerDeploymentRequestParams,
-  requests: SendTaskRequest[]
+  requests: SendMessageRequest[]
 ): AsyncIterable<Task | ServerDeploymentResponse | null> {
   const generator = await testExecuteStreamEvents(
     new URL("https://agents.artinet.io/test/deploy"),

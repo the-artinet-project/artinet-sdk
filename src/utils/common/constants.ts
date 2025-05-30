@@ -1,20 +1,25 @@
-import { TaskState, TaskYieldUpdate } from "../../types/extended-schema.js";
+import { TaskState } from "../../types/schema/index.js";
+import { TaskYieldUpdate } from "../../types/extended-schema.js";
 
 export const WORKING_UPDATE: TaskYieldUpdate = {
-  state: "working",
+  state: TaskState.Working,
   message: {
+    messageId: "working-update",
+    kind: "message",
     role: "agent" as const,
-    parts: [{ type: "text" as const, text: "Processing..." }],
+    parts: [{ kind: "text" as const, text: "Processing..." }],
   },
 };
 
 export const CANCEL_UPDATE: TaskYieldUpdate = {
-  state: "canceled",
+  state: TaskState.Canceled,
   message: {
+    messageId: "cancel-update",
+    kind: "message",
     role: "agent" as const,
     parts: [
       {
-        type: "text" as const,
+        kind: "text" as const,
         text: "Task was canceled during execution.",
       },
     ],
@@ -22,11 +27,17 @@ export const CANCEL_UPDATE: TaskYieldUpdate = {
 };
 
 export const SUBMITTED_UPDATE: TaskYieldUpdate = {
-  state: "submitted",
+  state: TaskState.Submitted,
   message: {
+    messageId: "submitted-update",
+    kind: "message",
     role: "agent" as const,
-    parts: [{ type: "text" as const, text: "Task was submitted." }],
+    parts: [{ kind: "text" as const, text: "Task was submitted." }],
   },
 };
 
-export const FINAL_STATES: TaskState[] = ["completed", "failed", "canceled"];
+export const FINAL_STATES: TaskState[] = [
+  TaskState.Completed,
+  TaskState.Failed,
+  TaskState.Canceled,
+];

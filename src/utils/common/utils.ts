@@ -2,7 +2,7 @@ import {
   Artifact,
   ExtendedTaskStatusUpdate,
   TaskYieldUpdate,
-  TaskSendParams,
+  MessageSendParams,
   TaskQueryParams,
 } from "../../types/extended-schema.js";
 
@@ -48,10 +48,10 @@ export function validateTaskResubscribeParams(
 ): asserts params is TaskQueryParams {
   // Structure validation
   if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS<string>("Invalid parameters");
+    throw INVALID_PARAMS("Invalid parameters");
   }
   if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS<string>("Invalid task ID");
+    throw INVALID_PARAMS("Invalid task ID");
   }
 }
 /**
@@ -61,23 +61,23 @@ export function validateTaskResubscribeParams(
  */
 export function validateTaskSendParams(
   params: any
-): asserts params is TaskSendParams {
+): asserts params is MessageSendParams {
   // Structure validation
   if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS<string>("Invalid parameters");
+    throw INVALID_PARAMS("Invalid parameters");
   }
   if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS<string>("Invalid task ID");
+    throw INVALID_PARAMS("Invalid task ID");
   }
 
   // Message validation
   if (!params.message || typeof params.message !== "object") {
-    throw INVALID_PARAMS<string>("Invalid message");
+    throw INVALID_PARAMS("Invalid message");
   }
 
   // Role validation
   if (params.message.role !== "user") {
-    throw INVALID_PARAMS<string>("Invalid message role");
+    throw INVALID_PARAMS("Invalid message role");
   }
 
   // Parts validation
@@ -85,13 +85,13 @@ export function validateTaskSendParams(
     !Array.isArray(params.message.parts) ||
     params.message.parts.length === 0
   ) {
-    throw INVALID_PARAMS<string>("Invalid message parts");
+    throw INVALID_PARAMS("Invalid message parts");
   }
 }
 
 export function extractTaskId(id: number | string | null | undefined): string {
   if (!id) {
-    throw INVALID_PARAMS<string>("Missing task ID");
+    throw INVALID_PARAMS("Missing task ID");
   }
   if (typeof id === "number") {
     return id.toString();

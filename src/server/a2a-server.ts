@@ -7,7 +7,7 @@ import type {
   AgentCard,
   Task,
   Message,
-  SendTaskStreamingRequest,
+  SendMessageStreamingRequest,
   TaskResubscriptionRequest,
 } from "../types/index.js";
 
@@ -340,7 +340,7 @@ export class A2AServer implements Server {
    * @param res The Express Response object
    */
   public async handleTaskSendSubscribe(
-    req: SendTaskStreamingRequest,
+    req: SendMessageStreamingRequest,
     res: Response
   ): Promise<void> {
     validateTaskSendParams(req.params);

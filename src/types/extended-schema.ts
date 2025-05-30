@@ -13,57 +13,23 @@ import type {
   JSONRPCRequest,
   JSONRPCResponse,
   AgentCard,
-  JSONRPCMessage,
-  JSONRPCError,
-} from "./schema.js";
+  FileWithBytes,
+  FileWithUri,
+} from "./schema/index.js";
 
 /**
- * Improved JSON-RPC Response types using discriminated unions
- * These provide better type safety than the standard optional field approach
+ * Represents the content of a file, either as base64 encoded bytes or a URI.
+ * @description Ensures that either 'bytes' or 'uri' is provided, but not both. (Note: This constraint is informational in TypeScript types).
  */
+export type FileContent = FileWithBytes | FileWithUri;
 
 /**
- * @deprecated Use JSONRPCResponse instead
- * Represents a successful JSON-RPC response with a result.
+ * Represents the possible types of events that can be yielded by a TaskHandler.
+ * @description Either a partial TaskStatus (without the server-managed timestamp)
+ * or a complete Artifact object.
  */
-export interface JSONRPCSuccessResponse<R = any> extends JSONRPCMessage {
-  /**
-   * The result of the method invocation.
-   */
-  result: R;
-
-  /**
-   * In a success response, error must never be present.
-   */
-  error?: never;
-}
-
-/**
- * @deprecated Use JSONRPCResponse instead
- * Represents an error JSON-RPC response.
- */
-export interface JSONRPCErrorResponse<E = any> extends JSONRPCMessage {
-  /**
-   * The error object.
-   */
-  error: JSONRPCError<E>;
-
-  /**
-   * In an error response, result must never be present.
-   */
-  result?: never;
-}
-
-/**
- * @deprecated Use JSONRPCResponse instead
- * Combined JSON-RPC response type as a discriminated union.
- * This ensures a response is either a success with a result, or an error.
- */
-export type ExtendedJSONRPCResponse<R = any, E = any> =
-  | JSONRPCSuccessResponse<R>
-  | JSONRPCErrorResponse<E>;
-
 export type TaskEvent = TaskStatusUpdateEvent | TaskArtifactUpdateEvent;
+
 /**
  * Represents the possible types of updates a TaskHandler can yield.
  * Either a partial TaskStatus (without the server-managed timestamp)
@@ -146,5 +112,5 @@ export interface TestServerDeploymentRequest extends JSONRPCRequest {
 export type ServerDeploymentResponse =
   JSONRPCResponse<ServerDeploymentSuccessResponseParams>;
 
-export * from "./schema.js";
-export type { A2AError as A2AErrorType } from "./schema.js";
+export * from "./schema/index.js";
+export type { A2AError as A2AErrorType } from "./schema/index.js";

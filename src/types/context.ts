@@ -6,6 +6,11 @@ import type { Task, Message, TaskYieldUpdate } from "./extended-schema.js";
  */
 export interface TaskContext {
   /**
+   * The context ID of the task.
+   */
+  contextId: string;
+
+  /**
    * The current state of the task when the handler is invoked or resumed.
    * This is a snapshot - the latest state may need to be reloaded during async operations.
    */

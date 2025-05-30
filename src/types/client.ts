@@ -7,7 +7,7 @@ import {
 import type {
   AgentCard,
   TaskQueryParams,
-  TaskSendParams,
+  MessageSendParams,
   TaskStatusUpdateEvent,
 } from "./extended-schema.js";
 
@@ -40,21 +40,21 @@ export interface Client {
 
   /**
    * @description Sends a task request to the agent server.
-   * @param {TaskSendParams} params Parameters required to send the task, including the task definition and metadata.
+   * @param {MessageSendParams} params Parameters required to send the task, including the task definition and metadata.
    * @returns {Promise<Task | null>} A promise that resolves with the initial Task object representing the submitted task, or null if the submission failed.
    * @async
    */
-  sendTask(params: TaskSendParams): Promise<Task | null>;
+  sendTask(params: MessageSendParams): Promise<Task | null>;
 
   /**
    * @description Sends a task request and subscribes to real-time updates (status changes, artifact updates) for that task.
    * This uses a streaming connection if available.
-   * @param {TaskSendParams} params Parameters required to send the task.
+   * @param {MessageSendParams} params Parameters required to send the task.
    * @returns {AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>} An async iterable that yields task status and artifact updates.
    * @async
    */
   sendTaskSubscribe(
-    params: TaskSendParams
+    params: MessageSendParams
   ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>;
 
   /**

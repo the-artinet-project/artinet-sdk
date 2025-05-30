@@ -1,15 +1,15 @@
 import type {
   AgentCard,
-  SendTaskRequest,
+  SendMessageRequest,
   GetTaskRequest,
   CancelTaskRequest,
   SetTaskPushNotificationRequest,
   GetTaskPushNotificationRequest,
-  TaskSendParams,
+  MessageSendParams,
   TaskQueryParams,
   TaskIdParams,
   TaskPushNotificationConfig,
-  SendTaskResponse,
+  SendMessageResponse,
   GetTaskResponse,
   CancelTaskResponse,
   SetTaskPushNotificationResponse,
@@ -17,7 +17,7 @@ import type {
   Task,
   TaskArtifactUpdateEvent,
   TaskStatusUpdateEvent,
-  SendTaskStreamingRequest,
+  SendMessageStreamingRequest,
   TaskResubscriptionRequest,
 } from "../types/index.js";
 
@@ -131,8 +131,8 @@ export class A2AClient implements Client {
    * @param params The parameters for the tasks/send method.
    * @returns A promise resolving to the Task object or null.
    */
-  async sendTask(params: TaskSendParams): Promise<Task | null> {
-    return await executeJsonRpcRequest<SendTaskRequest, SendTaskResponse>(
+  async sendTask(params: MessageSendParams): Promise<Task | null> {
+    return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
       this.baseUrl,
       "tasks/send",
       params,
@@ -146,10 +146,10 @@ export class A2AClient implements Client {
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
   sendTaskSubscribe(
-    params: TaskSendParams
+    params: MessageSendParams
   ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent> {
     return executeStreamEvents<
-      SendTaskStreamingRequest,
+      SendMessageStreamingRequest,
       { result: TaskStatusUpdateEvent | TaskArtifactUpdateEvent }
     >(this.baseUrl, "tasks/sendSubscribe", params, this.customHeaders);
   }
