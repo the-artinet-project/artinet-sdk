@@ -10,7 +10,7 @@ configureLogger({ level: "info" });
 // Define the simplest possible agent logic
 const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
   const userInput =
-    context.userMessage.parts[0].type === "text"
+    context.userMessage.parts[0].kind === "text"
       ? context.userMessage.parts[0].text
       : "";
   logger.info(`Quick server received: ${userInput}`);
@@ -40,7 +40,19 @@ const server = new A2AServer({
     url: "http://localhost:4000/a2a",
     version: "0.1.0",
     capabilities: { streaming: true }, // Our handler uses yield
-    skills: [{ id: "echo", name: "Echo Skill" }],
+    skills: [
+      {
+        id: "echo",
+        name: "Echo Skill",
+        description: "Echo the user's message",
+        tags: ["echo"],
+        inputModes: ["text"],
+        outputModes: ["text"],
+      },
+    ],
+    description: "A simple agent that echoes the user's message",
+    defaultInputModes: ["text"],
+    defaultOutputModes: ["text"],
   },
 });
 
