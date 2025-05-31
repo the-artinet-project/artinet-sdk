@@ -19,12 +19,12 @@ import {
   InternalError,
   TaskNotFoundError,
   TaskNotCancelableError,
-  TaskStatus,
   ErrorCodeContentTypeNotSupported,
   ContentTypeNotSupportedError,
   InvalidAgentResponseError,
   ErrorCodeInvalidAgentResponse,
   TaskState,
+  TaskStatusUpdateEvent,
 } from "../../types/schema/index.js";
 
 export class SystemError<
@@ -113,15 +113,23 @@ export const INVALID_AGENT_RESPONSE = <T extends InvalidAgentResponseError>(
   );
 
 export const FAILED_UPDATE = (
-  message: string,
-  messageId: string = "failed-update"
-): TaskStatus => ({
-  state: TaskState.Failed,
-  message: {
-    role: "agent",
-    parts: [{ kind: "text", text: message }],
-    messageId,
-    kind: "message",
+  taskId: string,
+  contextId: string,
+  messageId: string = "failed-update",
+  errMessage: string
+): TaskStatusUpdateEvent => ({
+  taskId,
+  contextId,
+  kind: "status-update",
+  final: true,
+  status: {
+    state: TaskState.Failed,
+    message: {
+      messageId,
+      role: "agent",
+      parts: [{ kind: "text", text: errMessage }],
+      kind: "message",
+    },
   },
 });
 

@@ -5,9 +5,10 @@ import {
   A2AServer,
   InMemoryTaskStore,
   TaskContext,
-  TaskYieldUpdate,
+  UpdateEvent,
   TaskStore,
   configureLogger,
+  TaskState,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -17,14 +18,22 @@ configureLogger({ level: "silent" });
 // Define test task handler
 async function* basicTaskHandler(
   context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
+): AsyncGenerator<UpdateEvent, void, unknown> {
   // Check if task already has status, if not, use "working"
   yield {
-    state: "working",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Working on it..." }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Working,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Working on it..." }],
+      },
     },
+    final: false,
   };
 
   // Simulate some work
@@ -32,25 +41,49 @@ async function* basicTaskHandler(
 
   // Check for cancellation
   if (context.isCancelled()) {
-    yield { state: "canceled" };
+    yield {
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: { state: TaskState.Canceled },
+      final: true,
+    };
     return;
   }
 
   // Generate a result artifact
   yield {
-    name: "result.txt",
-    parts: [
-      { type: "text", text: `Task ${context.task.id} completed successfully.` },
-    ],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "artifact-update",
+    artifact: {
+      artifactId: "test-artifact-id",
+      name: "result.txt",
+      parts: [
+        {
+          kind: "text",
+          text: `Task ${context.task.id} completed successfully.`,
+        },
+      ],
+    },
+    lastChunk: true,
   };
 
   // Final completion status
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Task completed successfully!" }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Task completed successfully!" }],
+      },
     },
+    final: true,
   };
 }
 
@@ -114,17 +147,17 @@ describe("A2AServer", () => {
     });
   });
 
-  describe("tasks/send", () => {
+  describe("message/send", () => {
     it("handles a valid task send request", async () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "test-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "test-task-1",
           message: {
+            taskId: "test-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Hello, world!" }],
+            parts: [{ kind: "text", text: "Hello, world!" }],
           },
         },
       };
@@ -147,12 +180,12 @@ describe("A2AServer", () => {
       const invalidRequest = {
         // Missing required jsonrpc field
         id: "invalid-req",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "task-id",
           message: {
             role: "user",
-            parts: [{ type: "text", text: "Test" }],
+            parts: [{ kind: "text", text: "Test" }],
           },
         },
       };
@@ -171,12 +204,12 @@ describe("A2AServer", () => {
       const requestWithoutId = {
         jsonrpc: "2.0",
         id: "missing-id-req",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           // Missing id field
           message: {
-            role: "user",
-            parts: [{ type: "text", text: "Test" }],
+            // role: "user",
+            parts: [{ kind: "text", text: "Test" }],
           },
         },
       };
@@ -198,12 +231,12 @@ describe("A2AServer", () => {
       const createRequest = {
         jsonrpc: "2.0",
         id: "create-req",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "retrieve-task",
           message: {
+            taskId: "retrieve-task",
             role: "user",
-            parts: [{ type: "text", text: "Task to retrieve" }],
+            parts: [{ kind: "text", text: "Task to retrieve" }],
           },
         },
       };
@@ -257,12 +290,12 @@ describe("A2AServer", () => {
       const createRequest = {
         jsonrpc: "2.0",
         id: "create-cancel-req",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "cancel-task",
           message: {
+            taskId: "cancel-task",
             role: "user",
-            parts: [{ type: "text", text: "Task to cancel" }],
+            parts: [{ kind: "text", text: "Task to cancel" }],
           },
         },
       };

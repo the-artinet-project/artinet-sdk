@@ -8,13 +8,14 @@ import type {
   TaskStatusUpdateEvent,
   TaskArtifactUpdateEvent,
   TaskStatus,
-  Artifact,
   A2ARequest,
   JSONRPCRequest,
   JSONRPCResponse,
   AgentCard,
   FileWithBytes,
   FileWithUri,
+  Task,
+  Message,
 } from "./schema/index.js";
 
 /**
@@ -31,11 +32,22 @@ export type FileContent = FileWithBytes | FileWithUri;
 export type TaskEvent = TaskStatusUpdateEvent | TaskArtifactUpdateEvent;
 
 /**
+ * Represents the possible types of updates that can be yielded by a TaskHandler.
+ * @description Either a Message, Task, TaskStatusUpdateEvent, or TaskArtifactUpdateEvent.
+ */
+export type UpdateEvent =
+  | Message
+  | Task
+  | TaskStatusUpdateEvent
+  | TaskArtifactUpdateEvent;
+
+/**
+ * @deprecated use UpdateEvent instead
  * Represents the possible types of updates a TaskHandler can yield.
  * Either a partial TaskStatus (without the server-managed timestamp)
  * or a complete Artifact object.
  */
-export type TaskYieldUpdate = Omit<TaskStatus, "timestamp"> | Artifact;
+export type TaskYieldUpdate = UpdateEvent;
 
 export type ExtendedTaskStatusUpdate = Omit<TaskStatus, "timestamp">;
 export type RequestParams = Required<Pick<A2ARequest, "params">>["params"];

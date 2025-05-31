@@ -1,43 +1,53 @@
-import { TaskState } from "../../types/schema/index.js";
-import { TaskYieldUpdate } from "../../types/extended-schema.js";
+import { TaskState, TaskStatusUpdateEvent } from "../../types/schema/index.js";
 
-export const WORKING_UPDATE: TaskYieldUpdate = {
-  state: TaskState.Working,
-  message: {
-    messageId: "working-update",
-    kind: "message",
-    role: "agent" as const,
-    parts: [{ kind: "text" as const, text: "Processing..." }],
-  },
+export const WORKING_UPDATE = (
+  taskId: string,
+  contextId: string
+): TaskStatusUpdateEvent => {
+  return {
+    taskId: taskId,
+    contextId: contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Working,
+    },
+    final: false,
+  };
 };
 
-export const CANCEL_UPDATE: TaskYieldUpdate = {
-  state: TaskState.Canceled,
-  message: {
-    messageId: "cancel-update",
-    kind: "message",
-    role: "agent" as const,
-    parts: [
-      {
-        kind: "text" as const,
-        text: "Task was canceled during execution.",
-      },
-    ],
-  },
+export const CANCEL_UPDATE = (
+  taskId: string,
+  contextId: string
+): TaskStatusUpdateEvent => {
+  return {
+    taskId: taskId,
+    contextId: contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Canceled,
+    },
+    final: true,
+  };
 };
 
-export const SUBMITTED_UPDATE: TaskYieldUpdate = {
-  state: TaskState.Submitted,
-  message: {
-    messageId: "submitted-update",
-    kind: "message",
-    role: "agent" as const,
-    parts: [{ kind: "text" as const, text: "Task was submitted." }],
-  },
+export const SUBMITTED_UPDATE = (
+  taskId: string,
+  contextId: string
+): TaskStatusUpdateEvent => {
+  return {
+    taskId: taskId,
+    contextId: contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Submitted,
+    },
+    final: false,
+  };
 };
 
 export const FINAL_STATES: TaskState[] = [
   TaskState.Completed,
   TaskState.Failed,
   TaskState.Canceled,
+  TaskState.Rejected,
 ];

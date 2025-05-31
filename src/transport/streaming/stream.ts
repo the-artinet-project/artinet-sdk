@@ -1,20 +1,11 @@
 import { Response } from "express";
-import {
-  Artifact,
-  JSONRPCError,
-  JSONRPCResponse,
-} from "../../types/schema/index.js";
-import { TaskEvent } from "../../types/extended-schema.js";
-import { updateState } from "../../server/lib/state.js";
+import { JSONRPCError, JSONRPCResponse } from "../../types/schema/index.js";
+import { TaskEvent, UpdateEvent } from "../../types/extended-schema.js";
+import { processUpdate } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";
 import { TaskContext, TaskHandler } from "../../types/context.js";
 import { FAILED_UPDATE, INTERNAL_ERROR } from "../../utils/common/errors.js";
-import {
-  isArtifactUpdate,
-  isTaskStatusUpdate,
-} from "../../utils/common/utils.js";
 import { logError } from "../../utils/logging/log.js";
-import { FINAL_STATES } from "../../utils/common/constants.js";
 
 /**
  * Sets up a Server-Sent Events stream with appropriate headers
@@ -45,7 +36,7 @@ export function setupSseStream(
 
   // Send initial status if provided
   if (initialStatus) {
-    sendSSEEvent(res, initialStatus);
+    sendSSEEvent(res, taskId, initialStatus);
   }
 }
 
@@ -55,14 +46,18 @@ export function setupSseStream(
  * @param reqId The request ID
  * @param eventData The event data to send
  */
-export function sendSSEEvent(res: Response, update: TaskEvent): void {
+export function sendSSEEvent(
+  res: Response,
+  id: string,
+  update: UpdateEvent
+): void {
   if (!res.writable) {
     return;
   }
 
-  const response: JSONRPCResponse<TaskEvent> = {
+  const response: JSONRPCResponse<UpdateEvent> = {
     jsonrpc: "2.0",
-    id: update.taskId,
+    id: id,
     result: update,
   };
 
@@ -106,7 +101,11 @@ export async function processTaskStream(
   taskId: string,
   context: TaskContext,
   initialData: TaskAndHistory,
-  onCancel: (data: TaskAndHistory, res: Response) => Promise<void>,
+  onCancel: (
+    context: TaskContext,
+    data: TaskAndHistory,
+    res: Response
+  ) => Promise<void>,
   onEnd: (taskId: string, res: Response) => Promise<void>
 ): Promise<void> {
   let currentData = initialData;
@@ -116,57 +115,35 @@ export async function processTaskStream(
   try {
     for await (const yieldValue of generator) {
       if (context.isCancelled()) {
-        await onCancel(currentData, res);
+        await onCancel(context, currentData, res);
         return;
       }
 
-      currentData = await updateState(taskStore, currentData, yieldValue);
+      currentData = await processUpdate(taskStore, {
+        context: context,
+        current: currentData,
+        update: yieldValue,
+      });
 
       context.task = currentData.task;
-
-      if (isTaskStatusUpdate(yieldValue)) {
-        sendSSEEvent(res, {
-          taskId: taskId,
-          contextId: context.contextId,
-          kind: "status-update",
-          status: currentData.task.status,
-          final: FINAL_STATES.includes(currentData.task.status.state),
-        });
-      } else if (isArtifactUpdate(yieldValue)) {
-        const artifactIndex =
-          currentData.task.artifacts?.findIndex(
-            (a: Artifact) => a.name && a.name === yieldValue.name
-          ) ??
-          yieldValue.index ??
-          -1;
-
-        if (
-          artifactIndex >= 0 &&
-          currentData.task.artifacts &&
-          artifactIndex < currentData.task.artifacts.length
-        ) {
-          sendSSEEvent(res, {
-            taskId: taskId,
-            contextId: context.contextId,
-            kind: "artifact-update",
-            artifact: currentData.task.artifacts[artifactIndex],
-            lastChunk: FINAL_STATES.includes(currentData.task.status.state),
-          });
-        }
-      }
+      sendSSEEvent(res, taskId, yieldValue);
     }
   } catch (error) {
     try {
       const failedUpdate = FAILED_UPDATE(
+        taskId,
+        context.contextId,
+        "failed-update",
         error instanceof Error ? error.message : String(error)
       );
 
-      currentData = await updateState(taskStore, currentData, failedUpdate);
-
-      sendSSEEvent(res, {
-        id: taskId,
-        status: currentData.task.status,
+      currentData = await processUpdate(taskStore, {
+        context: context,
+        current: currentData,
+        update: failedUpdate,
       });
+
+      sendSSEEvent(res, taskId, failedUpdate);
     } catch (saveError) {
       logError(
         "A2AServer",

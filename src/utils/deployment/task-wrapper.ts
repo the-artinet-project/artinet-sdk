@@ -1,4 +1,4 @@
-import { Task, TaskYieldUpdate } from "../../types/index.js";
+import { UpdateEvent } from "../../types/index.js";
 import { TaskContext } from "../../types/context.js";
 import { artinet } from "./agents.js";
 
@@ -26,7 +26,7 @@ import { artinet } from "./agents.js";
 export const taskHandlerProxy = async (
   taskHandler: (
     context: TaskContext
-  ) => AsyncGenerator<TaskYieldUpdate, Task | void, unknown>
+  ) => AsyncGenerator<UpdateEvent, void, unknown>
 ) => {
   return await artinet.v0.taskManager({ taskHandler });
 };

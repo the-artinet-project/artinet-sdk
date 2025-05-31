@@ -202,7 +202,7 @@ export * from "./rpc.js";
 import {
   SendMessageRequest,
   SendMessageResponse,
-  SendMessageStreamingRequest,
+  SendStreamingMessageRequest,
   SendStreamingMessageResponse,
 } from "./message.js";
 import {
@@ -226,7 +226,7 @@ export type A2ARequest =
   | SetTaskPushNotificationConfigRequest
   | GetTaskPushNotificationConfigRequest
   | TaskResubscriptionRequest
-  | SendMessageStreamingRequest;
+  | SendStreamingMessageRequest;
 
 /**
  * Represents any valid JSON-RPC response defined in the A2A protocol.

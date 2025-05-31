@@ -6,6 +6,7 @@ import {
   JSONRPCResponse,
   Task,
   SendMessageRequest,
+  Message,
 } from "../../types/index.js";
 import { A2AClient } from "../../client/a2a-client.js";
 import { executeStreamEvents } from "../../transport/index.js";
@@ -50,7 +51,7 @@ const testExecuteStreamEvents = executeStreamEvents as <
 export async function* testDeployment(
   params: ServerDeploymentRequestParams,
   requests: SendMessageRequest[]
-): AsyncIterable<Task | ServerDeploymentResponse | null> {
+): AsyncIterable<Message | Task | ServerDeploymentResponse | null> {
   const generator = await testExecuteStreamEvents(
     new URL("https://agents.artinet.io/test/deploy"),
     "/test/deploy" as any,
@@ -63,7 +64,6 @@ export async function* testDeployment(
       const testClient = new A2AClient(url);
       for (const request of requests) {
         const task = await testClient.sendTask({
-          id: request.params.id,
           message: request.params.message,
         });
         logDebug("testDeployment", "task: ", task);
@@ -81,13 +81,13 @@ export async function* testDeployment(
       deploymentEvent.result.url
     ) {
       logDebug("testDeployment", "deployment-event: ", deploymentEvent);
-      yield event;
+      yield deploymentEvent;
       const innerGenerator = await requestExecutor(deploymentEvent.result.url);
-      for await (const task of innerGenerator()) {
-        yield task;
+      for await (const updateEvent of innerGenerator()) {
+        yield updateEvent;
       }
     } else {
-      yield event;
+      yield event as any;
       logDebug("testDeployment", "event-received: ", event);
     }
   }

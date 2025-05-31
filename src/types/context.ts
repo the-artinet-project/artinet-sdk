@@ -1,4 +1,9 @@
-import type { Task, Message, TaskYieldUpdate } from "./extended-schema.js";
+import type {
+  Task,
+  Message,
+  UpdateEvent,
+  MessageSendConfiguration,
+} from "./extended-schema.js";
 
 /**
  * Context object provided to the TaskHandler.
@@ -32,6 +37,17 @@ export interface TaskContext {
    * The message history associated with the task up to the point the handler is invoked.
    */
   history: Message[];
+
+  /**
+   * @descriptionThe latest user message that triggered this handler invocation or resumption.
+   * @note It's unclear whether this is necessary as userMessage already exists
+   */
+  latestUserMessage?: Message;
+
+  /**
+   * The configuration for the task.
+   */
+  configuration?: MessageSendConfiguration;
 }
 
 /**
@@ -44,9 +60,9 @@ export interface TaskContext {
  *
  * @param context The TaskContext object containing task details and state.
  * @yields Updates to the task's status or artifacts.
- * @returns Optionally returns the final complete Task object (needed for non-streaming 'tasks/send').
+ * @returns Optionally returns the final complete Task object (needed for non-streaming 'message/send').
  *   If void is returned, the server uses the last known state after processing all yields.
  */
 export type TaskHandler = (
   context: TaskContext
-) => AsyncGenerator<TaskYieldUpdate, Task | void, unknown>;
+) => AsyncGenerator<UpdateEvent, void, undefined>;

@@ -1,6 +1,6 @@
 import {
   JSONRPCErrorResponse,
-  JSONRPCRequest,
+  JSONRPCRequestWithParams,
   JSONRPCSuccessResponse,
 } from "./rpc.js";
 import { TaskIdParams } from "./task.js";
@@ -46,7 +46,7 @@ export interface PushNotificationConfig {
 
 /**
  * @description Represents the push notification information associated with a specific task ID.
- * Used as parameters for `tasks/pushNotification/set` and as a result type.
+ * Used as parameters for `tasks/pushNotificationConfig/set` and as a result type.
  * @required taskId
  * @required pushNotificationConfig
  */
@@ -65,20 +65,20 @@ export interface TaskPushNotificationConfig {
  * @description Request to set or update the push notification config for a task.
  * @required TaskPushNotificationConfig
  */
-export type SetTaskPushNotificationConfigRequest = JSONRPCRequest<
-  "tasks/pushNotification/set",
+export type SetTaskPushNotificationConfigRequest = JSONRPCRequestWithParams<
+  "tasks/pushNotificationConfig/set",
   TaskPushNotificationConfig
 >;
 
 /**
- * @description JSON-RPC success response model for the 'tasks/pushNotification/set' method.
+ * @description JSON-RPC success response model for the 'tasks/pushNotificationConfig/set' method.
  * @required TaskPushNotificationConfig
  */
 export type SetTaskPushNotificationConfigSuccessResponse =
   JSONRPCSuccessResponse<TaskPushNotificationConfig>;
 
 /**
- * @description Response to a `tasks/pushNotification/set` request. Contains the confirmed TaskPushNotificationConfig or an error.
+ * @description Response to a `tasks/pushNotificationConfig/set` request. Contains the confirmed TaskPushNotificationConfig or an error.
  * @oneOf SetTaskPushNotificationConfigSuccessResponse | JSONRPCErrorResponse
  */
 export type SetTaskPushNotificationConfigResponse =
@@ -89,7 +89,7 @@ export type SetTaskPushNotificationConfigResponse =
  * @description Request to retrieve the currently configured push notification configuration for a task.
  * @required TaskIdParams
  */
-export type GetTaskPushNotificationConfigRequest = JSONRPCRequest<
+export type GetTaskPushNotificationConfigRequest = JSONRPCRequestWithParams<
   "tasks/pushNotificationConfig/get",
   TaskIdParams
 >;
@@ -102,7 +102,7 @@ export type GetTaskPushNotificationConfigSuccessResponse =
   JSONRPCSuccessResponse<TaskPushNotificationConfig>;
 
 /**
- * @description Response to a `tasks/pushNotification/get` request. Contains the TaskPushNotificationConfig or an error.
+ * @description Response to a `tasks/pushNotificationConfig/get` request. Contains the TaskPushNotificationConfig or an error.
  * @oneOf GetTaskPushNotificationConfigSuccessResponse | JSONRPCErrorResponse
  */
 export type GetTaskPushNotificationConfigResponse =

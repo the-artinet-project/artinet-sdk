@@ -4,7 +4,7 @@ import { TaskArtifactUpdateEvent } from "./task.js";
 import { TaskStatusUpdateEvent } from "./task.js";
 import {
   JSONRPCErrorResponse,
-  JSONRPCRequest,
+  JSONRPCRequestWithParams,
   JSONRPCSuccessResponse,
 } from "./rpc.js";
 import { Task } from "./task.js";
@@ -67,7 +67,7 @@ export interface MessageSendParams {
  * @required method
  * @required params
  */
-export type SendMessageRequest = JSONRPCRequest<
+export type SendMessageRequest = JSONRPCRequestWithParams<
   "message/send",
   MessageSendParams
 >;
@@ -98,7 +98,7 @@ export type SendMessageResponse =
  * @required method
  * @required params
  */
-export type SendMessageStreamingRequest = JSONRPCRequest<
+export type SendStreamingMessageRequest = JSONRPCRequestWithParams<
   "message/stream",
   MessageSendParams
 >;
@@ -114,7 +114,7 @@ export type SendStreamingMessageSuccessResponse = JSONRPCSuccessResponse<
 >;
 
 /**
- * @description Response to a streaming task operation, either through `tasks/sendSubscribe` or a subscription.
+ * @description Response to a streaming task operation, either through `message/stream` or a subscription.
  * @oneOf Message | Task | TaskStatusUpdateEvent | TaskArtifactUpdateEvent
  */
 export type SendStreamingMessageResponse =

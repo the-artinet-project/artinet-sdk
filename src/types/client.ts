@@ -1,6 +1,5 @@
 import {
   TaskPushNotificationConfig,
-  TaskArtifactUpdateEvent,
   TaskIdParams,
   Task,
 } from "./extended-schema.js";
@@ -8,7 +7,8 @@ import type {
   AgentCard,
   TaskQueryParams,
   MessageSendParams,
-  TaskStatusUpdateEvent,
+  Message,
+  UpdateEvent,
 } from "./extended-schema.js";
 
 /**
@@ -44,18 +44,16 @@ export interface Client {
    * @returns {Promise<Task | null>} A promise that resolves with the initial Task object representing the submitted task, or null if the submission failed.
    * @async
    */
-  sendTask(params: MessageSendParams): Promise<Task | null>;
+  sendTask(params: MessageSendParams): Promise<Message | Task | null>;
 
   /**
    * @description Sends a task request and subscribes to real-time updates (status changes, artifact updates) for that task.
    * This uses a streaming connection if available.
    * @param {MessageSendParams} params Parameters required to send the task.
-   * @returns {AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>} An async iterable that yields task status and artifact updates.
+   * @returns {AsyncIterable<UpdateEvent>} An async iterable that yields task status and artifact updates.
    * @async
    */
-  sendTaskSubscribe(
-    params: MessageSendParams
-  ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>;
+  sendTaskSubscribe(params: MessageSendParams): AsyncIterable<UpdateEvent>;
 
   /**
    * @description Retrieves the current state of a specific task by its ID.
@@ -99,12 +97,10 @@ export interface Client {
    * @description Resubscribes to updates for an existing task, potentially after a connection drop or client restart.
    * This allows resuming the stream of status and artifact updates.
    * @param {TaskQueryParams} params Parameters containing the task ID to resubscribe to.
-   * @returns {AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>} An async iterable that yields task status and artifact updates.
+   * @returns {AsyncIterable<UpdateEvent>} An async iterable that yields task status and artifact updates.
    * @async
    */
-  resubscribeTask(
-    params: TaskQueryParams
-  ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent>;
+  resubscribeTask(params: TaskQueryParams): AsyncIterable<UpdateEvent>;
 
   /**
    * @description Checks if the agent server supports a specific capability.

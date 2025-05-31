@@ -5,10 +5,13 @@ import {
   A2AServer,
   InMemoryTaskStore,
   TaskContext,
-  TaskYieldUpdate,
+  UpdateEvent,
   INTERNAL_ERROR,
   AgentCard,
   configureLogger,
+  TaskYieldUpdate,
+  TaskState,
+  Message,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -18,9 +21,9 @@ configureLogger({ level: "silent" });
 // Create a specialized task handler for more coverage testing
 async function* serverImplTestHandler(
   context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
+): AsyncGenerator<UpdateEvent, void, unknown> {
   const text = context.userMessage.parts
-    .filter((part) => part.type === "text")
+    .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
 
@@ -32,29 +35,53 @@ async function* serverImplTestHandler(
   // Test for different state transitions in detail
   if (text.includes("streaming")) {
     yield {
-      state: "submitted",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Task submitted..." }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Submitted,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Task submitted..." }],
+        },
       },
+      final: false,
     };
 
     yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Working..." }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Working..." }],
+        },
       },
+      final: false,
     };
 
     // Simulate a few more updates
     for (let i = 1; i <= 3; i++) {
       yield {
-        state: "working",
-        message: {
-          role: "agent",
-          parts: [{ type: "text", text: `Still working (${i}/3)...` }],
+        taskId: context.task.id,
+        contextId: context.contextId,
+        kind: "status-update",
+        status: {
+          state: TaskState.Working,
+          message: {
+            messageId: "test-message-id",
+            kind: "message",
+            role: "agent",
+            parts: [{ kind: "text", text: `Still working (${i}/3)...` }],
+          },
         },
+        final: false,
       };
 
       // Small delay to simulate processing
@@ -62,30 +89,54 @@ async function* serverImplTestHandler(
     }
 
     yield {
-      state: "completed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Task completed successfully!" }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Completed,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Task completed successfully!" }],
+        },
       },
+      final: true,
     };
     return;
   }
 
   // Default case
   yield {
-    state: "working",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Working on it..." }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Working,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Working on it..." }],
+      },
     },
+    final: false,
   };
 
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Completed!" }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Completed!" }],
+      },
     },
+    final: true,
   };
 }
 
@@ -109,8 +160,13 @@ describe("Server Implementation Tests", () => {
         {
           id: "test-skill",
           name: "Test Skill",
+          description: "Test skill description",
+          tags: ["test", "skill"],
         },
       ],
+      defaultInputModes: ["text"],
+      defaultOutputModes: ["text"],
+      description: "Test agent description",
     };
 
     server = new A2AServer({
@@ -161,12 +217,12 @@ describe("Server Implementation Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "test-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "test-task-1",
           message: {
+            taskId: "test-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Basic test" }],
+            parts: [{ kind: "text", text: "Basic test" }],
           },
         },
       };
@@ -214,12 +270,12 @@ describe("Server Implementation Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "internal-error-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "internal-error-task-1",
           message: {
+            taskId: "internal-error-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This will throw-internal error" }],
+            parts: [{ kind: "text", text: "This will throw-internal error" }],
           },
         },
       };
@@ -277,7 +333,7 @@ describe("Server Implementation Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "invalid-params-request-1",
-        method: "tasks/send",
+        method: "message/send",
         // Missing params
       };
 
@@ -318,12 +374,12 @@ describe("Server Implementation Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "history-create-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "history-task-1",
           message: {
+            taskId: "history-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Task for history test" }],
+            parts: [{ kind: "text", text: "Task for history test" }],
           },
         },
       };
@@ -355,13 +411,13 @@ describe("Server Implementation Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "session-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "session-task-1",
-          sessionId: "test-session-123",
           message: {
+            taskId: "session-task-1",
+            contextId: "test-session-123",
             role: "user",
-            parts: [{ type: "text", text: "Task with session ID" }],
+            parts: [{ kind: "text", text: "Task with session ID" }],
           },
         },
       };
@@ -373,19 +429,19 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("session-task-1");
-      expect(response.body.result.sessionId).toBe("test-session-123");
+      expect(response.body.result.contextId).toBe("test-session-123");
     });
 
     it("includes metadata when provided", async () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "metadata-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "metadata-task-1",
           message: {
+            taskId: "metadata-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Task with metadata" }],
+            parts: [{ kind: "text", text: "Task with metadata" }],
           },
           metadata: {
             testKey: "testValue",
@@ -410,12 +466,12 @@ describe("Server Implementation Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "timestamp-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "timestamp-task-1",
           message: {
+            taskId: "timestamp-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Task for timestamp test" }],
+            parts: [{ kind: "text", text: "Task for timestamp test" }],
           },
         },
       };

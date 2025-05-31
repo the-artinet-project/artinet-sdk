@@ -2,7 +2,7 @@ import { jest } from "@jest/globals";
 import {
   testDeployment,
   configureLogger,
-  SendTaskRequest,
+  SendMessageRequest,
   Message,
   AgentCard,
   ServerDeploymentRequestParams,
@@ -10,7 +10,7 @@ import {
   Task,
   bundle,
   fullDeployment,
-  TaskSendParams,
+  MessageSendParams,
 } from "../src/index.js";
 import { logDebug } from "../src/utils/logging/log.js";
 import { A2AClient } from "../src/index.js";
@@ -47,8 +47,11 @@ const MOCK_AGENT_CARD: AgentCard = {
       id: "test-skill",
       name: "Test Skill",
       description: "A test skill for unit tests",
+      tags: ["test", "skill"],
     },
   ],
+  defaultInputModes: ["text"],
+  defaultOutputModes: ["text"],
 };
 
 const MOCK_AGENT_CARD_NESTED: AgentCard = {
@@ -66,8 +69,11 @@ const MOCK_AGENT_CARD_NESTED: AgentCard = {
       id: "test-skill",
       name: "Test Skill",
       description: "A test skill for unit tests",
+      tags: ["test", "skill"],
     },
   ],
+  defaultInputModes: ["text"],
+  defaultOutputModes: ["text"],
 };
 
 const testParams: ServerDeploymentRequestParams = {
@@ -101,46 +107,52 @@ const fullTestParams: ServerDeploymentRequestParams = {
 };
 
 const message: Message = {
+  messageId: "test-message-id",
+  kind: "message",
   role: "user",
   parts: [
     {
-      type: "text",
+      kind: "text",
       text: "Write a python function to share files remotely. Please be concise and respond with code only. Please use the following format: def share_files(files: list[str]) -> str: ...",
     },
   ],
 };
 const message2: Message = {
+  messageId: "test-message-id-2",
+  kind: "message",
   role: "user",
   parts: [
     {
-      type: "text",
+      kind: "text",
       text: "Write a javascript function to share files remotely. Please be concise and respond with code only. Please use the following format: function share_files(files: string[]) { ... }",
     },
   ],
 };
 
-const sendTaskRequest: SendTaskRequest = {
-  method: "tasks/send",
+const sendTaskRequest: SendMessageRequest = {
+  jsonrpc: "2.0",
+  id: "test-request-1",
+  method: "message/send",
   params: {
-    id: `task-${Date.now()}`,
     message: message,
   },
 };
 
 describe("TestDeployment", () => {
   it("should deploy test logic", async () => {
-    const requests: SendTaskRequest[] = [
+    const requests: SendMessageRequest[] = [
       sendTaskRequest,
       {
-        method: "tasks/send",
+        jsonrpc: "2.0",
+        id: "test-request-2",
+        method: "message/send",
         params: {
-          id: `task-${Date.now()}-2`,
           message: message2,
         },
       },
     ];
     logDebug("testDeployment", "Starting testDeployment test...");
-    const results: (Task | ServerDeploymentResponse)[] = [];
+    const results: (Message | Task | ServerDeploymentResponse)[] = [];
     for await (const result of testDeployment(testParams, requests)) {
       if (result) {
         results.push(result);
@@ -155,18 +167,19 @@ describe("TestDeployment", () => {
   });
 
   it("should bundle and deploy test logic", async () => {
-    const requests: SendTaskRequest[] = [
+    const requests: SendMessageRequest[] = [
       sendTaskRequest,
       {
-        method: "tasks/send",
+        jsonrpc: "2.0",
+        id: "test-request-2",
+        method: "message/send",
         params: {
-          id: `task-${Date.now()}-2`,
           message: message2,
         },
       },
     ];
     logDebug("testDeployment", "Starting testDeployment test...");
-    const results: (Task | ServerDeploymentResponse)[] = [];
+    const results: (Message | Task | ServerDeploymentResponse)[] = [];
     for await (const result of testDeployment(coderTestParams, requests)) {
       logDebug("testDeployment", "Received result:", JSON.stringify(result));
       if (result) {
@@ -181,18 +194,19 @@ describe("TestDeployment", () => {
   }, 90000);
 
   it("should bundle and deploy typescript test logic", async () => {
-    const requests: SendTaskRequest[] = [
+    const requests: SendMessageRequest[] = [
       sendTaskRequest,
       {
-        method: "tasks/send",
+        jsonrpc: "2.0",
+        id: "test-request-2",
+        method: "message/send",
         params: {
-          id: `task-${Date.now()}-2`,
           message: message2,
         },
       },
     ];
     logDebug("testDeployment", "Starting testDeployment test...");
-    const results: (Task | ServerDeploymentResponse)[] = [];
+    const results: (Message | Task | ServerDeploymentResponse)[] = [];
     for await (const result of testDeployment(ts_coderTestParams, requests)) {
       logDebug("testDeployment", "Received result:", JSON.stringify(result));
       if (result) {
@@ -207,18 +221,19 @@ describe("TestDeployment", () => {
   }, 90000);
 
   it("should test nested deployment", async () => {
-    const requests: SendTaskRequest[] = [
+    const requests: SendMessageRequest[] = [
       sendTaskRequest,
       {
-        method: "tasks/send",
+        jsonrpc: "2.0",
+        id: "test-request-2",
+        method: "message/send",
         params: {
-          id: `task-${Date.now()}-2`,
           message: message2,
         },
       },
     ];
     logDebug("testDeployment", "Starting testDeployment test...");
-    const results: (Task | ServerDeploymentResponse)[] = [];
+    const results: (Message | Task | ServerDeploymentResponse)[] = [];
     for await (const result of testDeployment(nestedTestParams, requests)) {
       logDebug("testDeployment", "Received result:", JSON.stringify(result));
       if (result) {
@@ -274,16 +289,16 @@ describe("FullDeployment", () => {
       {},
       "/agentId=0x88a03f820c633d580f37e9dae1487a32ae2f59b42eafe0f8396c5a902507f349/.well-known/agent.json"
     );
-    const params: TaskSendParams = {
+    const params: MessageSendParams = {
       message: message,
-      id: `task-${Date.now()}`,
     };
     const task = await client.sendTask(params);
     logDebug("testDeployment", "task:", JSON.stringify(task));
     expect(task).toBeDefined();
-    expect(task?.status.state).toBe("completed");
+    expect(task?.kind).toBe("task");
+    expect((task as Task).status.state).toBe("completed");
     console.log(task);
-    console.log(task?.status.message);
+    console.log((task as Task).status.message);
     logDebug("testDeployment", "fullDeployment test finished.");
   }, 90000);
 
@@ -294,16 +309,16 @@ describe("FullDeployment", () => {
       {},
       "/0x350dd68abd99508c3acc5c61d889fe2f83e4cb5dc8740af0cf7444be9ca686af/agent-card"
     );
-    const params: TaskSendParams = {
+    const params: MessageSendParams = {
       message: message,
-      id: `task-${Date.now()}`,
     };
     const task = await client.sendTask(params);
     logDebug("testDeployment", "task:", JSON.stringify(task));
     expect(task).toBeDefined();
-    expect(task?.status.state).toBe("completed");
+    expect(task?.kind).toBe("task");
+    expect((task as Task).status.state).toBe("completed");
     console.log(task);
-    console.log(task?.status.message);
+    console.log((task as Task).status.message);
     logDebug("testDeployment", "fullDeployment test finished.");
   }, 90000);
 });

@@ -19,7 +19,12 @@ import {
   defaultSetTaskPushNotificationMethod,
   defaultGetTaskPushNotificationMethod,
 } from "./a2a-methods.js";
-import { A2AResponse, RequestParams } from "../../../types/index.js";
+import {
+  A2AResponse,
+  Message,
+  RequestParams,
+  Task,
+} from "../../../types/index.js";
 
 /**
  * Creates a JSON-RPC method handler from a function
@@ -30,7 +35,7 @@ import { A2AResponse, RequestParams } from "../../../types/index.js";
  */
 export function createJSONRPCMethod<
   Params extends RequestParams,
-  Result extends A2AResponse | null,
+  Result extends A2AResponse | Task | Message | null,
 >(
   deps: CreateJSONRPCServerParams,
   funct: A2AMethodHandler<Params, Result>,
@@ -70,7 +75,7 @@ export const defaultCreateJSONRPCServer: CreateJSONRPCServer = (params) => {
   const taskSendMethod = createJSONRPCMethod(
     params,
     defaultSendTaskMethod,
-    "tasks/send"
+    "message/send"
   );
   const taskGetMethod = createJSONRPCMethod(
     params,
@@ -85,21 +90,21 @@ export const defaultCreateJSONRPCServer: CreateJSONRPCServer = (params) => {
   const taskPushNotificationSetMethod = createJSONRPCMethod(
     params,
     defaultSetTaskPushNotificationMethod,
-    "tasks/pushNotification/set"
+    "tasks/pushNotificationConfig/set"
   );
   const taskPushNotificationGetMethod = createJSONRPCMethod(
     params,
     defaultGetTaskPushNotificationMethod,
-    "tasks/pushNotification/get"
+    "tasks/pushNotificationConfig/get"
   );
 
   return new JSONRPCServer(
     {
-      "tasks/send": taskSendMethod,
+      "message/send": taskSendMethod,
       "tasks/get": taskGetMethod,
       "tasks/cancel": taskCancelMethod,
-      "tasks/pushNotification/set": taskPushNotificationSetMethod,
-      "tasks/pushNotification/get": taskPushNotificationGetMethod,
+      "tasks/pushNotificationConfig/set": taskPushNotificationSetMethod,
+      "tasks/pushNotificationConfig/get": taskPushNotificationGetMethod,
     },
     { reviver: undefined, replacer: undefined }
   );

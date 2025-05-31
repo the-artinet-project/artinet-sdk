@@ -1,7 +1,7 @@
 import { Message, Artifact } from "./parameters.js";
 import {
   JSONRPCErrorResponse,
-  JSONRPCRequest,
+  JSONRPCRequestWithParams,
   JSONRPCSuccessResponse,
 } from "./rpc.js";
 
@@ -22,7 +22,7 @@ export enum TaskState {
 
 /**
  * Basic parameters used for task ID operations.
- * Used by: `tasks/cancel`, `tasks/pushNotification/get`.
+ * Used by: `tasks/cancel`, `tasks/pushNotificationConfig/get`.
  */
 export interface TaskIdParams {
   /**
@@ -49,7 +49,7 @@ export interface TaskQueryParams extends TaskIdParams {
 
 /**
  * Basic parameters used for task ID operations.
- * Used by: `tasks/cancel`, `tasks/pushNotification/get`.
+ * Used by: `tasks/cancel`, `tasks/pushNotificationConfig/get`.
  * @description Basic parameters used for task ID operations.
  * @required id
  * @optional metadata
@@ -247,7 +247,10 @@ export interface TaskArtifactUpdateEvent {
  * @required method
  * @required params
  */
-export type GetTaskRequest = JSONRPCRequest<"tasks/get", TaskQueryParams>;
+export type GetTaskRequest = JSONRPCRequestWithParams<
+  "tasks/get",
+  TaskQueryParams
+>;
 
 /**
  * @description JSON-RPC success response model for the 'tasks/get' method.
@@ -268,7 +271,7 @@ export type GetTaskResponse = GetTaskSuccessResponse | JSONRPCErrorResponse;
  * @required method
  * @required params
  */
-export type TaskResubscriptionRequest = JSONRPCRequest<
+export type TaskResubscriptionRequest = JSONRPCRequestWithParams<
   "tasks/resubscribe",
   TaskQueryParams
 >;
@@ -279,7 +282,10 @@ export type TaskResubscriptionRequest = JSONRPCRequest<
  * @required method
  * @required params
  */
-export type CancelTaskRequest = JSONRPCRequest<"tasks/cancel", TaskIdParams>;
+export type CancelTaskRequest = JSONRPCRequestWithParams<
+  "tasks/cancel",
+  TaskIdParams
+>;
 
 /**
  * @description JSON-RPC success response model for the 'tasks/cancel' method.

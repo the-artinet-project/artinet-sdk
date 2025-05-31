@@ -27,7 +27,9 @@ configureLogger({ level: "silent" });
 describe("Error Handling Utilities", () => {
   describe("SystemError", () => {
     it("should create a SystemError with proper attributes", () => {
-      const error = new SystemError("System operation failed", -12345);
+      const error = new SystemError("System operation failed", -12345, {
+        detail: "Additional error information",
+      });
       expect(error.name).toBe("RpcError");
       expect(error.message).toBe("System operation failed");
       expect(error.code).toBe(-12345);
@@ -44,63 +46,65 @@ describe("Error Handling Utilities", () => {
 
   describe("Error Factories", () => {
     it("should create Parse Error", () => {
-      const error = PARSE_ERROR();
+      const error = PARSE_ERROR("Invalid JSON payload");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeParseError);
       expect(error.message).toBe("Invalid JSON payload");
     });
 
     it("should create Invalid Request Error", () => {
-      const error = INVALID_REQUEST();
+      const error = INVALID_REQUEST("Invalid request");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeInvalidRequest);
       expect(error.message).toBe("Request payload validation error");
     });
 
     it("should create Method Not Found Error", () => {
-      const error = METHOD_NOT_FOUND();
+      const error = METHOD_NOT_FOUND("Method not found");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeMethodNotFound);
       expect(error.message).toBe("Method not found");
     });
 
     it("should create Invalid Params Error", () => {
-      const error = INVALID_PARAMS();
+      const error = INVALID_PARAMS("Invalid parameters");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeInvalidParams);
       expect(error.message).toBe("Invalid parameters");
     });
 
     it("should create Internal Error", () => {
-      const error = INTERNAL_ERROR();
+      const error = INTERNAL_ERROR("Internal error");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeInternalError);
       expect(error.message).toBe("Internal error");
     });
 
     it("should create Task Not Found Error", () => {
-      const error = TASK_NOT_FOUND();
+      const error = TASK_NOT_FOUND("Task not found");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeTaskNotFound);
       expect(error.message).toBe("Task not found");
     });
 
     it("should create Task Not Cancelable Error", () => {
-      const error = TASK_NOT_CANCELABLE();
+      const error = TASK_NOT_CANCELABLE("Task cannot be canceled");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeTaskNotCancelable);
       expect(error.message).toBe("Task cannot be canceled");
     });
 
     it("should create Unsupported Operation Error", () => {
-      const error = UNSUPPORTED_OPERATION();
+      const error = UNSUPPORTED_OPERATION("This operation is not supported");
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodeUnsupportedOperation);
       expect(error.message).toBe("This operation is not supported");
     });
 
     it("should create Push Notification Not Supported Error", () => {
-      const error = PUSH_NOTIFICATION_NOT_SUPPORTED();
+      const error = PUSH_NOTIFICATION_NOT_SUPPORTED(
+        "Push Notification is not supported"
+      );
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodePushNotificationNotSupported);
       expect(error.message).toBe("Push Notification is not supported");
@@ -116,17 +120,17 @@ describe("Error Handling Utilities", () => {
   describe("FAILED_UPDATE", () => {
     it("should create a failed task update", () => {
       const message = "Task execution failed";
-      const update = FAILED_UPDATE(message);
+      const update = FAILED_UPDATE("taskId", "contextId", "agent", message);
 
       // Test the structure without relying on specific type
       const failedUpdate = update as any;
-      expect(failedUpdate.state).toBe("failed");
-      expect(failedUpdate.message).toBeDefined();
-      expect(failedUpdate.message.role).toBe("agent");
-      expect(Array.isArray(failedUpdate.message.parts)).toBe(true);
-      expect(failedUpdate.message.parts).toHaveLength(1);
-      expect(failedUpdate.message.parts[0].type).toBe("text");
-      expect(failedUpdate.message.parts[0].text).toBe(message);
+      expect(failedUpdate.status.state).toBe("failed");
+      expect(failedUpdate.status.message).toBeDefined();
+      expect(failedUpdate.status.message.role).toBe("agent");
+      expect(Array.isArray(failedUpdate.status.message.parts)).toBe(true);
+      expect(failedUpdate.status.message.parts).toHaveLength(1);
+      expect(failedUpdate.status.message.parts[0].kind).toBe("text");
+      expect(failedUpdate.status.message.parts[0].text).toBe(message);
     });
   });
 

@@ -44,6 +44,15 @@ export interface JSONRPCRequest<Method = string, Params = unknown>
 }
 
 /**
+ * @description Represents a JSON-RPC request object with parameters.
+ * @required params
+ */
+export interface JSONRPCRequestWithParams<Method = string, Params = unknown>
+  extends JSONRPCRequest<Method, Params> {
+  params: Params;
+}
+
+/**
  * @description Represents a JSON-RPC error object.
  * @required code
  * @required message

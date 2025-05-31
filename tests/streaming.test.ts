@@ -5,7 +5,8 @@ import {
   A2AServer,
   InMemoryTaskStore,
   TaskContext,
-  TaskYieldUpdate,
+  TaskState,
+  UpdateEvent,
   configureLogger,
 } from "../src/index.js";
 
@@ -16,20 +17,28 @@ configureLogger({ level: "silent" });
 // Specialized task handler for streaming tests
 async function* streamingTestHandler(
   context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
+): AsyncGenerator<UpdateEvent, void, unknown> {
   const text = context.userMessage.parts
-    .filter((part) => part.type === "text")
+    .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
 
   // Quick completion without streaming for non-streaming tests
   if (text.includes("quick")) {
     yield {
-      state: "completed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Quick completion" }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Completed,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Quick completion" }],
+        },
       },
+      final: true,
     };
     return;
   }
@@ -37,45 +46,79 @@ async function* streamingTestHandler(
   // Test for resubscription
   if (text.includes("resubscribe")) {
     yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [
-          { type: "text", text: "Starting work for resubscribe test..." },
-        ],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [
+            { kind: "text", text: "Starting work for resubscribe test..." },
+          ],
+        },
       },
+      final: false,
     };
 
     // Add a small delay to allow for resubscription test
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     yield {
-      state: "completed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Completed task for resubscribe test" }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Completed,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [
+            { kind: "text", text: "Completed task for resubscribe test" },
+          ],
+        },
       },
+      final: true,
     };
     return;
   }
 
   // Long running task with multiple updates
   yield {
-    state: "submitted",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Task submitted" }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Submitted,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Task submitted" }],
+      },
     },
+    final: false,
   };
 
   // Progress updates
   for (let i = 1; i <= 3; i++) {
     yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: `Progress update ${i}/3` }],
+      taskId: context.task.id,
+      contextId: context.contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: `Progress update ${i}/3` }],
+        },
       },
+      final: false,
     };
 
     // Small delay to simulate processing
@@ -84,11 +127,19 @@ async function* streamingTestHandler(
 
   // Final completion
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Task completed successfully" }],
+    taskId: context.task.id,
+    contextId: context.contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Task completed successfully" }],
+      },
     },
+    final: true,
   };
 }
 
@@ -115,8 +166,13 @@ describe("Streaming API Tests", () => {
           {
             id: "streaming-test",
             name: "Streaming Test Skill",
+            description: "Streaming Test Skill",
+            tags: ["streaming", "test"],
           },
         ],
+        description: "Streaming Test Agent",
+        defaultInputModes: ["text"],
+        defaultOutputModes: ["text"],
       },
     });
     app = server.start();
@@ -196,17 +252,17 @@ describe("Streaming API Tests", () => {
     });
   };
 
-  describe("tasks/sendSubscribe", () => {
+  describe("message/stream", () => {
     it("establishes a stream and sends events until completion", async () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "stream-request-1",
-        method: "tasks/sendSubscribe",
+        method: "message/stream",
         params: {
-          id: "stream-task-1",
           message: {
+            taskId: "stream-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Test streaming updates" }],
+            parts: [{ kind: "text", text: "Test streaming updates" }],
           },
         },
       };
@@ -260,7 +316,7 @@ describe("Streaming API Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "invalid-stream-1",
-        method: "tasks/sendSubscribe",
+        method: "message/stream",
         params: {
           // Missing id
           message: {
@@ -288,12 +344,12 @@ describe("Streaming API Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "resubscribe-request-1",
-        method: "tasks/sendSubscribe",
+        method: "message/stream",
         params: {
-          id: "resubscribe-task-1",
           message: {
+            taskId: "resubscribe-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Test for resubscribe" }],
+            parts: [{ kind: "text", text: "Test for resubscribe" }],
           },
         },
       };
@@ -383,7 +439,7 @@ describe("Streaming API Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "close-stream-request-1",
-        method: "tasks/sendSubscribe",
+        method: "message/stream",
         params: {
           id: "close-stream-task-1",
           message: {

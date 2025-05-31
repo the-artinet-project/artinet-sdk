@@ -6,7 +6,7 @@ import {
   AgentCard,
   Message,
   Task,
-  SendMessageStreamingRequest,
+  SendStreamingMessageRequest,
   TaskResubscriptionRequest,
 } from "../../types/index.js";
 
@@ -35,13 +35,17 @@ export interface Server {
     userMessage: Message,
     history: Message[]
   ): TaskContext;
-  onCancel(data: TaskAndHistory, res: Response): Promise<void>;
+  onCancel(
+    context: TaskContext,
+    data: TaskAndHistory,
+    res: Response
+  ): Promise<void>;
   onEnd(taskId: string, res: Response): Promise<void>;
   addStreamForTask(taskId: string, res: Response): void;
   removeStreamForTask(taskId: string, res: Response): void;
   closeStreamsForTask(taskId: string): void;
   handleTaskSendSubscribe(
-    req: SendMessageStreamingRequest,
+    req: SendStreamingMessageRequest,
     res: Response
   ): Promise<void>;
   handleTaskResubscribe(

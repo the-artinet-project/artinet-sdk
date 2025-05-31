@@ -41,7 +41,7 @@ export function createExpressServer(params: CreateExpressServerParams): {
       try {
         const body = req.body;
         if (body && body.method) {
-          if (body.method === "tasks/sendSubscribe") {
+          if (body.method === "message/stream") {
             return await onTaskSendSubscribe(body, res);
           } else if (body.method === "tasks/resubscribe") {
             return await onTaskResubscribe(body, res);
