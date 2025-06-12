@@ -1,5 +1,5 @@
 import { BaseExecutionContext } from "../types/services/context.js";
-import { AgentCard } from "../types/schema/index.js";
+import { AgentCard } from "../types/index.js";
 import { ServiceDispatcher } from "../types/services/dispatcher.js";
 import { v4 as uuidv4 } from "uuid";
 import { ManagerInterface, ManagerOptions } from "../types/services/manager.js";

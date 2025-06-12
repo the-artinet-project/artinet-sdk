@@ -23,7 +23,7 @@ import {
   GetTaskPushNotificationConfigRequest,
   TaskState,
   TaskArtifactUpdateEvent,
-} from "../../types/schema/index.js";
+} from "../../types/index.js";
 import {
   AgentEngine,
   ExecutionContext,

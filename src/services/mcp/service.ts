@@ -8,7 +8,7 @@ import {
   ExecutionContext,
   MCPExecutionContext,
 } from "../../types/services/context.js";
-import { AgentSkill } from "../../types/schema/index.js";
+import { AgentSkill } from "../../types/index.js";
 import {
   CallToolResult,
   Implementation,

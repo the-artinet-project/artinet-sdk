@@ -1,5 +1,5 @@
 import { TaskAndHistory, TaskStore } from "../../../server/interfaces/store.js";
-import { AgentCard } from "../../schema/index.js";
+import { AgentCard } from "../../schemas/index.js";
 import { TaskContext } from "../../index.js";
 import express, { Response } from "express";
 

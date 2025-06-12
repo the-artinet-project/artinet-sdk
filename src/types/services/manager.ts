@@ -1,6 +1,6 @@
 import { BaseExecutionContext } from "./context.js";
 import { TaskStore } from "../../server/interfaces/store.js";
-import { AgentCard } from "../schema/index.js";
+import { AgentCard } from "../schemas/index.js";
 import { DispatchOptions } from "./dispatcher.js";
 
 /**

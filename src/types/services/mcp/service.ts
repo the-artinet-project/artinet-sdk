@@ -5,7 +5,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import z, { ZodRawShape } from "zod";
 import { Service } from "../service.js";
-import { AgentSkill } from "../../schema/index.js";
+import { AgentSkill } from "../../schemas/index.js";
 import { MCPExecutionContext } from "../context.js";
 
 /**

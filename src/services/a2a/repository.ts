@@ -4,7 +4,7 @@ import {
   Message,
   MessageSendConfiguration,
   Task,
-} from "../../types/schema/index.js";
+} from "../../types/index.js";
 import { TaskContext } from "../../types/index.js";
 import { CANCEL_UPDATE } from "../../utils/index.js";
 import { processUpdate } from "../../server/lib/state.js";

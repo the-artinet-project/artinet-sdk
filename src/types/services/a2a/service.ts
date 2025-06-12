@@ -1,7 +1,7 @@
 import {
   TaskResubscriptionRequest,
   SendStreamingMessageRequest,
-} from "../../schema/index.js";
+} from "../../schemas/index.js";
 import { A2AExecutionContext } from "../context.js";
 import { Service } from "../service.js";
 import { Response } from "express";

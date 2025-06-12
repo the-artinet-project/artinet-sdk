@@ -11,6 +11,10 @@ import {
 } from "../../types/index.js";
 import { FAILED_UPDATE, INTERNAL_ERROR } from "../../utils/common/errors.js";
 import { logError } from "../../utils/logging/log.js";
+import {
+  SendStreamingMessageRequest,
+  TaskResubscriptionRequest,
+} from "../../types/index.js";
 
 /**
  * Sets up a Server-Sent Events stream with appropriate headers
