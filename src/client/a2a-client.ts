@@ -132,7 +132,7 @@ export class A2AClient implements Client {
    * @param params The parameters for the message/send method.
    * @returns A promise resolving to the Task object or null.
    */
-  async sendTask(params: MessageSendParams): Promise<Message | Task | null> {
+  async sendMessage(params: MessageSendParams): Promise<Message | Task | null> {
     return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
       this.baseUrl,
       "message/send",
@@ -142,15 +142,35 @@ export class A2AClient implements Client {
   }
 
   /**
+   * @deprecated Use sendMessage instead.
+   * Sends a task request to the agent (non-streaming).
+   * @param params The parameters for the message/send method.
+   * @returns A promise resolving to the Task object or null.
+   */
+  async sendTask(params: MessageSendParams): Promise<Message | Task | null> {
+    return await this.sendMessage(params);
+  }
+
+  /**
+   * Sends a task and returns a subscription to status and artifact updates.
+   * @param params Task parameters for the request
+   * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
+   */
+  sendStreamingMessage(params: MessageSendParams): AsyncIterable<UpdateEvent> {
+    return executeStreamEvents<
+      SendStreamingMessageRequest,
+      SendStreamingMessageResponse
+    >(this.baseUrl, "message/stream", params, this.customHeaders);
+  }
+
+  /**
+   * @deprecated Use sendStreamingMessage instead.
    * Sends a task and returns a subscription to status and artifact updates.
    * @param params Task parameters for the request
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
   sendTaskSubscribe(params: MessageSendParams): AsyncIterable<UpdateEvent> {
-    return executeStreamEvents<
-      SendStreamingMessageRequest,
-      SendStreamingMessageResponse
-    >(this.baseUrl, "message/stream", params, this.customHeaders);
+    return this.sendStreamingMessage(params);
   }
 
   /**
