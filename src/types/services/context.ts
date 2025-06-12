@@ -77,7 +77,7 @@ export interface A2AExecutionContext<
 }
 
 /**
- * Represents a request specific to the MCP (Model Context Protocol) protocol.
+ * @description Represents a request specific to the MCP (Model Context Protocol) protocol.
  * The `protocol` field is narrowed to `Protocol.MCP`.
  */
 export interface MCPExecutionContext extends BaseExecutionContext<MCPContext> {
@@ -102,6 +102,15 @@ export interface MCPExecutionContext extends BaseExecutionContext<MCPContext> {
    * @type {AgentSkill[]}
    */
   skills?: AgentSkill[];
+}
+
+/**
+ * @description Represents a request specific to the NLWeb protocol.
+ * The `protocol` field is narrowed to `Protocol.NLWEB`.
+ */
+export interface NLWebExecutionContext
+  extends Omit<MCPExecutionContext, "protocol"> {
+  protocol: Protocol.NLWEB;
 }
 
 /**

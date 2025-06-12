@@ -19,6 +19,10 @@ export enum Protocol {
    */
   CHAT = "chat",
   /**
+   * @description The NLWeb protocol.
+   */
+  NLWEB = "nlweb",
+  /**
    * @description The custom protocol for user-defined services.
    */
   CUSTOM = "custom",
