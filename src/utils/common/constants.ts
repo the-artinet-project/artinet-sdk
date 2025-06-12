@@ -1,4 +1,7 @@
-import { TaskState, TaskStatusUpdateEvent } from "../../types/schema/index.js";
+import {
+  TaskState,
+  TaskStatusUpdateEvent,
+} from "../../types/schemas/a2a/index.js";
 
 export const WORKING_UPDATE = (
   taskId: string,

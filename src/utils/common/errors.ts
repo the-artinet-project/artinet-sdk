@@ -25,7 +25,7 @@ import {
   ErrorCodeInvalidAgentResponse,
   TaskState,
   TaskStatusUpdateEvent,
-} from "../../types/schema/index.js";
+} from "../../types/schemas/a2a/index.js";
 
 export class SystemError<
   T extends JSONRPCError<number, unknown>,

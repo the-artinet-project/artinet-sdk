@@ -1,5 +1,8 @@
 import { Response } from "express";
-import { JSONRPCError, JSONRPCResponse } from "../../types/schema/index.js";
+import {
+  JSONRPCError,
+  JSONRPCResponse,
+} from "../../types/schemas/a2a/index.js";
 import { TaskEvent, UpdateEvent } from "../../types/extended-schema.js";
 import { processUpdate } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";

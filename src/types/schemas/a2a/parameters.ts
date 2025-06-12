@@ -123,6 +123,7 @@ export type Part = TextPart | FilePart | DataPart;
  * @optional description
  * @required parts
  * @optional metadata
+ * @optional extensions
  */
 export interface Artifact {
   /**
@@ -149,6 +150,11 @@ export interface Artifact {
    * @optional metadata associated with the artifact.
    */
   metadata?: Record<string, unknown>;
+
+  /**
+   * @optional The URIs of extensions that are present or contributed to this Artifact.
+   */
+  extension?: string;
 }
 
 /**
@@ -156,6 +162,7 @@ export interface Artifact {
  * @required role
  * @required parts
  * @optional metadata
+ * @optional extensions
  * @optional referenceTaskIds
  * @optional messageId
  * @optional taskId
@@ -175,6 +182,11 @@ export interface Message {
    * @optional metadata associated with the message.
    */
   metadata?: Record<string, unknown>;
+
+  /**
+   * @optional The URIs of extensions that are present or contributed to this Message.
+   */
+  extensions?: string[];
 
   /**
    * @optional List of tasks referenced as context by this message.

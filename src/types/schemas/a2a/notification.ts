@@ -29,6 +29,10 @@ export interface PushNotificationAuthenticationInfo {
  */
 export interface PushNotificationConfig {
   /**
+   * @optional Push Notification ID - created by server to support multiple callbacks.
+   */
+  id?: string;
+  /**
    * @required The URL endpoint where the agent should send notifications.
    */
   url: string;

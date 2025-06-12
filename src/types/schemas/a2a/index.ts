@@ -32,6 +32,35 @@ export interface AgentCapabilities {
    * @required Indicates if the agent supports providing state transition history.
    */
   stateTransitionHistory?: boolean;
+
+  /**
+   * @optional Extensions supported by this agent.
+   */
+  extensions?: AgentExtension[];
+}
+
+/**
+ * @description A declaration of an extension supported by an Agent.
+ */
+export interface AgentExtension {
+  /**
+   * @required The URI of the extension.
+   */
+  uri: string;
+  /**
+   * @optional A description of how this agent uses this extension.
+   */
+  description?: string;
+
+  /**
+   * @optional Whether the client must follow specific requirements of the extension.
+   */
+  required?: boolean;
+
+  /**
+   * @optional Optional configuration for the extension.
+   */
+  params?: Record<string, unknown>;
 }
 
 /**
@@ -94,6 +123,7 @@ export interface AgentSkill {
  * @required name
  * @required description
  * @required url
+ * @optional iconUrl
  * @required version
  * @required capabilities
  * @required defaultInputModes
@@ -125,6 +155,13 @@ export interface AgentCard {
    * @example "https://recipe-agent.com"
    */
   url: string;
+
+  /**
+   * @optional The URL of the agent's icon.
+   * @description The URL of the agent's icon.
+   * @example "https://recipe-agent.com/icon.png"
+   */
+  iconUrl?: string;
 
   /**
    * @optional the service provider of the agent.

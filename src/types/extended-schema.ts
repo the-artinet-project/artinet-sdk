@@ -16,7 +16,7 @@ import type {
   FileWithUri,
   Task,
   Message,
-} from "./schema/index.js";
+} from "./schemas/a2a/index.js";
 
 /**
  * Represents the content of a file, either as base64 encoded bytes or a URI.
@@ -124,5 +124,5 @@ export interface TestServerDeploymentRequest extends JSONRPCRequest {
 export type ServerDeploymentResponse =
   JSONRPCResponse<ServerDeploymentSuccessResponseParams>;
 
-export * from "./schema/index.js";
-export type { A2AError as A2AErrorType } from "./schema/index.js";
+export * from "./schemas/a2a/index.js";
+export type { A2AError as A2AErrorType } from "./schemas/a2a/index.js";
