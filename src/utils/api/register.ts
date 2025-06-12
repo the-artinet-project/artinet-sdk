@@ -38,9 +38,7 @@ export function convert(card: AgentCard): IRegistration {
   const capabilities = skillNames.slice(0, 5) as IRegistration["capabilities"]; // Type assertion based on slice limit
 
   // Determine if authentication is required based on the agent card, ensuring type is boolean | undefined
-  const requiresAuth = card.authentication
-    ? card.authentication.schemes.length > 0
-    : undefined;
+  const requiresAuth: boolean = !!card.security?.length;
 
   const registration: IRegistration = {
     schemaVersion: "1.0.0",

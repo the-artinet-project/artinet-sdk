@@ -242,9 +242,9 @@ describe("RPC Client", () => {
         );
       } catch (error) {
         expect(error).toBeInstanceOf(SystemError);
-        expect((error as SystemError).code).toBe(-32603);
-        expect((error as SystemError).message).toBe("Test error");
-        expect((error as SystemError).data).toEqual({
+        expect((error as SystemError<any>).code).toBe(-32603);
+        expect((error as SystemError<any>).message).toBe("Test error");
+        expect((error as SystemError<any>).data).toEqual({
           detail: "This is a test error",
         });
       }
@@ -328,8 +328,8 @@ describe("RPC Client", () => {
         parseResponseTest(responseText);
       } catch (error) {
         expect(error).toBeInstanceOf(SystemError);
-        expect((error as SystemError).code).toBe(-32000);
-        expect((error as SystemError).message).toBe("Error message");
+        expect((error as SystemError<any>).code).toBe(-32000);
+        expect((error as SystemError<any>).message).toBe("Error message");
       }
     });
   });

@@ -38,12 +38,21 @@ describe("register Function", () => {
         stateTransitionHistory: false,
       },
       skills: [
-        { id: "skill1", name: "Skill One", description: "Does one thing" },
-        { id: "skill2", name: "Skill Two", description: "Does another thing" },
+        {
+          id: "skill1",
+          name: "Skill One",
+          description: "Does one thing",
+          tags: [],
+        },
+        {
+          id: "skill2",
+          name: "Skill Two",
+          description: "Does another thing",
+          tags: [],
+        },
       ],
       defaultInputModes: ["text"],
-      defaultOutputModes: ["text"],
-      authentication: undefined, // Explicitly no auth for default test card
+      defaultOutputModes: ["text"], // Explicitly no auth for default test card
       provider: { organization: "Test Org", url: "http://test.org" },
       documentationUrl: "http://docs.test.org",
     };
@@ -122,10 +131,12 @@ describe("register Function", () => {
   });
 
   test("should set endpoint authentication to true if AgentCard has auth schemes", async () => {
-    sampleAgentCard.authentication = {
-      schemes: ["bearer"],
-      credentials: "test-token",
-    };
+    sampleAgentCard.security = [
+      {
+        scheme: ["bearer"],
+        credentials: ["test-token"],
+      },
+    ];
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({

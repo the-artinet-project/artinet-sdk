@@ -1,12 +1,25 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
+  ExecutionContext,
   InMemoryTaskStore,
-  TaskContext,
+  A2AExecutionContext,
+  TaskState,
+  TaskStatusUpdateEvent,
   TaskYieldUpdate,
+  TextPart,
+  UpdateEvent,
   configureLogger,
+  MessageSendParams,
 } from "../src/index.js";
 
 configureLogger({ level: "silent" });
@@ -16,11 +29,14 @@ jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
 async function* a2aProtocolTestHandler(
-  context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
-  const text = context.userMessage.parts
-    .filter((part) => part.type === "text")
-    .map((part) => (part as any).text)
+  context: ExecutionContext<A2AExecutionContext>
+): AsyncGenerator<UpdateEvent, void, unknown> {
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
+    .filter((part) => part.kind === "text")
+    .map((part) => (part as TextPart).text)
     .join(" ");
 
   // Test for all possible states in A2A protocol
@@ -29,145 +45,168 @@ async function* a2aProtocolTestHandler(
   }
 
   if (text.includes("fail")) {
-    yield {
-      state: "failed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Task failed intentionally." }],
+    const yieldable: TaskStatusUpdateEvent = {
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: true,
+      status: {
+        state: TaskState.Failed,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Task failed intentionally." }],
+        },
       },
     };
+    yield yieldable;
     return;
   }
 
   if (text.includes("input-required")) {
-    yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Processing request..." }],
+    const yieldable: TaskStatusUpdateEvent = {
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: true,
+      status: {
+        state: TaskState.InputRequired,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "need more information" }],
+        },
       },
     };
 
-    yield {
-      state: "input-required",
-      message: {
-        role: "agent",
-        parts: [
-          {
-            type: "text",
-            text: "I need more information. Please provide details.",
-          },
-        ],
-      },
-    };
+    yield yieldable;
     return;
   }
 
   if (text.includes("working-only")) {
-    yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Still working..." }],
+    const yieldable: TaskStatusUpdateEvent = {
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: false,
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id-working-only",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Still working..." }],
+        },
       },
     };
+
+    yield yieldable;
     return;
   }
-
   if (text.includes("multi-part")) {
     yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [
-          { type: "text", text: "First part" },
-          { type: "data", data: { key: "value" } },
-        ],
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: true,
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id-multi-part",
+          kind: "message",
+          role: "agent",
+          parts: [
+            { kind: "text", text: "First part" },
+            { kind: "data", data: { key: "value" } },
+          ],
+        },
       },
     };
 
     yield {
-      state: "completed",
-      message: {
-        role: "agent",
-        parts: [
-          { type: "text", text: "Task completed with multiple part types." },
-          {
-            type: "file",
-            file: {
-              name: "test.txt",
-              mimeType: "text/plain",
-              bytes: Buffer.from("test content").toString("base64"),
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: true,
+      status: {
+        state: TaskState.Completed,
+        message: {
+          messageId: "test-message-id-multi-part",
+          kind: "message",
+          role: "agent",
+          parts: [
+            { kind: "text", text: "Task completed with multiple part types." },
+            {
+              kind: "file",
+              file: {
+                name: "test.txt",
+                mimeType: "text/plain",
+                bytes: Buffer.from("test content").toString("base64"),
+              },
             },
-          },
-        ],
-      },
-      // Using 'as any' to bypass the type checking for testing purposes
-      artifacts: [
-        {
-          name: "test-artifact",
-          description: "Test artifact description",
-          parts: [{ type: "text", text: "Artifact content" }],
-          index: 0,
-          metadata: {
-            testKey: "testValue",
-          },
+          ],
         },
-      ] as any,
+      },
     };
     return;
   }
 
   if (text.includes("streaming")) {
     yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Working..." }],
-      },
-    };
-
-    yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Still working..." }],
-      },
-      // Using 'as any' to bypass the type checking for testing purposes
-      artifacts: [
-        {
-          name: "partial-artifact",
-          parts: [{ type: "text", text: "Partial " }],
-          index: 0,
-          append: false,
-          lastChunk: false,
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: false,
+      status: {
+        state: TaskState.Working,
+        message: {
+          messageId: "test-message-id-streaming",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Working..." }],
         },
-      ] as any,
-    };
-
-    yield {
-      state: "working",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Almost done..." }],
       },
-      // Using 'as any' to bypass the type checking for testing purposes
-      artifacts: [
-        {
-          name: "partial-artifact",
-          parts: [{ type: "text", text: "artifact content" }],
-          index: 0,
-          append: true,
-          lastChunk: true,
-        },
-      ] as any,
     };
 
     yield {
-      state: "completed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Streaming completed!" }],
+      taskId: taskId,
+      kind: "artifact-update",
+      contextId: contextId,
+      artifact: {
+        artifactId: "test-artifact-id",
+        name: "partial-artifact",
+        parts: [{ kind: "text", text: "Partial " }],
+      },
+    };
+
+    yield {
+      taskId: taskId,
+      kind: "artifact-update",
+      contextId: contextId,
+      artifact: {
+        artifactId: "test-artifact-id",
+        name: "partial-artifact",
+        parts: [{ kind: "text", text: "Partial " }],
+      },
+      append: true,
+      lastChunk: true,
+    };
+
+    yield {
+      taskId: taskId,
+      kind: "status-update",
+      contextId: contextId,
+      final: true,
+      status: {
+        state: TaskState.Completed,
+        message: {
+          messageId: "test-message-id-streaming-completed",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Streaming completed!" }],
+        },
       },
     };
     return;
@@ -175,18 +214,34 @@ async function* a2aProtocolTestHandler(
 
   // Default case - normal processing
   yield {
-    state: "working",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Working..." }],
+    taskId: taskId,
+    kind: "status-update",
+    contextId: contextId,
+    final: false,
+    status: {
+      state: TaskState.Working,
+      message: {
+        messageId: "test-message-id-working",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Working..." }],
+      },
     },
   };
 
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Task completed successfully." }],
+    taskId: taskId,
+    kind: "status-update",
+    contextId: contextId,
+    final: true,
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id-completed",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Task completed successfully." }],
+      },
     },
   };
 }
@@ -205,6 +260,9 @@ describe("A2A Protocol Specification Tests", () => {
         name: "A2A Protocol Test Agent",
         url: "http://localhost:41241",
         version: "1.0.0",
+        description: "A2A Protocol Test Agent",
+        defaultInputModes: ["text"],
+        defaultOutputModes: ["text"],
         capabilities: {
           streaming: true,
           pushNotifications: true,
@@ -213,7 +271,9 @@ describe("A2A Protocol Specification Tests", () => {
         skills: [
           {
             id: "test",
-            name: "Test Skill",
+            name: "test",
+            description: "Test Skill Description",
+            tags: ["test", "skill"],
           },
         ],
       },
@@ -273,12 +333,13 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "test-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "test-task-1",
           message: {
+            taskId: "test-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Basic test" }],
+            parts: [{ kind: "text", text: "Basic test" }],
           },
         },
       };
@@ -300,12 +361,13 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "fail-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "fail-task-1",
           message: {
+            taskId: "fail-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This will fail" }],
+            parts: [{ kind: "text", text: "This will fail" }],
           },
         },
       };
@@ -327,12 +389,12 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "input-required-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "input-required-task-1",
           message: {
+            taskId: "input-required-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This needs input-required" }],
+            parts: [{ kind: "text", text: "This needs input-required" }],
           },
         },
       };
@@ -354,12 +416,13 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "working-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "working-task-1",
           message: {
+            taskId: "working-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This is working-only" }],
+            parts: [{ kind: "text", text: "This is working-only" }],
           },
         },
       };
@@ -383,12 +446,13 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "multi-part-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "multi-part-task-1",
           message: {
+            taskId: "multi-part-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This is multi-part" }],
+            parts: [{ kind: "text", text: "This is multi-part" }],
           },
         },
       };
@@ -396,7 +460,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("multi-part-task-1");
@@ -404,8 +467,8 @@ describe("A2A Protocol Specification Tests", () => {
 
       // Check multiple parts in message
       expect(response.body.result.status.message.parts).toHaveLength(2);
-      expect(response.body.result.status.message.parts[0].type).toBe("text");
-      expect(response.body.result.status.message.parts[1].type).toBe("file");
+      expect(response.body.result.status.message.parts[0].kind).toBe("text");
+      expect(response.body.result.status.message.parts[1].kind).toBe("file");
       expect(response.body.result.status.message.parts[1].file.name).toBe(
         "test.txt"
       );
@@ -433,12 +496,13 @@ describe("A2A Protocol Specification Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "create-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "retrieve-task-1",
           message: {
+            taskId: "retrieve-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Task to be retrieved" }],
+            parts: [{ kind: "text", text: "Task to be retrieved" }],
           },
         },
       };
@@ -458,7 +522,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(retrieveBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("retrieve-task-1");
@@ -490,12 +553,12 @@ describe("A2A Protocol Specification Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "cancel-create-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "cancel-task-1",
           message: {
+            taskId: "cancel-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This is working-only" }],
+            parts: [{ kind: "text", text: "This is working-only" }],
           },
         },
       };
@@ -515,7 +578,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(cancelBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("cancel-task-1");
@@ -547,18 +609,17 @@ describe("A2A Protocol Specification Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "completed-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "completed-task-1",
           message: {
+            taskId: "completed-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Task to be completed" }],
+            parts: [{ kind: "text", text: "Task to be completed" }],
           },
         },
       };
 
       await trackRequest(request(app).post("/").send(createBody));
-
       // Now try to cancel it
       const cancelBody = {
         jsonrpc: "2.0",
@@ -586,12 +647,12 @@ describe("A2A Protocol Specification Tests", () => {
       const createBody = {
         jsonrpc: "2.0",
         id: "push-create-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "push-task-1",
           message: {
             role: "user",
-            parts: [{ type: "text", text: "Task for push notifications" }],
+            parts: [{ kind: "text", text: "Task for push notifications" }],
           },
         },
       };
@@ -602,9 +663,9 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "push-request-1",
-        method: "tasks/pushNotification/set",
+        method: "tasks/pushNotificationConfig/set",
         params: {
-          id: "push-task-1",
+          taskId: "push-task-1",
           pushNotificationConfig: {
             url: "https://example.com/webhook",
             token: "test-token",
@@ -617,30 +678,17 @@ describe("A2A Protocol Specification Tests", () => {
       );
 
       expect(response.status).toBe(200);
-
-      // The implementation might return either a result with the config or a method not found error
-      if (response.body.result) {
-        expect(response.body.result.id).toBe("push-task-1");
-        if (response.body.result.pushNotificationConfig) {
-          expect(response.body.result.pushNotificationConfig.url).toBe(
-            "https://example.com/webhook"
-          );
-          expect(response.body.result.pushNotificationConfig.token).toBe(
-            "test-token"
-          );
-        }
-      } else if (response.body.error) {
-        // The server might return method not found error if push notifications aren't implemented
-        expect([-32601, -32003]).toContain(response.body.error.code);
-      }
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error.code).toBe(-32001);
+      expect(response.body.error.message).toBe("Task not found");
     });
 
-    it("gets push notification configuration", async () => {
+    it("does not get push notification configuration", async () => {
       // First create a task
       const createBody = {
         jsonrpc: "2.0",
         id: "push-create-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
           id: "push-get-task-1",
           message: {
@@ -656,34 +704,30 @@ describe("A2A Protocol Specification Tests", () => {
       const getBody = {
         jsonrpc: "2.0",
         id: "push-get-request-1",
-        method: "tasks/pushNotification/get",
+        method: "tasks/pushNotificationConfig/get",
         params: {
           id: "push-get-task-1",
+          config: {
+            url: "https://example.com/webhook",
+            token: "test-token",
+          },
         },
       };
 
       const response = await trackRequest(request(app).post("/").send(getBody));
 
       expect(response.status).toBe(200);
-
-      // Since we didn't set a push notification, we might get null result
-      // or a method not found error if not implemented
-      if (response.body.result !== undefined) {
-        // Result might be null or an actual config object
-        // Test passes in either case since we're just checking the response structure
-      } else if (response.body.error) {
-        // The server might return method not found error if push notifications aren't implemented
-        expect([-32601, -32003]).toContain(response.body.error.code);
-      }
+      expect(response.body.error).toBeDefined();
+      expect(response.body.error.code).toBe(-32001);
     });
 
     it("returns error when setting push notification for non-existent task", async () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "nonexistent-push-request-1",
-        method: "tasks/pushNotification/set",
+        method: "tasks/pushNotificationConfig/set",
         params: {
-          id: "nonexistent-task-1",
+          taskId: "nonexistent-task-1",
           pushNotificationConfig: {
             url: "https://example.com/webhook",
           },
@@ -728,14 +772,8 @@ describe("A2A Protocol Specification Tests", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "invalid-params-request-1",
-        method: "tasks/send",
-        params: {
-          // Missing required id field
-          message: {
-            role: "user",
-            parts: [{ type: "text", text: "Invalid params" }],
-          },
-        },
+        method: "message/send",
+        params: {},
       };
 
       const response = await trackRequest(

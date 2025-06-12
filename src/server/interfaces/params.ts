@@ -1,34 +1,40 @@
 import { CorsOptions } from "cors";
+
 import {
   A2AResponse,
-  RequestParams,
   AgentCard,
   CancelTaskRequest,
   CancelTaskResponse,
-  GetTaskPushNotificationRequest,
-  GetTaskPushNotificationResponse,
+  GetTaskPushNotificationConfigRequest,
+  GetTaskPushNotificationConfigResponse,
   GetTaskRequest,
   GetTaskResponse,
   Message,
-  SendTaskRequest,
-  SendTaskResponse,
-  SendTaskStreamingRequest,
-  SetTaskPushNotificationRequest,
-  SetTaskPushNotificationResponse,
+  SendMessageRequest,
+  SendMessageResponse,
+  SendStreamingMessageRequest,
+  SetTaskPushNotificationConfigRequest,
+  SetTaskPushNotificationConfigResponse,
   Task,
   TaskResubscriptionRequest,
+  MessageSendConfiguration,
+  A2ARequest,
 } from "../../types/extended-schema.js";
+
 import { TaskStore } from "./store.js";
-import { TaskHandler, TaskContext } from "../../types/context.js";
+import { TaskHandler, TaskContext } from "../../types/index.js";
+
 import jayson from "jayson";
+
 import { ErrorHandler } from "../../utils/common/errors.js";
 import { JSONRPCError } from "../../types/extended-schema.js";
+
 import { Response } from "express";
 
 export type JSONRPCServerType = jayson.Server;
 export const JSONRPCServer = jayson.Server;
 
-export type JSONRPCCallback<Res = A2AResponse | null> = (
+export type JSONRPCCallback<Res = A2AResponse | Task | null> = (
   error: JSONRPCError | null,
   result?: Res
 ) => void;
@@ -71,7 +77,8 @@ export type CloseStreamsForTask = (taskId: string) => void;
 export type CreateTaskContext = (
   task: Task,
   message: Message,
-  history: Message[]
+  history: Message[],
+  configuration?: MessageSendConfiguration
 ) => TaskContext;
 
 /**
@@ -126,7 +133,7 @@ export type CreateExpressServerParams = Omit<
     rpcServer: JSONRPCServerType;
     errorHandler: ErrorHandler;
     onTaskSendSubscribe: (
-      req: SendTaskStreamingRequest,
+      req: SendStreamingMessageRequest,
       res: Response
     ) => Promise<void>;
     onTaskResubscribe: (
@@ -139,11 +146,11 @@ export type CreateExpressServerParams = Omit<
  * This can be used by consumers to implement their own server solutions
  */
 export type A2AMethodHandler<
-  Params extends RequestParams,
-  Result extends A2AResponse | null,
+  RequestParamT extends A2ARequest["params"],
+  Result extends A2AResponse | Message | Task | null,
 > = (
   deps: CreateJSONRPCServerParams,
-  requestParams: Params,
+  requestParams: RequestParamT,
   callback: JSONRPCCallback<Result>
 ) => Promise<void>;
 
@@ -152,8 +159,8 @@ export type A2AMethodHandler<
  * This can be used by consumers to implement their own server solutions
  */
 export type SendTaskMethod = A2AMethodHandler<
-  SendTaskRequest["params"],
-  SendTaskResponse | null
+  SendMessageRequest["params"],
+  SendMessageResponse | Message | Task | null
 >;
 
 /**
@@ -162,7 +169,7 @@ export type SendTaskMethod = A2AMethodHandler<
  */
 export type GetTaskMethod = A2AMethodHandler<
   GetTaskRequest["params"],
-  GetTaskResponse | null
+  GetTaskResponse | Task | null
 >;
 
 /**
@@ -171,7 +178,7 @@ export type GetTaskMethod = A2AMethodHandler<
  */
 export type CancelTaskMethod = A2AMethodHandler<
   CancelTaskRequest["params"],
-  CancelTaskResponse | null
+  CancelTaskResponse | Task | null
 >;
 
 /**
@@ -179,8 +186,8 @@ export type CancelTaskMethod = A2AMethodHandler<
  * This can be used by consumers to implement their own server solutions
  */
 export type SetTaskPushNotificationMethod = A2AMethodHandler<
-  SetTaskPushNotificationRequest["params"],
-  SetTaskPushNotificationResponse | null
+  SetTaskPushNotificationConfigRequest["params"],
+  SetTaskPushNotificationConfigResponse | null
 >;
 
 /**
@@ -188,6 +195,6 @@ export type SetTaskPushNotificationMethod = A2AMethodHandler<
  * This can be used by consumers to implement their own server solutions
  */
 export type GetTaskPushNotificationMethod = A2AMethodHandler<
-  GetTaskPushNotificationRequest["params"],
-  GetTaskPushNotificationResponse | null
+  GetTaskPushNotificationConfigRequest["params"],
+  GetTaskPushNotificationConfigResponse | null
 >;

@@ -1,5 +1,4 @@
-import { Task, TaskYieldUpdate } from "../../types/index.js";
-import { TaskContext } from "../../types/context.js";
+import { UpdateEvent, ExecutionContext } from "../../types/index.js";
 import { artinet } from "./agents.js";
 
 /**
@@ -16,17 +15,17 @@ import { artinet } from "./agents.js";
  * and iterates over its yielded updates, passing them to a `hostOnYield` function
  * made available in the `env` by the host environment.
  *
- * The `Context` (TaskContext) is also expected to be provided by the host environment via `env`.
+ * The `Context` (ExecutionContext) is also expected to be provided by the host environment via `env`.
  * @deprecated This function is deprecated and will be removed in a future version. Use the `Artinet.v0.taskManager` function instead.
- * @param taskHandler - An asynchronous generator function that takes a `TaskContext`
- *                      and yields `TaskYieldUpdate` objects, eventually returning a `Task` or void.
+ * @param taskHandler - An asynchronous generator function that takes a `ExecutionContext`
+ *                      and yields `UpdateEvent` objects, eventually returning a `Task` or void.
  * @throws An error if the required `env.hostOnYield` or `env.Context` are not found,
  *         indicating an invalid runtime environment.
  */
 export const taskHandlerProxy = async (
   taskHandler: (
-    context: TaskContext
-  ) => AsyncGenerator<TaskYieldUpdate, Task | void, unknown>
+    context: ExecutionContext
+  ) => AsyncGenerator<UpdateEvent, void, unknown>
 ) => {
   return await artinet.v0.taskManager({ taskHandler });
 };

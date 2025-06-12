@@ -1,15 +1,14 @@
-import { TaskYieldUpdate } from "./extended-schema.js";
-import { TaskHandler } from "./context.js";
+import { UpdateEvent, TaskHandler } from "./extended-schema.js";
 import { Client } from "./client.js";
 
 /**
  * Represents a proxy function for sending task yield updates.
  * This function is typically provided by the host environment to allow
  * an agent to communicate updates about its task execution.
- * @param taskYieldUpdate - The update object yielded by the task.
+ * @param updateEvent - The update object yielded by the task.
  * @returns A promise that resolves when the update has been processed.
  */
-export type TaskProxy = (taskYieldUpdate: TaskYieldUpdate) => Promise<void>;
+export type TaskProxy = (updateEvent: UpdateEvent) => Promise<void>;
 
 /**
  * Properties for the TaskManager function.
@@ -17,7 +16,7 @@ export type TaskProxy = (taskYieldUpdate: TaskYieldUpdate) => Promise<void>;
 export interface TaskManagerProps {
   /**
    * The core task-handling generator function of an agent.
-   * This function takes a `TaskContext` and yields `TaskYieldUpdate` objects,
+   * This function takes a `TaskContext` and yields `UpdateEvent` objects,
    * eventually returning a `Task` or void.
    */
   taskHandler: TaskHandler;

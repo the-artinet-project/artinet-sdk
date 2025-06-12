@@ -1,11 +1,22 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
+  ExecutionContext,
   InMemoryTaskStore,
+  Message,
+  MessageSendParams,
   TaskContext,
-  TaskYieldUpdate,
+  TaskState,
+  UpdateEvent,
   configureLogger,
 } from "../src/index.js";
 
@@ -15,10 +26,13 @@ configureLogger({ level: "silent" });
 
 // Define an error-prone task handler for testing
 async function* errorProneTaskHandler(
-  context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
-  const text = context.userMessage.parts
-    .filter((part) => part.type === "text")
+  context: ExecutionContext
+): AsyncGenerator<UpdateEvent, void, unknown> {
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
+    .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
 
@@ -30,30 +44,54 @@ async function* errorProneTaskHandler(
   // If the message contains "fail", we'll yield a failed state
   if (text.includes("fail")) {
     yield {
-      state: "failed",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Task failed intentionally." }],
+      taskId: taskId,
+      contextId: contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Failed,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Task failed intentionally." }],
+        } as Message,
       },
+      final: true,
     };
     return;
   }
 
   // Otherwise, normal processing
   yield {
-    state: "working",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Working..." }],
+    taskId: taskId,
+    contextId: contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Working,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Working..." }],
+      },
     },
+    final: false,
   };
 
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Task completed successfully." }],
+    taskId: taskId,
+    contextId: contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Task completed successfully." }],
+      },
     },
+    final: true,
   };
 }
 
@@ -101,12 +139,12 @@ describe("A2AServer Error Handling", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "error-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "error-task-1",
           message: {
+            taskId: "error-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This will throw an error" }],
+            parts: [{ kind: "text", text: "This will throw an error" }],
           },
         },
       };
@@ -134,12 +172,12 @@ describe("A2AServer Error Handling", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "fail-request-1",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "fail-task-1",
           message: {
+            taskId: "fail-task-1",
             role: "user",
-            parts: [{ type: "text", text: "This will fail" }],
+            parts: [{ kind: "text", text: "This will fail" }],
           },
         },
       };
@@ -202,12 +240,12 @@ describe("A2AServer Error Handling", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "content-type-test",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "content-type-task-1",
           message: {
+            taskId: "content-type-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Testing content type" }],
+            parts: [{ kind: "text", text: "Testing content type" }],
           },
         },
       };
@@ -228,12 +266,12 @@ describe("A2AServer Error Handling", () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "charset-test",
-        method: "tasks/send",
+        method: "message/send",
         params: {
-          id: "charset-task-1",
           message: {
+            taskId: "charset-task-1",
             role: "user",
-            parts: [{ type: "text", text: "Testing charset" }],
+            parts: [{ kind: "text", text: "Testing charset" }],
           },
         },
       };

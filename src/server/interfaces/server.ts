@@ -6,14 +6,14 @@ import {
   AgentCard,
   Message,
   Task,
-  SendTaskStreamingRequest,
+  SendStreamingMessageRequest,
   TaskResubscriptionRequest,
 } from "../../types/index.js";
 
 import { TaskStore } from "./store.js";
 import { JSONRPCServerType } from "./params.js";
 import { TaskAndHistory } from "./store.js";
-import { TaskContext, TaskHandler } from "../../types/context.js";
+import { TaskContext, TaskHandler } from "../../types/index.js";
 
 export interface Server {
   start(): express.Express;
@@ -35,13 +35,17 @@ export interface Server {
     userMessage: Message,
     history: Message[]
   ): TaskContext;
-  onCancel(data: TaskAndHistory, res: Response): Promise<void>;
+  onCancel(
+    context: TaskContext,
+    data: TaskAndHistory,
+    res: Response
+  ): Promise<void>;
   onEnd(taskId: string, res: Response): Promise<void>;
   addStreamForTask(taskId: string, res: Response): void;
   removeStreamForTask(taskId: string, res: Response): void;
   closeStreamsForTask(taskId: string): void;
   handleTaskSendSubscribe(
-    req: SendTaskStreamingRequest,
+    req: SendStreamingMessageRequest,
     res: Response
   ): Promise<void>;
   handleTaskResubscribe(

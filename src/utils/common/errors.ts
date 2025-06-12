@@ -1,28 +1,39 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  A2AErrorType,
-  ErrorCodeInvalidParams,
-  ErrorCodeInvalidRequest,
-  ErrorCodeParseError,
-  ErrorCodeInternalError,
-  ErrorCodeMethodNotFound,
-  ErrorCodeTaskNotFound,
-  ErrorCodeUnsupportedOperation,
-  ErrorCodeTaskNotCancelable,
-  ErrorCodePushNotificationNotSupported,
-  TaskYieldUpdate,
-} from "../../types/extended-schema.js";
+import { JSONParseError } from "../../types/extended-schema.js";
 import { logError } from "../../utils/logging/log.js";
-import { JSONRPCError } from "../../types/schema.js";
+import {
+  A2AError,
+  ErrorCodeInternalError,
+  ErrorCodeInvalidRequest,
+  ErrorCodeMethodNotFound,
+  ErrorCodeParseError,
+  ErrorCodeInvalidParams,
+  ErrorCodeTaskNotFound,
+  ErrorCodeTaskNotCancelable,
+  ErrorCodeUnsupportedOperation,
+  ErrorCodePushNotificationNotSupported,
+  InvalidParamsError,
+  InvalidRequestError,
+  JSONRPCError,
+  MethodNotFoundError,
+  InternalError,
+  TaskNotFoundError,
+  TaskNotCancelableError,
+  ErrorCodeContentTypeNotSupported,
+  ContentTypeNotSupportedError,
+  InvalidAgentResponseError,
+  ErrorCodeInvalidAgentResponse,
+  TaskState,
+  TaskStatusUpdateEvent,
+} from "../../types/schemas/a2a/index.js";
 
-export class SystemError<ErrorData = unknown, C extends number = number>
-  extends Error
-  implements A2AErrorType
-{
-  code: C;
-  data: ErrorData;
+export class SystemError<
+  T extends JSONRPCError<number, unknown>,
+> extends Error {
+  code: T["code"];
+  data: T["data"];
 
-  constructor(message: string, code: C, data: ErrorData) {
+  constructor(message: string, code: T["code"], data: T["data"]) {
     super(message);
     this.name = "RpcError";
     this.message = message;
@@ -31,76 +42,94 @@ export class SystemError<ErrorData = unknown, C extends number = number>
   }
 }
 // Factory methods for common errors
-export const PARSE_ERROR = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeParseError>(
-    "Invalid JSON payload",
-    ErrorCodeParseError,
-    data
-  );
+export const PARSE_ERROR = <T extends JSONParseError>(data: T["data"]) =>
+  new SystemError<T>("Invalid JSON payload", ErrorCodeParseError, data);
 
-export const METHOD_NOT_FOUND = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeMethodNotFound>(
-    "Method not found",
-    ErrorCodeMethodNotFound,
-    data
-  );
-
-export const INVALID_REQUEST = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeInvalidRequest>(
+export const INVALID_REQUEST = <T extends InvalidRequestError>(
+  data: T["data"]
+) =>
+  new SystemError<T>(
     "Request payload validation error",
     ErrorCodeInvalidRequest,
     data
   );
 
-export const INVALID_PARAMS = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeInvalidParams>(
-    "Invalid parameters",
-    ErrorCodeInvalidParams,
-    data
-  );
+export const METHOD_NOT_FOUND = <T extends MethodNotFoundError>(
+  data: T["data"]
+) => new SystemError<T>("Method not found", ErrorCodeMethodNotFound, data);
 
-export const INTERNAL_ERROR = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeInternalError>(
-    "Internal error",
-    ErrorCodeInternalError,
-    data
-  );
+export const INVALID_PARAMS = <T extends InvalidParamsError>(data: T["data"]) =>
+  new SystemError<T>("Invalid parameters", ErrorCodeInvalidParams, data);
 
-export const TASK_NOT_FOUND = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeTaskNotFound>(
-    "Task not found",
-    ErrorCodeTaskNotFound,
-    data
-  );
+export const INTERNAL_ERROR = <T extends InternalError>(data: T["data"]) =>
+  new SystemError<T>("Internal error", ErrorCodeInternalError, data);
 
-export const TASK_NOT_CANCELABLE = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeTaskNotCancelable>(
+export const TASK_NOT_FOUND = <T extends TaskNotFoundError>(data: T["data"]) =>
+  new SystemError<T>("Task not found", ErrorCodeTaskNotFound, data);
+
+export const TASK_NOT_CANCELABLE = <T extends TaskNotCancelableError>(
+  data: T["data"]
+) =>
+  new SystemError<T>(
     "Task cannot be canceled",
     ErrorCodeTaskNotCancelable,
     data
   );
 
-export const UNSUPPORTED_OPERATION = <ErrorData = unknown>(data: ErrorData) =>
-  new SystemError<ErrorData, ErrorCodeUnsupportedOperation>(
-    "This operation is not supported",
-    ErrorCodeUnsupportedOperation,
-    data
-  );
-
-export const PUSH_NOTIFICATION_NOT_SUPPORTED = <ErrorData = unknown>(
-  data: ErrorData
+export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
+  data: T["data"]
 ) =>
-  new SystemError<ErrorData, ErrorCodePushNotificationNotSupported>(
+  new SystemError<T>(
     "Push Notification is not supported",
     ErrorCodePushNotificationNotSupported,
     data
   );
 
-export const FAILED_UPDATE = (message: string): TaskYieldUpdate => ({
-  state: "failed",
-  message: {
-    role: "agent" as const,
-    parts: [{ type: "text" as const, text: message }],
+export const UNSUPPORTED_OPERATION = <T extends A2AError>(data: T["data"]) =>
+  new SystemError<T>(
+    "This operation is not supported",
+    ErrorCodeUnsupportedOperation,
+    data
+  );
+
+export const CONTENT_TYPE_NOT_SUPPORTED = <
+  T extends ContentTypeNotSupportedError,
+>(
+  data: T["data"]
+) =>
+  new SystemError<T>(
+    "Content type not supported",
+    ErrorCodeContentTypeNotSupported,
+    data
+  );
+
+export const INVALID_AGENT_RESPONSE = <T extends InvalidAgentResponseError>(
+  data: T["data"]
+) =>
+  new SystemError<T>(
+    "Invalid agent response",
+    ErrorCodeInvalidAgentResponse,
+    data
+  );
+
+export const FAILED_UPDATE = (
+  taskId: string,
+  contextId: string,
+  messageId: string = "failed-update",
+  errMessage: string
+): TaskStatusUpdateEvent => ({
+  taskId,
+  contextId,
+  kind: "status-update",
+  final: true,
+  status: {
+    state: TaskState.Failed,
+    message: {
+      messageId,
+      role: "agent",
+      parts: [{ kind: "text", text: errMessage }],
+      kind: "message",
+    },
   },
 });
 
@@ -136,7 +165,7 @@ export function errorHandler(
     logError("A2AServer", "Error extracting request ID", e);
   }
 
-  let jsonRpcError: JSONRPCError<unknown | null, number>;
+  let jsonRpcError: JSONRPCError<number, unknown>;
   if (err instanceof SystemError) {
     jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {

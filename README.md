@@ -57,7 +57,7 @@ Its got [serveral template projects](https://github.com/the-artinet-project/crea
 - **TypeScript First:** Fully written in TypeScript with comprehensive type definitions for a robust developer experience.
 - **Flexible Storage:** Offers built-in `InMemoryTaskStore` (development/testing) and `FileStore` (persistent), with the `TaskStore` interface allowing custom storage solutions.
 - **Protocol Compliance:** Implements the complete A2A specification using the official JSON schema, ensuring interoperability.
-- **Robust Streaming:** Reliable SSE support for `tasks/sendSubscribe` & `tasks/resubscribe` using `eventsource-parser`.
+- **Robust Streaming:** Reliable SSE support for `message/stream` & `tasks/resubscribe` using `eventsource-parser`.
 - **Configurable Logging:** Integrated structured logging via `pino`. Configurable levels using `configureLogger` and `LogLevel`.
 - **Advanced Customization:** Allows providing a custom `JSONRPCServerFactory` for fine-grained control over the JSON-RPC server, enabling integration with existing Express apps or adding custom methods.
 - **Comprehensive Testing:** Includes a suite of tests to ensure reliability and maintainability.
@@ -69,7 +69,7 @@ Its got [serveral template projects](https://github.com/the-artinet-project/crea
 | **Server**          | Host A2A-compliant agents. Handles protocol details, routing, SSE.          | `A2AServer`, `A2AServerParams`                                                               |
 | **Task Handling**   | Define agent logic using async generators.                                  | `TaskHandler`, `TaskContext`, `TaskYieldUpdate`                                              |
 | **Storage**         | Persist task state. In-memory and file-based options included.              | `TaskStore`, `InMemoryTaskStore`, `FileStore`                                                |
-| **Streaming (SSE)** | Handle real-time updates via SSE for `tasks/sendSubscribe`/`resubscribe`.   | `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`                                           |
+| **Streaming (SSE)** | Handle real-time updates via SSE for `message/stream`/`resubscribe`.   | `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`                                           |
 | **Logging**         | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                      |
 | **Advanced Server** | Customize the underlying JSON-RPC server or integrate into existing apps.   | `JSONRPCServerFactory`, `CreateJSONRPCServerParams`, `createJSONRPCMethod`, A2A Method Types |
 | **Core Types**      | Based on the official A2A JSON Schema.                                      | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                     |
@@ -184,7 +184,7 @@ The Artinet SDK provides several core classes and interfaces for building A2A cl
 | `A2AServerParams`                                         | Configuration object passed to the `A2AServer` constructor (port, store, card, basePath, handler, etc.).                           |
 | `AgentCard`                                               | Describes the agent's capabilities, metadata, skills, and endpoint URL.                                                            |
 | `Message`, `Part`, `Artifact`, `Task`, `TaskStatus`, etc. | Core types mirroring the structures defined in the A2A JSON Schema specification. Used for requests, responses, and task state.    |
-| `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`        | Specific types for Server-Sent Events (SSE) received during streaming operations (`tasks/sendSubscribe`, `tasks/resubscribe`).     |
+| `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`        | Specific types for Server-Sent Events (SSE) received during streaming operations (`message/stream`, `tasks/resubscribe`).     |
 | `LogLevel`                                                | Enum defining logging levels (`error`, `warn`, `info`, `debug`, `trace`) used with the built-in logger.                            |
 | `JSONRPCServerFactory`                                    | Function signature for providing a custom JSON-RPC server creation logic to `A2AServer` for advanced customization.                |
 | `CreateJSONRPCServerParams`                               | Object containing dependencies provided _to_ a `JSONRPCServerFactory` function.                                                    |
@@ -214,7 +214,7 @@ Interact with A2A-compliant agents using the `A2AClient`. See `examples/` for mo
 
 #### Basic Client Usage
 
-Send a task using `tasks/send`.
+Send a task using `message/send`.
 
 ```typescript
 import { A2AClient, Message } from "@artinet/sdk";
@@ -233,7 +233,7 @@ async function runBasicTask() {
 
 #### Streaming Updates
 
-Receive real-time updates via SSE using `tasks/sendSubscribe` (recommended).
+Receive real-time updates via SSE using `message/stream` (recommended).
 
 ```typescript
 import {
@@ -436,7 +436,7 @@ const myCustomSendMethod: SendTaskMethod = (
   callback
 ) => {
   const { taskStore, taskHandler, createTaskContext } = deps;
-  const taskId = extractTaskId(requestParams.id);
+  const { id: taskId } = requestParams;
   const { message, sessionId, metadata } = requestParams;
   ...
   callback(null, ...);
@@ -446,20 +446,20 @@ const myCustomRPCServer: JSONRPCServerFactory = (
   params: CreateJSONRPCServerParams
 ): JSONRPCServerType => {
   //Use a custom task/send method
-  const taskSendMethod = createJSONRPCMethod(params, myCustomSendMethod, "tasks/send");
+  const taskSendMethod = createJSONRPCMethod(params, myCustomSendMethod, "message/send");
   const taskGetMethod = createJSONRPCMethod(params, defaultGetTaskMethod, "tasks/get");
   const taskCancelMethod = createJSONRPCMethod(params, defaultCancelTaskMethod, "tasks/cancel");
 
   // Note: Push notifications are not fully implemented yet
-  const taskPushNotificationSetMethod = createJSONRPCMethod(params, defaultSetTaskPushNotificationMethod, "tasks/pushNotification/set");
-  const taskPushNotificationGetMethod = createJSONRPCMethod(params, defaultGetTaskPushNotificationMethod, "tasks/pushNotification/get");
+  const taskPushNotificationSetMethod = createJSONRPCMethod(params, defaultSetTaskPushNotificationMethod, "tasks/pushNotificationConfig/set");
+  const taskPushNotificationGetMethod = createJSONRPCMethod(params, defaultGetTaskPushNotificationMethod, "tasks/pushNotificationConfig/get");
 
   const rpcServer = new JSONRPCServer({
-    "tasks/send": taskSendMethod,
+    "message/send": taskSendMethod,
     "tasks/get": taskGetMethod,
     "tasks/cancel": taskCancelMethod,
-    "tasks/pushNotification/set": taskPushNotificationSetMethod,
-    "tasks/pushNotification/get": taskPushNotificationGetMethod,
+    "tasks/pushNotificationConfig/set": taskPushNotificationSetMethod,
+    "tasks/pushNotificationConfig/get": taskPushNotificationGetMethod,
   });
 
   return rpcServer;
@@ -476,7 +476,7 @@ const server = new A2AServer({
 
 Pass your factory function via the `createJSONRPCServer` option during `A2AServer` initialization.
 
-**Important:** The default `A2AServer` setup automatically adds Express middleware to handle Server-Sent Events (SSE) for `tasks/sendSubscribe` and `tasks/resubscribe`, as well as the `/agent/card` (and `/.well-known/agent.json`) GET endpoints. If you are **not** using `A2AServer` and integrating the Jayson server middleware into your own Express application, you **must** implement these SSE and card endpoints yourself to maintain full A2A compliance, especially for streaming functionality. See `src/server/lib/express-server.ts` for how the default server handles these routes.
+**Important:** The default `A2AServer` setup automatically adds Express middleware to handle Server-Sent Events (SSE) for `message/stream` and `tasks/resubscribe`, as well as the `/agent/card` (and `/.well-known/agent.json`) GET endpoints. If you are **not** using `A2AServer` and integrating the Jayson server middleware into your own Express application, you **must** implement these SSE and card endpoints yourself to maintain full A2A compliance, especially for streaming functionality. See `src/server/lib/express-server.ts` for how the default server handles these routes.
 
 ### Quick-Agents (Alpha)
 

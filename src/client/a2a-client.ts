@@ -1,24 +1,25 @@
 import type {
   AgentCard,
-  SendTaskRequest,
+  SendMessageRequest,
   GetTaskRequest,
   CancelTaskRequest,
-  SetTaskPushNotificationRequest,
-  GetTaskPushNotificationRequest,
-  TaskSendParams,
+  SetTaskPushNotificationConfigRequest,
+  GetTaskPushNotificationConfigRequest,
+  MessageSendParams,
   TaskQueryParams,
   TaskIdParams,
   TaskPushNotificationConfig,
-  SendTaskResponse,
+  SendMessageResponse,
   GetTaskResponse,
   CancelTaskResponse,
-  SetTaskPushNotificationResponse,
-  GetTaskPushNotificationResponse,
+  SetTaskPushNotificationConfigResponse,
+  GetTaskPushNotificationConfigResponse,
   Task,
-  TaskArtifactUpdateEvent,
-  TaskStatusUpdateEvent,
-  SendTaskStreamingRequest,
+  SendStreamingMessageRequest,
   TaskResubscriptionRequest,
+  Message,
+  SendStreamingMessageResponse,
+  UpdateEvent,
 } from "../types/index.js";
 
 import {
@@ -128,16 +129,26 @@ export class A2AClient implements Client {
 
   /**
    * Sends a task request to the agent (non-streaming).
-   * @param params The parameters for the tasks/send method.
+   * @param params The parameters for the message/send method.
    * @returns A promise resolving to the Task object or null.
    */
-  async sendTask(params: TaskSendParams): Promise<Task | null> {
-    return await executeJsonRpcRequest<SendTaskRequest, SendTaskResponse>(
+  async sendMessage(params: MessageSendParams): Promise<Message | Task | null> {
+    return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
       this.baseUrl,
-      "tasks/send",
+      "message/send",
       params,
       this.customHeaders
     );
+  }
+
+  /**
+   * @deprecated Use sendMessage instead.
+   * Sends a task request to the agent (non-streaming).
+   * @param params The parameters for the message/send method.
+   * @returns A promise resolving to the Task object or null.
+   */
+  async sendTask(params: MessageSendParams): Promise<Message | Task | null> {
+    return await this.sendMessage(params);
   }
 
   /**
@@ -145,13 +156,21 @@ export class A2AClient implements Client {
    * @param params Task parameters for the request
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  sendTaskSubscribe(
-    params: TaskSendParams
-  ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent> {
+  sendStreamingMessage(params: MessageSendParams): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
-      SendTaskStreamingRequest,
-      { result: TaskStatusUpdateEvent | TaskArtifactUpdateEvent }
-    >(this.baseUrl, "tasks/sendSubscribe", params, this.customHeaders);
+      SendStreamingMessageRequest,
+      SendStreamingMessageResponse
+    >(this.baseUrl, "message/stream", params, this.customHeaders);
+  }
+
+  /**
+   * @deprecated Use sendStreamingMessage instead.
+   * Sends a task and returns a subscription to status and artifact updates.
+   * @param params Task parameters for the request
+   * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
+   */
+  sendTaskSubscribe(params: MessageSendParams): AsyncIterable<UpdateEvent> {
+    return this.sendStreamingMessage(params);
   }
 
   /**
@@ -184,30 +203,40 @@ export class A2AClient implements Client {
 
   /**
    * Sets or updates the push notification config for a task.
-   * @param params The parameters for the tasks/pushNotification/set method (which is TaskPushNotificationConfig).
+   * @param params The parameters for the tasks/pushNotificationConfig/set method (which is TaskPushNotificationConfig).
    * @returns A promise resolving to the confirmed TaskPushNotificationConfig or null.
    */
   async setTaskPushNotification(
     params: TaskPushNotificationConfig
   ): Promise<TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
-      SetTaskPushNotificationRequest,
-      SetTaskPushNotificationResponse
-    >(this.baseUrl, "tasks/pushNotification/set", params, this.customHeaders);
+      SetTaskPushNotificationConfigRequest,
+      SetTaskPushNotificationConfigResponse
+    >(
+      this.baseUrl,
+      "tasks/pushNotificationConfig/set",
+      params,
+      this.customHeaders
+    );
   }
 
   /**
    * Retrieves the currently configured push notification config for a task.
-   * @param params The parameters for the tasks/pushNotification/get method.
+   * @param params The parameters for the tasks/pushNotificationConfig/get method.
    * @returns A promise resolving to the TaskPushNotificationConfig or null.
    */
   async getTaskPushNotification(
     params: TaskIdParams
   ): Promise<TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
-      GetTaskPushNotificationRequest,
-      GetTaskPushNotificationResponse
-    >(this.baseUrl, "tasks/pushNotification/get", params, this.customHeaders);
+      GetTaskPushNotificationConfigRequest,
+      GetTaskPushNotificationConfigResponse
+    >(
+      this.baseUrl,
+      "tasks/pushNotificationConfig/get",
+      params,
+      this.customHeaders
+    );
   }
 
   /**
@@ -215,12 +244,10 @@ export class A2AClient implements Client {
    * @param params Parameters identifying the task to resubscribe to
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  resubscribeTask(
-    params: TaskQueryParams
-  ): AsyncIterable<TaskStatusUpdateEvent | TaskArtifactUpdateEvent> {
+  resubscribeTask(params: TaskQueryParams): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
       TaskResubscriptionRequest,
-      { result: TaskStatusUpdateEvent | TaskArtifactUpdateEvent }
+      SendStreamingMessageResponse
     >(this.baseUrl, "tasks/resubscribe", params, this.customHeaders);
   }
 

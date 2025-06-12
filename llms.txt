@@ -54,9 +54,9 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   New types: `ServerDeploymentRequestParams`, `ServerDeploymentResponse` in `src/types/extended-schema.ts`. New proxy-related types (`TaskProxy`, `TaskManagerProps`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory`, etc.) in `src/types/proxy.ts`.
 *   **Protocol Compliance:**
     *   Full implementation based on the official A2A JSON Schema (`a2a.json`).
-    *   Supports core methods: `tasks/send`, `tasks/get`, `tasks/cancel`.
-    *   Supports streaming method: `tasks/sendSubscribe`.
-    *   Supports push notification configuration methods: `tasks/pushNotification/set`, `tasks/pushNotification/get` (though full push *sending* logic might be agent-specific).
+    *   Supports core methods: `message/send`, `tasks/get`, `tasks/cancel`.
+    *   Supports streaming method: `message/stream`.
+    *   Supports push notification configuration methods: `tasks/pushNotificationConfig/set`, `tasks/pushNotificationConfig/get` (though full push *sending* logic might be agent-specific).
     *   Supports streaming resubscription: `tasks/resubscribe`.
     *   Agent registration now includes `tags: ["a2a"]`.
     *   Improved agent card fetching in client with URL validation and checks for card content.

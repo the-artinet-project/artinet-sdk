@@ -1,12 +1,24 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  beforeEach,
+  afterEach,
+  test,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import {
   A2AClient,
   A2AServer,
   InMemoryTaskStore,
+  Message,
+  Task,
   TaskContext,
-  TaskYieldUpdate,
+  TaskState,
+  UpdateEvent,
   configureLogger,
+  ExecutionContext,
+  MessageSendParams,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -17,31 +29,50 @@ configureLogger({ level: "silent" });
  * Simple echo task handler for testing
  */
 async function* echoHandler(
-  context: TaskContext
-): AsyncGenerator<TaskYieldUpdate, void, unknown> {
+  context: ExecutionContext
+): AsyncGenerator<UpdateEvent, void, unknown> {
   // Extract user text
-  const userText = context.userMessage.parts
-    .filter((part) => part.type === "text")
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const userText = params.message.parts
+    .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
 
   // Send working status
   yield {
-    state: "working",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: "Processing..." }],
+    taskId,
+    contextId,
+    kind: "status-update",
+    status: {
+      state: TaskState.Working,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: "Processing..." }],
+      },
     },
+    final: false,
   };
-
+  await new Promise((resolve) => setTimeout(resolve, 300));
   // Check cancellation
   if (context.isCancelled()) {
     yield {
-      state: "canceled",
-      message: {
-        role: "agent",
-        parts: [{ type: "text", text: "Task was canceled." }],
+      taskId,
+      contextId,
+      kind: "status-update",
+      status: {
+        state: TaskState.Canceled,
+        message: {
+          messageId: "test-message-id",
+          kind: "message",
+          role: "agent",
+          parts: [{ kind: "text", text: "Task was canceled." }],
+        },
       },
+      final: true,
     };
     return;
   }
@@ -51,16 +82,29 @@ async function* echoHandler(
 
   // Create an artifact
   yield {
-    name: "echo.txt",
-    parts: [{ type: "text", text: response }],
+    taskId,
+    contextId,
+    kind: "artifact-update",
+    artifact: {
+      artifactId: "test-artifact-id",
+      name: "echo.txt",
+      parts: [{ kind: "text", text: response }],
+    },
   };
 
   // Complete the task
   yield {
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ type: "text", text: response }],
+    id: taskId,
+    contextId,
+    kind: "task",
+    status: {
+      state: TaskState.Completed,
+      message: {
+        messageId: "test-message-id",
+        kind: "message",
+        role: "agent",
+        parts: [{ kind: "text", text: response }],
+      },
     },
   };
 }
@@ -114,38 +158,41 @@ describe("Client-Server Integration Tests", () => {
   test("client can send task and get response", async () => {
     const testMessage = "Hello, A2A!";
     const task = await client.sendTask({
-      id: "test-task-1",
       message: {
+        messageId: "test-message-id",
+        kind: "message",
         role: "user",
-        parts: [{ type: "text", text: testMessage }],
+        parts: [{ kind: "text", text: testMessage }],
       },
     });
 
     expect(task).toBeDefined();
-    expect(task!.id).toBe("test-task-1");
-    expect(task!.status.state).toBe("completed");
+    expect(task?.kind).toBe("task");
+    expect((task as Task).status.state).toBe("completed");
 
     // Check if the response message contains our echo
-    const responseText = task!.status.message?.parts
-      .filter((part) => part.type === "text")
+    const responseText = (task as Task).status.message?.parts
+      .filter((part) => part.kind === "text")
       .map((part) => (part as any).text)
       .join(" ");
 
     expect(responseText).toContain(testMessage);
 
     // Check if artifact was created
-    expect(task!.artifacts).toBeDefined();
-    expect(task!.artifacts!.length).toBe(1);
-    expect(task!.artifacts![0].name).toBe("echo.txt");
+    expect((task as Task).artifacts).toBeDefined();
+    expect((task as Task).artifacts!.length).toBe(1);
+    expect((task as Task).artifacts![0].name).toBe("echo.txt");
   });
 
   test("client can stream task updates", async () => {
     const testMessage = "Test streaming";
     const stream = client.sendTaskSubscribe({
-      id: "test-stream-task",
       message: {
+        taskId: "stream-task-test",
+        messageId: "test-message-id",
+        kind: "message",
         role: "user",
-        parts: [{ type: "text", text: testMessage }],
+        parts: [{ kind: "text", text: testMessage }],
       },
     });
 
@@ -180,7 +227,7 @@ describe("Client-Server Integration Tests", () => {
 
     // Verify response text contains our message
     const responseText = lastUpdate.status.message?.parts
-      .filter((part: any) => part.type === "text")
+      .filter((part: any) => part.kind === "text")
       .map((part: any) => part.text)
       .join(" ");
 
@@ -189,41 +236,32 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can cancel a task", async () => {
     // First send a task to create it
-    const task = await client.sendTask({
-      id: "cancel-task-test",
+    const task = client.sendTask({
       message: {
+        taskId: "cancel-task-test",
+        messageId: "test-message-id",
+        kind: "message",
         role: "user",
-        parts: [{ type: "text", text: "Task to be canceled" }],
+        parts: [{ kind: "text", text: "Task to be canceled" }],
       },
     });
 
-    try {
-      // Now try to cancel it (note: in a real scenario this would need to be a long-running task)
-      const canceledTask = await client.cancelTask({
-        id: "cancel-task-test",
-      });
-      console.log("canceledTask", canceledTask);
-      expect(canceledTask).toBeDefined();
-      // Should be in canceled state
-      expect(canceledTask!.status.state).toBe("canceled");
-    } catch (error: any) {
-      // The task might complete too quickly to be canceled, resulting in a "cannot be canceled" error
-      // This is also a valid test scenario
-
-      // The error message should contain the task cannot be canceled text
-      // Not checking the exact error code because it may be wrapped in an internal error
-      expect(error.code).toBe(-32002);
-      expect(error.message).toContain("Task cannot be canceled");
-    }
+    const canceledTask = await client.cancelTask({
+      id: "cancel-task-test",
+    });
+    expect(canceledTask).toBeDefined();
+    expect(canceledTask!.status.state).toBe("canceled");
+    expect(((await task) as Task)?.status.state).toBe("canceled");
   });
 
   test("client can get task by ID", async () => {
-    // First create a task
     await client.sendTask({
-      id: "get-task-test",
       message: {
+        taskId: "get-task-test",
+        messageId: "test-message-id",
+        kind: "message",
         role: "user",
-        parts: [{ type: "text", text: "Task to be retrieved" }],
+        parts: [{ kind: "text", text: "Task to be retrieved" }],
       },
     });
 

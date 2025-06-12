@@ -1,11 +1,4 @@
-import {
-  Artifact,
-  ExtendedTaskStatusUpdate,
-  TaskYieldUpdate,
-  TaskSendParams,
-  TaskQueryParams,
-} from "../../types/extended-schema.js";
-
+import { MessageSendParams, Part } from "../../types/extended-schema.js";
 import { INVALID_PARAMS } from "./errors.js";
 
 /**
@@ -26,58 +19,25 @@ export function isObject(value: unknown): value is Record<string, any> {
 }
 
 /**
- * Type guard to check if an object is a TaskStatus update (lacks 'parts').
- * Used to differentiate yielded updates from the handler.
- */
-export function isTaskStatusUpdate(
-  update: TaskYieldUpdate
-): update is ExtendedTaskStatusUpdate {
-  return isObject(update) && "state" in update && !("parts" in update);
-}
-
-/**
- * Type guard to check if an object is an Artifact update (has 'parts').
- * Used to differentiate yielded updates from the handler.
- */
-export function isArtifactUpdate(update: TaskYieldUpdate): update is Artifact {
-  return isObject(update) && "parts" in update && !("state" in update);
-}
-
-export function validateTaskResubscribeParams(
-  params: any
-): asserts params is TaskQueryParams {
-  // Structure validation
-  if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS<string>("Invalid parameters");
-  }
-  if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS<string>("Invalid task ID");
-  }
-}
-/**
  * Validates a task send parameters object.
  * @param params The parameters to validate
  * @throws INVALID_PARAMS if the parameters are invalid
  */
-export function validateTaskSendParams(
+export function validateSendMessageParams(
   params: any
-): asserts params is TaskSendParams {
+): asserts params is MessageSendParams {
   // Structure validation
   if (!params || typeof params !== "object") {
-    throw INVALID_PARAMS<string>("Invalid parameters");
+    throw INVALID_PARAMS("Invalid parameters");
   }
-  if (typeof params.id !== "string" || params.id === "") {
-    throw INVALID_PARAMS<string>("Invalid task ID");
-  }
-
   // Message validation
   if (!params.message || typeof params.message !== "object") {
-    throw INVALID_PARAMS<string>("Invalid message");
+    throw INVALID_PARAMS("Invalid message");
   }
 
   // Role validation
   if (params.message.role !== "user") {
-    throw INVALID_PARAMS<string>("Invalid message role");
+    throw INVALID_PARAMS("Invalid message role");
   }
 
   // Parts validation
@@ -85,13 +45,22 @@ export function validateTaskSendParams(
     !Array.isArray(params.message.parts) ||
     params.message.parts.length === 0
   ) {
-    throw INVALID_PARAMS<string>("Invalid message parts");
+    throw INVALID_PARAMS("Invalid message parts");
+  }
+  if (
+    params.message.parts.some(
+      (part: Part) =>
+        !part.kind ||
+        (part.kind !== "text" && part.kind !== "data" && part.kind !== "file")
+    )
+  ) {
+    throw INVALID_PARAMS("Message parts must be text, data, or file");
   }
 }
 
 export function extractTaskId(id: number | string | null | undefined): string {
   if (!id) {
-    throw INVALID_PARAMS<string>("Missing task ID");
+    throw INVALID_PARAMS("Missing task ID");
   }
   if (typeof id === "number") {
     return id.toString();

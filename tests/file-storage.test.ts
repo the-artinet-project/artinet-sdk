@@ -31,6 +31,7 @@ describe("FileStore", () => {
     const taskId = "test-task-1";
     const task: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "working" as TaskState,
         timestamp: new Date().toISOString(),
@@ -52,6 +53,7 @@ describe("FileStore", () => {
     const taskId = "test-task-2";
     const task: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "submitted" as TaskState,
         timestamp: new Date().toISOString(),
@@ -64,16 +66,18 @@ describe("FileStore", () => {
     // Update the task
     const updatedTask: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "completed" as TaskState,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
         {
+          artifactId: "test-artifact-id",
           name: "result.txt",
           parts: [
             {
-              type: "text",
+              kind: "text",
               text: "Task completed successfully",
             },
           ],
@@ -108,16 +112,18 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "completed" as TaskState,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
         {
+          artifactId: "test-artifact-id",
           name: "example.txt",
           parts: [
             {
-              type: "file",
+              kind: "file",
               file: {
                 name: "example.txt",
                 mimeType: "text/plain",
@@ -140,7 +146,7 @@ describe("FileStore", () => {
     expect(result?.task.artifacts?.length).toBe(1);
 
     const filePart = result?.task.artifacts?.[0].parts[0];
-    expect(filePart?.type).toBe("file");
+    expect(filePart?.kind).toBe("file");
     expect((filePart as any).file.name).toBe("example.txt");
     expect((filePart as any).file.bytes).toBe(fileContent);
   });
@@ -150,25 +156,28 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "completed" as TaskState,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
         {
+          artifactId: "test-artifact-id",
           name: "result1.txt",
           parts: [
             {
-              type: "text",
+              kind: "text",
               text: "First result",
             },
           ],
         },
         {
+          artifactId: "test-artifact-id-2",
           name: "result2.txt",
           parts: [
             {
-              type: "text",
+              kind: "text",
               text: "Second result",
             },
           ],
@@ -194,6 +203,7 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      kind: "task",
       status: {
         state: "completed" as TaskState,
         timestamp: new Date().toISOString(),
@@ -202,19 +212,23 @@ describe("FileStore", () => {
 
     const history: Message[] = [
       {
+        messageId: "test-message-id-1",
+        kind: "message",
         role: "user",
         parts: [
           {
-            type: "text",
+            kind: "text",
             text: "Initial request",
           },
         ],
       },
       {
+        messageId: "test-message-id-2",
+        kind: "message",
         role: "agent",
         parts: [
           {
-            type: "text",
+            kind: "text",
             text: "Agent response",
           },
         ],
