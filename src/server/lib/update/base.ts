@@ -1,4 +1,4 @@
-import { TaskContext } from "../../../types/context.js";
+import { TaskContext } from "../../../types/index.js";
 import {
   Message,
   Task,
@@ -7,6 +7,7 @@ import {
   UpdateEvent,
 } from "../../../types/extended-schema.js";
 import { getCurrentTimestamp } from "../../../utils/common/utils.js";
+import { logError } from "../../../utils/logging/log.js";
 import { TaskAndHistory } from "../../interfaces/store.js";
 import { processArtifactUpdate } from "../state.js";
 
@@ -41,6 +42,7 @@ const updateHistory = (current: TaskAndHistory, updateMessage: Message) => {
 export const updateMessage: Update<Message> = async (props) => {
   const { context, update } = props;
   if (!update || update.kind !== UpdateKind.Message) {
+    logError("updateMessage", "Invalid update", update);
     return false;
   }
   context.latestUserMessage = update;
@@ -50,6 +52,7 @@ export const updateMessage: Update<Message> = async (props) => {
 export const updateTask: Update<Task> = async (props) => {
   const { context, current, update } = props;
   if (!update || update.kind !== UpdateKind.Task) {
+    logError("updateTask", "Invalid update kind", update);
     return false;
   }
   current.task = { ...current.task, ...update };
@@ -71,9 +74,9 @@ export const updateTaskStatusUpdate: Update<TaskStatusUpdateEvent> = async (
 ) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.StatusUpdate) {
+    logError("updateTaskStatusUpdate", "Invalid update kind", update);
     return false;
   }
-
   if (current.task.id === update.taskId) {
     current.task.status = update.status;
     current.task.status.timestamp = getCurrentTimestamp();
@@ -82,6 +85,7 @@ export const updateTaskStatusUpdate: Update<TaskStatusUpdateEvent> = async (
     }
     return true;
   }
+  logError("updateTaskStatusUpdate", "Invalid task id", update);
   return false;
 };
 
@@ -90,6 +94,7 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
 ) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.ArtifactUpdate) {
+    logError("updateTaskArtifactUpdate", "Invalid update kind", update);
     return false;
   }
   if (current.task.id === update.taskId) {
@@ -105,6 +110,7 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
 export const update: Update<UpdateEvent> = async (props): Promise<boolean> => {
   const { context, current, update } = props;
   if (!update || !update.kind) {
+    logError("update", "Invalid update", update);
     return false;
   }
 

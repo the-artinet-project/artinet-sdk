@@ -40,6 +40,7 @@ export function logError(
   }
   logger.error(logData, message);
 }
+
 /**
  * Logger utility for server warnings
  * @param context The context of the log (e.g., "A2AServer", "TaskStore")

@@ -2,7 +2,11 @@ import {
   TaskState,
   Task,
   SetTaskPushNotificationConfigResponse,
+  ExecutionContext,
+  SendMessageRequest,
+  A2AExecutionContext,
 } from "../../../types/index.js";
+import { Protocol } from "../../../types/services/protocol.js";
 import {
   getCurrentTimestamp,
   validateSendMessageParams,
@@ -26,7 +30,7 @@ import {
   GetTaskPushNotificationMethod,
 } from "../../interfaces/params.js";
 import { FINAL_STATES } from "../../../utils/index.js";
-
+//todo move to the a2a plugin
 export const defaultSendTaskMethod: SendTaskMethod = async (
   deps,
   requestParams,
@@ -49,7 +53,25 @@ export const defaultSendTaskMethod: SendTaskMethod = async (
     currentData.history,
     configuration
   );
-  const generator = taskHandler(context);
+  const requestContext: A2AExecutionContext<SendMessageRequest> = {
+    id: context.contextId,
+    protocol: Protocol.A2A,
+    method: "message/send",
+    params: requestParams,
+    task: currentData.task,
+    request: null,
+    response: null,
+  };
+  const executionContext: ExecutionContext<
+    A2AExecutionContext<SendMessageRequest>
+  > = {
+    id: context.contextId,
+    protocol: Protocol.A2A,
+    getRequestParams: () => requestParams,
+    isCancelled: () => deps.activeCancellations.has(context.task.id),
+    requestContext: requestContext,
+  };
+  const generator = taskHandler(executionContext);
   try {
     for await (const update of generator) {
       currentData = await processUpdate(taskStore, {
@@ -71,14 +93,12 @@ export const defaultSendTaskMethod: SendTaskMethod = async (
       "failed-update",
       `Task processing failed: ${innerError instanceof Error ? innerError.message : String(innerError)}`
     );
-
     // Ensure state is saved before calling callback with error
     await processUpdate(taskStore, {
       context: context,
       current: currentData,
       update: failedUpdate,
     });
-
     // Throwing here would be caught by createMethod's catch block
     if (innerError instanceof SystemError) {
       throw innerError;

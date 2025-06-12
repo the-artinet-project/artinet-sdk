@@ -8,7 +8,7 @@ import {
   TaskManagerProps,
   TaskProxy,
 } from "../../types/proxy.js";
-import { TaskContext } from "../../types/context.js";
+import { ExecutionContext } from "../../types/index.js";
 
 const env = process.env;
 
@@ -43,7 +43,7 @@ export namespace artinet {
         return;
       }
 
-      const context = env.context as unknown as TaskContext;
+      const context = env.context as unknown as ExecutionContext;
       const taskManagerProxy = env.taskManagerStub as unknown as TaskProxy;
 
       if (!taskManagerProxy || !context) {

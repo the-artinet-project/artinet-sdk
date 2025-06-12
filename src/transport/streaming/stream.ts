@@ -1,12 +1,14 @@
 import { Response } from "express";
-import {
-  JSONRPCError,
-  JSONRPCResponse,
-} from "../../types/schemas/a2a/index.js";
+import { JSONRPCError, JSONRPCResponse } from "../../types/index.js";
 import { TaskEvent, UpdateEvent } from "../../types/extended-schema.js";
 import { processUpdate } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";
-import { TaskContext, TaskHandler } from "../../types/context.js";
+import {
+  AgentEngine,
+  ExecutionContext,
+  TaskContext,
+  A2AExecutionContext,
+} from "../../types/index.js";
 import { FAILED_UPDATE, INTERNAL_ERROR } from "../../utils/common/errors.js";
 import { logError } from "../../utils/logging/log.js";
 
@@ -97,23 +99,28 @@ export function sendSSEError(
  * @param context The task context
  * @param initialData The initial task data
  */
-export async function processTaskStream(
+export async function processTaskStream<
+  T extends A2AExecutionContext<
+    SendStreamingMessageRequest | TaskResubscriptionRequest
+  >,
+>(
+  context: TaskContext,
   taskStore: TaskStore,
-  taskHandler: TaskHandler,
+  engine: AgentEngine,
   res: Response,
   taskId: string,
-  context: TaskContext,
   initialData: TaskAndHistory,
   onCancel: (
     context: TaskContext,
     data: TaskAndHistory,
     res: Response
   ) => Promise<void>,
-  onEnd: (taskId: string, res: Response) => Promise<void>
+  onEnd: (taskId: string, res: Response) => Promise<void>,
+  executionContext: ExecutionContext<T>
 ): Promise<void> {
   let currentData = initialData;
 
-  const generator = taskHandler(context);
+  const generator = engine(executionContext);
 
   try {
     for await (const yieldValue of generator) {

@@ -33,7 +33,6 @@ export class InMemoryTaskStore implements TaskStore {
    */
   async save(data: TaskAndHistory): Promise<void> {
     logDebug("InMemoryTaskStore", `Saving task: ${data.task.id}`);
-
     // Store copies to prevent internal mutation if caller reuses objects
     this.store.set(data.task.id, {
       task: { ...data.task },

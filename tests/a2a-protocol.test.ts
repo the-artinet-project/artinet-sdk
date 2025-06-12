@@ -1,16 +1,25 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
+  ExecutionContext,
   InMemoryTaskStore,
-  TaskContext,
+  A2AExecutionContext,
   TaskState,
   TaskStatusUpdateEvent,
   TaskYieldUpdate,
   TextPart,
   UpdateEvent,
   configureLogger,
+  MessageSendParams,
 } from "../src/index.js";
 
 configureLogger({ level: "silent" });
@@ -20,9 +29,12 @@ jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
 async function* a2aProtocolTestHandler(
-  context: TaskContext
+  context: ExecutionContext<A2AExecutionContext>
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const text = context.userMessage.parts
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as TextPart).text)
     .join(" ");
@@ -34,9 +46,9 @@ async function* a2aProtocolTestHandler(
 
   if (text.includes("fail")) {
     const yieldable: TaskStatusUpdateEvent = {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: true,
       status: {
         state: TaskState.Failed,
@@ -54,9 +66,9 @@ async function* a2aProtocolTestHandler(
 
   if (text.includes("input-required")) {
     const yieldable: TaskStatusUpdateEvent = {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: true,
       status: {
         state: TaskState.InputRequired,
@@ -75,9 +87,9 @@ async function* a2aProtocolTestHandler(
 
   if (text.includes("working-only")) {
     const yieldable: TaskStatusUpdateEvent = {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: false,
       status: {
         state: TaskState.Working,
@@ -95,9 +107,9 @@ async function* a2aProtocolTestHandler(
   }
   if (text.includes("multi-part")) {
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: true,
       status: {
         state: TaskState.Working,
@@ -114,9 +126,9 @@ async function* a2aProtocolTestHandler(
     };
 
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: true,
       status: {
         state: TaskState.Completed,
@@ -143,9 +155,9 @@ async function* a2aProtocolTestHandler(
 
   if (text.includes("streaming")) {
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: false,
       status: {
         state: TaskState.Working,
@@ -159,9 +171,9 @@ async function* a2aProtocolTestHandler(
     };
 
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "artifact-update",
-      contextId: context.contextId,
+      contextId: contextId,
       artifact: {
         artifactId: "test-artifact-id",
         name: "partial-artifact",
@@ -170,9 +182,9 @@ async function* a2aProtocolTestHandler(
     };
 
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "artifact-update",
-      contextId: context.contextId,
+      contextId: contextId,
       artifact: {
         artifactId: "test-artifact-id",
         name: "partial-artifact",
@@ -183,9 +195,9 @@ async function* a2aProtocolTestHandler(
     };
 
     yield {
-      taskId: context.task.id,
+      taskId: taskId,
       kind: "status-update",
-      contextId: context.contextId,
+      contextId: contextId,
       final: true,
       status: {
         state: TaskState.Completed,
@@ -202,9 +214,9 @@ async function* a2aProtocolTestHandler(
 
   // Default case - normal processing
   yield {
-    taskId: context.task.id,
+    taskId: taskId,
     kind: "status-update",
-    contextId: context.contextId,
+    contextId: contextId,
     final: false,
     status: {
       state: TaskState.Working,
@@ -218,9 +230,9 @@ async function* a2aProtocolTestHandler(
   };
 
   yield {
-    taskId: context.task.id,
+    taskId: taskId,
     kind: "status-update",
-    contextId: context.contextId,
+    contextId: contextId,
     final: true,
     status: {
       state: TaskState.Completed,

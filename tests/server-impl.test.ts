@@ -1,10 +1,17 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
   InMemoryTaskStore,
-  TaskContext,
+  ExecutionContext,
   UpdateEvent,
   INTERNAL_ERROR,
   AgentCard,
@@ -12,6 +19,7 @@ import {
   TaskYieldUpdate,
   TaskState,
   Message,
+  MessageSendParams,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -20,9 +28,12 @@ configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
 async function* serverImplTestHandler(
-  context: TaskContext
+  context: ExecutionContext
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const text = context.userMessage.parts
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
@@ -35,8 +46,8 @@ async function* serverImplTestHandler(
   // Test for different state transitions in detail
   if (text.includes("streaming")) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Submitted,
@@ -51,8 +62,8 @@ async function* serverImplTestHandler(
     };
 
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Working,
@@ -69,8 +80,8 @@ async function* serverImplTestHandler(
     // Simulate a few more updates
     for (let i = 1; i <= 3; i++) {
       yield {
-        taskId: context.task.id,
-        contextId: context.contextId,
+        taskId: taskId,
+        contextId: contextId,
         kind: "status-update",
         status: {
           state: TaskState.Working,
@@ -89,8 +100,8 @@ async function* serverImplTestHandler(
     }
 
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Completed,
@@ -108,8 +119,8 @@ async function* serverImplTestHandler(
 
   // Default case
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Working,
@@ -124,8 +135,8 @@ async function* serverImplTestHandler(
   };
 
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Completed,

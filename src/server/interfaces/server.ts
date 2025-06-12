@@ -13,7 +13,7 @@ import {
 import { TaskStore } from "./store.js";
 import { JSONRPCServerType } from "./params.js";
 import { TaskAndHistory } from "./store.js";
-import { TaskContext, TaskHandler } from "../../types/context.js";
+import { TaskContext, TaskHandler } from "../../types/index.js";
 
 export interface Server {
   start(): express.Express;

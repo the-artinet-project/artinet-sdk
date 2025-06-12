@@ -75,7 +75,7 @@ export async function processUpdate(
   updateProps: UpdateProps
 ): Promise<TaskAndHistory> {
   if (!(await update(updateProps))) {
-    throw new Error("Invalid update");
+    throw new Error("processUpdate: Invalid update");
   }
   await taskStore.save(updateProps.current);
   return updateProps.current;
@@ -114,6 +114,8 @@ export async function loadState(
     },
     metadata: metadata,
   };
+  message.taskId = newTask.id;
+  message.contextId = newTask.contextId;
   const newHistory: Message[] = [message];
   return { task: newTask, history: newHistory };
 }

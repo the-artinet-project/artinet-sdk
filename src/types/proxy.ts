@@ -1,5 +1,4 @@
-import { UpdateEvent } from "./extended-schema.js";
-import { TaskHandler } from "./context.js";
+import { UpdateEvent, TaskHandler } from "./extended-schema.js";
 import { Client } from "./client.js";
 
 /**

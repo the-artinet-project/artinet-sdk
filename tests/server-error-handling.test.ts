@@ -1,10 +1,19 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
+  ExecutionContext,
   InMemoryTaskStore,
   Message,
+  MessageSendParams,
   TaskContext,
   TaskState,
   UpdateEvent,
@@ -17,9 +26,12 @@ configureLogger({ level: "silent" });
 
 // Define an error-prone task handler for testing
 async function* errorProneTaskHandler(
-  context: TaskContext
+  context: ExecutionContext
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const text = context.userMessage.parts
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
@@ -32,8 +44,8 @@ async function* errorProneTaskHandler(
   // If the message contains "fail", we'll yield a failed state
   if (text.includes("fail")) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Failed,
@@ -51,8 +63,8 @@ async function* errorProneTaskHandler(
 
   // Otherwise, normal processing
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Working,
@@ -67,8 +79,8 @@ async function* errorProneTaskHandler(
   };
 
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Completed,

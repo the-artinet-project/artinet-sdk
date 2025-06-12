@@ -2,7 +2,7 @@ import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
   TestServerDeploymentRequest,
-  A2ARequest,
+  A2AExecutionContext,
   JSONRPCResponse,
   Task,
   SendMessageRequest,
@@ -19,7 +19,7 @@ import { logDebug } from "../../index.js";
  */
 
 const testExecuteStreamEvents = executeStreamEvents as <
-  Req extends A2ARequest | TestServerDeploymentRequest,
+  Req extends A2AExecutionContext | TestServerDeploymentRequest,
   StreamRes extends JSONRPCResponse | ServerDeploymentResponse,
 >(
   baseUrl: URL,

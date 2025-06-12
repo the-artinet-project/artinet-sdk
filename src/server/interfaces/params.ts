@@ -1,7 +1,7 @@
 import { CorsOptions } from "cors";
+
 import {
   A2AResponse,
-  RequestParams,
   AgentCard,
   CancelTaskRequest,
   CancelTaskResponse,
@@ -18,12 +18,17 @@ import {
   Task,
   TaskResubscriptionRequest,
   MessageSendConfiguration,
+  A2ARequest,
 } from "../../types/extended-schema.js";
+
 import { TaskStore } from "./store.js";
-import { TaskHandler, TaskContext } from "../../types/context.js";
+import { TaskHandler, TaskContext } from "../../types/index.js";
+
 import jayson from "jayson";
+
 import { ErrorHandler } from "../../utils/common/errors.js";
 import { JSONRPCError } from "../../types/extended-schema.js";
+
 import { Response } from "express";
 
 export type JSONRPCServerType = jayson.Server;
@@ -141,11 +146,11 @@ export type CreateExpressServerParams = Omit<
  * This can be used by consumers to implement their own server solutions
  */
 export type A2AMethodHandler<
-  Params extends RequestParams,
+  RequestParamT extends A2ARequest["params"],
   Result extends A2AResponse | Message | Task | null,
 > = (
   deps: CreateJSONRPCServerParams,
-  requestParams: Params,
+  requestParams: RequestParamT,
   callback: JSONRPCCallback<Result>
 ) => Promise<void>;
 

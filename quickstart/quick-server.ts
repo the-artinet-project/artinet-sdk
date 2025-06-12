@@ -14,11 +14,14 @@ const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
       ? context.userMessage.parts[0].text
       : "";
   logger.info(`Quick server received: ${userInput}`);
+
   yield {
     state: "working",
     message: { role: "agent", parts: [{ type: "text", text: "Thinking..." }] },
   };
+
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate work
+
   yield {
     state: "completed",
     message: {
@@ -26,6 +29,7 @@ const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
       parts: [{ type: "text", text: `You said: ${userInput}` }],
     },
   };
+
   logger.info(`Quick server responded.`);
 };
 

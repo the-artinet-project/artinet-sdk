@@ -1,9 +1,3 @@
 [submodule "deps/a2a"]
 	path = deps/a2a
 	url = https://github.com/google-a2a/A2A.git
-[submodule "deps/a2a-samples"]
-	path = deps/a2a-samples
-	url = https://github.com/google-a2a/a2a-samples.git
-[submodule "deps/mcp-use"]
-	path = deps/mcp-use
-	url = https://github.com/EditUndo/artinet-mcp-use-ts.git

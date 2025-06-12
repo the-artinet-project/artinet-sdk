@@ -1,14 +1,23 @@
-import { jest } from "@jest/globals";
+import {
+  describe,
+  beforeEach,
+  afterEach,
+  it,
+  expect,
+  jest,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
   InMemoryTaskStore,
-  TaskContext,
-  UpdateEvent,
   TaskStore,
   configureLogger,
   TaskState,
+  ExecutionContext,
+  AgentEngine,
+  MessageSendParams,
+  logInfo,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -16,13 +25,16 @@ jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Define test task handler
-async function* basicTaskHandler(
-  context: TaskContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
+const basicTaskHandler: AgentEngine = async function* (
+  context: ExecutionContext
+) {
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
   // Check if task already has status, if not, use "working"
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Working,
@@ -42,19 +54,18 @@ async function* basicTaskHandler(
   // Check for cancellation
   if (context.isCancelled()) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: { state: TaskState.Canceled },
       final: true,
     };
     return;
   }
-
   // Generate a result artifact
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "artifact-update",
     artifact: {
       artifactId: "test-artifact-id",
@@ -62,17 +73,16 @@ async function* basicTaskHandler(
       parts: [
         {
           kind: "text",
-          text: `Task ${context.task.id} completed successfully.`,
+          text: `Task ${contextId} completed successfully.`,
         },
       ],
     },
     lastChunk: true,
   };
-
   // Final completion status
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Completed,
@@ -85,7 +95,7 @@ async function* basicTaskHandler(
     },
     final: true,
   };
-}
+};
 
 describe("A2AServer", () => {
   let server: A2AServer;
@@ -241,7 +251,10 @@ describe("A2AServer", () => {
         },
       };
 
-      await trackRequest(request(app).post("/").send(createRequest));
+      const createResponse = await trackRequest(
+        request(app).post("/").send(createRequest)
+      );
+      logInfo("createResponse", createResponse.body);
 
       // Now try to retrieve it
       const getRequest = {

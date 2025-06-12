@@ -22,8 +22,8 @@ import {
 import {
   A2AResponse,
   Message,
-  RequestParams,
   Task,
+  A2ARequest,
 } from "../../../types/index.js";
 
 /**
@@ -34,13 +34,13 @@ import {
  * @returns A JSON-RPC method handler
  */
 export function createJSONRPCMethod<
-  Params extends RequestParams,
+  RequestParamT extends A2ARequest["params"],
   Result extends A2AResponse | Task | Message | null,
 >(
   deps: CreateJSONRPCServerParams,
-  funct: A2AMethodHandler<Params, Result>,
+  funct: A2AMethodHandler<RequestParamT, Result>,
   methodName: string // Pass method name for logging
-): JSONRPCMethodHandler<Params, Result> {
+): JSONRPCMethodHandler<RequestParamT, Result> {
   return async (requestParams, callback) => {
     try {
       if (!requestParams) {

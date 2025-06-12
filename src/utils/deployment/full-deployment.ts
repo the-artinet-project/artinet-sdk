@@ -1,7 +1,7 @@
 import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
-  A2ARequest,
+  A2AExecutionContext,
   ServerDeploymentRequest,
 } from "../../types/index.js";
 import { executeJsonRpcRequest } from "../../transport/index.js";
@@ -19,7 +19,7 @@ const API_KEY = process.env.ARTINET_API_KEY;
 /**
  * @description The type of the full deployment request.
  */
-type FullDeploymentRequest = A2ARequest | ServerDeploymentRequest;
+type FullDeploymentRequest = A2AExecutionContext | ServerDeploymentRequest;
 
 /**
  * Sends a full deployment request to the server.

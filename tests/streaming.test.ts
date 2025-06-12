@@ -1,9 +1,18 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
   A2AServer,
+  ExecutionContext,
   InMemoryTaskStore,
+  MessageSendParams,
   TaskContext,
   TaskState,
   UpdateEvent,
@@ -16,9 +25,12 @@ configureLogger({ level: "silent" });
 
 // Specialized task handler for streaming tests
 async function* streamingTestHandler(
-  context: TaskContext
+  context: ExecutionContext
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const text = context.userMessage.parts
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
@@ -26,8 +38,8 @@ async function* streamingTestHandler(
   // Quick completion without streaming for non-streaming tests
   if (text.includes("quick")) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Completed,
@@ -46,8 +58,8 @@ async function* streamingTestHandler(
   // Test for resubscription
   if (text.includes("resubscribe")) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Working,
@@ -67,8 +79,8 @@ async function* streamingTestHandler(
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Completed,
@@ -88,8 +100,8 @@ async function* streamingTestHandler(
 
   // Long running task with multiple updates
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Submitted,
@@ -106,8 +118,8 @@ async function* streamingTestHandler(
   // Progress updates
   for (let i = 1; i <= 3; i++) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId: taskId,
+      contextId: contextId,
       kind: "status-update",
       status: {
         state: TaskState.Working,
@@ -127,8 +139,8 @@ async function* streamingTestHandler(
 
   // Final completion
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId: taskId,
+    contextId: contextId,
     kind: "status-update",
     status: {
       state: TaskState.Completed,

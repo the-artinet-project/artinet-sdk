@@ -1,4 +1,11 @@
-import { jest } from "@jest/globals";
+import {
+  jest,
+  describe,
+  beforeEach,
+  afterEach,
+  test,
+  expect,
+} from "@jest/globals";
 import express from "express";
 import {
   A2AClient,
@@ -10,6 +17,8 @@ import {
   TaskState,
   UpdateEvent,
   configureLogger,
+  ExecutionContext,
+  MessageSendParams,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -20,17 +29,21 @@ configureLogger({ level: "silent" });
  * Simple echo task handler for testing
  */
 async function* echoHandler(
-  context: TaskContext
+  context: ExecutionContext
 ): AsyncGenerator<UpdateEvent, void, unknown> {
   // Extract user text
-  const userText = context.userMessage.parts
+  const params = context.getRequestParams() as MessageSendParams;
+  const taskId = params.message.taskId ?? context.id;
+  const contextId = context.id;
+  const userText = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");
+
   // Send working status
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId,
+    contextId,
     kind: "status-update",
     status: {
       state: TaskState.Working,
@@ -43,12 +56,12 @@ async function* echoHandler(
     },
     final: false,
   };
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 300));
   // Check cancellation
   if (context.isCancelled()) {
     yield {
-      taskId: context.task.id,
-      contextId: context.contextId,
+      taskId,
+      contextId,
       kind: "status-update",
       status: {
         state: TaskState.Canceled,
@@ -69,8 +82,8 @@ async function* echoHandler(
 
   // Create an artifact
   yield {
-    taskId: context.task.id,
-    contextId: context.contextId,
+    taskId,
+    contextId,
     kind: "artifact-update",
     artifact: {
       artifactId: "test-artifact-id",
@@ -81,8 +94,8 @@ async function* echoHandler(
 
   // Complete the task
   yield {
-    id: context.task.id,
-    contextId: context.contextId,
+    id: taskId,
+    contextId,
     kind: "task",
     status: {
       state: TaskState.Completed,

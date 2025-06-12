@@ -11,6 +11,8 @@ import type {
   TaskResubscriptionRequest,
   MessageSendConfiguration,
   TaskArtifactUpdateEvent,
+  A2AExecutionContext,
+  ExecutionContext,
 } from "../types/index.js";
 import { TaskState } from "../types/index.js";
 import {
@@ -35,7 +37,7 @@ import {
 } from "../transport/index.js";
 
 import { TaskStore, TaskAndHistory } from "./interfaces/store.js";
-import { TaskHandler, TaskContext } from "../types/context.js";
+import { TaskHandler, TaskContext } from "../types/index.js";
 import { A2AServerParams, JSONRPCServerType } from "./interfaces/params.js";
 import { Server } from "./interfaces/server.js";
 
@@ -44,6 +46,7 @@ import { createExpressServer } from "./lib/express-server.js";
 import { loadState, processUpdate } from "./lib/state.js";
 import { InMemoryTaskStore } from "./lib/storage/memory.js";
 import { v4 as uuidv4 } from "uuid";
+import { Protocol } from "../types/services/index.js";
 
 /**
  * Implements an A2A protocol compliant server using Express.
@@ -51,7 +54,7 @@ import { v4 as uuidv4 } from "uuid";
  * Uses Jayson for JSON-RPC handling.
  */
 export class A2AServer implements Server {
-  private taskHandler: TaskHandler;
+  protected taskHandler: TaskHandler;
   private taskStore: TaskStore;
   private corsOptions: CorsOptions;
   private basePath: string;
@@ -61,8 +64,8 @@ export class A2AServer implements Server {
   private app: express.Express;
   private fallbackPath: string;
   private register: boolean;
-  private activeCancellations: Set<string> = new Set();
-  private activeStreams: Map<string, Response[]> = new Map();
+  protected activeCancellations: Set<string> = new Set();
+  protected activeStreams: Map<string, Response[]> = new Map();
 
   /** The agent card representing this server */
   public card!: AgentCard;
@@ -358,6 +361,16 @@ export class A2AServer implements Server {
     }
     const taskId = message.taskId;
     let contextId = message.contextId ?? "unknown";
+
+    const executionContext: ExecutionContext<
+      A2AExecutionContext<SendStreamingMessageRequest>
+    > = {
+      id: taskId,
+      protocol: Protocol.A2A,
+      getRequestParams: () => req.params,
+      isCancelled: () => this.activeCancellations.has(taskId),
+    };
+
     // Set up SSE stream with initial status
     setupSseStream(
       res,
@@ -403,14 +416,15 @@ export class A2AServer implements Server {
 
     // Process the task using the shared method
     await processTaskStream(
+      context,
       this.taskStore,
       this.taskHandler,
       res,
       taskId,
-      context,
       currentData,
       this.onCancel.bind(this),
-      this.onEnd.bind(this)
+      this.onEnd.bind(this),
+      executionContext
     );
   }
 
@@ -428,6 +442,16 @@ export class A2AServer implements Server {
       console.error("Task ID is required", req);
       throw INVALID_PARAMS("Missing task ID");
     }
+
+    // Create execution context
+    const executionContext: ExecutionContext<
+      A2AExecutionContext<TaskResubscriptionRequest>
+    > = {
+      id: taskId,
+      protocol: Protocol.A2A,
+      getRequestParams: () => req.params,
+      isCancelled: () => this.activeCancellations.has(taskId),
+    };
 
     // Try to load the task
     const data = await this.taskStore.load(taskId);
@@ -491,14 +515,15 @@ export class A2AServer implements Server {
 
     // Continue processing the task using the shared method
     await processTaskStream(
+      context,
       this.taskStore,
       this.taskHandler,
       res,
       taskId,
-      context,
       data,
       this.onCancel.bind(this),
-      this.onEnd.bind(this)
+      this.onEnd.bind(this),
+      executionContext
     );
   }
 
