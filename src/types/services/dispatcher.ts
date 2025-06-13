@@ -18,8 +18,8 @@ export interface Dispatcher {
 }
 
 export class ServiceDispatcher implements Dispatcher {
-  protected services: Partial<Record<Protocol, Service>>;
-  protected engine: AgentEngine;
+  readonly services: Partial<Record<Protocol, Service>>;
+  readonly engine: AgentEngine;
 
   constructor(options: DispatchOptions) {
     this.engine = options.engine;

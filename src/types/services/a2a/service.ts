@@ -1,11 +1,19 @@
 import {
   TaskResubscriptionRequest,
   SendStreamingMessageRequest,
+  AgentCard,
 } from "../../schemas/index.js";
-import { A2AExecutionContext } from "../context.js";
+import { A2AExecutionContext, AgentEngine } from "../context.js";
 import { Service } from "../service.js";
 import { Response } from "express";
+import { TaskStore } from "../../../server/interfaces/store.js";
+import { A2ARepositoryOptions } from "./repository.js";
 
+export interface A2AServiceOptions extends A2ARepositoryOptions {
+  engine: AgentEngine;
+  card: AgentCard;
+  taskStore: TaskStore;
+}
 /**
  * @description The A2AService interface.
  */

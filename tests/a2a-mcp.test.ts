@@ -223,6 +223,7 @@ describe("Client-Server Integration Tests", () => {
   beforeEach(async () => {
     // Create a simple server
     a2aService = new A2AService({
+      taskStore: new InMemoryTaskStore(),
       engine: echoAgent,
       card: {
         name: "test-agent",
@@ -548,7 +549,6 @@ describe("Client-Server Integration Tests", () => {
           })
       );
       await request(server).get("/");
-      console.log("response", response.body);
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.kind).toBe("task");

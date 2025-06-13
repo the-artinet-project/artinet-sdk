@@ -35,6 +35,12 @@ export interface Service<
   }): Promise<void>;
 
   /**
+   * @description The stop method.
+   * @returns {Promise<void>} The promise.
+   */
+  stop(): Promise<void>;
+
+  /**
    * @description The description.
    * @type {Promise<string>}
    */

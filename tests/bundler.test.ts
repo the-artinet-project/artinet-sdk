@@ -1,7 +1,8 @@
+import { describe, it, expect } from "@jest/globals";
 import { bundle } from "../src/index.js";
 import { configureLogger } from "../src/index.js";
 
-configureLogger({ level: "debug" });
+configureLogger({ level: "silent" });
 
 describe("bundle", () => {
   it("should be defined", () => {

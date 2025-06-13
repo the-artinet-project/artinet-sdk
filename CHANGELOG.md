@@ -5,7 +5,26 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.2] - 2025-05-25 (Please fill in the date)
+## [0.5.4] - 2025-06-12
+
+### Added
+- New `ExecutionContext` interface for enhanced parameter management across services
+- `MCPExecutionContext` and `NLWebExecutionContext` interfaces for protocol-specific request handling
+- New schema organization under `schemas/a2a` directory for improved code structure
+
+### Changed
+- **BREAKING**: Renamed core methods to align with message-based approach:
+  - `sendTask` → `sendMessage`
+  - `sendTaskSubscribe` → `sendStreamingMessage`
+  - Updated push notification config methods to `tasks/pushNotificationConfig/set` and `tasks/pushNotificationConfig/get`
+- Refactored import paths to use new schema structure under `schemas/a2a`
+- Enhanced error handling and validation for message parameters across the codebase
+- Updated documentation to reflect new method names and functionalities
+
+### Removed
+- Deprecated submodules for `a2a-samples` and `mcp-use`
+
+## [0.5.2] - 2025-05-25
 
 ### Added
 - New `artinet.v0` namespace in `src/utils/deployment/agents.ts` providing `taskManager`, `connect`, and `agent` utilities. These are designed for agents running in sandboxed or managed environments, offering a standardized way to interact with the host system for task execution, inter-agent communication, and external API calls.

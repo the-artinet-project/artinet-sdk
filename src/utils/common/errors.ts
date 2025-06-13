@@ -30,12 +30,13 @@ import {
 export class SystemError<
   T extends JSONRPCError<number, unknown>,
 > extends Error {
+  message: string;
   code: T["code"];
   data: T["data"];
 
   constructor(message: string, code: T["code"], data: T["data"]) {
     super(message);
-    this.name = "RpcError";
+    // this.name = "RpcError";
     this.message = message;
     this.code = code;
     this.data = data;

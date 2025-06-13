@@ -150,7 +150,7 @@ describe("A2AServer Error Handling", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/").send(requestBody)
+        request(app).post("/a2a").send(requestBody)
       );
 
       // The server should handle the error and return a failed task
@@ -183,7 +183,7 @@ describe("A2AServer Error Handling", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/").send(requestBody)
+        request(app).post("/a2a").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -216,7 +216,10 @@ describe("A2AServer Error Handling", () => {
 
     it("returns error for empty request body", async () => {
       const response = await trackRequest(
-        request(app).post("/").set("Content-Type", "application/json").send("")
+        request(app)
+          .post("/a2a")
+          .set("Content-Type", "application/json")
+          .send("")
       );
 
       expect(response.status).toBe(200);
@@ -226,7 +229,7 @@ describe("A2AServer Error Handling", () => {
     });
 
     it.skip("returns error when request body is not an object", async () => {
-      const response = await trackRequest(request(app).post("/").send("42"));
+      const response = await trackRequest(request(app).post("/a2a").send("42"));
 
       // The server might return various status codes for invalid content types
       expect(response.status).toBe(200);
@@ -252,7 +255,7 @@ describe("A2AServer Error Handling", () => {
 
       const response = await trackRequest(
         request(app)
-          .post("/")
+          .post("/a2a")
           .set("Content-Type", "application/json")
           .send(requestBody)
       );
@@ -278,7 +281,7 @@ describe("A2AServer Error Handling", () => {
 
       const response = await trackRequest(
         request(app)
-          .post("/")
+          .post("/a2a")
           .set("Content-Type", "application/json; charset=utf-8")
           .send(requestBody)
       );

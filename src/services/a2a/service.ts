@@ -37,6 +37,7 @@ import {
   getCurrentTimestamp,
   INVALID_PARAMS,
   INVALID_REQUEST,
+  logError,
   METHOD_NOT_FOUND,
   TASK_NOT_FOUND,
   validateSendMessageParams,
@@ -44,8 +45,10 @@ import {
 } from "../../utils/index.js";
 import { processTaskStream } from "../../transport/streaming/stream.js";
 import { sendSSEEvent, setupSseStream } from "../../index.js";
-import { A2ARepositoryParams } from "../../types/services/a2a/repository.js";
-import { A2AServiceInterface } from "../../types/services/a2a/service.js";
+import {
+  A2AServiceInterface,
+  A2AServiceOptions,
+} from "../../types/services/a2a/service.js";
 import { A2ARepository } from "./repository.js";
 
 export class A2AService implements A2AServiceInterface {
@@ -54,9 +57,9 @@ export class A2AService implements A2AServiceInterface {
   readonly engine: AgentEngine;
   readonly state: A2ARepository;
 
-  constructor(params: A2ARepositoryParams & { engine: AgentEngine }) {
-    this.engine = params.engine;
-    this.state = new A2ARepository(params);
+  constructor(options: A2AServiceOptions) {
+    this.engine = options.engine;
+    this.state = new A2ARepository(options);
   }
 
   /**
@@ -82,9 +85,8 @@ export class A2AService implements A2AServiceInterface {
       id: taskId,
       protocol: Protocol.A2A,
       getRequestParams: () => req.params,
-      isCancelled: () => this.state.getActiveCancellations().has(taskId),
+      isCancelled: () => this.state.activeCancellations.has(taskId),
     };
-
     // Set up SSE stream with initial status
     setupSseStream(
       res,
@@ -99,9 +101,8 @@ export class A2AService implements A2AServiceInterface {
         },
         final: false,
       },
-      this.state.addStreamForTask.bind(this)
+      this.state.addStreamForTask.bind(this.state)
     );
-
     // Load or create task
     let currentData = await loadState(
       this.state.getTaskStore(),
@@ -137,8 +138,8 @@ export class A2AService implements A2AServiceInterface {
       res,
       taskId,
       currentData,
-      this.state.onCancel.bind(this),
-      this.state.onEnd.bind(this),
+      this.state.onCancel.bind(this.state),
+      this.state.onEnd.bind(this.state),
       executionContext
     );
   }
@@ -154,19 +155,17 @@ export class A2AService implements A2AServiceInterface {
   ): Promise<void> {
     const { id: taskId } = req.params;
     if (!taskId) {
-      console.error("Task ID is required", req);
+      logError("A2AService", "Task ID is required", req);
       throw INVALID_PARAMS("Missing task ID");
     }
-
     const executionContext: ExecutionContext<
       A2AExecutionContext<TaskResubscriptionRequest>
     > = {
       id: taskId,
       protocol: Protocol.A2A,
       getRequestParams: () => req.params,
-      isCancelled: () => this.state.getActiveCancellations().has(taskId),
+      isCancelled: () => this.state.activeCancellations.has(taskId),
     };
-
     // Try to load the task
     const data = await this.state.getTaskStore().load(taskId);
     if (!data) {
@@ -185,7 +184,7 @@ export class A2AService implements A2AServiceInterface {
         final: false,
         metadata: data.task.metadata,
       },
-      this.state.addStreamForTask.bind(this)
+      this.state.addStreamForTask.bind(this.state)
     );
 
     // Check if task is in final state
@@ -235,8 +234,8 @@ export class A2AService implements A2AServiceInterface {
       res,
       taskId,
       data,
-      this.state.onCancel.bind(this),
-      this.state.onEnd.bind(this),
+      this.state.onCancel.bind(this.state),
+      this.state.onEnd.bind(this.state),
       executionContext
     );
   }
@@ -265,24 +264,28 @@ export class A2AService implements A2AServiceInterface {
     if (!executionContext.requestContext?.method) {
       throw METHOD_NOT_FOUND({ method: "unknown" });
     }
+    //todo better callback sanitization
     let closeConnection = false;
     const callback = (error: any, result: any) => {
+      const responseHandler = executionContext.requestContext?.response;
       if (error) {
-        executionContext.requestContext?.response.status(500).send({
+        responseHandler.status(200);
+        responseHandler.send({
           jsonrpc: "2.0",
           id: executionContext.id,
           error: error,
         });
         closeConnection = true;
       } else {
-        executionContext.requestContext?.response.send({
+        responseHandler.status(200);
+        responseHandler.send({
           jsonrpc: "2.0",
           id: executionContext.id,
           result,
         });
       }
       if (closeConnection) {
-        executionContext.requestContext?.response.end();
+        responseHandler.end();
       }
     };
     switch (executionContext.requestContext?.method) {
@@ -300,34 +303,74 @@ export class A2AService implements A2AServiceInterface {
             taskStore: this.state.getTaskStore(),
             card: this.state.getCard(),
             taskHandler: engine,
-            activeCancellations: this.state.getActiveCancellations(),
-            createTaskContext: this.state.createTaskContext.bind(this),
-            closeStreamsForTask: this.state.closeStreamsForTask.bind(this),
+            activeCancellations: this.state.activeCancellations,
+            createTaskContext: this.state.createTaskContext.bind(this.state),
+            closeStreamsForTask: this.state.closeStreamsForTask.bind(
+              this.state
+            ),
           }
-        );
-      case "message/stream": //todo make the following functions leverage callback
-        return await this.handleTaskSendSubscribe(
-          executionContext.requestContext.request,
-          executionContext.requestContext.response
         ).catch((error) => {
+          logError(
+            "A2AService",
+            `Error dispatching method: ${executionContext.requestContext?.method}`,
+            error
+          );
           closeConnection = true;
           callback(error, null);
         });
+      case "message/stream":
+        {
+          //todo make the following functions leverage callback
+          const params = executionContext.requestContext.request
+            .body as SendStreamingMessageRequest;
+          return await this.handleTaskSendSubscribe(
+            params,
+            executionContext.requestContext.response
+          ).catch((error) => {
+            logError(
+              "A2AService",
+              `Error dispatching method: ${executionContext.requestContext?.method}`,
+              error
+            );
+            closeConnection = true;
+            callback(error, null);
+          });
+        }
+        break;
       case "tasks/resubscribe":
-        return await this.handleTaskResubscribe(
-          executionContext.requestContext.request,
-          executionContext.requestContext.response
-        ).catch((error) => {
-          closeConnection = true;
-          callback(error, null);
-        });
+        {
+          const params = executionContext.requestContext.request
+            .body as TaskResubscriptionRequest;
+          return await this.handleTaskResubscribe(
+            params,
+            executionContext.requestContext.response
+          ).catch((error) => {
+            logError(
+              "A2AService",
+              `Error dispatching method: ${executionContext.requestContext?.method}`,
+              error
+            );
+            closeConnection = true;
+            callback(error, null);
+          });
+        }
+        break;
       default:
+        logError(
+          "A2AService",
+          `Unknown method: ${executionContext.requestContext?.method}`,
+          null
+        );
         callback(
           METHOD_NOT_FOUND({ method: executionContext.requestContext?.method }),
           null
         );
         break;
     }
+  }
+
+  async stop(): Promise<void> {
+    await this.state.destroy();
   }
 
   /**

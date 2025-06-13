@@ -1,7 +1,7 @@
 import { TaskAndHistory, TaskStore } from "../../../server/interfaces/store.js";
 import { AgentCard } from "../../schemas/index.js";
 import { TaskContext } from "../../index.js";
-import express, { Response } from "express";
+import { Response } from "express";
 
 /**
  * @description The A2ARepository interface.
@@ -16,7 +16,7 @@ export interface A2ARepositoryInterface {
    * @description Gets the active cancellations.
    * @returns {Set<string>} The active cancellations.
    */
-  getActiveCancellations: () => Set<string>;
+  activeCancellations: Set<string>;
   /**
    * @description Gets the task store.
    * @returns {TaskStore} The task store.
@@ -46,12 +46,18 @@ export interface A2ARepositoryInterface {
    * @param {Response} res The response.
    */
   onEnd: (taskId: string, res: Response) => Promise<void>;
+
+  /**
+   * @description Gets the active streams.
+   * @returns {Map<string, Response[]>} The active streams.
+   */
+  destroy: () => Promise<void>;
 }
 
 /**
  * @description The A2ARepository parameters.
  */
-export interface A2ARepositoryParams {
+export interface A2ARepositoryOptions {
   /**
    * @description The task store.
    * @type {TaskStore}
@@ -61,27 +67,27 @@ export interface A2ARepositoryParams {
    * @description The base path.
    * @type {string}
    */
-  basePath?: string;
+  // basePath?: string;
   /**
    * @description The fallback path.
    * @type {string}
    */
-  fallbackPath?: string;
+  // fallbackPath?: string;
   /**
    * @description The port.
    * @type {number}
    */
-  port?: number;
+  // port?: number;
   /**
    * @description The app.
    * @type {express.Express}
    */
-  app?: express.Express;
+  // app?: express.Express;
   /**
    * @description The register.
    * @type {boolean}
    */
-  register?: boolean;
+  // register?: boolean;
   /**
    * @description The card.
    * @type {AgentCard}

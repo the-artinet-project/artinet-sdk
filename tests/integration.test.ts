@@ -130,7 +130,7 @@ describe("Client-Server Integration Tests", () => {
     port = (expressServer.address() as any).port;
 
     // Create client
-    client = new A2AClient(`http://localhost:${port}`);
+    client = new A2AClient(`http://localhost:${port}/a2a`);
   });
 
   afterEach(async () => {

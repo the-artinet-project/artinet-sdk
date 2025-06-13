@@ -36,4 +36,9 @@ export interface ManagerInterface {
    * @returns {string} The description.
    */
   // getDescription(serviceName?: string): string;
+  /**
+   * @description Stops the manager.
+   * @returns {Promise<void>} The promise.
+   */
+  destroy(): Promise<void>;
 }

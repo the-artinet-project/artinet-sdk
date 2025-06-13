@@ -13,46 +13,56 @@ import { logDebug } from "../../utils/logging/log.js";
 import { InMemoryTaskStore } from "../../server/lib/storage/memory.js";
 import {
   A2ARepositoryInterface,
-  A2ARepositoryParams,
+  A2ARepositoryOptions,
 } from "../../types/services/a2a/repository.js";
 
 import { v4 as uuidv4 } from "uuid";
-import express, { Response } from "express";
+import { Response } from "express";
 
 /**
  * @description The A2ARepository class.
  */
 export class A2ARepository implements A2ARepositoryInterface {
   protected taskStore: TaskStore;
-  protected basePath: string;
-  protected fallbackPath: string;
-  protected port: number;
-  protected app: express.Express;
-  protected register: boolean;
-  protected activeCancellations: Set<string>;
-  protected activeStreams: Map<string, Response[]>;
+  protected _activeCancellations: Set<string>;
+  protected _activeStreams: Map<string, Response[]>;
   protected card: AgentCard;
 
-  constructor(params: A2ARepositoryParams) {
+  constructor(params: A2ARepositoryOptions) {
     this.taskStore = params.taskStore ?? new InMemoryTaskStore();
-    this.basePath = params.basePath ?? "/";
-    this.fallbackPath = params.fallbackPath ?? "agent-card";
-    this.port = params.port ?? 3000;
-    this.app = params.app ?? express();
-    this.register = params.register ?? false;
     this.card = params.card;
-    this.activeCancellations = new Set();
-    this.activeStreams = new Map();
+    this._activeCancellations = new Set();
+    this._activeStreams = new Map();
   }
 
+  /**
+   * @description Gets the agent card.
+   * @returns {AgentCard} The agent card.
+   */
   public getCard(): AgentCard {
     return this.card;
   }
 
-  public getActiveCancellations(): Set<string> {
-    return this.activeCancellations;
+  /**
+   * @description Gets the active streams.
+   * @returns {Map<string, Response[]>} The active streams.
+   */
+  get activeStreams(): Map<string, Response[]> {
+    return this._activeStreams;
   }
 
+  /**
+   * @description Gets the active cancellations.
+   * @returns {Set<string>} The active cancellations.
+   */
+  get activeCancellations(): Set<string> {
+    return this._activeCancellations;
+  }
+
+  /**
+   * @description Gets the task store.
+   * @returns {TaskStore} The task store.
+   */
   public getTaskStore(): TaskStore {
     return this.taskStore;
   }
@@ -76,7 +86,7 @@ export class A2ARepository implements A2ARepositoryInterface {
       userMessage,
       history,
       configuration,
-      isCancelled: () => this.activeCancellations.has(task.id),
+      isCancelled: () => this._activeCancellations.has(task.id),
     };
   }
 
@@ -109,14 +119,14 @@ export class A2ARepository implements A2ARepositoryInterface {
    * @param res The response stream
    */
   public addStreamForTask(taskId: string, res: Response): void {
-    if (!this.activeStreams.has(taskId)) {
-      this.activeStreams.set(taskId, []);
+    if (!this._activeStreams.has(taskId)) {
+      this._activeStreams.set(taskId, []);
     }
     logDebug("A2AServer", "Adding stream for task", {
       taskId,
-      activeStreams: this.activeStreams,
+      activeStreams: this._activeStreams,
     });
-    this.activeStreams.get(taskId)?.push(res);
+    this._activeStreams.get(taskId)?.push(res);
   }
 
   /**
@@ -125,7 +135,7 @@ export class A2ARepository implements A2ARepositoryInterface {
    * @param res The response stream
    */
   public removeStreamForTask(taskId: string, res: Response): void {
-    const streams = this.activeStreams.get(taskId);
+    const streams = this._activeStreams.get(taskId);
     if (streams) {
       const index = streams.indexOf(res);
       if (index !== -1) {
@@ -133,9 +143,9 @@ export class A2ARepository implements A2ARepositoryInterface {
         if (streams.length === 0) {
           logDebug("A2AServer", "Removing stream for task", {
             taskId,
-            activeStreams: this.activeStreams,
+            activeStreams: this._activeStreams,
           });
-          this.activeStreams.delete(taskId);
+          this._activeStreams.delete(taskId);
         }
       }
     }
@@ -146,7 +156,7 @@ export class A2ARepository implements A2ARepositoryInterface {
    * @param taskId The task ID
    */
   public closeStreamsForTask(taskId: string): void {
-    const streams = this.activeStreams.get(taskId);
+    const streams = this._activeStreams.get(taskId);
     if (streams) {
       // Send close event to all streams
       for (const stream of streams) {
@@ -155,7 +165,7 @@ export class A2ARepository implements A2ARepositoryInterface {
           stream.end();
         }
       }
-      this.activeStreams.delete(taskId);
+      this._activeStreams.delete(taskId);
     }
   }
 
@@ -165,7 +175,23 @@ export class A2ARepository implements A2ARepositoryInterface {
    * @param res Response object
    */
   public async onEnd(taskId: string, res: Response): Promise<void> {
-    this.activeCancellations.delete(taskId);
+    this._activeCancellations.delete(taskId);
     this.removeStreamForTask(taskId, res);
+  }
+
+  /**
+   * Destroys the repository.
+   */
+  public async destroy(): Promise<void> {
+    this._activeStreams.forEach((streams, taskId) => {
+      if (streams.length > 0) {
+        logDebug("A2ARepository", "Closing streams for task during stop", {
+          taskId,
+        });
+        this.closeStreamsForTask(taskId);
+      }
+    });
+    this._activeStreams.clear();
+    this._activeCancellations.clear();
   }
 }

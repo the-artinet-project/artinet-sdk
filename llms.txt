@@ -28,7 +28,7 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   Optional custom JSON-RPC server implementation via `createJSONRPCServer` factory function parameter.
     *   Corrected internal parameter name from `taskHandler` to `handler` for consistency, though `taskHandler` might have worked due to JS flexibility.
 *   **Enhanced Client (`A2AClient`):**
-    *   Reliable streaming support (`sendTaskSubscribe`) using `eventsource-parser`.
+    *   Reliable streaming support (`sendStreamingMessage`) using `eventsource-parser`.
     *   Convenience methods for capability checking (`supports`).
     *   Flexible header management for authentication (`addHeader`, `setHeaders`).
     *   Informative client-side error handling (`RpcError`).
@@ -36,6 +36,7 @@ The SDK is distributed as the `@artinet/sdk` npm package.
     *   **Strong Typing:** Comprehensive TypeScript types for the entire A2A protocol and SDK interfaces.
     *   **Simplified APIs:** Abstracts protocol complexities for both client and server.
     *   **Structured Logging:** Integrated, configurable logging using `pino`. Defaults to `error` level, configurable via `configureLogger`.
+    *   **Enhanced Context Handling:** New `ExecutionContext` interface for improved parameter management, with protocol-specific extensions (`MCPExecutionContext`, `NLWebExecutionContext`).
 *   **Reliability & Testing:**
     *   **High Test Coverage:** (>95% reported) using Jest, covering core logic, streaming, error handling, push notification config, and edge cases.
     *   Standardized error classes (`A2AError`, `RpcError`) mapped to JSON-RPC error codes.
@@ -72,6 +73,7 @@ The SDK is distributed as the `@artinet/sdk` npm package.
 *   **File Structure Changes:**
     *   `src/client/interfaces/client.ts` moved to `src/types/client.ts`.
     *   `src/server/interfaces/context.ts` moved to `src/types/context.ts`.
+    *   Schema definitions reorganized under `schemas/a2a` directory.
 *   **Testing:** Jest (`ts-jest`).
 *   **Linting:** ESLint with TypeScript-ESLint (Flat Config `eslint.config.js`).
 *   **Core Dependencies:** `express`, `jayson` (for JSON-RPC server), `pino`, `eventsource-parser`, `cors`.
@@ -79,7 +81,7 @@ The SDK is distributed as the `@artinet/sdk` npm package.
 ## 4. Usage (High-Level)
 
 *   **Server:** Instantiate `A2AServer`, providing a `TaskHandler` async generator function and optionally a `TaskStore` and other configurations. Call `server.start()`.
-*   **Client:** Instantiate `A2AClient` with the server's A2A endpoint URL. Use methods like `sendTask`, `sendTaskSubscribe`, `getTask`, `cancelTask`, `supports`.
+*   **Client:** Instantiate `A2AClient` with the server's A2A endpoint URL. Use methods like `sendMessage`, `sendStreamingMessage`, `getTask`, `cancelTask`, `supports`.
 
 ## 5. Project Goals
 

@@ -214,7 +214,7 @@ Interact with A2A-compliant agents using the `A2AClient`. See `examples/` for mo
 
 #### Basic Client Usage
 
-Send a task using `message/send`.
+Send a message using `message/send`.
 
 ```typescript
 import { A2AClient, Message } from "@artinet/sdk";
@@ -226,7 +226,7 @@ async function runBasicTask() {
     parts: [{ type: "text", text: "What is the capital of France?" }],
   };
 
-  const task = await client.sendTask({ id: "basic-task-1", message });
+  const task = await client.sendMessage({ id: "basic-task-1", message });
   console.log("Task Completed:", task);
 }
 ```
@@ -250,7 +250,7 @@ async function runStreamingTask() {
     parts: [{ type: "text", text: "Tell me a short story." }],
   };
 
-  const stream = client.sendTaskSubscribe({ id: "streaming-task-1", message });
+  const stream = client.sendStreamingMessage({ id: "streaming-task-1", message });
 
   for await (const update of stream) {
     if ((update as TaskStatusUpdateEvent).status) {
@@ -420,9 +420,9 @@ The SDK includes features to help make your agent discoverable:
 
 Provide a custom `createJSONRPCServer` function (implementing `JSONRPCServerFactory`) for fine-grained control over the underlying RPC server.
 
-This factory function receives objects of type `CreateJSONRPCServerParams` & `RequestParams` containing the necessary SDK dependencies (`taskHandler`, `taskStore`, `agentCard`, `activeCancellations`, `createTaskContext`, `closeStreamsForTask`) and the specific method paramaters (i.e. `SendTaskRequest["params"]`). You can use these dependencies to configure the standard A2A methods and add your own custom JSON-RPC methods.
+This factory function receives objects of type `CreateJSONRPCServerParams` & `RequestParams` containing the necessary SDK dependencies (`taskHandler`, `taskStore`, `agentCard`, `activeCancellations`, `createTaskContext`, `closeStreamsForTask`) and the specific method parameters (i.e. `SendMessageRequest["params"]`). You can use these dependencies to configure the standard A2A methods and add your own custom JSON-RPC methods.
 
-The SDK exports default handlers for the standard A2A methods (e.g., `defaultSendTaskMethod`), create your own using dedicated A2A method types(`SendTaskMethod`) and use `createJSONRPCMethod` to easily wrap these methods with dependency injection and error handling.
+The SDK exports default handlers for the standard A2A methods (e.g., `defaultSendMessageMethod`), create your own using dedicated A2A method types(`SendMessageMethod`) and use `createJSONRPCMethod` to easily wrap these methods with dependency injection and error handling.
 
 See `src/server/lib/middleware/factory.ts` and `src/server/lib/middleware/a2a-methods.ts` for implementation details.
 
@@ -430,7 +430,7 @@ See `src/server/lib/middleware/factory.ts` and `src/server/lib/middleware/a2a-me
 
 ```typescript
 
-const myCustomSendMethod: SendTaskMethod = (
+const myCustomSendMethod: SendMessageMethod = (
   deps,
   requestParams,
   callback
@@ -445,8 +445,8 @@ const myCustomSendMethod: SendTaskMethod = (
 const myCustomRPCServer: JSONRPCServerFactory = (
   params: CreateJSONRPCServerParams
 ): JSONRPCServerType => {
-  //Use a custom task/send method
-  const taskSendMethod = createJSONRPCMethod(params, myCustomSendMethod, "message/send");
+  //Use a custom message/send method
+  const messageSendMethod = createJSONRPCMethod(params, myCustomSendMethod, "message/send");
   const taskGetMethod = createJSONRPCMethod(params, defaultGetTaskMethod, "tasks/get");
   const taskCancelMethod = createJSONRPCMethod(params, defaultCancelTaskMethod, "tasks/cancel");
 
@@ -455,7 +455,7 @@ const myCustomRPCServer: JSONRPCServerFactory = (
   const taskPushNotificationGetMethod = createJSONRPCMethod(params, defaultGetTaskPushNotificationMethod, "tasks/pushNotificationConfig/get");
 
   const rpcServer = new JSONRPCServer({
-    "message/send": taskSendMethod,
+    "message/send": messageSendMethod,
     "tasks/get": taskGetMethod,
     "tasks/cancel": taskCancelMethod,
     "tasks/pushNotificationConfig/set": taskPushNotificationSetMethod,
