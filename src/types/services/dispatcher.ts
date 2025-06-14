@@ -8,7 +8,7 @@ import { Service } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 
 export interface DispatchOptions {
-  services: Partial<Record<Protocol, Service>>; //string should be by protocol
+  services: Partial<Record<Protocol, Service>>;
   engine: AgentEngine;
 }
 

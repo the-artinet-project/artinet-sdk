@@ -135,24 +135,14 @@ export class A2AServer implements Server {
    * @param options Options for configuring the server
    */
   constructor(params: A2AServerParams) {
-    const card = params.card ?? A2AServer.defaultAgentCard();
-    const storage = params.taskStore ?? new InMemoryTaskStore();
-    const a2aService = new A2AService({
-      taskStore: storage,
-      engine: params.handler,
-      card: card,
-    });
     this.expressServer = new ExpressServer({
-      card: card,
-      taskStore: storage,
+      card: params.card ?? A2AServer.defaultAgentCard(),
+      storage: params.taskStore ?? new InMemoryTaskStore(),
       corsOptions: params.corsOptions,
       basePath: params.basePath,
       port: params.port,
       fallbackPath: params.fallbackPath,
       register: params.register,
-      services: {
-        [Protocol.A2A]: a2aService,
-      },
       engine: params.handler,
     });
 
@@ -243,7 +233,7 @@ export class A2AServer implements Server {
   ): Promise<void> {
     await (
       this.expressServer.getService(Protocol.A2A) as A2AService
-    )?.handleTaskSendSubscribe(req, res);
+    )?.handleSendStreamingMessage(req, res);
   }
 
   /**

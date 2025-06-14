@@ -241,7 +241,7 @@ describe("Server Implementation Tests", () => {
 
       const response = await trackRequest(
         request(app)
-          .post("/api/a2a") // Using custom path
+          .post("/api") // Using custom path
           .send(requestBody)
       );
 
@@ -263,7 +263,7 @@ describe("Server Implementation Tests", () => {
     it("properly applies CORS settings", async () => {
       const response = await trackRequest(
         request(app)
-          .options("/api/a2a")
+          .options("/api")
           .set("Origin", "http://localhost:3000")
           .set("Access-Control-Request-Method", "POST")
       );
@@ -293,7 +293,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -313,7 +313,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -332,7 +332,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -350,7 +350,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -370,7 +370,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -396,7 +396,7 @@ describe("Server Implementation Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/api/a2a").send(createBody));
+      await trackRequest(request(app).post("/api").send(createBody));
 
       // Now retrieve it with history
       const retrieveBody = {
@@ -410,7 +410,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(retrieveBody)
+        request(app).post("/api").send(retrieveBody)
       );
 
       expect(response.status).toBe(200);
@@ -435,7 +435,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -463,7 +463,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -491,7 +491,7 @@ describe("Server Implementation Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/api/a2a").send(requestBody)
+        request(app).post("/api").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();

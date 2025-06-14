@@ -14,6 +14,6 @@ describe("bundle", () => {
     const result = await bundle(filePath);
     expect(result).toBeDefined();
 
-    console.log("result: ", result);
+    // console.log("result: ", result);
   });
 });

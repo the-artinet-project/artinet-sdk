@@ -2,11 +2,18 @@ import express from "express";
 import http from "http";
 import { CorsOptions } from "cors";
 import { ManagerOptions } from "./services/manager.js";
+import { Protocol } from "./services/protocol.js";
+import { Service } from "./services/service.js";
 
 /**
  * @description The express server options.
  */
-export interface ExpressServerOptions extends ManagerOptions {
+export interface ExpressServerOptions extends Omit<ManagerOptions, "services"> {
+  /**
+   * @description The services.
+   * @type {Partial<Record<Protocol, Service>>}
+   */
+  services?: Partial<Record<Protocol, Service>>;
   /**
    * @description The app.
    * @type {express.Express}

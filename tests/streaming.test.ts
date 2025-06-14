@@ -283,7 +283,7 @@ describe("Streaming API Tests", () => {
 
       const req = trackRequest(
         request(app)
-          .post("/a2a")
+          .post("/")
           .set("Accept", "text/event-stream")
           .send(requestBody)
       );
@@ -341,7 +341,7 @@ describe("Streaming API Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -372,7 +372,7 @@ describe("Streaming API Tests", () => {
 
       const req1 = trackRequest(
         request(app)
-          .post("/a2a")
+          .post("/")
           .set("Accept", "text/event-stream")
           .send(createBody)
       );
@@ -395,7 +395,7 @@ describe("Streaming API Tests", () => {
 
       const req2 = trackRequest(
         request(app)
-          .post("/a2a")
+          .post("/")
           .set("Accept", "text/event-stream")
           .send(resubscribeBody)
       );
@@ -440,7 +440,7 @@ describe("Streaming API Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -466,7 +466,7 @@ describe("Streaming API Tests", () => {
 
       const req = trackRequest(
         request(app)
-          .post("/a2a")
+          .post("/")
           .set("Accept", "text/event-stream")
           .send(requestBody)
       );

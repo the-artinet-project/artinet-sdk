@@ -174,7 +174,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -202,7 +202,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(invalidRequest)
+        request(app).post("/").send(invalidRequest)
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -227,7 +227,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestWithoutId)
+        request(app).post("/").send(requestWithoutId)
       );
 
       expect(response.status).toBe(200);
@@ -254,7 +254,7 @@ describe("A2AServer", () => {
       };
 
       const createResponse = await trackRequest(
-        request(app).post("/a2a").send(createRequest)
+        request(app).post("/").send(createRequest)
       );
       logInfo("createResponse", createResponse.body);
 
@@ -269,7 +269,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(getRequest)
+        request(app).post("/").send(getRequest)
       );
 
       expect(response.status).toBe(200);
@@ -289,7 +289,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(getRequest)
+        request(app).post("/").send(getRequest)
       );
 
       expect(response.status).toBe(200);
@@ -315,7 +315,7 @@ describe("A2AServer", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createRequest));
+      await trackRequest(request(app).post("/").send(createRequest));
 
       // Now try to cancel it (note: the task may complete before cancellation in this test)
       const cancelRequest = {
@@ -328,7 +328,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(cancelRequest)
+        request(app).post("/").send(cancelRequest)
       );
 
       // It's possible the task completes before we can cancel it,
@@ -356,7 +356,7 @@ describe("A2AServer", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(unknownMethodRequest)
+        request(app).post("/").send(unknownMethodRequest)
       );
 
       expect(response.status).toBe(200);

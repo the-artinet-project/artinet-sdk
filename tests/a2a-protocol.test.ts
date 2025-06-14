@@ -347,7 +347,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -375,7 +375,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -402,7 +402,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -430,7 +430,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -460,7 +460,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
@@ -509,7 +509,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createBody));
+      await trackRequest(request(app).post("/").send(createBody));
 
       // Now retrieve it
       const retrieveBody = {
@@ -522,7 +522,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(retrieveBody)
+        request(app).post("/").send(retrieveBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
@@ -541,7 +541,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(retrieveBody)
+        request(app).post("/").send(retrieveBody)
       );
 
       expect(response.status).toBe(200);
@@ -565,7 +565,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createBody));
+      await trackRequest(request(app).post("/").send(createBody));
 
       // Now cancel it
       const cancelBody = {
@@ -578,7 +578,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(cancelBody)
+        request(app).post("/").send(cancelBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
@@ -597,7 +597,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(cancelBody)
+        request(app).post("/").send(cancelBody)
       );
 
       expect(response.status).toBe(200);
@@ -621,7 +621,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createBody));
+      await trackRequest(request(app).post("/").send(createBody));
       // Now try to cancel it
       const cancelBody = {
         jsonrpc: "2.0",
@@ -633,7 +633,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(cancelBody)
+        request(app).post("/").send(cancelBody)
       );
 
       expect(response.status).toBe(200);
@@ -659,7 +659,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createBody));
+      await trackRequest(request(app).post("/").send(createBody));
 
       // Now set push notification config
       const requestBody = {
@@ -676,7 +676,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -700,7 +700,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await trackRequest(request(app).post("/a2a").send(createBody));
+      await trackRequest(request(app).post("/").send(createBody));
 
       // Now try to get push notification config
       const getBody = {
@@ -716,9 +716,7 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      const response = await trackRequest(
-        request(app).post("/a2a").send(getBody)
-      );
+      const response = await trackRequest(request(app).post("/").send(getBody));
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -739,7 +737,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
 
       expect(response.status).toBe(200);
@@ -763,7 +761,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -780,7 +778,7 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await trackRequest(
-        request(app).post("/a2a").send(requestBody)
+        request(app).post("/").send(requestBody)
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();

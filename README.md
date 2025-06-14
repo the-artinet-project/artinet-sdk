@@ -5,11 +5,11 @@
 
 <!-- [![Coverage Status](https://coveralls.io/repos/github/the-artinet-project/artinet-sdk/badge.svg?branch=main)](https://coveralls.io/github/the-artinet-project/artinet-sdk?branch=main) -->
 
-# Artinet SDK
+# artinet SDK
 
-Artinet SDK is a [Agent2Agent (A2A) Protocol](https://github.com/google/A2A) compliant server and client written in TypeScript for [node.js](https://nodejs.org/) that aims to simplify the creation of interoperable AI agents. Learn more at [the artinet project](https://artinet.io/).
+The artinet SDK is a Full Stack Agent builder written in TypeScript for [node.js](https://nodejs.org/) that aims to simplify the creation of interoperable AI agents. Learn more at [the artinet project](https://artinet.io/).
 
-This SDK significantly enhances the foundational A2A concepts and samples provided by Google, offering a production-ready solution with a focus on developer experience, reliability, and comprehensive features.
+This SDK significantly supports multiple agentic communication protocols, offering a production-ready solution with a focus on developer experience, reliability, and comprehensive features.
 
 ### Quick Start
 
@@ -22,16 +22,14 @@ npx @artinet/create-quick-agent@latest
 Its got [serveral template projects](https://github.com/the-artinet-project/create-quick-agent) that you can use to get started building agents today.
 
 ## Table of Contents
-- [Artinet SDK](#artinet-sdk)
+- [artinet SDK](#artinet-sdk)
     - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
   - [Requirements](#requirements)
+  - [Documentation](#documentation)
   - [Example](#example)
-  - [Class Documentation](#class-documentation)
-    - [Core Classes](#core-classes)
-    - [Key Types \& Interfaces](#key-types--interfaces)
   - [Running Tests](#running-tests)
   - [Typescript](#typescript)
   - [Usage](#usage)
@@ -52,27 +50,21 @@ Its got [serveral template projects](https://github.com/the-artinet-project/crea
 
 ## Features
 
-- **Plug-and-Play Server:** Built on Express.js, the `A2AServer` handles JSON-RPC complexity, routing, protocol compliance, and Server-Sent Events (SSE) streaming mechanics automatically. Just provide your core agent logic (`TaskHandler`) and configuration via `A2AServerParams`.
-- **Enhanced Client:** `A2AClient` features refined error handling (`RpcError`), flexible header management for authentication, and clear separation of concerns.
+- **Plug-and-Play Server:** Built on Express.js, the `ExpressServer` handles Transport-layer complexity, routing, protocol compliance, and Server-Sent Events (SSE) streaming mechanics automatically. Just provide your core agent logic (`AgentEngine`) and configuration via `ExpressServerOptions`.
 - **TypeScript First:** Fully written in TypeScript with comprehensive type definitions for a robust developer experience.
-- **Flexible Storage:** Offers built-in `InMemoryTaskStore` (development/testing) and `FileStore` (persistent), with the `TaskStore` interface allowing custom storage solutions.
-- **Protocol Compliance:** Implements the complete A2A specification using the official JSON schema, ensuring interoperability.
-- **Robust Streaming:** Reliable SSE support for `message/stream` & `tasks/resubscribe` using `eventsource-parser`.
-- **Configurable Logging:** Integrated structured logging via `pino`. Configurable levels using `configureLogger` and `LogLevel`.
-- **Advanced Customization:** Allows providing a custom `JSONRPCServerFactory` for fine-grained control over the JSON-RPC server, enabling integration with existing Express apps or adding custom methods.
-- **Comprehensive Testing:** Includes a suite of tests to ensure reliability and maintainability.
-- **Code Deployment (Experimental)** | Bundle, test, and deploy agent code onto the artinet. Includes bundler, task wrapper, and deployment utilities.           | `bundle`, `test/fullDeployment`, `ServerDeploymentRequestParams`, `ServerDeploymentResponse`, `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent` |
+- **Protocol Compliance:** Implements the complete A2A specification with growing support for recieving commands via MCP & ACP.
+- **Code Deployment (Experimental)** | Bundle, test, and deploy agent code onto the artinet. Includes bundler, task wrapper, and deployment utilities.
 
 | Component/Feature   | Description                                                                 | Key Classes/Types                                                                            |
 | :------------------ | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
 | **Client**          | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`, `RpcError`                                                                      |
-| **Server**          | Host A2A-compliant agents. Handles protocol details, routing, SSE.          | `A2AServer`, `A2AServerParams`                                                               |
-| **Task Handling**   | Define agent logic using async generators.                                  | `TaskHandler`, `TaskContext`, `TaskYieldUpdate`                                              |
-| **Storage**         | Persist task state. In-memory and file-based options included.              | `TaskStore`, `InMemoryTaskStore`, `FileStore`                                                |
-| **Streaming (SSE)** | Handle real-time updates via SSE for `message/stream`/`resubscribe`.   | `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`                                           |
+| **Server**          | Host agents that can communicate using a variety of protocols. Handles protocol details, routing, SSE.          | `ExpressServer`, `ExpressServerOptions`                                                               |
+| **Reqeust Handling**   | Define agent logic using async generators.                                  | `AgentEngine`, `ExecutionContext`, `UpdateEvent`                                              |
+| **Storage**         | Persist event state. In-memory and file-based options included.              | `Store`, `InMemoryTaskStore`, `FileStore`                                                |
+| **Streaming (SSE)** | Handle real-time updates via SSE.   |                                           |
 | **Logging**         | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                      |
-| **Advanced Server** | Customize the underlying JSON-RPC server or integrate into existing apps.   | `JSONRPCServerFactory`, `CreateJSONRPCServerParams`, `createJSONRPCMethod`, A2A Method Types |
-| **Core Types**      | Based on the official A2A JSON Schema.                                      | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                     |
+| **Advanced Server** | Customize the underlying JSON-RPC server or integrate into existing apps.   | `CreateJSONRPCServerParams`, `createJSONRPCMethod` |
+| **Core Types**      | Based on the official JSON Schemas.                                      | `Tool`,`AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                     |
 | **Agent Utilities (for Sandboxed Environments)** | Standardized utilities for agents in managed environments to interact with the host system for task lifecycle, inter-agent communication, and external API calls. | `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent`, `TaskProxy`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory` |
 
 ## Installation
@@ -85,6 +77,10 @@ npm install @artinet/sdk
 
 - Node.js (v22.0.0 or higher recommended, check `package.json` engines for exact requirement)
 
+## Documentation
+
+For more detailed documentation visit our documentation site [here](https://the-artinet-project.github.io/artinet-documentation/).
+
 ## Example
  
 A basic A2A server and client interaction. For more detailed examples, see the `examples/` directory.
@@ -93,16 +89,16 @@ A basic A2A server and client interaction. For more detailed examples, see the `
 
 ```typescript
 import {
-  A2AServer,
-  TaskContext,
-  TaskHandler,
+  ExpressServer,
+  ExecutionContext,
+  AgentEngine,
   InMemoryTaskStore,
 } from "@artinet/sdk";
 
 // Minimal agent logic: receive text, yield working state, yield completed state with echo
-const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
-  const userInput =
-    context.userMessage.parts[0].type === "text"
+const quickAgentLogic: AgentEngine = async function* (context: ExecutionContext) {
+  const params = context.getRequestParams() as MessageSendParams; //for A2A requests
+  const userInput = params.message.parts[0].kind === "text"
       ? context.userMessage.parts[0].text
       : "";
   yield { state: "working" };
@@ -111,13 +107,13 @@ const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
     state: "completed",
     message: {
       role: "agent",
-      parts: [{ type: "text", text: `You said: ${userInput}` }],
+      parts: [{ kind: "text", text: `You said: ${userInput}` }],
     },
   };
 };
 
 const server = new A2AServer({
-  taskHandler: quickAgentLogic,
+  handler: quickAgentLogic,
   taskStore: new InMemoryTaskStore(),
   port: 4000,
   basePath: "/a2a",
@@ -143,11 +139,13 @@ async function runClient() {
   const client = new A2AClient("http://localhost:4000/a2a");
 
    const message = {
-    role: "user" as const,
-    parts: [{ type: "text" as const, text: "Hello Quick Start!" }],
+    messageId: "test-message-id",
+    kind: "message",
+    role: "user",
+    parts: [{ kind: "text", text: "Hello Quick Start!" }],
   };
 
-  const stream = client.sendTaskSubscribe({ id: "quick-task-1", message });
+  const stream = client.sendStreamingMessage({ message });
 
   for await (const update of stream) {
     // process the update
@@ -158,37 +156,6 @@ async function runClient() {
 
 runClient().catch(console.error);
 ```
-
-## Class Documentation
-
-The Artinet SDK provides several core classes and interfaces for building A2A clients and servers.
-
-### Core Classes
-
-| Class               | Description                                                         |
-| :------------------ | :------------------------------------------------------------------ |
-| `A2AClient`         | Client for interacting with A2A servers.                            |
-| `A2AServer`         | Express-based server implementation for hosting A2A agents.         |
-| `RpcError`          | Represents client-side errors encountered during A2A communication. |
-| `InMemoryTaskStore` | Simple in-memory task persistence (ideal for development/testing).  |
-| `FileStore`         | File-based task persistence (stores task data in the filesystem).   |
-
-### Key Types & Interfaces
-
-| Type/Interface                                            | Description                                                                                                                        |
-| :-------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| `TaskHandler`                                             | Async generator function defining the core agent logic (`async function*(context: TaskContext): AsyncGenerator<TaskYieldUpdate>`). |
-| `TaskContext`                                             | Provides task details (`task`, `userMessage`, `history`, `isCancelled()`) to the `TaskHandler`.                                    |
-| `TaskStore`                                               | Interface defining the contract for task persistence implementations (like `InMemoryTaskStore`, `FileStore`).                      |
-| `TaskYieldUpdate`                                         | Union type for updates yielded by a `TaskHandler` (representing status changes or generated artifacts).                            |
-| `A2AServerParams`                                         | Configuration object passed to the `A2AServer` constructor (port, store, card, basePath, handler, etc.).                           |
-| `AgentCard`                                               | Describes the agent's capabilities, metadata, skills, and endpoint URL.                                                            |
-| `Message`, `Part`, `Artifact`, `Task`, `TaskStatus`, etc. | Core types mirroring the structures defined in the A2A JSON Schema specification. Used for requests, responses, and task state.    |
-| `TaskStatusUpdateEvent`, `TaskArtifactUpdateEvent`        | Specific types for Server-Sent Events (SSE) received during streaming operations (`message/stream`, `tasks/resubscribe`).     |
-| `LogLevel`                                                | Enum defining logging levels (`error`, `warn`, `info`, `debug`, `trace`) used with the built-in logger.                            |
-| `JSONRPCServerFactory`                                    | Function signature for providing a custom JSON-RPC server creation logic to `A2AServer` for advanced customization.                |
-| `CreateJSONRPCServerParams`                               | Object containing dependencies provided _to_ a `JSONRPCServerFactory` function.                                                    |
-| `SendTaskMethod`, `GetTaskMethod`, ...                    | Type signatures for specific A2A method handlers, used when implementing custom server logic with `createJSONRPCMethod`.           |
 
 ## Running Tests
 
@@ -222,11 +189,13 @@ import { A2AClient, Message } from "@artinet/sdk";
 async function runBasicTask() {
   const client = new A2AClient("https://your-a2a-server.com/a2a");
   const message: Message = {
+    messageId: "test-message",
+    kind: "message",
     role: "user",
-    parts: [{ type: "text", text: "What is the capital of France?" }],
+    parts: [{ kind: "text", text: "What is the capital of France?" }],
   };
 
-  const task = await client.sendMessage({ id: "basic-task-1", message });
+  const task = await client.sendMessage({ message });
   console.log("Task Completed:", task);
 }
 ```
@@ -293,13 +262,13 @@ Define agent behavior with an async generator `TaskHandler`.
 ```typescript
 import {
   A2AServer,
-  TaskContext,
-  TaskHandler,
+  ExecutionContext,
+  AgentEngine,
   InMemoryTaskStore,
 } from "@artinet/sdk";
 
 
-const myAgent: TaskHandler = async function* (context: TaskContext) {
+const myAgent: AgentEngine = async function* (context: ExecutionContext) {
 
   yield {
     state: "working",
@@ -484,7 +453,7 @@ We are excited to introduce new capabilities for deploying agents directly onto 
 
 We've added a `testDeployment` utility which is available for all users letting you bundle and test your agent logic in a temporary sandboxed environment. 
 
-**QUICK-AGENTS ARE HERE!** Use the new `fullDeployment` utility, which allows direct deployment of your bundled agent code and `AgentCard` to the Artinet platform (requires an `ARTINET_API_KEY`).
+**QUICK-AGENTS** Use the `fullDeployment` utility, which allows direct deployment of your bundled agent code and `AgentCard` to the Artinet platform (requires an `ARTINET_API_KEY`).
 
 To join the beta waitlist, please email us at humans@artinet.io and stay tuned for more updates!
 
@@ -498,7 +467,7 @@ Key features include:
     ```
 
 -   **Sandboxed Enviroments:** Streamline agent logic for quick and easy deployments. The new `artinet.v0` namespace (accessible via `@artinet/sdk/agents`) provides `taskManager`, `connect`, and `agent`.
-    -   `artinet.v0.taskManager`: Replaces the deprecated `taskHandlerProxy`. Manages the agent's task lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
+    -   `artinet.v0.taskManager`: Manages the agent's lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
     -   `artinet.v0.connect`: Replaces the deprecated `fetchResponseProxy`. Allows agents to make proxied calls to other agents or LLMs via the host environment.
     -   `artinet.v0.agent`: A factory function to obtain a `ClientProxy` for type-safe communication with other agents, managed by the host environment.
 
@@ -571,7 +540,7 @@ Key features include:
 -   Quick-Agents v0 does not support streaming, push notifications or state transition history (these capabilities are on the project roadmap).
 -   Larger deployments can take significant time to deploy which may cause `fullDeployment` to timeout. In such cases wait to see if the listing has been added to your account before trying to deploy again.
 -   Quick-Agent logic is public, therefore the artinet project is not liable for any sensitive material held within a deployment.
--   v0.0.5c of the artinet platform will enable search by registrationId/agentId.
+-   Only availble with version 0.5.3 of the SDK.
   
 Sign-up at [artinet.io](https://artinet.io/) to deploy your Quick-Agent today!
 
@@ -587,7 +556,7 @@ This project is licensed under the Apache License 2.0 - see the `LICENSE` file f
 
 ## Acknowledgements
 
-This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google/A2A) initiated by Google. It utilizes the official [A2A JSON Schema](https://github.com/google/A2A/tree/main/specification/json) for protocol compliance.
+This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A) initiated by Google. It utilizes the official [A2A JSON Schema](https://github.com/google-a2a/A2A/blob/main/specification/json/a2a.json) for protocol compliance.
 
 Libraries used include:
 

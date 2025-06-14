@@ -11,7 +11,7 @@ export interface ManagerOptions extends DispatchOptions {
    * @description The task store.
    * @type {TaskStore}
    */
-  taskStore: TaskStore;
+  storage: TaskStore;
   /**
    * @description The agent card.
    * @note will be removed in the future

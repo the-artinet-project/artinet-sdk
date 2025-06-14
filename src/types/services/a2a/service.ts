@@ -23,7 +23,7 @@ export interface A2AServiceInterface extends Service<A2AExecutionContext> {
    * @param req The SendStreamingMessageRequest object
    * @param res The Express Response object
    */
-  handleTaskSendSubscribe(
+  handleSendStreamingMessage(
     req: SendStreamingMessageRequest,
     res: Response
   ): Promise<void>;

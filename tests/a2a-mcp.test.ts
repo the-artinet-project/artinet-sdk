@@ -26,10 +26,8 @@ import { z } from "zod";
 import { ExpressServer } from "../src/server/lib/express-server.js";
 import expressListRoutes from "express-list-routes";
 import request from "supertest";
-// todo: change based on agent engine emissions
 
-// jest.setTimeout(10000);
-configureLogger({ level: "trace" });
+configureLogger({ level: "silent" });
 
 /**
  * Simple echo task handler for testing
@@ -488,7 +486,7 @@ describe("Client-Server Integration Tests", () => {
 
     beforeEach(async () => {
       broker = new ExpressServer({
-        taskStore: new InMemoryTaskStore(),
+        storage: new InMemoryTaskStore(),
         card: a2aService.state.getCard(),
         engine: echoAgent,
         services: {
@@ -548,7 +546,6 @@ describe("Client-Server Integration Tests", () => {
             },
           })
       );
-      await request(server).get("/");
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.kind).toBe("task");

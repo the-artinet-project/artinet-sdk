@@ -67,7 +67,7 @@ export class A2AService implements A2AServiceInterface {
    * @param req The SendTaskRequest object
    * @param res The Express Response object
    */
-  public async handleTaskSendSubscribe(
+  public async handleSendStreamingMessage(
     req: SendStreamingMessageRequest,
     res: Response
   ): Promise<void> {
@@ -323,7 +323,7 @@ export class A2AService implements A2AServiceInterface {
           //todo make the following functions leverage callback
           const params = executionContext.requestContext.request
             .body as SendStreamingMessageRequest;
-          return await this.handleTaskSendSubscribe(
+          return await this.handleSendStreamingMessage(
             params,
             executionContext.requestContext.response
           ).catch((error) => {

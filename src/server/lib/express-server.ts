@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { CreateExpressServerParams } from "../interfaces/params.js";
 import { ServiceManager } from "../../services/manager.js";
+import { errorHandler } from "../../utils/common/errors.js";
 import {
   ExpressServerInterface,
   ExpressServerOptions,
@@ -13,7 +14,8 @@ import http from "http";
 import util from "util";
 import { CorsOptions } from "cors";
 import { logError, logInfo } from "../../utils/logging/log.js";
-import { INVALID_REQUEST, PARSE_ERROR } from "../../utils/common/errors.js";
+import { INVALID_REQUEST } from "../../utils/common/errors.js";
+import { A2AService } from "../../services/a2a/service.js";
 
 /**
  * @deprecated Use ExpressServer instead.
@@ -106,7 +108,19 @@ export class ExpressServer
    * @param {ExpressServerOptions} params The express server options.
    */
   constructor(params: ExpressServerOptions) {
-    super(params);
+    const atBasePath =
+      Object.keys(params.services ?? {}).length > 1 ? false : true;
+    super({
+      ...params,
+      services: params.services ?? {
+        [Protocol.A2A]: new A2AService({
+          engine: params.engine,
+          taskStore: params.storage,
+          card: params.card,
+        }),
+      },
+    });
+
     this.corsOptions = params.corsOptions ?? {
       origin: "*",
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -131,6 +145,7 @@ export class ExpressServer
     this.app.use(express.json());
 
     this.register = params.register ?? false;
+    this.registerRoutes(atBasePath);
   }
 
   /**
@@ -138,8 +153,8 @@ export class ExpressServer
    * @param {StreamableHTTPServerTransport} transport The mcp transport.
    */
   registerRoutes(
-    transport?: StreamableHTTPServerTransport,
-    atBasePath?: boolean
+    atBasePath: boolean = true,
+    transport?: StreamableHTTPServerTransport
   ): void {
     this.app.get(`/.well-known/agent.json`, (_, res) => {
       res.json(this.getCard());
@@ -189,7 +204,7 @@ export class ExpressServer
               res.status(500).json({ id, error: error.message });
             });
           } catch (error) {
-            console.error("Error in GET", error);
+            logError("ExpressServer", "Error in GET", error);
             next(error);
           }
         }
@@ -243,11 +258,8 @@ export class ExpressServer
           }
         }
       );
-
-      this.app.delete(path, async (_, res: express.Response) => {
-        res.status(500).json({ error: "Not implemented" });
-      });
     }
+    this.app.use(errorHandler);
     this.initialized = true;
   }
 
