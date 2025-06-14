@@ -85,6 +85,7 @@ export function createRenameConfig<T extends object>() {
 /**
  * Common transformation patterns using built-in utility types
  */
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace TransformPatterns {
   /**
    * Convert snake_case keys to camelCase

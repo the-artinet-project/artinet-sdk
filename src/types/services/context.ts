@@ -191,22 +191,22 @@ export const executionContextConfig = {
 } as const;
 
 //todo move to utils
-export function getParams(context: ExecutionContext) {
-  console.log("getParams", context);
-  switch (context.protocol) {
-    case Protocol.A2A:
-      const a2aRequestParams = context.getRequestParams();
-      if (!a2aRequestParams) {
-        throw new Error("No request params provided");
-      }
-      return a2aRequestParams;
-    case Protocol.MCP:
-      const mcpRequestParams = context.getRequestParams();
-      if (!mcpRequestParams) {
-        throw new Error("No request params provided");
-      }
-      return mcpRequestParams;
-    default:
-      throw new Error("Invalid protocol");
-  }
-}
+// export function getParams(context: ExecutionContext) {
+//   console.log("getParams", context);
+//   switch (context.protocol) {
+//     case Protocol.A2A:
+//       const a2aRequestParams = context.getRequestParams();
+//       if (!a2aRequestParams) {
+//         throw new Error("No request params provided");
+//       }
+//       return a2aRequestParams;
+//     case Protocol.MCP:
+//       const mcpRequestParams = context.getRequestParams();
+//       if (!mcpRequestParams) {
+//         throw new Error("No request params provided");
+//       }
+//       return mcpRequestParams;
+//     default:
+//       throw new Error("Invalid protocol");
+//   }
+// }
