@@ -18,6 +18,7 @@ import {
   AgentEngine,
   MessageSendParams,
   logInfo,
+  SendMessageRequest,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -203,11 +204,12 @@ describe("A2AServer", () => {
       const response = await trackRequest(
         request(app).post("/").send(invalidRequest)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32600); // Invalid request error
-      expect(response.body.error.message).toBe("Invalid request"); //todo expected "Request payload validation error" but may be caused by the jsonrpc middleware
+      expect(response.body.error.message).toBe(
+        "Request payload validation error"
+      ); //todo expected "Request payload validation error" but may be caused by the jsonrpc middleware
     });
 
     it("returns an error for missing task ID", async () => {

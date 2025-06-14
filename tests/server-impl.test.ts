@@ -20,6 +20,7 @@ import {
   TaskState,
   Message,
   MessageSendParams,
+  SendMessageRequest,
 } from "../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -474,12 +475,14 @@ describe("Server Implementation Tests", () => {
 
   describe("Task Timestamps", () => {
     it("includes timestamps in task status", async () => {
-      const requestBody = {
+      const requestBody: SendMessageRequest = {
         jsonrpc: "2.0",
         id: "timestamp-request-1",
         method: "message/send",
         params: {
           message: {
+            messageId: "timestamp-message-id-1",
+            kind: "message",
             taskId: "timestamp-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Task for timestamp test" }],
@@ -490,7 +493,6 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.status.timestamp).toBeDefined();

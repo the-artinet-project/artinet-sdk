@@ -86,6 +86,10 @@ export class MCPService<
     await validTransport.handleRequest(request, response, request.body);
   }
 
+  async stop(): Promise<void> {
+    await super.close();
+  }
+
   static mcpFactory<Args extends MCPExecutionContext = MCPExecutionContext>(
     engine: AgentEngine
   ): (args: Args["params"]) => Promise<string> {

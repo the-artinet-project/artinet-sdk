@@ -8,7 +8,7 @@ import { Service } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 
 export interface DispatchOptions {
-  services: Partial<Record<Protocol, Service>>; //string should be by protocol
+  services: Partial<Record<Protocol, Service>>;
   engine: AgentEngine;
 }
 
@@ -18,8 +18,8 @@ export interface Dispatcher {
 }
 
 export class ServiceDispatcher implements Dispatcher {
-  protected services: Partial<Record<Protocol, Service>>;
-  protected engine: AgentEngine;
+  readonly services: Partial<Record<Protocol, Service>>;
+  readonly engine: AgentEngine;
 
   constructor(options: DispatchOptions) {
     this.engine = options.engine;

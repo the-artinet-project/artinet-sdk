@@ -20,6 +20,7 @@ import {
   UpdateEvent,
   configureLogger,
   MessageSendParams,
+  SendMessageRequest,
 } from "../src/index.js";
 
 configureLogger({ level: "silent" });
@@ -29,7 +30,7 @@ jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
 async function* a2aProtocolTestHandler(
-  context: ExecutionContext<A2AExecutionContext>
+  context: ExecutionContext
 ): AsyncGenerator<UpdateEvent, void, unknown> {
   const params = context.getRequestParams() as MessageSendParams;
   const taskId = params.message.taskId ?? context.id;
@@ -330,13 +331,14 @@ describe("A2A Protocol Specification Tests", () => {
 
   describe("Task States", () => {
     it("handles task/send with task/completed state", async () => {
-      const requestBody = {
+      const requestBody: SendMessageRequest = {
         jsonrpc: "2.0",
         id: "test-request-1",
         method: "message/send",
         params: {
-          id: "test-task-1",
           message: {
+            messageId: "test-message-id",
+            kind: "message",
             taskId: "test-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Basic test" }],
@@ -761,7 +763,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32601); // Method not found error
@@ -779,7 +780,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602); // Invalid params error

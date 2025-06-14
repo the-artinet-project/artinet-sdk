@@ -13,7 +13,9 @@ import {
   ExecutionContext,
   InMemoryTaskStore,
   MessageSendParams,
+  SendStreamingMessageRequest,
   TaskContext,
+  TaskResubscriptionRequest,
   TaskState,
   UpdateEvent,
   configureLogger,
@@ -353,12 +355,14 @@ describe("Streaming API Tests", () => {
   describe("tasks/resubscribe", () => {
     it("allows resubscribing to an existing task stream", async () => {
       // First create a streaming task
-      const createBody = {
+      const createBody: SendStreamingMessageRequest = {
         jsonrpc: "2.0",
         id: "resubscribe-request-1",
         method: "message/stream",
         params: {
           message: {
+            messageId: "resubscribe-message-id-1",
+            kind: "message",
             taskId: "resubscribe-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Test for resubscribe" }],
@@ -380,7 +384,7 @@ describe("Streaming API Tests", () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       // Now resubscribe to the same task
-      const resubscribeBody = {
+      const resubscribeBody: TaskResubscriptionRequest = {
         jsonrpc: "2.0",
         id: "resubscribe-stream-2",
         method: "tasks/resubscribe",
@@ -438,7 +442,6 @@ describe("Streaming API Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32001);

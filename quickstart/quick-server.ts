@@ -1,18 +1,19 @@
 import {
   A2AServer,
-  TaskContext,
-  TaskHandler,
   InMemoryTaskStore,
   logger,
   configureLogger,
+  AgentEngine,
+  ExecutionContext,
+  MessageSendParams,
 } from "@artinet/sdk";
+
 configureLogger({ level: "info" });
 // Define the simplest possible agent logic
-const quickAgentLogic: TaskHandler = async function* (context: TaskContext) {
-  const userInput =
-    context.userMessage.parts[0].kind === "text"
-      ? context.userMessage.parts[0].text
-      : "";
+const quickAgentLogic: AgentEngine = async function* (
+  context: ExecutionContext
+) {
+  const userInput = (context.getRequestParams() as MessageSendParams).message;
   logger.info(`Quick server received: ${userInput}`);
 
   yield {

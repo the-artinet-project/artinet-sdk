@@ -1,7 +1,8 @@
+import { describe, it, expect } from "@jest/globals";
 import { bundle } from "../src/index.js";
 import { configureLogger } from "../src/index.js";
 
-configureLogger({ level: "debug" });
+configureLogger({ level: "silent" });
 
 describe("bundle", () => {
   it("should be defined", () => {
@@ -13,6 +14,6 @@ describe("bundle", () => {
     const result = await bundle(filePath);
     expect(result).toBeDefined();
 
-    console.log("result: ", result);
+    // console.log("result: ", result);
   });
 });

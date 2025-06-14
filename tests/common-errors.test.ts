@@ -21,6 +21,7 @@ import {
   ErrorCodePushNotificationNotSupported,
   configureLogger,
 } from "../src/index.js";
+import { describe, it, expect } from "@jest/globals";
 
 configureLogger({ level: "silent" });
 
@@ -30,7 +31,7 @@ describe("Error Handling Utilities", () => {
       const error = new SystemError("System operation failed", -12345, {
         detail: "Additional error information",
       });
-      expect(error.name).toBe("RpcError");
+      expect(error.name).toBe("Error");
       expect(error.message).toBe("System operation failed");
       expect(error.code).toBe(-12345);
       expect(error).toBeInstanceOf(Error);

@@ -37,12 +37,10 @@ export function setupSseStream(
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-
   // Track this stream for potential cancellation if tracking method provided
   if (addStreamMethod) {
     addStreamMethod(taskId, res);
   }
-
   // Send initial status if provided
   if (initialStatus) {
     sendSSEEvent(res, taskId, initialStatus);

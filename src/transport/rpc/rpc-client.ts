@@ -240,7 +240,6 @@ export async function executeJsonRpcRequest<
     headers,
     acceptHeader
   );
-
   return handleJsonRpcResponse<Res>(response, method);
 }
 
