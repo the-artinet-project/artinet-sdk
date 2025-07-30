@@ -1,7 +1,7 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.4",
-  "description": "TypeScript SDK for the Agent2Agent (A2A) Protocol",
+  "version": "0.5.5",
+  "description": "TypeScript SDK for Agentic Communication",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -13,7 +13,7 @@
       "default": "./dist/index.js"
     },
     "./agents": {
-      "types": "./dist/utils/deployment/agents.d.ts",
+      "types": "./dist/types/utils/deployment/agents.d.ts",
       "import": "./dist/utils/deployment/agents.js",
       "default": "./dist/utils/deployment/agents.js"
     }
