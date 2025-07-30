@@ -19,7 +19,7 @@ To build your own agent/server use the [`create-quick-agent`](https://www.npmjs.
 npx @artinet/create-quick-agent@latest
 ```
 
-Its got [serveral template projects](https://github.com/the-artinet-project/create-quick-agent) that you can use to get started building agents today.
+It has [serveral template projects](https://github.com/the-artinet-project/create-quick-agent) that you can use to get started building agents today.
 
 ## Table of Contents
 - [artinet SDK](#artinet-sdk)
