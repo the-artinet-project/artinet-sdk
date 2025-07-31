@@ -25,11 +25,9 @@ import {
   ErrorCodeInvalidAgentResponse,
   TaskState,
   TaskStatusUpdateEvent,
-} from "../../types/schemas/a2a/index.js";
+} from "../../types/schemas/index.js";
 
-export class SystemError<
-  T extends JSONRPCError<number, unknown>,
-> extends Error {
+export class SystemError<T extends JSONRPCError> extends Error {
   message: string;
   code: T["code"];
   data: T["data"];
@@ -124,7 +122,7 @@ export const FAILED_UPDATE = (
   kind: "status-update",
   final: true,
   status: {
-    state: TaskState.Failed,
+    state: TaskState.failed,
     message: {
       messageId,
       role: "agent",
@@ -166,7 +164,7 @@ export function errorHandler(
     logError("A2AServer", "Error extracting request ID", e);
   }
 
-  let jsonRpcError: JSONRPCError<number, unknown>;
+  let jsonRpcError: JSONRPCError;
   if (err instanceof SystemError) {
     jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {

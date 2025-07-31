@@ -1,4 +1,5 @@
 import { SecurityScheme } from "./auth/auth.js";
+import { TransportProtocol, AgentInterface } from "./transport.js";
 /**
  * @description Represents the provider or organization behind an agent.
  */
@@ -115,14 +116,39 @@ export interface AgentSkill {
 }
 
 /**
+ * @description AgentCardSignature represents a JWS signature of an AgentCard.
+ * This follows the JSON format of an RFC 7515 JSON Web Signature (JWS).
+ */
+export interface AgentCardSignature {
+  /**
+   * @required The protected JWS header for the signature. This is a Base64url-encoded
+   * JSON object, as per RFC 7515.
+   */
+  protected: string;
+
+  /**
+   * @required The computed signature, Base64url-encoded.
+   */
+  signature: string;
+
+  /**
+   * @optional The unprotected JWS header values.
+   */
+  header?: { [key: string]: any };
+}
+
+/**
  * @description An AgentCard conveys key information:
  * - Overall details (version, name, description, uses)
  * - Skills: A set of capabilities the agent can perform
  * - Default modalities/content types supported by the agent.
  * - Authentication requirements
+ * @required protocolVersion
  * @required name
  * @required description
  * @required url
+ * @optional preferredTransport
+ * @optional additionalInterfaces
  * @optional iconUrl
  * @required version
  * @required capabilities
@@ -134,8 +160,15 @@ export interface AgentSkill {
  * @optional securitySchemes
  * @optional security
  * @optional supportsAuthenticatedExtendedCard
+ * @optional signatures
  */
 export interface AgentCard {
+  /**
+   * @required The version of the A2A protocol this agent supports.
+   * @default "0.3.0"
+   */
+  protocolVersion: string;
+
   /**
    * @required Human readable name of the agent.
    * @example "Recipe Agent"
@@ -150,11 +183,24 @@ export interface AgentCard {
   description: string;
 
   /**
-   * @required The base URL endpoint for interacting with the agent.
-   * @description The URL where the agent is hosted.
-   * @example "https://recipe-agent.com"
+   * @required The preferred endpoint URL for interacting with the agent.
+   * This URL MUST support the transport specified by 'preferredTransport'.
+   * @example "https://api.example.com/a2a/v1"
    */
   url: string;
+
+  /**
+   * @optional The transport protocol for the preferred endpoint (the main 'url' field).
+   * If not specified, defaults to 'JSONRPC'.
+   * @default "JSONRPC"
+   */
+  preferredTransport?: TransportProtocol | string;
+
+  /**
+   * @optional A list of additional supported interfaces (transport and URL combinations).
+   * This allows agents to expose multiple transports, potentially at different URLs.
+   */
+  additionalInterfaces?: AgentInterface[];
 
   /**
    * @optional The URL of the agent's icon.
@@ -227,6 +273,11 @@ export interface AgentCard {
    * @optional true if the agent supports providing an extended agent card when the user is authenticated.
    */
   supportsAuthenticatedExtendedCard?: boolean;
+
+  /**
+   * @optional JSON Web Signatures computed for this AgentCard.
+   */
+  signatures?: AgentCardSignature[];
 }
 
 export * from "./task.js";
@@ -235,6 +286,7 @@ export * from "./parameters.js";
 export * from "./notification.js";
 export * from "./auth/index.js";
 export * from "./rpc.js";
+export * from "./transport.js";
 
 import {
   SendMessageRequest,

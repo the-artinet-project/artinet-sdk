@@ -23,7 +23,7 @@ import {
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
+configureLogger({ level: "info" });
 
 /**
  * Simple echo task handler for testing
@@ -46,7 +46,7 @@ async function* echoHandler(
     contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -64,7 +64,7 @@ async function* echoHandler(
       contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Canceled,
+        state: TaskState.canceled,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -98,7 +98,7 @@ async function* echoHandler(
     contextId,
     kind: "task",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -186,7 +186,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can stream task updates", async () => {
     const testMessage = "Test streaming";
-    const stream = client.sendTaskSubscribe({
+    const stream = client.sendStreamingMessage({
       message: {
         taskId: "stream-task-test",
         messageId: "test-message-id",
@@ -236,7 +236,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can cancel a task", async () => {
     // First send a task to create it
-    const task = client.sendTask({
+    const task = client.sendMessage({
       message: {
         taskId: "cancel-task-test",
         messageId: "test-message-id",
@@ -255,7 +255,7 @@ describe("Client-Server Integration Tests", () => {
   });
 
   test("client can get task by ID", async () => {
-    await client.sendTask({
+    await client.sendMessage({
       message: {
         taskId: "get-task-test",
         messageId: "test-message-id",

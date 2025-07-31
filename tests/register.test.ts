@@ -1,4 +1,11 @@
-import { jest, describe, test, expect } from "@jest/globals";
+import {
+  jest,
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+} from "@jest/globals";
 import { register, convert, AgentCard, configureLogger } from "../src/index.js";
 import { MetadataValidator } from "@artinet/metadata-validator";
 
@@ -28,6 +35,7 @@ describe("register Function", () => {
 
     // Define a basic AgentCard for testing
     sampleAgentCard = {
+      protocolVersion: "0.3.0",
       name: "Test Agent",
       description: "A test agent card",
       url: "https://agents.artinet.io/agent",

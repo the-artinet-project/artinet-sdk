@@ -44,7 +44,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -64,7 +64,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -85,7 +85,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -106,7 +106,7 @@ async function* streamingTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Submitted,
+      state: TaskState.submitted,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -124,7 +124,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -145,7 +145,7 @@ async function* streamingTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -171,6 +171,7 @@ describe("Streaming API Tests", () => {
         name: "Streaming Test Agent",
         url: "http://localhost:41241",
         version: "1.0.0",
+        protocolVersion: "0.3.0",
         capabilities: {
           streaming: true,
           pushNotifications: false,

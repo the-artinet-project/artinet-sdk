@@ -51,7 +51,7 @@ async function* serverImplTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Submitted,
+        state: TaskState.submitted,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -67,7 +67,7 @@ async function* serverImplTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -85,7 +85,7 @@ async function* serverImplTestHandler(
         contextId: contextId,
         kind: "status-update",
         status: {
-          state: TaskState.Working,
+          state: TaskState.working,
           message: {
             messageId: "test-message-id",
             kind: "message",
@@ -105,7 +105,7 @@ async function* serverImplTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -124,7 +124,7 @@ async function* serverImplTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -140,7 +140,7 @@ async function* serverImplTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -160,6 +160,7 @@ describe("Server Implementation Tests", () => {
   beforeEach(() => {
     // Create a server with a custom agent card to test that code path
     const customCard: AgentCard = {
+      protocolVersion: "0.3.0",
       name: "Server Impl Test Agent",
       url: "http://localhost:41241",
       version: "1.0.0",

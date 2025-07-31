@@ -68,6 +68,12 @@ export interface OAuth2SecurityScheme extends SecuritySchemeBase {
    * @required An object containing configuration information for the flow types supported.
    */
   flows: OAuthFlows;
+
+  /**
+   * @optional URL to the oauth2 authorization server metadata
+   * [RFC8414](https://datatracker.ietf.org/doc/html/rfc8414). TLS is required.
+   */
+  oauth2MetadataUrl?: string;
 }
 
 /**
@@ -87,8 +93,20 @@ export interface OpenIdConnectSecurityScheme extends SecuritySchemeBase {
   openIdConnectUrl: string;
 }
 
+/**
+ * @description Mutual TLS (mTLS) security scheme.
+ * @required type
+ */
+export interface MutualTLSSecurityScheme extends SecuritySchemeBase {
+  /**
+   * @required Type of the security scheme.
+   */
+  type: "mutualTLS";
+}
+
 export type SecurityScheme =
   | APIKeySecurityScheme
   | HTTPAuthSecurityScheme
   | OAuth2SecurityScheme
-  | OpenIdConnectSecurityScheme;
+  | OpenIdConnectSecurityScheme
+  | MutualTLSSecurityScheme;

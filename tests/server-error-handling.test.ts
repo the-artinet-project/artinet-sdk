@@ -48,7 +48,7 @@ async function* errorProneTaskHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Failed,
+        state: TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -67,7 +67,7 @@ async function* errorProneTaskHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -83,7 +83,7 @@ async function* errorProneTaskHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",

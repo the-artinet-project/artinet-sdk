@@ -38,7 +38,7 @@ const basicTaskHandler: AgentEngine = async function* (
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -58,7 +58,7 @@ const basicTaskHandler: AgentEngine = async function* (
       taskId: taskId,
       contextId: contextId,
       kind: "status-update",
-      status: { state: TaskState.Canceled },
+      status: { state: TaskState.canceled },
       final: true,
     };
     return;
@@ -86,7 +86,7 @@ const basicTaskHandler: AgentEngine = async function* (
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",

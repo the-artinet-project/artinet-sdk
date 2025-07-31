@@ -47,7 +47,7 @@ const echoAgent: AgentEngine = async function* (context: ExecutionContext) {
     contextId: context.id,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -65,7 +65,7 @@ const echoAgent: AgentEngine = async function* (context: ExecutionContext) {
       contextId: context.id,
       kind: "status-update",
       status: {
-        state: TaskState.Canceled,
+        state: TaskState.canceled,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -99,7 +99,7 @@ const echoAgent: AgentEngine = async function* (context: ExecutionContext) {
     contextId: context.id,
     kind: "task",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -224,6 +224,7 @@ describe("Client-Server Integration Tests", () => {
       taskStore: new InMemoryTaskStore(),
       engine: echoAgent,
       card: {
+        protocolVersion: "0.3.0   ",
         name: "test-agent",
         description: "test-description",
         url: "test-url",
@@ -352,7 +353,7 @@ describe("Client-Server Integration Tests", () => {
           id: "test-message-id",
           contextId: "test-message-id",
           status: {
-            state: TaskState.Working,
+            state: TaskState.working,
             message: {
               messageId: "test-message-id",
               kind: "message",
@@ -549,7 +550,7 @@ describe("Client-Server Integration Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.kind).toBe("task");
-      expect(response.body.result.status.state).toBe(TaskState.Completed);
+      expect(response.body.result.status.state).toBe(TaskState.completed);
       expect(response.body.result.status.message).toBeDefined();
       expect(response.body.result.status.message.kind).toBe("message");
       expect(response.body.result.status.message.role).toBe("agent");

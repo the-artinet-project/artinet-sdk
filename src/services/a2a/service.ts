@@ -96,7 +96,7 @@ export class A2AService implements A2AServiceInterface {
         contextId: contextId,
         kind: "status-update",
         status: {
-          state: TaskState.Submitted,
+          state: TaskState.submitted,
           timestamp: getCurrentTimestamp(),
         },
         final: false,

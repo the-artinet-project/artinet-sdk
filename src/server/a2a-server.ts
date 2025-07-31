@@ -277,6 +277,7 @@ export class A2AServer implements Server {
    */
   public static defaultAgentCard(): AgentCard {
     return {
+      protocolVersion: "0.3.0",
       name: "A2A Server",
       description: "A general-purpose A2A protocol server",
       version: "0.1.0",

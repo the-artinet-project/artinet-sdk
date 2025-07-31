@@ -125,6 +125,13 @@ export type InvalidAgentResponseError<Data = unknown> = JSONRPCError<
   Data
 >;
 
+export const ErrorCodeAuthenticatedExtendedCardNotConfigured = -32007;
+export type ErrorCodeAuthenticatedExtendedCardNotConfigured =
+  typeof ErrorCodeAuthenticatedExtendedCardNotConfigured;
+
+export type AuthenticatedExtendedCardNotConfiguredError<Data = unknown> =
+  JSONRPCError<ErrorCodeAuthenticatedExtendedCardNotConfigured, Data>;
+
 /**
  * Union of all well-known A2A and standard JSON-RPC error codes defined in this schema.
  * Use this type for checking against specific error codes. A server might theoretically
@@ -141,7 +148,8 @@ export type KnownErrorCode =
   | typeof ErrorCodePushNotificationNotSupported
   | typeof ErrorCodeUnsupportedOperation
   | typeof ErrorCodeContentTypeNotSupported
-  | typeof ErrorCodeInvalidAgentResponse;
+  | typeof ErrorCodeInvalidAgentResponse
+  | typeof ErrorCodeAuthenticatedExtendedCardNotConfigured;
 
 export type A2AError<Data = unknown> =
   | JSONParseError<Data>
@@ -154,4 +162,5 @@ export type A2AError<Data = unknown> =
   | PushNotificationNotSupportedError<Data>
   | UnsupportedOperationError<Data>
   | ContentTypeNotSupportedError<Data>
-  | InvalidAgentResponseError<Data>;
+  | InvalidAgentResponseError<Data>
+  | AuthenticatedExtendedCardNotConfiguredError<Data>;

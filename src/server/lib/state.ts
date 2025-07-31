@@ -109,7 +109,7 @@ export async function loadState(
     contextId: contextId ?? uuidv4(),
     kind: "task",
     status: {
-      state: TaskState.Submitted,
+      state: TaskState.submitted,
       timestamp,
     },
     metadata: metadata,

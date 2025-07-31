@@ -29,6 +29,7 @@ import { setupServer } from "msw/node";
 configureLogger({ level: "silent" });
 
 const MOCK_AGENT_CARD: AgentCard = {
+  protocolVersion: "0.3.0",
   name: "Test Agent",
   description: "A test agent for unit tests",
   url: "https://test-agent.example.com/api",

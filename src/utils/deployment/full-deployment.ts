@@ -1,8 +1,8 @@
 import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
-  A2AExecutionContext,
   ServerDeploymentRequest,
+  A2ARequest,
 } from "../../types/index.js";
 import { executeJsonRpcRequest } from "../../transport/index.js";
 
@@ -19,7 +19,7 @@ const API_KEY = process.env.ARTINET_API_KEY;
 /**
  * @description The type of the full deployment request.
  */
-type FullDeploymentRequest = A2AExecutionContext | ServerDeploymentRequest;
+type FullDeploymentRequest = A2ARequest | ServerDeploymentRequest;
 
 /**
  * Sends a full deployment request to the server.
@@ -38,7 +38,7 @@ const executeFullDeploymentRequest = executeJsonRpcRequest as <
   params: Req["params"],
   headers: Record<string, string>,
   acceptHeader: "application/json"
-) => Promise<ServerDeploymentResponse>;
+) => Promise<NonNullable<ServerDeploymentResponse["result"]>>;
 
 /**
  * Sends a full deployment request to the server.
@@ -46,7 +46,7 @@ const executeFullDeploymentRequest = executeJsonRpcRequest as <
  * @returns The response from the server.
  */
 export async function fullDeployment(params: ServerDeploymentRequestParams) {
-  if (!API_KEY) {
+  if (!API_KEY && !process.env.ARTINET_API_KEY) {
     throw new Error("ARTINET_API_KEY is not set");
   }
 
@@ -54,7 +54,7 @@ export async function fullDeployment(params: ServerDeploymentRequestParams) {
     FULL_DEPLOYMENT_URL,
     "/deploy",
     params,
-    { Authorization: `Bearer ${API_KEY}` },
+    { Authorization: `Bearer ${process.env.ARTINET_API_KEY}` },
     "application/json"
   );
 }

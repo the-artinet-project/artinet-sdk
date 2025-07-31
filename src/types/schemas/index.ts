@@ -1,1 +1,1 @@
-export * from "./a2a/index.js";
+export * from "../zod/protocols/a2a/index.js";

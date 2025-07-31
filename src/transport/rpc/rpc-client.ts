@@ -62,9 +62,13 @@ export async function sendJsonRpcRequest<Req extends A2ARequest>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
         Accept: acceptHeader,
         ...headers,
       },
+      priority: "high",
+      mode: "cors",
+      keepalive: true,
       body: JSON.stringify(requestBody),
     });
   } catch (networkError) {

@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { jest, describe, it, expect } from "@jest/globals";
 import {
   testDeployment,
   configureLogger,
@@ -33,6 +33,7 @@ const nestedTestCode = await bundle(
 );
 
 const MOCK_AGENT_CARD: AgentCard = {
+  protocolVersion: "0.3.0",
   name: "Quick-Agent-v0",
   description: "A test agent for unit tests",
   url: "https://test-agent.example.com/api",
@@ -55,6 +56,7 @@ const MOCK_AGENT_CARD: AgentCard = {
 };
 
 const MOCK_AGENT_CARD_NESTED: AgentCard = {
+  protocolVersion: "0.3.0",
   name: "Quick-Agent-v0-Nested",
   description: "A test agent for unit tests",
   url: "https://test-agent.example.com/api",

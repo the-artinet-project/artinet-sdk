@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "TypeScript SDK for the Agent2Agent (A2A) Protocol",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,6 +16,11 @@
       "types": "./dist/types/utils/deployment/agents.d.ts",
       "import": "./dist/utils/deployment/agents.js",
       "default": "./dist/utils/deployment/agents.js"
+    },
+    "./deployment": {
+      "types": "./dist/types/utils/deployment/index.d.ts",
+      "import": "./dist/utils/deployment/index.js",
+      "default": "./dist/utils/deployment/index.js"
     }
   },
   "rootDir": ".",
@@ -28,6 +33,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
+    "rebuild": "rimraf dist node_modules/ && npm i && npm run build",
     "lint": "eslint src --ext .ts",
     "prepublishOnly": "npm run clean && npm run build && npm run lint && npm test",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",

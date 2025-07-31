@@ -10,6 +10,15 @@ export type LogLevel = "silent" | "error" | "warn" | "info" | "debug" | "trace";
 const baseLogger = pino({
   name: "A2A",
   level: "error", // Default level
+  browser: {
+    asObject: true,
+    formatters: {
+      level(label, _number) {
+        return { level: label.toUpperCase() };
+      },
+    },
+    write: (o) => console.log(JSON.stringify(o)),
+  },
   // In production, don't use the pretty transport by default
   ...(process.env.NODE_ENV !== "production" && {
     transport: {

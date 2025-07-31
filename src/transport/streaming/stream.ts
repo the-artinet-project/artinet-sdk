@@ -1,5 +1,9 @@
 import { Response } from "express";
-import { JSONRPCError, JSONRPCResponse } from "../../types/index.js";
+import {
+  JSONRPCError,
+  JSONRPCErrorResponse,
+  JSONRPCResponse,
+} from "../../types/index.js";
 import { TaskEvent, UpdateEvent } from "../../types/extended-schema.js";
 import { processUpdate } from "../../server/lib/state.js";
 import { TaskStore, TaskAndHistory } from "../../server/interfaces/store.js";
@@ -62,7 +66,7 @@ export function sendSSEEvent(
     return;
   }
 
-  const response: JSONRPCResponse<UpdateEvent> = {
+  const response: JSONRPCResponse = {
     jsonrpc: "2.0",
     id: id,
     result: update,
@@ -77,15 +81,12 @@ export function sendSSEEvent(
  * @param reqId The request ID
  * @param error The error to send
  */
-export function sendSSEError(
-  res: Response,
-  error: JSONRPCError<any, any>
-): void {
+export function sendSSEError(res: Response, error: JSONRPCError): void {
   if (!res.writable) {
     return;
   }
 
-  const response: JSONRPCResponse<null, any> = {
+  const response: JSONRPCErrorResponse = {
     jsonrpc: "2.0",
     error: error,
   };

@@ -52,7 +52,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.Failed,
+        state: TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -72,7 +72,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.InputRequired,
+        state: TaskState["input-required"],
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -93,7 +93,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id-working-only",
           kind: "message",
@@ -113,7 +113,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -132,7 +132,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -161,7 +161,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id-streaming",
           kind: "message",
@@ -201,7 +201,7 @@ async function* a2aProtocolTestHandler(
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id-streaming-completed",
           kind: "message",
@@ -220,7 +220,7 @@ async function* a2aProtocolTestHandler(
     contextId: contextId,
     final: false,
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id-working",
         kind: "message",
@@ -236,7 +236,7 @@ async function* a2aProtocolTestHandler(
     contextId: contextId,
     final: true,
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id-completed",
         kind: "message",
@@ -261,6 +261,7 @@ describe("A2A Protocol Specification Tests", () => {
         name: "A2A Protocol Test Agent",
         url: "http://localhost:41241",
         version: "1.0.0",
+        protocolVersion: "0.3.0",
         description: "A2A Protocol Test Agent",
         defaultInputModes: ["text"],
         defaultOutputModes: ["text"],
