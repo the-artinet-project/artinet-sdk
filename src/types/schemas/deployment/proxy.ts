@@ -37,7 +37,7 @@ export interface TaskManagerProps {
  * @param props - The properties for the task manager, including the taskHandler.
  * @returns A promise that resolves when the task handler has completed.
  */
-export type TaskManager = (props: TaskManagerProps) => Promise<void>;
+export type AgentExecutor = (props: TaskManagerProps) => Promise<void>;
 
 /**
  * Properties for the Connect function.

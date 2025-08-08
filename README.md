@@ -73,7 +73,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 | **Transport Layers** | Built-in support for Express/TRPC.                                          | Express middleware, tRPC router, or easily create your own.                                          |
 | **Core Types**       | Fully implement A2A schema in Zod.                                          | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                             |
 | **Deployment**       | Bundle, test, and deploy agents onto the artinet platform (v0.5.2).         | `@artinet/sdk/deployment`, `fullDeployment`, `testDeployment`, `bundle`                              |
-| **Agent Utilities**  | Run agents in managed environments with our proxy system.                   | `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent`                                   |
+| **Agent Utilities**  | Run agents in managed environments with our proxy system.                   | `artinet.v0.agentExecutor`, `artinet.v0.connect`, `artinet.v0.agent`                                   |
 
 ## Installation
 
@@ -781,7 +781,7 @@ Key features include:
 
 - **Sandboxed Enviroments:** Streamline agent logic for quick and easy deployments. The new `artinet.v0` namespace (accessible via `@artinet/sdk/agents`) provides `taskManager`, `connect`, and `agent`.
 
-  - `artinet.v0.taskManager`: Manages the agent's lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
+  - `artinet.v0.agentExecutor`: Manages the agent's lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
   - `artinet.v0.connect`: Replaces the deprecated `fetchResponseProxy`. Allows agents to make proxied calls to other agents or LLMs via the host environment.
   - `artinet.v0.agent`: A factory function to obtain a `ClientProxy` for type-safe communication with other agents, managed by the host environment.
 
@@ -811,10 +811,10 @@ Key features include:
   }
 
   // The host environment will invoke this taskManager with the agent's logic.
-  await artinet.v0.taskManager({ taskHandler: myAgentLogic });
+  await artinet.v0.agentExecutor({ taskHandler: myAgentLogic });
   ```
 
-  _Note: The `taskHandlerProxy` and `fetchResponseProxy` utilities are now deprecated in favor of `artinet.v0.taskManager` and `artinet.v0.connect` respectively._
+  _Note: The `taskHandlerProxy` and `fetchResponseProxy` utilities are now deprecated in favor of `artinet.v0.agentExecutor` and `artinet.v0.connect` respectively._
 
 - **Test-Agents (Experimental):** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
 

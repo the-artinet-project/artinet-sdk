@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated `zod` package version
   - **BREAKING**: Rolled back from `zod/v4` to standard `zod` for better compatibility
 - Improved service interface architecture to support multiple protocol bindings
+- Renamed `artinet.v0.taskManager` and it's associate type `TaskManager` to `artinet.v0.agentExecutor` and `AgentExecutor` to avoid confusion with A2A `TaskManager` in `service.ts`
 
 ### Fixed
 

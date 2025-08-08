@@ -165,5 +165,5 @@ export const simpleEchoAgent: AgentEngine = async function* (context: Context) {
   yield completedUpdate;
 };
 
-await artinet.v0.taskManager({ taskHandler: simpleEchoAgent });
+await artinet.v0.agentExecutor({ taskHandler: simpleEchoAgent });
 console.log("[SimpleEchoAgent] Finished");
