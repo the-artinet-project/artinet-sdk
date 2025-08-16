@@ -50,6 +50,7 @@ import {
   A2AServiceOptions,
 } from "../../types/services/a2a/service.js";
 import { A2ARepository } from "./repository.js";
+import { v4 as uuidv4 } from "uuid";
 
 export class A2AService implements A2AServiceInterface {
   readonly name: string = "a2a";
@@ -77,7 +78,7 @@ export class A2AService implements A2AServiceInterface {
       throw INVALID_PARAMS("Missing task ID");
     }
     const taskId = message.taskId;
-    let contextId = message.contextId ?? "unknown";
+    let contextId = message.contextId ?? uuidv4();
 
     const executionContext: ExecutionContext<
       A2AExecutionContext<SendStreamingMessageRequest>

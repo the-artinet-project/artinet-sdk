@@ -1,8 +1,10 @@
 import { TaskState, TaskStatusUpdateEvent } from "../../types/schemas/index.js";
+import { getCurrentTimestamp } from "../index.js";
 
 export const WORKING_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
@@ -10,6 +12,7 @@ export const WORKING_UPDATE = (
     kind: "status-update",
     status: {
       state: TaskState.working,
+      timestamp: timestamp,
     },
     final: false,
   };
@@ -17,7 +20,8 @@ export const WORKING_UPDATE = (
 
 export const CANCEL_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
@@ -25,6 +29,7 @@ export const CANCEL_UPDATE = (
     kind: "status-update",
     status: {
       state: TaskState.canceled,
+      timestamp: timestamp,
     },
     final: true,
   };
@@ -32,7 +37,8 @@ export const CANCEL_UPDATE = (
 
 export const SUBMITTED_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
@@ -40,6 +46,7 @@ export const SUBMITTED_UPDATE = (
     kind: "status-update",
     status: {
       state: TaskState.submitted,
+      timestamp: timestamp,
     },
     final: false,
   };

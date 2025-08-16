@@ -1,6 +1,7 @@
 import type { Task, Message } from "../../types/extended-schema.js";
 
 /**
+ * @deprecated Task now has a history property.
  * Represents a task and its associated message history.
  */
 export interface TaskAndHistory {

@@ -102,7 +102,6 @@ export async function loadState(
       return existingData;
     }
   }
-
   const timestamp = getCurrentTimestamp();
   const newTask: Task = {
     id: taskId ?? uuidv4(),
@@ -113,6 +112,7 @@ export async function loadState(
       timestamp,
     },
     metadata: metadata,
+    history: [message],
   };
   message.taskId = newTask.id;
   message.contextId = newTask.contextId;

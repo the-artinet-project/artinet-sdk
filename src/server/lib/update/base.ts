@@ -34,7 +34,7 @@ const isMessageInHistory = (task: Task, message: Message) => {
 
 const updateHistory = (current: TaskAndHistory, updateMessage: Message) => {
   if (!isMessageInHistory(current.task, updateMessage)) {
-    current.history = [...(current.history ?? []), updateMessage];
+    current.history = [...(current.history ?? []), updateMessage]; //todo deprecate history
     current.task.history = [...(current.task.history ?? []), updateMessage];
   }
 };
@@ -64,7 +64,7 @@ export const updateTask: Update<Task> = async (props) => {
       context.latestUserMessage,
       ...(current.task.history ?? []),
     ];
-    current.history = [context.latestUserMessage, ...(current.history ?? [])];
+    current.history = [context.latestUserMessage, ...(current.history ?? [])]; //todo deprecate history
   }
   return true;
 };
@@ -102,8 +102,10 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
       update.append ?? false,
       current.task.artifacts ?? [],
       update.artifact
-    );
+    ); //hmm?
+    return true;
   }
+  logError("updateTaskArtifactUpdate", "Invalid task id", update);
   return true;
 };
 
@@ -111,6 +113,16 @@ export const update: Update<UpdateEvent> = async (props): Promise<boolean> => {
   const { context, current, update } = props;
   if (!update || !update.kind) {
     logError("update", "Invalid update", update);
+    return false;
+  }
+
+  if (!current || !current.task || !current.task.id) {
+    logError("update", "Invalid current", current);
+    return false;
+  }
+
+  if (!context || !context.contextId) {
+    logError("update", "Invalid context", context);
     return false;
   }
 
