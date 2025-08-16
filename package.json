@@ -63,6 +63,7 @@
   "dependencies": {
     "@artinet/metadata-validator": "^0.0.3",
     "@modelcontextprotocol/sdk": "latest",
+    "@trpc/server": "^11.4.3",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/mime-types": "^3.0.0",
