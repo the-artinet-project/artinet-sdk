@@ -1,6 +1,7 @@
 import {
   A2AServiceInterface,
   Context,
+  ContextManager,
   createEventManager,
   EventManagerOptions,
 } from "../protocol/index.js";
@@ -21,13 +22,13 @@ export const serviceProcedure = publicProcedure.use(
     return opts.next({ ctx: opts.ctx });
   }
 );
-export { globalRepository };
 
 export async function createExecutionContext(
   request: any,
+  service: A2AServiceInterface,
+  contextManager: ContextManager,
   abortSignal?: AbortSignal,
   contextId?: string,
-  service?: A2AServiceInterface,
   additionalOptions?: EventManagerOptions<any, any>
 ): Promise<Context<any, any>> {
   //   if (contextId) {
@@ -42,12 +43,11 @@ export async function createExecutionContext(
   //     }
   //     return context;
   //   }
-  const serviceImpl = service ?? globalRepository.getService();
   const contextId_ = contextId ?? uuidv4();
   const signal = abortSignal ?? new AbortController().signal;
   let events = await createEventManager<any>(
     contextId_,
-    serviceImpl,
+    service,
     additionalOptions
   );
   const context: Context<any, any> = {
@@ -56,9 +56,9 @@ export async function createExecutionContext(
     events: events,
     signal,
     isCancelled: () => {
-      return signal.aborted || serviceImpl.isCancelled(contextId_);
+      return signal.aborted || service.isCancelled(contextId_);
     },
   };
-  globalRepository.getContextManager().setContext(contextId_, context);
+  contextManager.setContext(contextId_, context);
   return context;
 }

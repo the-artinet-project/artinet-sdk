@@ -1,5 +1,6 @@
-import { A2AServiceInterface } from "./protocol/index.js";
+import { A2AServiceInterface, ExecutionEngine } from "./protocol/index.js";
 import { initTRPC } from "@trpc/server";
+import { Context } from "./protocol/context.js";
 
 export interface ExecutionEnvironment {
   session?: {
@@ -9,6 +10,7 @@ export interface ExecutionEnvironment {
     userId: string;
   } | null;
   service: A2AServiceInterface;
+  engine?: ExecutionEngine<Context>;
 }
 
 const transport = initTRPC.context<ExecutionEnvironment>().create();

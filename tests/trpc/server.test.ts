@@ -7,7 +7,7 @@ import {
   expect,
 } from "@jest/globals";
 import { agentRouter } from "../../src/server/trpc/server.js";
-import { globalRepository } from "../../src/server/trpc/procedures/service.js";
+import { globalRepository } from "../../src/server/trpc/repository.js";
 import { configureLogger, TaskState, TASK_NOT_FOUND } from "../../src/index.js";
 
 // Set a reasonable timeout for all tests
@@ -35,21 +35,20 @@ describe("trpc-server", () => {
   it("should be able to call the agentCard procedure", async () => {
     const result = await agent.agentCard();
     expect(result).toEqual({
-      name: "Agent",
-      description: "Agent",
-      url: "https://agent.com",
-      version: "1.0.0",
       protocolVersion: "0.3.0",
+      name: "A2A Server",
+      description: "A general-purpose A2A protocol server",
+      version: "0.1.0",
+      url: "http://localhost",
       capabilities: {
         streaming: false,
         pushNotifications: false,
         stateTransitionHistory: false,
         extensions: [],
       },
+      skills: [],
       defaultInputModes: ["text"],
       defaultOutputModes: ["text"],
-      skills: [],
-      signatures: [],
     });
   });
   describe("message", () => {

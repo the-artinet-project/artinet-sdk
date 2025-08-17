@@ -1,4 +1,4 @@
-import { A2AServiceInterface } from "./a2a-service.js";
+import { A2AServiceInterface } from "../procs/a2a/interfaces/service.js";
 import { EventManager, EventManagerOptions } from "./event-manager.js";
 import { v4 as uuidv4 } from "uuid";
 import { loadState, processUpdate } from "../../lib/state.js";
@@ -107,6 +107,9 @@ export async function createEventManager<TState extends {} = any>(
 
     onError: async (current: TState, error: any): Promise<void> => {
       console.log(`onError[${contextId}]`, current, error);
+      if (!current || (current as any).contextId === undefined) {
+        return;
+      }
       const failedUpdate = FAILED_UPDATE(
         (current as any).taskId ?? (current as any).task?.id ?? contextId,
         (current as any).contextId ?? contextId,

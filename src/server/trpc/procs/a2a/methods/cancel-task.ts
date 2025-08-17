@@ -1,17 +1,9 @@
-import {
-  TaskIdParams,
-  TaskIdParamsSchema,
-  TaskSchema,
-} from "../../../../types/index.js";
-import { A2AServiceInterface, ContextManager } from "../../protocol/index.js";
-import {
-  globalRepository,
-  serviceProcedure,
-} from "../../procedures/service.js";
-import { Task } from "../../../../types/index.js";
-import { TaskState } from "../../../../types/index.js";
-import { FINAL_STATES, TASK_NOT_FOUND } from "../../../../utils/index.js";
-import { TASK_NOT_CANCELABLE } from "../../../../utils/index.js";
+import { TaskIdParams } from "../../../../../types/index.js";
+import { A2AServiceInterface, ContextManager } from "../../../protocol/index.js";
+import { Task } from "../../../../../types/index.js";
+import { TaskState } from "../../../../../types/index.js";
+import { FINAL_STATES, TASK_NOT_FOUND } from "../../../../../utils/index.js";
+import { TASK_NOT_CANCELABLE } from "../../../../../utils/index.js";
 
 export async function cancelTask(
   input: TaskIdParams,
@@ -44,7 +36,16 @@ export async function cancelTask(
   if (!context) {
     service.setState(input.id, {
       ...originalState,
-      task: cancelledTask,
+      task: {
+        ...originalState?.task,
+        ...cancelledTask,
+      },
+      history: Array.from(
+        new Set([
+          ...(originalState?.history ?? []),
+          ...(cancelledTask.history ?? []),
+        ])
+      ),
     });
     return cancelledTask;
   }
@@ -57,14 +58,3 @@ export async function cancelTask(
   await context.events.onCancel(cancelledTask);
   return cancelledTask;
 }
-
-export const cancelTaskRoute = serviceProcedure
-  .input(TaskIdParamsSchema)
-  .output(TaskSchema)
-  .mutation(async ({ input, ctx }) => {
-    return await cancelTask(
-      input,
-      ctx.service,
-      globalRepository.getContextManager()
-    );
-  });

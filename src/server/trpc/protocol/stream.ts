@@ -1,5 +1,6 @@
-import { TaskState, UpdateEvent } from "../../../types/index.js";
-import { Context, execute } from "../protocol/index.js";
+import { UpdateEvent } from "../../../types/index.js";
+import { Context, execute, ExecutionEngine } from "./index.js";
+import { ServiceInterface } from "../services/interfaces/service.js";
 
 export class ExecutionStream {
   private contextId: string | null = null;
@@ -42,35 +43,36 @@ export class ExecutionStream {
     this.executionContext = executionContext;
     this.contextId = executionContext.events.contextId;
   }
-  async *stream(
-    engine: (request: any) => AsyncGenerator<any, void, undefined>
-  ) {
-    const executePromise = execute(engine, this.getExecutionContext())
-      .catch((error) => {
-        console.error("stream/error[", this.contextId, "]", error);
+  async *stream(engine: ExecutionEngine<Context>, service?: ServiceInterface) {
+    let executionError: Error | null = null;
+
+    const executePromise = (
+      service
+        ? service.execute(engine, this.getExecutionContext())
+        : execute(engine, this.getExecutionContext())
+    )
+      .catch((error: Error) => {
+        executionError = error;
       })
       .finally(() => {
         this.setCompleted();
       });
 
     while (!this.isCompleted() || this.getUpdates().length > 0) {
+      if (executionError) {
+        throw executionError;
+      }
       if (this.getUpdates().length > 0) {
         yield this.getUpdates().shift()!;
       }
       await new Promise((resolve) => setTimeout(resolve, 10));
     }
+
     await executePromise;
     this.setCompleted();
-    // const state = this.getExecutionContext().events.getState();
-    // let toReturn = state?.task ?? state;
-    // console.log("stream/toReturn", toReturn);
-    // yield {
-    //   ...toReturn,
-    //   status: {
-    //     ...toReturn.status,
-    //     state: TaskState.completed,
-    //   },
-    //   final: false,
-    // };
+
+    if (executionError) {
+      throw executionError;
+    }
   }
 }

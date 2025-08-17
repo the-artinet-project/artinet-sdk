@@ -1,16 +1,21 @@
 import { Context } from "./context.js";
 
-export async function execute<
-  TRequest extends {} = any,
-  TState extends {} = any,
->(
-  engine: (request: TRequest) => AsyncGenerator<any, void, unknown>,
-  context: Context<TRequest, TState>
+/**
+ * @description The execution engine.
+ * @type {ExecutionEngine<Context>}
+ */
+export type ExecutionEngine<TContext extends Context = Context> = (
+  command: TContext["command"]
+) => AsyncGenerator<TContext["command"], void, undefined>;
+
+export async function execute<TContext extends Context = Context>(
+  engine: ExecutionEngine<TContext>,
+  context: TContext
 ): Promise<void> {
-  if (context.events.onStart) {
-    await context.events.onStart(context.command);
-  }
   try {
+    if (context.events.onStart) {
+      await context.events.onStart(context.command);
+    }
     for await (const update of engine(context.command)) {
       if (context.isCancelled() || context.signal.aborted) {
         await context.events.onCancel(update);
@@ -20,6 +25,7 @@ export async function execute<
     }
   } catch (error) {
     context.events.onError(error);
+    throw error;
   } finally {
     context.events.onComplete();
   }

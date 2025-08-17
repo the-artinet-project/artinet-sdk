@@ -1,5 +1,5 @@
-export * from "./a2a-service.js";
-export * from "./a2a-service-impl.js";
+export * from "../procs/a2a/interfaces/service.js";
+export * from "../procs/a2a/service.js";
 export * from "./context.js";
 export * from "./context-impl.js";
 export * from "./event-manager.js";
