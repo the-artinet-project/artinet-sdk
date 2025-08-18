@@ -1,4 +1,8 @@
-import { MessageSendParams, TaskState } from "../../../../../types/index.js";
+import {
+  AgentEngine,
+  MessageSendParams,
+  TaskState,
+} from "../../../../../types/index.js";
 import { ExecutionStream } from "../../../protocol/stream.js";
 import { createExecutionContext } from "../../../procedures/service.js";
 import {
@@ -6,17 +10,14 @@ import {
   WORKING_UPDATE,
 } from "../../../../../utils/index.js";
 import { A2AServiceInterface } from "../interfaces/service.js";
-import {
-  ContextManagerInterface,
-  ExecutionEngine,
-} from "../../../protocol/index.js";
+import { ContextManagerInterface } from "../../../protocol/index.js";
 
 export async function* streamMessage(
   input: MessageSendParams,
-  signal: AbortSignal,
   service: A2AServiceInterface,
-  engine: ExecutionEngine,
-  contextManager: ContextManagerInterface
+  agent: AgentEngine,
+  contextManager: ContextManagerInterface,
+  signal: AbortSignal
 ) {
   let contextId = input.message.contextId;
   const context = await createExecutionContext(
@@ -59,5 +60,5 @@ export async function* streamMessage(
     });
     stream.addUpdate(WORKING_UPDATE(context.command.taskId, contextId)); //don't know why I was sending this working update here
   });
-  yield* stream.stream(engine, service);
+  yield* stream.stream(agent, service);
 }

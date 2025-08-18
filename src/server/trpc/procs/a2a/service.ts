@@ -52,6 +52,7 @@ export const defaultAgentCard: AgentCard = {
 
 export interface A2AServiceParams {
   agentCard: AgentCard;
+  agent?: AgentEngine;
   contexts?: ContextManagerInterface;
   connections?: ConnectionManagerInterface;
   cancellations?: CancellationManagerInterface;
@@ -73,6 +74,7 @@ export function createA2AServiceMethods(
 export function createA2AService(params: A2AServiceParams) {
   return new A2AServiceImpl(
     params.agentCard,
+    params.agent ?? defaultEngine,
     params.contexts ?? new ExecutionContextManager(),
     params.connections ?? new ConnectionManager(),
     params.cancellations ?? new CancellationManager(),
@@ -82,8 +84,8 @@ export function createA2AService(params: A2AServiceParams) {
 }
 
 export class A2AServiceImpl implements A2AServiceInterface {
-  private agentCard: AgentCard;
-  private agent?: AgentEngine;
+  private agentInfo: AgentCard;
+  private agent: AgentEngine;
   private connections: ConnectionManagerInterface;
   private cancellations: CancellationManagerInterface;
   private tasks: TaskManagerInterface;
@@ -91,19 +93,19 @@ export class A2AServiceImpl implements A2AServiceInterface {
   private methods: A2AServiceMethodOptions;
   constructor(
     agentCard: AgentCard,
+    agent: AgentEngine,
     contexts: ContextManagerInterface,
     connections: ConnectionManagerInterface,
     cancellations: CancellationManagerInterface,
     tasks: TaskManagerInterface,
-    methods: A2AServiceMethodOptions,
-    agent?: AgentEngine
+    methods: A2AServiceMethodOptions
   ) {
-    this.agentCard = agentCard;
+    this.agent = agent;
+    this.agentInfo = agentCard;
     this.contexts = contexts;
     this.connections = connections;
     this.cancellations = cancellations;
     this.tasks = tasks;
-    this.agent = agent;
     this.methods = methods;
   }
 
@@ -123,7 +125,7 @@ export class A2AServiceImpl implements A2AServiceInterface {
   }
 
   getAgentCard(): AgentCard {
-    return this.agentCard;
+    return this.agentInfo;
   }
 
   addConnection(id: string) {
@@ -164,43 +166,43 @@ export class A2AServiceImpl implements A2AServiceInterface {
 
   async sendMessage(
     message: MessageSendParams,
-    signal?: AbortSignal,
-    engine: ExecutionEngine = this.agent ?? defaultEngine
+    agent: AgentEngine = this.agent,
+    signal?: AbortSignal
   ) {
     return await this.methods.sendMessage(
       message,
-      signal ?? new AbortController().signal,
       this,
-      engine,
-      this.contexts
+      agent,
+      this.contexts,
+      signal ?? new AbortController().signal
     );
   }
 
   async *streamMessage(
     message: MessageSendParams,
-    signal?: AbortSignal,
-    engine: ExecutionEngine = this.agent ?? defaultEngine
+    agent: AgentEngine = this.agent,
+    signal?: AbortSignal
   ) {
     yield* this.methods.streamMessage(
       message,
-      signal ?? new AbortController().signal,
       this,
-      engine,
-      this.contexts
+      agent,
+      this.contexts,
+      signal ?? new AbortController().signal
     );
   }
 
   async *resubscribe(
     input: TaskIdParams,
-    signal?: AbortSignal,
-    engine: ExecutionEngine = this.agent ?? defaultEngine
+    agent: AgentEngine = this.agent,
+    signal?: AbortSignal
   ) {
     yield* this.methods.resubscribe(
       input,
-      signal ?? new AbortController().signal,
       this,
-      engine,
-      this.contexts
+      agent,
+      this.contexts,
+      signal ?? new AbortController().signal
     );
   }
 }

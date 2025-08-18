@@ -2,19 +2,19 @@ import { createExecutionContext } from "../../../procedures/service.js";
 import {
   MessageSendParams,
   SendMessageSuccessResult,
+  AgentEngine,
 } from "../../../../../types/index.js";
 import {
   A2AServiceInterface,
   ContextManagerInterface,
-  ExecutionEngine,
 } from "../../../protocol/index.js";
 
 export async function sendMessage(
   input: MessageSendParams,
-  signal: AbortSignal,
   service: A2AServiceInterface,
-  engine: ExecutionEngine,
-  contextManager: ContextManagerInterface
+  agent: AgentEngine,
+  contextManager: ContextManagerInterface,
+  signal: AbortSignal
 ): Promise<SendMessageSuccessResult> {
   const contextId = input.message.contextId;
   const context = await createExecutionContext(
@@ -31,7 +31,7 @@ export async function sendMessage(
   context.events.on("error", () => {
     context.events.onComplete();
   });
-  await service.execute(engine, context);
+  await service.execute(agent, context);
   const state = context.events.getState();
   return state?.task ?? state;
 }

@@ -3,29 +3,25 @@ import {
   Task,
   TaskStatusUpdateEvent,
   TaskArtifactUpdateEvent,
-  TaskState,
+  AgentEngine,
 } from "../../../../../types/index.js";
 import { createExecutionContext } from "../../../procedures/service.js";
 import {
   FINAL_STATES,
   INVALID_REQUEST,
   TASK_NOT_FOUND,
-  FAILED_UPDATE,
 } from "../../../../../utils/index.js";
 import { ExecutionStream } from "../../../protocol/stream.js";
 import { TaskAndHistory } from "../../../../interfaces/store.js";
 import { A2AServiceInterface } from "../interfaces/service.js";
-import {
-  ContextManagerInterface,
-  ExecutionEngine,
-} from "../../../protocol/index.js";
+import { ContextManagerInterface } from "../../../protocol/index.js";
 
 export async function* resubscribe(
   input: TaskIdParams,
-  signal: AbortSignal,
   service: A2AServiceInterface,
-  engine: ExecutionEngine,
-  contextManager: ContextManagerInterface
+  agent: AgentEngine,
+  contextManager: ContextManagerInterface,
+  signal: AbortSignal
 ) {
   const stream = new ExecutionStream();
   const context = await createExecutionContext(
@@ -93,5 +89,5 @@ export async function* resubscribe(
     stream.addUpdate(nextState);
   });
   stream.setExecutionContext(context);
-  yield* stream.stream(engine, service);
+  yield* stream.stream(agent, service);
 }

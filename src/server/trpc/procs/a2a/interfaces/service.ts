@@ -1,6 +1,7 @@
 import { ServiceInterface } from "../../../services/interfaces/service.js";
 import {
   AgentCard,
+  AgentEngine,
   MessageSendParams,
   SendMessageSuccessResult,
   Task,
@@ -9,7 +10,6 @@ import {
 } from "../../../../../types/index.js";
 import { TaskAndHistory } from "../../../../interfaces/store.js";
 import { Context, ContextManagerInterface } from "../../../protocol/context.js";
-import { ExecutionEngine } from "../../../protocol/execute.js";
 
 export interface A2AServiceMethodOptions {
   getTask: (input: TaskIdParams, service: A2AServiceInterface) => Promise<Task>;
@@ -20,24 +20,24 @@ export interface A2AServiceMethodOptions {
   ) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,
-    signal: AbortSignal,
     service: A2AServiceInterface,
-    engine: ExecutionEngine,
-    contextManager: ContextManagerInterface
+    agent: AgentEngine,
+    contextManager: ContextManagerInterface,
+    signal: AbortSignal
   ) => Promise<SendMessageSuccessResult>;
   streamMessage: (
     message: MessageSendParams,
-    signal: AbortSignal,
     service: A2AServiceInterface,
-    engine: ExecutionEngine,
-    contextManager: ContextManagerInterface
+    agent: AgentEngine,
+    contextManager: ContextManagerInterface,
+    signal: AbortSignal
   ) => AsyncGenerator<UpdateEvent>;
   resubscribe: (
     input: TaskIdParams,
-    signal: AbortSignal,
     service: A2AServiceInterface,
-    engine: ExecutionEngine,
-    contextManager: ContextManagerInterface
+    agent: AgentEngine,
+    contextManager: ContextManagerInterface,
+    signal: AbortSignal
   ) => AsyncGenerator<UpdateEvent>;
 }
 
@@ -46,18 +46,18 @@ export interface A2AServiceMethods {
   cancelTask: (input: TaskIdParams) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,
-    signal?: AbortSignal,
-    engine?: ExecutionEngine
+    agent: AgentEngine,
+    signal?: AbortSignal
   ) => Promise<SendMessageSuccessResult>;
   streamMessage: (
     message: MessageSendParams,
-    signal?: AbortSignal,
-    engine?: ExecutionEngine
+    agent: AgentEngine,
+    signal?: AbortSignal
   ) => AsyncGenerator<UpdateEvent>;
   resubscribe: (
     input: TaskIdParams,
-    signal?: AbortSignal,
-    engine?: ExecutionEngine
+    agent: AgentEngine,
+    signal?: AbortSignal
   ) => AsyncGenerator<UpdateEvent>;
 }
 export interface A2AServiceInterface<
