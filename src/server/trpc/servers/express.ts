@@ -60,7 +60,8 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
     ("taskManager" in serviceParams ||
       "contextManager" in serviceParams ||
       "cancellationManager" in serviceParams ||
-      "connectionManager" in serviceParams)
+      "connectionManager" in serviceParams ||
+      "methods" in serviceParams)
   ) {
     serviceInstance = createA2AService({
       agentCard: agentInfo,
@@ -68,13 +69,14 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
       connections: serviceParams.connectionManager,
       cancellations: serviceParams.cancellationManager,
       tasks: serviceParams.taskManager,
+      methods: serviceParams.methods,
     });
   } else {
     serviceInstance =
       (serviceParams as A2AServiceInterface) ||
       createA2AService({ agentCard: agentInfo });
   }
-  console.log("serviceInstance", serviceInstance);
+
   const agentRouter = createAgentRouter({});
   app.use(express.json());
   app.use(cors(params.corsOptions));

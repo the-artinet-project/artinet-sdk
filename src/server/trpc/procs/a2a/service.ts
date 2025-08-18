@@ -2,7 +2,6 @@ import { TaskAndHistory } from "../../../interfaces/store.js";
 import {
   A2AServiceInterface,
   A2AServiceMethodOptions,
-  A2AServiceMethods,
 } from "./interfaces/service.js";
 import {
   AgentCard,
@@ -57,7 +56,7 @@ export interface A2AServiceParams {
   connections?: ConnectionManagerInterface;
   cancellations?: CancellationManagerInterface;
   tasks?: TaskManagerInterface;
-  methods?: A2AServiceMethodOptions;
+  methods?: Partial<A2AServiceMethodOptions>;
 }
 
 export function createA2AServiceMethods(
