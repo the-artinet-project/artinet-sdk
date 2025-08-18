@@ -6,7 +6,7 @@ import {
 } from "../../types/index.js";
 
 export const engine = async function* (request: any) {
-  console.log("engine: request", request);
+  console.log("test-engine: request", request);
   const update: TaskStatusUpdateEvent = {
     kind: "status-update",
     taskId: request.taskId,

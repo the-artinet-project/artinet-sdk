@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { EventManager, EventManagerOptions } from "./event-manager.js";
+import { EventManager, EventManagerOptions } from "./manager.js";
 
 export class StateManager<TRequest extends {} = any, TState extends {} = any>
   extends EventEmitter

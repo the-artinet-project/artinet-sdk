@@ -1,19 +1,24 @@
 import express from "express";
 import http from "http";
 import { CorsOptions } from "cors";
-import { ManagerOptions } from "./services/manager.js";
 import { Protocol } from "./services/protocol.js";
 import { Service } from "./services/service.js";
+import { AgentCard, AgentEngine } from "./index.js";
 
 /**
  * @description The express server options.
  */
-export interface ExpressServerOptions extends Omit<ManagerOptions, "services"> {
+export interface ExpressServerOptions {
   /**
    * @description The services.
    * @type {Partial<Record<Protocol, Service>>}
    */
-  services?: Partial<Record<Protocol, Service>>;
+  agent: AgentEngine;
+  /**
+   * @description The agent info.
+   * @type {AgentCard}
+   */
+  agentInfo: AgentCard;
   /**
    * @description The app.
    * @type {express.Express}
@@ -29,11 +34,6 @@ export interface ExpressServerOptions extends Omit<ManagerOptions, "services"> {
    * @type {string}
    */
   basePath?: string;
-  /**
-   * @description The fallback path.
-   * @type {string}
-   */
-  fallbackPath?: string;
   /**
    * @description The register.
    * @type {boolean}

@@ -1,5 +1,8 @@
 import { TaskIdParams } from "../../../../../types/index.js";
-import { A2AServiceInterface, ContextManager } from "../../../protocol/index.js";
+import {
+  A2AServiceInterface,
+  ContextManagerInterface,
+} from "../../../protocol/index.js";
 import { Task } from "../../../../../types/index.js";
 import { TaskState } from "../../../../../types/index.js";
 import { FINAL_STATES, TASK_NOT_FOUND } from "../../../../../utils/index.js";
@@ -8,8 +11,8 @@ import { TASK_NOT_CANCELABLE } from "../../../../../utils/index.js";
 export async function cancelTask(
   input: TaskIdParams,
   service: A2AServiceInterface,
-  contextManager: ContextManager
-) {
+  contextManager: ContextManagerInterface
+): Promise<Task> {
   const originalState = service.getState(input.id);
   const task: Task = (originalState as any)?.task;
 

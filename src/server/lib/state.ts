@@ -75,6 +75,7 @@ export async function processUpdate(
   updateProps: UpdateProps
 ): Promise<TaskAndHistory> {
   if (!(await update(updateProps))) {
+    console.error("processUpdate: Invalid update", updateProps);
     throw new Error("processUpdate: Invalid update");
   }
   await taskStore.save(updateProps.current);

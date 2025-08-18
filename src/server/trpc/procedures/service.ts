@@ -1,17 +1,39 @@
 import {
   A2AServiceInterface,
   Context,
-  ContextManager,
-  createEventManager,
+  ContextManagerInterface,
+  createA2AEventManager,
   EventManagerOptions,
 } from "../protocol/index.js";
 import { globalRepository } from "../repository.js";
 import { publicProcedure } from "../transport.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const serviceProcedure = publicProcedure.use(
+export const createA2AEnviroment = (opts: any) => {
+  console.log("createEnviroment", opts.path);
+  return opts;
+};
+// if (opts.path.includes("message") || opts.path.includes("task")) {
+//   return opts.next({
+//     ctx: {
+//       ...opts.ctx,
+//       service: globalRepository.getService(), //todo: remove this
+//     },
+//   });
+// }
+
+export const agentProcedure = publicProcedure.use(
   async function createContext(opts) {
-    if (opts.path.includes("message") || opts.path.includes("task")) {
+    console.log("createContext", opts.path);
+    if (opts.ctx.service) {
+      return opts.next({ ctx: opts.ctx });
+    }
+
+    if (
+      opts.path.includes("message") ||
+      opts.path.includes("task") ||
+      opts.path.includes("agentCard")
+    ) {
       return opts.next({
         ctx: {
           ...opts.ctx,
@@ -26,14 +48,14 @@ export const serviceProcedure = publicProcedure.use(
 export async function createExecutionContext(
   request: any,
   service: A2AServiceInterface,
-  contextManager: ContextManager,
+  contextManager: ContextManagerInterface,
   abortSignal?: AbortSignal,
   contextId?: string,
   additionalOptions?: EventManagerOptions<any, any>
 ): Promise<Context<any, any>> {
   //   if (contextId) {
   //     //disable for testing
-  //     const context = globalRepository.getContextManager().getContext(contextId);
+  //     const context = contextManager.getContext(contextId);
   //     if (!context) {
   //       console.error("createExecutionContext", contextId, "Context not found");
   //       throw new TRPCError({
@@ -45,7 +67,7 @@ export async function createExecutionContext(
   //   }
   const contextId_ = contextId ?? uuidv4();
   const signal = abortSignal ?? new AbortController().signal;
-  let events = await createEventManager<any>(
+  let events = await createA2AEventManager<any>(
     contextId_,
     service,
     additionalOptions

@@ -1,6 +1,6 @@
 import { INVALID_PARAMS } from "../../../../utils/index.js";
 import { router } from "../../transport.js";
-import { serviceProcedure } from "../../procedures/service.js";
+import { agentProcedure } from "../../procedures/service.js";
 import { zAsyncIterable } from "../../zAsyncIterable.js";
 import {
   MessageSendParamsSchema,
@@ -9,7 +9,7 @@ import {
 } from "../../../../types/index.js";
 import { A2AServiceImpl } from "../../protocol/index.js";
 
-const sendMessageRoute = serviceProcedure
+const sendMessageRoute = agentProcedure
   .input(MessageSendParamsSchema)
   .output(SendMessageSuccessResultSchema)
   .mutation(async (opts) => {
@@ -23,7 +23,7 @@ const sendMessageRoute = serviceProcedure
     );
   });
 
-const streamMessageRoute = serviceProcedure
+const streamMessageRoute = agentProcedure
   .input(MessageSendParamsSchema)
   .output(
     zAsyncIterable({

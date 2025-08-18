@@ -1,17 +1,20 @@
 import {
   A2AServiceInterface,
-  ContextManager,
+  ContextManagerInterface,
   ExecutionContextManager,
 } from "./protocol/index.js";
-import { A2AServiceImpl } from "./procs/a2a/service.js";
+import { createA2AService, defaultAgentCard } from "./procs/a2a/service.js";
 
 export class Repository {
   private service: A2AServiceInterface;
-  private contextManager: ContextManager;
+  private contextManager: ContextManagerInterface;
 
   constructor() {
     this.contextManager = new ExecutionContextManager();
-    this.service = new A2AServiceImpl(this.contextManager);
+    this.service = createA2AService({
+      agentCard: defaultAgentCard,
+      contexts: this.contextManager,
+    });
   }
   getService() {
     return this.service;

@@ -1,7 +1,7 @@
 import { AgentCardSchema } from "../../../types/index.js";
-import { serviceProcedure } from "../procedures/service.js";
+import { agentProcedure } from "../procedures/service.js";
 
-export const agentFAQRouter = serviceProcedure
+export const agentInfoRoute = agentProcedure
   .output(AgentCardSchema)
   .query(async ({ ctx }) => {
     return ctx.service.getAgentCard();

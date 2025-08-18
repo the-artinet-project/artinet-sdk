@@ -10,9 +10,7 @@ import express from "express";
 import request from "supertest";
 import {
   A2AServer,
-  ExecutionContext,
   InMemoryTaskStore,
-  A2AExecutionContext,
   TaskState,
   TaskStatusUpdateEvent,
   TaskYieldUpdate,
@@ -21,8 +19,12 @@ import {
   configureLogger,
   MessageSendParams,
   SendMessageRequest,
+  Message,
 } from "../src/index.js";
-
+import {
+  AgentServer,
+  createAgentServer,
+} from "../src/server/trpc/servers/express.js";
 configureLogger({ level: "silent" });
 
 // Set a reasonable timeout for all tests
@@ -30,12 +32,11 @@ jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
 async function* a2aProtocolTestHandler(
-  context: ExecutionContext
+  request: Message
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
-  const text = params.message.parts
+  const taskId = request.taskId ?? "";
+  const contextId = request.contextId ?? "";
+  const text = request.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as TextPart).text)
     .join(" ");
@@ -248,16 +249,15 @@ async function* a2aProtocolTestHandler(
 }
 
 describe("A2A Protocol Specification Tests", () => {
-  let server: A2AServer;
+  let server: AgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    server = new A2AServer({
-      handler: a2aProtocolTestHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0, // Don't actually listen
-      card: {
+    const agentServer: AgentServer = createAgentServer({
+      agent: a2aProtocolTestHandler,
+      agentInfoPath: "/.well-known/agent.json",
+      agentInfo: {
         name: "A2A Protocol Test Agent",
         url: "http://localhost:41241",
         version: "1.0.0",
@@ -280,7 +280,8 @@ describe("A2A Protocol Specification Tests", () => {
         ],
       },
     });
-    app = server.start();
+    app = agentServer.app;
+    server = agentServer;
     pendingRequests = [];
   });
 
@@ -297,7 +298,7 @@ describe("A2A Protocol Specification Tests", () => {
       })
     );
 
-    await server.stop();
+    // await server.stop();
     // Add a small delay to allow any open connections to close
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
@@ -315,18 +316,12 @@ describe("A2A Protocol Specification Tests", () => {
       );
 
       expect(response.status).toBe(200);
+      console.log("response", response.body);
       expect(response.body.name).toBe("A2A Protocol Test Agent");
       expect(response.body.capabilities.streaming).toBe(true);
       expect(response.body.capabilities.pushNotifications).toBe(true);
       expect(response.body.skills).toHaveLength(1);
       expect(response.body.skills[0].id).toBe("test");
-    });
-
-    it("returns agent card at /agent-card", async () => {
-      const response = await trackRequest(request(app).get("/agent-card"));
-
-      expect(response.status).toBe(200);
-      expect(response.body.name).toBe("A2A Protocol Test Agent");
     });
   });
 
@@ -350,7 +345,7 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await trackRequest(
         request(app).post("/").send(requestBody)
       );
-
+      console.log("response", response.body);
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("test-task-1");

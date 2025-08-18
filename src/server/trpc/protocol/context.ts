@@ -1,4 +1,4 @@
-import { EventManager } from "./event-manager.js";
+import { EventManager } from "./events/manager.js";
 
 export interface Context<TRequest extends {} = any, TState extends {} = any> {
   readonly contextId: string;
@@ -8,7 +8,7 @@ export interface Context<TRequest extends {} = any, TState extends {} = any> {
   readonly events: EventManager<TRequest, TState>;
 }
 
-export interface ContextManager<TContext extends {} = any> {
+export interface ContextManagerInterface<TContext extends {} = any> {
   getContext: (id: string) => TContext | undefined;
   setContext: (id: string, data: TContext) => void;
   deleteContext: (id: string) => void;

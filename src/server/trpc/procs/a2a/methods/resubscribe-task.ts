@@ -15,14 +15,17 @@ import {
 import { ExecutionStream } from "../../../protocol/stream.js";
 import { TaskAndHistory } from "../../../../interfaces/store.js";
 import { A2AServiceInterface } from "../interfaces/service.js";
-import { ContextManager, ExecutionEngine } from "../../../protocol/index.js";
+import {
+  ContextManagerInterface,
+  ExecutionEngine,
+} from "../../../protocol/index.js";
 
 export async function* resubscribe(
   input: TaskIdParams,
   signal: AbortSignal,
   service: A2AServiceInterface,
   engine: ExecutionEngine,
-  contextManager: ContextManager
+  contextManager: ContextManagerInterface
 ) {
   const stream = new ExecutionStream();
   const context = await createExecutionContext(

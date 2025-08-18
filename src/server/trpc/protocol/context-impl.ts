@@ -1,7 +1,7 @@
-import { Context, ContextManager } from "./context.js";
+import { Context, ContextManagerInterface } from "./context.js";
 
 export class ExecutionContextManager<TContext extends Context = Context>
-  implements ContextManager<TContext>
+  implements ContextManagerInterface<TContext>
 {
   private contexts: Map<string, TContext> = new Map();
   deleteContext(id: string) {

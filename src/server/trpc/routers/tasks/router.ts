@@ -14,34 +14,33 @@ import {
   INVALID_REQUEST,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
 } from "../../../../utils/index.js";
-import { serviceProcedure } from "../../procedures/service.js";
-import { globalRepository } from "../../repository.js";
+import { agentProcedure } from "../../procedures/service.js";
 import { zAsyncIterable } from "../../zAsyncIterable.js";
 import { A2AServiceImpl } from "../../protocol/index.js";
 
 const pushNotificationConfigRouter = router({
-  set: serviceProcedure
+  set: agentProcedure
     .input(TaskPushNotificationConfigSchema)
     .output(TaskPushNotificationConfigSchema)
     .mutation(async ({ input }) => {
       console.log("task/pushNotificationConfig/set", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  get: serviceProcedure
+  get: agentProcedure
     .input(GetTaskPushNotificationConfigParamsSchema)
     .output(TaskPushNotificationConfigSchema)
     .query(async ({ input }) => {
       console.log("task/pushNotificationConfig/get", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  list: serviceProcedure
+  list: agentProcedure
     .input(ListTaskPushNotificationConfigsParamsSchema)
     .output(ListTaskPushNotificationConfigResultSchema)
     .query(async ({ input }) => {
       console.log("task/pushNotificationConfig/list", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  delete: serviceProcedure
+  delete: agentProcedure
     .input(DeleteTaskPushNotificationConfigParamsSchema)
     .output(z.null())
     .mutation(async ({ input }) => {
@@ -50,7 +49,7 @@ const pushNotificationConfigRouter = router({
     }),
 });
 
-const resubscribeRoute = serviceProcedure
+const resubscribeRoute = agentProcedure
   .input(TaskIdParamsSchema)
   .output(
     zAsyncIterable({
@@ -65,21 +64,18 @@ const resubscribeRoute = serviceProcedure
     yield* (opts.ctx.service as A2AServiceImpl).resubscribe(input, opts.signal);
   });
 
-const getTaskRoute = serviceProcedure
+const getTaskRoute = agentProcedure
   .input(TaskIdParamsSchema)
   .output(TaskSchema)
   .query(async ({ input, ctx }) => {
     return await (ctx.service as A2AServiceImpl).getTask(input);
   });
 
-const cancelTaskRoute = serviceProcedure
+const cancelTaskRoute = agentProcedure
   .input(TaskIdParamsSchema)
   .output(TaskSchema)
   .mutation(async ({ input, ctx }) => {
-    return await (ctx.service as A2AServiceImpl).cancelTask(
-      input,
-      globalRepository.getContextManager()
-    );
+    return await (ctx.service as A2AServiceImpl).cancelTask(input);
   });
 
 export const taskRouter = router({

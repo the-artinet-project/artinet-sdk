@@ -4,10 +4,7 @@ import {
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { Protocol } from "../../types/services/protocol.js";
-import {
-  ExecutionContext,
-  MCPExecutionContext,
-} from "../../types/services/context.js";
+import { ExecutionContext, MCPContext } from "../../types/services/context.js";
 import { AgentSkill } from "../../types/index.js";
 import {
   CallToolResult,
@@ -71,7 +68,7 @@ export class MCPService<
   async execute({
     executionContext,
   }: {
-    executionContext: ExecutionContext<MCPExecutionContext>;
+    executionContext: ExecutionContext<MCPContext>;
     engine: AgentEngine;
   }): Promise<void> {
     if (!executionContext.requestContext) {
@@ -90,7 +87,7 @@ export class MCPService<
     await super.close();
   }
 
-  static mcpFactory<Args extends MCPExecutionContext = MCPExecutionContext>(
+  static mcpFactory<Args extends MCPContext = MCPContext>(
     engine: AgentEngine
   ): (args: Args["params"]) => Promise<string> {
     return async (args: Args["params"]) => {

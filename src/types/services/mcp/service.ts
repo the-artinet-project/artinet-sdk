@@ -6,7 +6,7 @@ import {
 import z, { ZodRawShape } from "zod";
 import { Service } from "../service.js";
 import { AgentSkill } from "../../schemas/index.js";
-import { MCPExecutionContext } from "../context.js";
+import { MCPContext } from "../context.js";
 
 /**
  * @description The MCPRequestParamsSchema.
@@ -51,7 +51,7 @@ export interface MCPTool<Args extends ZodRawShape = ZodRawShape> {
 /**
  * @description The MCPServiceInterface interface.
  */
-export interface MCPServiceInterface extends Service<MCPExecutionContext> {
+export interface MCPServiceInterface extends Service<MCPContext> {
   /**
    * @description Initializes the service.
    * @param {AgentSkill[]} skills The skills.

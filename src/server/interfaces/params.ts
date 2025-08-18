@@ -112,7 +112,7 @@ export type A2AServerParams = {
   basePath?: string;
   taskStore?: TaskStore;
   card?: AgentCard;
-  createJSONRPCServer?: JSONRPCServerFactory;
+  createJSONRPCServer?: JSONRPCServerFactory; //@deprecated
   fallbackPath?: string;
   register?: boolean;
 };

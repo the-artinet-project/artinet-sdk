@@ -1,86 +1,17 @@
-import type { Task, A2AContext, AgentSkill } from "../extended-schema.js";
+import type { AgentSkill } from "../extended-schema.js";
 import { Protocol } from "./protocol.js";
+import { Context } from "../../server/trpc/protocol/context.js";
 
-/**
- * @description The base context.
- */
-export interface BaseContext {
-  /**
-   * @description The id.
-   * @type {string}
-   */
-  id: string;
-  /**
-   * @description The protocol.
-   * @type {Protocol}
-   */
-  protocol: Protocol;
-}
-
-/**
- * @description The MCP context.
- */
-export interface MCPContext {
-  /**
-   * @description The message.
-   * @type {string}
-   */
-  message: string;
-}
-
-/**
- * @description The context params.
- * @type {A2AContext["params"] | MCPContext}
- */
-export type ContextParams = A2AContext["params"] | MCPContext;
-
-/**
- * @description The base execution context.
- */
-export interface BaseExecutionContext<T extends ContextParams = ContextParams>
-  extends BaseContext {
-  /**
-   * @description The method.
-   * @type {string}
-   */
-  method: string;
-  /**
-   * @description The params.
-   * @type {T}
-   */
-  params: T;
-}
-
-/**
- * Represents a request specific to the A2A (Agent-to-Agent) protocol.
- * The `protocol` field is narrowed to `Protocol.A2A`.
- */
-export interface A2AExecutionContext<
-  RequestType extends A2AContext = A2AContext,
-> extends BaseExecutionContext<RequestType["params"]> {
+export interface A2AContext extends Context {
   protocol: Protocol.A2A;
-  /**
-   * @description The task.
-   * @type {Task}
-   */
-  task: Task;
-  /**
-   * @description The request.
-   * @type {any}
-   */
-  request: any;
-  /**
-   * @description The response.
-   * @type {any}
-   */
-  response: any;
+  message: string;
 }
 
 /**
  * @description Represents a request specific to the MCP (Model Context Protocol) protocol.
  * The `protocol` field is narrowed to `Protocol.MCP`.
  */
-export interface MCPExecutionContext extends BaseExecutionContext<MCPContext> {
+export interface MCPContext extends Context {
   protocol: Protocol.MCP;
   /**
    * @description The request.
@@ -108,8 +39,7 @@ export interface MCPExecutionContext extends BaseExecutionContext<MCPContext> {
  * @description Represents a request specific to the NLWeb protocol.
  * The `protocol` field is narrowed to `Protocol.NLWEB`.
  */
-export interface NLWebExecutionContext
-  extends Omit<MCPExecutionContext, "protocol"> {
+export interface NLWContext extends Context {
   protocol: Protocol.NLWEB;
 }
 
@@ -117,7 +47,7 @@ export interface NLWebExecutionContext
  * @description Represents a request specific to the ACP (Agent Communication Protocol).
  * The `protocol` field is narrowed to `Protocol.ACP`.
  */
-export interface ACPExecutionContext extends BaseExecutionContext {
+export interface ACPContext extends Context {
   protocol: Protocol.ACP;
 }
 
@@ -125,7 +55,7 @@ export interface ACPExecutionContext extends BaseExecutionContext {
  * @description Represents a request specific to the CHAT protocol.
  * The `protocol` field is narrowed to `Protocol.CHAT`.
  */
-export interface ChatExecutionContext extends BaseExecutionContext {
+export interface ChatContext extends Context {
   protocol: Protocol.CHAT;
 }
 
@@ -136,51 +66,14 @@ export interface ChatExecutionContext extends BaseExecutionContext {
  * handling based on the protocol.
  */
 export type SupportedContext =
-  | A2AExecutionContext
-  | MCPExecutionContext
-  | ACPExecutionContext
-  | ChatExecutionContext;
+  | A2AContext
+  | MCPContext
+  | ACPContext
+  | ChatContext;
 
-/**
- * @description The execution context.
- */
-export interface ExecutionContext<
-  ContextType extends BaseExecutionContext = SupportedContext,
-> {
-  /**
-   * @description The id.
-   * @type {string}
-   */
-  id: string;
-  /**
-   * @description The protocol.
-   */
-  protocol: Protocol;
-  /**
-   * @description The get request params.
-   * @type {() => ContextType["params"] | undefined}
-   */
-  getRequestParams: () => ContextType["params"] | undefined;
-  /**
-   * @description The is cancelled.
-   * @type {() => boolean}
-   */
-  isCancelled: () => boolean;
-  /**
-   * @description The request context.
-   * @type {ContextType}
-   */
-  requestContext?: ContextType;
-}
+import { ExecutionEngine } from "../../server/trpc/protocol/execute.js";
 
-/**
- * @description The agent engine.
- * @type {AgentEngine}
- */
-export type AgentEngine<Context extends ExecutionContext = ExecutionContext> = (
-  context: Context
-) => AsyncGenerator<any, void, undefined>;
-
+export type AgentEngine = ExecutionEngine<SupportedContext>;
 /**
  * @description The execution context config.
  * @type {const}

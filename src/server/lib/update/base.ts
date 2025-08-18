@@ -102,11 +102,11 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
       update.append ?? false,
       current.task.artifacts ?? [],
       update.artifact
-    ); //hmm?
-    return true;
+    ); //!TODO: hmm?
+    return true; //!
   }
-  logError("updateTaskArtifactUpdate", "Invalid task id", update);
-  return true;
+  logError("updateTaskArtifactUpdate", "Invalid task id", update); //!
+  return true; //!
 };
 
 export const update: Update<UpdateEvent> = async (props): Promise<boolean> => {

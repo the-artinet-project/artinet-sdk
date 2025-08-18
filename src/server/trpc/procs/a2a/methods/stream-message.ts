@@ -6,14 +6,17 @@ import {
   WORKING_UPDATE,
 } from "../../../../../utils/index.js";
 import { A2AServiceInterface } from "../interfaces/service.js";
-import { ContextManager, ExecutionEngine } from "../../../protocol/index.js";
+import {
+  ContextManagerInterface,
+  ExecutionEngine,
+} from "../../../protocol/index.js";
 
 export async function* streamMessage(
   input: MessageSendParams,
   signal: AbortSignal,
   service: A2AServiceInterface,
   engine: ExecutionEngine,
-  contextManager: ContextManager
+  contextManager: ContextManagerInterface
 ) {
   let contextId = input.message.contextId;
   const context = await createExecutionContext(

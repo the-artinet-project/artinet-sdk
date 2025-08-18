@@ -1,8 +1,11 @@
 import { createExecutionContext } from "../../../procedures/service.js";
-import { MessageSendParams } from "../../../../../types/index.js";
+import {
+  MessageSendParams,
+  SendMessageSuccessResult,
+} from "../../../../../types/index.js";
 import {
   A2AServiceInterface,
-  ContextManager,
+  ContextManagerInterface,
   ExecutionEngine,
 } from "../../../protocol/index.js";
 
@@ -11,8 +14,8 @@ export async function sendMessage(
   signal: AbortSignal,
   service: A2AServiceInterface,
   engine: ExecutionEngine,
-  contextManager: ContextManager
-) {
+  contextManager: ContextManagerInterface
+): Promise<SendMessageSuccessResult> {
   const contextId = input.message.contextId;
   const context = await createExecutionContext(
     input.message,

@@ -1,100 +1,27 @@
-import cors from "cors";
-import express, { NextFunction, Request, Response } from "express";
-import { CreateExpressServerParams } from "../interfaces/params.js";
-import { ServiceManager } from "../../services/manager.js";
-import { errorHandler } from "../../utils/common/errors.js";
+import express from "express";
 import {
   ExpressServerInterface,
   ExpressServerOptions,
 } from "../../types/express.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { Protocol } from "../../types/services/protocol.js";
-import { v4 as uuidv4 } from "uuid";
 import http from "http";
 import util from "util";
 import { CorsOptions } from "cors";
 import { logError, logInfo } from "../../utils/logging/log.js";
-import { INVALID_REQUEST } from "../../utils/common/errors.js";
-import { A2AService } from "../../services/a2a/service.js";
+import { createAgentServer } from "../trpc/servers/express.js";
+import { A2AServiceInterface } from "../trpc/protocol/index.js";
 
 /**
- * @deprecated Use ExpressServer instead.
- * @description Creates an Express server for the A2A protocol.
- * Handles task creation, streaming, cancellation and more.
- * Uses Jayson for JSON-RPC handling.
- */
-export function createExpressServer(params: CreateExpressServerParams): {
-  app: express.Express;
-} {
-  const {
-    card,
-    corsOptions,
-    basePath,
-    rpcServer,
-    fallbackPath,
-    errorHandler,
-    onTaskSendSubscribe,
-    onTaskResubscribe,
-  } = params;
-  const app = express();
-
-  app.use(cors(corsOptions));
-
-  app.use(express.json());
-
-  app.get("/.well-known/agent.json", (_, res) => {
-    res.json(card);
-  });
-
-  app.get(fallbackPath, (_, res) => {
-    res.json(card);
-  });
-
-  //SSE Paths
-  app.post(
-    basePath,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const body = req.body;
-        if (body && body.method) {
-          if (body.method === "message/stream") {
-            return await onTaskSendSubscribe(body, res);
-          } else if (body.method === "tasks/resubscribe") {
-            return await onTaskResubscribe(body, res);
-          }
-        }
-        next();
-      } catch (error) {
-        next(error);
-      }
-    }
-  );
-
-  //RPC server
-  app.post(basePath, rpcServer.middleware());
-
-  // Fallback error handler
-  app.use(errorHandler);
-
-  return { app };
-}
-
-/**
+ * @deprecated Use the createAgentServer function instead.
  * @description The express server class.
  */
-export class ExpressServer
-  extends ServiceManager
-  implements ExpressServerInterface
-{
+export class ExpressServer implements ExpressServerInterface {
   readonly basePath: string;
-  readonly fallbackPath: string;
   private _serverInstance: http.Server | undefined;
   readonly port: number;
   protected app: express.Express;
   readonly register: boolean;
   readonly corsOptions: CorsOptions;
-  private initialized: boolean = false;
-
+  readonly service: A2AServiceInterface;
   /**
    * @description Gets the server instance.
    * @returns {http.Server | undefined} The server instance.
@@ -108,19 +35,6 @@ export class ExpressServer
    * @param {ExpressServerOptions} params The express server options.
    */
   constructor(params: ExpressServerOptions) {
-    const atBasePath =
-      Object.keys(params.services ?? {}).length > 1 ? false : true;
-    super({
-      ...params,
-      services: params.services ?? {
-        [Protocol.A2A]: new A2AService({
-          engine: params.engine,
-          taskStore: params.storage,
-          card: params.card,
-        }),
-      },
-    });
-
     this.corsOptions = params.corsOptions ?? {
       origin: "*",
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -134,133 +48,18 @@ export class ExpressServer
     }
 
     this.basePath = basePath;
-
-    this.fallbackPath = params.fallbackPath ?? "/agent-card";
-
     this.port = params.port ?? 41241;
 
-    this.app = params.app ?? express();
-
-    this.app.use(cors(this.corsOptions));
-    this.app.use(express.json());
-
+    const { app, service } = createAgentServer({
+      app: params.app,
+      corsOptions: this.corsOptions,
+      basePath: this.basePath,
+      agent: params.agent,
+      agentInfo: params.agentInfo,
+    });
+    this.app = app;
+    this.service = service;
     this.register = params.register ?? false;
-    this.registerRoutes(atBasePath);
-  }
-
-  /**
-   * @description Registers the routes.
-   * @param {StreamableHTTPServerTransport} transport The mcp transport.
-   */
-  registerRoutes(
-    atBasePath: boolean = true,
-    transport?: StreamableHTTPServerTransport
-  ): void {
-    this.app.get(`/.well-known/agent.json`, (_, res) => {
-      res.json(this.getCard());
-    });
-    this.app.get(this.fallbackPath, (_, res) => {
-      res.json(this.getCard());
-    });
-    for (const service of Object.values(this.services)) {
-      const path = atBasePath
-        ? `${this.basePath}`
-        : this.basePath === "/"
-          ? `/${service.protocol}`
-          : `${this.basePath}${service.protocol}`;
-      this.app.get(
-        path,
-        async (
-          req: express.Request,
-          res: express.Response,
-          next: express.NextFunction
-        ) => {
-          try {
-            const { id, method, params, jsonrpc } = req.body;
-            if (jsonrpc !== "2.0") {
-              res.status(400).json({ error: "Invalid JSON-RPC version" });
-              return;
-            }
-            const context = this.createRequestContext({
-              id,
-              protocol: service.protocol,
-              method,
-              params: {
-                ...params,
-                protocol: service.protocol,
-              },
-              request: req,
-              response: res,
-              transport:
-                service.protocol === Protocol.MCP
-                  ? transport
-                    ? transport
-                    : new StreamableHTTPServerTransport({
-                        sessionIdGenerator: () => uuidv4(),
-                      })
-                  : undefined,
-            });
-            return await this.onRequest(context).catch((error) => {
-              res.status(500).json({ id, error: error.message });
-            });
-          } catch (error) {
-            logError("ExpressServer", "Error in GET", error);
-            next(error);
-          }
-        }
-      );
-
-      this.app.post(
-        path,
-        async (
-          req: express.Request,
-          res: express.Response,
-          next: express.NextFunction
-        ) => {
-          try {
-            const { id, method, params, jsonrpc } = req.body;
-            if (jsonrpc !== "2.0") {
-              res.status(200).send({
-                jsonrpc: "2.0",
-                id: id,
-                error: INVALID_REQUEST({
-                  jsonrpc: jsonrpc,
-                  data: req.body,
-                }),
-              });
-              return;
-            }
-            const context = this.createRequestContext({
-              id,
-              protocol: service.protocol,
-              method,
-              params: {
-                ...params,
-                protocol: service.protocol,
-              },
-              request: req,
-              response: res,
-              transport:
-                service.protocol === Protocol.MCP
-                  ? transport
-                    ? transport
-                    : new StreamableHTTPServerTransport({
-                        sessionIdGenerator: () => uuidv4(),
-                      })
-                  : undefined,
-            });
-            return await this.onRequest(context).catch((error) => {
-              res.status(500).json({ error: error.message });
-            });
-          } catch (error) {
-            console.error("Error in POST", error);
-            next(error);
-          }
-        }
-      );
-    }
-    this.app.use(errorHandler);
-    this.initialized = true;
   }
 
   /**
@@ -268,9 +67,6 @@ export class ExpressServer
    * @returns {express.Express} The app.
    */
   getApp(): express.Express {
-    if (!this.initialized) {
-      this.registerRoutes();
-    }
     return this.app;
   }
 
@@ -279,14 +75,11 @@ export class ExpressServer
    * @returns {Promise<http.Server>} The server.
    */
   async start(): Promise<http.Server> {
-    if (!this.initialized) {
-      this.registerRoutes();
-    }
     if (this._serverInstance) {
       return this._serverInstance;
     }
     this._serverInstance = this.app.listen(this.port, () => {
-      logInfo("ExpressServer", `Express Server started and listening`, {
+      logInfo("AgentServer", `Agent Server started and listening`, {
         port: this.port,
         path: this.basePath,
       });
@@ -298,7 +91,6 @@ export class ExpressServer
    * @description Stops the server.
    */
   async stop(): Promise<void> {
-    await super.destroy();
     if (!this._serverInstance) {
       return;
     }
@@ -310,7 +102,7 @@ export class ExpressServer
       this._serverInstance = undefined;
     } catch (error) {
       this._serverInstance = undefined;
-      logError("ExpressServer", "Error stopping server:", error);
+      logError("AgentServer", "Error stopping server:", error);
     }
   }
 }

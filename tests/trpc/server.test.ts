@@ -6,14 +6,19 @@ import {
   afterEach,
   expect,
 } from "@jest/globals";
-import { agentRouter } from "../../src/server/trpc/server.js";
+import { createAgentRouter } from "../../src/server/trpc/server.js";
 import { globalRepository } from "../../src/server/trpc/repository.js";
 import { configureLogger, TaskState, TASK_NOT_FOUND } from "../../src/index.js";
-
+import { createAgentServer } from "../../src/server/trpc/servers/express.js";
+import expressListRoutes from "express-list-routes";
+import express from "express";
+import request from "supertest";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
-
+const agentRouter = createAgentRouter({
+  agentInfoPath: "agentCard",
+});
 describe("trpc-server", () => {
   const testId = "123";
   const agent = agentRouter.createCaller({
@@ -102,7 +107,6 @@ describe("trpc-server", () => {
       });
       const messages: any[] = [];
       for await (const message of result) {
-        console.log("message/stream/test/message", message);
         messages.push(message);
       }
       expect(messages.length).toEqual(3);
@@ -136,6 +140,24 @@ describe("trpc-server", () => {
           id: testId,
         })
       ).rejects.toThrowError("Task not found");
+    });
+  });
+
+  describe("express", () => {
+    it("should create an express server", async () => {
+      const initapp = express();
+      initapp.get("/", (req, res) => {
+        res.send("Hello, world!");
+      });
+      const app = createExpressServer(initapp);
+      expect(app).toBeDefined();
+      const server = app.listen(2021, () => {
+        console.log("listening on port 2021");
+      });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await request(app).get("/api/v1/agent/agentCard");
+      console.log("response", response.text);
+      server.close();
     });
   });
 });
