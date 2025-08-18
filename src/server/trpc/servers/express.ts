@@ -28,7 +28,7 @@ export interface StateManagementParams {
   contextManager?: ContextManagerInterface;
   cancellationManager?: CancellationManagerInterface;
   connectionManager?: ConnectionManagerInterface;
-  methods?: A2AServiceMethodOptions;
+  methods?: Partial<A2AServiceMethodOptions>;
   events?: EventManagerOptions<Message, TaskAndHistory>; //currently not used
 }
 
