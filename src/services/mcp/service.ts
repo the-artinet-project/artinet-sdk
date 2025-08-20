@@ -3,22 +3,22 @@ import {
   ToolCallback,
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { Protocol } from "../../types/services/protocol.js";
-import { ExecutionContext, MCPContext } from "../../types/services/context.js";
+import { Protocol } from "../../types/interfaces/services/protocol.js";
+import { MCPContext } from "../../types/interfaces/services/context.js";
 import { AgentSkill } from "../../types/index.js";
 import {
   CallToolResult,
   Implementation,
 } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
-import { AgentEngine } from "../../types/services/context.js";
+import { AgentEngine } from "../../types/interfaces/services/context.js";
 import { ZodRawShape } from "zod";
 import {
   MCPTool,
   MCPRequestParamsSchema,
   MCPServiceInterface,
-} from "../../types/services/mcp/service.js";
-
+} from "../../types/interfaces/services/mcp/service.js";
+//todo: Refactor MCP Service to use the new pattern
 export class MCPService<
     T extends StreamableHTTPServerTransport = StreamableHTTPServerTransport,
   >

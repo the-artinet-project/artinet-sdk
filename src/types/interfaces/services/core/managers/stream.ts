@@ -1,0 +1,24 @@
+import { CoreCommand, CoreState, CoreUpdate } from "~types/index.js";
+import { Context } from "../context/index.js";
+import { ExecutionEngine } from "../execution/index.js";
+import { ServiceInterface } from "../service.js";
+
+export interface StreamManagerInterface<
+  TCommand extends CoreCommand = CoreCommand,
+  TState extends CoreState = CoreState,
+  TUpdate extends CoreUpdate = CoreUpdate,
+> {
+  getContextId(): string;
+  addUpdate(update: TUpdate): void;
+  getUpdates(): TUpdate[];
+  isCompleted(): boolean;
+  setCompleted(): void;
+  getExecutionContext(): Context<TCommand, TState, TUpdate>;
+  setExecutionContext(
+    executionContext: Context<TCommand, TState, TUpdate>
+  ): void;
+  stream(
+    engine: ExecutionEngine<TCommand, TUpdate>,
+    service?: ServiceInterface<TCommand, TState, TUpdate>
+  ): AsyncGenerator<TUpdate>;
+}

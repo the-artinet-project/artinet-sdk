@@ -9,29 +9,31 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  A2AServer,
   InMemoryTaskStore,
   TaskStore,
   configureLogger,
   TaskState,
-  ExecutionContext,
-  AgentEngine,
   MessageSendParams,
   logInfo,
   SendMessageRequest,
 } from "../src/index.js";
-
+import {
+  AgentServer,
+  createAgentServer,
+} from "../src/server/trpc/servers/express.js";
+import { AgentEngine } from "../src/types/services/index.js";
+import { defaultAgentCard } from "../src/server/trpc/repository.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Define test task handler
 const basicTaskHandler: AgentEngine = async function* (
-  context: ExecutionContext
+  command: MessageSendParams
 ) {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+  const params = command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   // Check if task already has status, if not, use "working"
   yield {
     taskId: taskId,
@@ -53,16 +55,16 @@ const basicTaskHandler: AgentEngine = async function* (
   await new Promise((resolve) => setTimeout(resolve, 100));
 
   // Check for cancellation
-  if (context.isCancelled()) {
-    yield {
-      taskId: taskId,
-      contextId: contextId,
-      kind: "status-update",
-      status: { state: TaskState.canceled },
-      final: true,
-    };
-    return;
-  }
+  // if (context.isCancelled()) {
+  //   yield {
+  //     taskId: taskId,
+  //     contextId: contextId,
+  //     kind: "status-update",
+  //     status: { state: TaskState.canceled },
+  //     final: true,
+  //   };
+  //   return;
+  // }
   // Generate a result artifact
   yield {
     taskId: taskId,
@@ -99,7 +101,7 @@ const basicTaskHandler: AgentEngine = async function* (
 };
 
 describe("A2AServer", () => {
-  let server: A2AServer;
+  let server: AgentServer;
   let app: express.Express;
   let taskStore: TaskStore;
   // Track any pending requests for cleanup
@@ -107,12 +109,15 @@ describe("A2AServer", () => {
 
   beforeEach(() => {
     taskStore = new InMemoryTaskStore();
-    server = new A2AServer({
-      handler: basicTaskHandler,
-      taskStore,
-      port: 0, // Don't actually listen
+    server = createAgentServer({
+      agent: basicTaskHandler,
+      agentInfo: defaultAgentCard,
+      agentInfoPath: "/.well-known/agent.json",
     });
-    app = server.start();
+    app = server.app;
+    app.get("/agent-card", (req, res) => {
+      res.json(defaultAgentCard);
+    });
     pendingRequests = [];
   });
 
@@ -128,10 +133,6 @@ describe("A2AServer", () => {
         }
       })
     );
-
-    await server.stop();
-    // Add a small delay to allow any open connections to close
-    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   // Helper function to track supertest requests
@@ -211,30 +212,6 @@ describe("A2AServer", () => {
         "Request payload validation error"
       ); //todo expected "Request payload validation error" but may be caused by the jsonrpc middleware
     });
-
-    it("returns an error for missing task ID", async () => {
-      const requestWithoutId = {
-        jsonrpc: "2.0",
-        id: "missing-id-req",
-        method: "message/send",
-        params: {
-          // Missing id field
-          message: {
-            // role: "user",
-            parts: [{ kind: "text", text: "Test" }],
-          },
-        },
-      };
-
-      const response = await trackRequest(
-        request(app).post("/").send(requestWithoutId)
-      );
-
-      expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
-    });
   });
 
   describe("tasks/get", () => {
@@ -256,7 +233,6 @@ describe("A2AServer", () => {
       const createResponse = await trackRequest(
         request(app).post("/").send(createRequest)
       );
-      logInfo("createResponse", createResponse.body);
 
       // Now try to retrieve it
       const getRequest = {

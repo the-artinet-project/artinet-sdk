@@ -1,4 +1,7 @@
-import { TaskAndHistory, TaskStore } from "../../interfaces/store.js";
+import {
+  TaskAndHistory,
+  TaskStore,
+} from "../../../types/interfaces/storage.js";
 import { Task, Message } from "../../../types/extended-schema.js";
 import { logError, logDebug } from "../../../utils/logging/log.js";
 import fs from "fs/promises";

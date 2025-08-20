@@ -9,28 +9,30 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  A2AServer,
-  ExecutionContext,
   InMemoryTaskStore,
-  Message,
   MessageSendParams,
-  TaskContext,
   TaskState,
-  UpdateEvent,
+  Message,
   configureLogger,
 } from "../src/index.js";
-
+import { ExecutionEngine } from "../src/server/trpc/protocol/execute.js";
+import { A2AContext } from "../src/types/services/context.js";
+import { A2AService } from "../src/services/a2a/index.js";
+import {
+  AgentServer,
+  createAgentServer,
+} from "../src/server/trpc/servers/express.js";
+import { defaultAgentCard } from "../src/server/trpc/repository.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
-// Define an error-prone task handler for testing
-async function* errorProneTaskHandler(
-  context: ExecutionContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+const errorProneEngine: ExecutionEngine<A2AContext> = async function* (
+  command: MessageSendParams
+) {
+  const params = command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
@@ -93,39 +95,21 @@ async function* errorProneTaskHandler(
     },
     final: true,
   };
-}
+  return;
+};
 
 describe("A2AServer Error Handling", () => {
-  let server: A2AServer;
+  let server: AgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    server = new A2AServer({
-      handler: errorProneTaskHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0, // Don't actually listen
+    server = createAgentServer({
+      agent: errorProneEngine,
+      agentInfo: defaultAgentCard,
     });
-    app = server.start();
+    app = server.app;
     pendingRequests = [];
-  });
-
-  afterEach(async () => {
-    // Ensure all pending requests are completed
-    await Promise.all(
-      pendingRequests.map((req) => {
-        try {
-          return req;
-        } catch (e) {
-          // Ignore errors during cleanup
-          return null;
-        }
-      })
-    );
-
-    await server.stop();
-    // Add a small delay to allow any open connections to close
-    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   // Helper function to track supertest requests

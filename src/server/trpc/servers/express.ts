@@ -1,21 +1,20 @@
-import * as trpcExpress from "@trpc/server/adapters/express";
-import { createAgentRouter } from "../server.js";
-import { AgentCard, Message } from "../../../types/index.js";
+import { AgentCard } from "../../../types/index.js";
 import express from "express";
 import { A2AServiceInterface } from "../protocol/index.js";
 import { createA2AService, defaultAgentCard } from "../procs/a2a/service.js";
 import { AgentEngine } from "../../../types/index.js";
-import { engine as defaultEngine } from "../test-engine.js";
 import { CorsOptions } from "cors";
 import { TaskManagerInterface } from "../protocol/states/task-manager.js";
 import { ContextManagerInterface } from "../protocol/context.js";
 import { CancellationManagerInterface } from "../protocol/states/cancellation-manager.js";
 import { ConnectionManagerInterface } from "../protocol/states/connection-manager.js";
 import { EventManagerOptions } from "../protocol/events/manager.js";
-import { TaskAndHistory } from "../../interfaces/store.js";
+import { TaskAndHistory } from "../../../types/interfaces/storage.js";
 import cors from "cors";
 import { jsonRpcExpressMiddleware } from "./json-rpc-express.js";
 import { A2AServiceMethodOptions } from "../procs/a2a/interfaces/service.js";
+import { MessageSendParams } from "../../../types/schemas/index.js";
+import { errorHandler, INVALID_REQUEST } from "../../../utils/common/errors.js";
 
 export interface ExpressServerParams {
   app?: express.Express;
@@ -23,13 +22,13 @@ export interface ExpressServerParams {
   basePath?: string;
 }
 
-export interface StateManagementParams {
+export interface ServiceBuilder {
   taskManager?: TaskManagerInterface;
   contextManager?: ContextManagerInterface;
   cancellationManager?: CancellationManagerInterface;
   connectionManager?: ConnectionManagerInterface;
   methods?: Partial<A2AServiceMethodOptions>;
-  events?: EventManagerOptions<Message, TaskAndHistory>; //currently not used
+  events?: EventManagerOptions<MessageSendParams, TaskAndHistory>; //currently not used
 }
 
 export interface CreateAgentServerParams<TInfo extends AgentCard = AgentCard>
@@ -37,7 +36,7 @@ export interface CreateAgentServerParams<TInfo extends AgentCard = AgentCard>
   agent: AgentEngine;
   agentInfo: TInfo;
   agentInfoPath?: string;
-  service?: A2AServiceInterface | StateManagementParams;
+  service?: A2AServiceInterface | ServiceBuilder;
   register?: boolean;
 }
 
@@ -47,11 +46,14 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
   const {
     app = express(),
     basePath = "/",
-    agentInfoPath = "/agent-card",
+    agentInfoPath = "/.well-known/agent.json",
     agentInfo = defaultAgentCard,
-    agent = defaultEngine,
+    agent,
   } = params;
-  console.log("agentInfoPath", agentInfoPath);
+  if (!agent) {
+    throw new Error("Agent is required");
+  }
+  // console.log("agentInfoPath", agentInfoPath);
   let serviceParams = params.service;
   let serviceInstance: A2AServiceInterface;
 
@@ -65,6 +67,7 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
   ) {
     serviceInstance = createA2AService({
       agentCard: agentInfo,
+      agent,
       contexts: serviceParams.contextManager,
       connections: serviceParams.connectionManager,
       cancellations: serviceParams.cancellationManager,
@@ -74,16 +77,21 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
   } else {
     serviceInstance =
       (serviceParams as A2AServiceInterface) ||
-      createA2AService({ agentCard: agentInfo });
+      createA2AService({ agentCard: agentInfo, agent });
   }
 
-  const agentRouter = createAgentRouter({});
+  //   const agentRouter = createAgentRouter({});
   app.use(express.json());
   app.use(cors(params.corsOptions));
   app.get(agentInfoPath, (req, res) => {
     res.json(agentInfo);
   });
-  // Add JSON-RPC middleware to convert JSON-RPC calls to tRPC procedures
+  /**
+   * Now that agents are services we can wrap them in any kind of transport layer
+   * for express we can use json-rpc, but we could also use websockets, or any other
+   * transport layer.
+   */
+  //this is an example of using a standard express middleware to handle json-rpc
   app.post(
     basePath,
     express.json(),
@@ -94,25 +102,30 @@ export const createAgentServer = <TInfo extends AgentCard = AgentCard>(
     ) => {
       const { jsonrpc } = req.body;
       if (jsonrpc === "2.0") {
-        return await jsonRpcExpressMiddleware(serviceInstance, req, res);
+        return await jsonRpcExpressMiddleware(serviceInstance, req, res, next);
       }
-      next();
+      next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));
     }
   );
-  app.use(
-    `${basePath}`,
-    trpcExpress.createExpressMiddleware({
-      router: agentRouter,
-      createContext: async (ctx: trpcExpress.CreateExpressContextOptions) => {
-        console.log("createContext");
-        return {
-          ...ctx,
-          service: serviceInstance,
-          engine: agent,
-        };
-      },
-    })
-  );
+  app.use(errorHandler);
+  //this is an example of using the trpc express middleware
+  //   app.use(
+  //     `${basePath}`,
+  //     trpcExpress.createExpressMiddleware({
+  //       router: agentRouter,
+  //       createContext: async (ctx: trpcExpress.CreateExpressContextOptions) => {
+  //         console.log("createContext");
+  //         return {
+  //           ...ctx,
+  //           service: serviceInstance,
+  //           engine: agent,
+  //         };
+  //       },
+  //     })
+  //   );
+  /**
+   * we could also just use trpc directly or any other transport layer
+   */
   return { app, service: serviceInstance };
 };
 

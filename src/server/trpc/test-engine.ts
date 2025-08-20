@@ -3,14 +3,14 @@ import {
   TaskState,
   Kind,
   MessageRoleSchema,
+  MessageSendParams,
 } from "../../types/index.js";
 
-export const engine = async function* (request: any) {
-  console.log("test-engine: request", request);
+export const engine = async function* (request: MessageSendParams) {
   const update: TaskStatusUpdateEvent = {
     kind: "status-update",
-    taskId: request.taskId,
-    contextId: request.contextId ?? request.taskId,
+    taskId: request.message.taskId ?? "",
+    contextId: request.message.contextId ?? "",
     status: {
       state: TaskState.completed,
       timestamp: "2024-01-01T00:00:00.000Z",

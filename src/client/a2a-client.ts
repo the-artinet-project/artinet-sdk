@@ -30,7 +30,7 @@ import {
 
 import { logError, INTERNAL_ERROR } from "../utils/index.js";
 
-import type { Client } from "../types/client.js";
+import type { Client } from "../types/interfaces/client.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.

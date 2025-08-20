@@ -61,7 +61,11 @@ const resubscribeRoute = agentProcedure
     if (!input) {
       throw INVALID_REQUEST({ input: "No input" });
     }
-    yield* (opts.ctx.service as A2AServiceImpl).resubscribe(input, opts.signal);
+    yield* (opts.ctx.service as A2AServiceImpl).resubscribe(
+      input,
+      opts.ctx.engine,
+      opts.signal
+    );
   });
 
 const getTaskRoute = agentProcedure

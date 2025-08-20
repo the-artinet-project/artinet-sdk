@@ -19,6 +19,7 @@ const sendMessageRoute = agentProcedure
     }
     return await (opts.ctx.service as A2AServiceImpl).sendMessage(
       input,
+      opts.ctx.engine,
       opts.signal
     );
   });
@@ -37,6 +38,7 @@ const streamMessageRoute = agentProcedure
     }
     yield* (opts.ctx.service as A2AServiceImpl).streamMessage(
       input,
+      opts.ctx.engine,
       opts.signal
     );
   });

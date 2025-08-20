@@ -2,7 +2,6 @@ import {
   JSONRPCError,
   JSONRPCResponse,
   JSONRPCErrorSchema,
-  JSONRPCResponseSchema,
 } from "../../types/extended-schema.js";
 import { SystemError, PARSE_ERROR } from "../../utils/common/errors.js";
 import { logError } from "../../utils/logging/log.js";

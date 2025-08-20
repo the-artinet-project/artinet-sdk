@@ -9,13 +9,14 @@ import {
 import { createAgentRouter } from "../../src/server/trpc/server.js";
 import { globalRepository } from "../../src/server/trpc/repository.js";
 import { configureLogger, TaskState, TASK_NOT_FOUND } from "../../src/index.js";
-import { createAgentServer } from "../../src/server/trpc/servers/express.js";
-import expressListRoutes from "express-list-routes";
 import express from "express";
 import request from "supertest";
+import { createAgentServer } from "../../src/server/trpc/servers/express.js";
+import { engine } from "../../src/server/trpc/test-engine.js";
+import { defaultAgentCard } from "../../src/server/trpc/repository.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
+configureLogger({ level: "error" });
 const agentRouter = createAgentRouter({
   agentInfoPath: "agentCard",
 });
@@ -58,6 +59,7 @@ describe("trpc-server", () => {
   });
   describe("message", () => {
     it("should call send", async () => {
+      // const start = performance.now();
       const result = await agent.message.send({
         message: {
           messageId: testId,
@@ -68,6 +70,8 @@ describe("trpc-server", () => {
           taskId: testId,
         },
       });
+      // const end = performance.now();
+      // console.log("execution time", end - start);
       expect(result).toEqual({
         kind: "task",
         id: testId,
@@ -149,14 +153,17 @@ describe("trpc-server", () => {
       initapp.get("/", (req, res) => {
         res.send("Hello, world!");
       });
-      const app = createExpressServer(initapp);
-      expect(app).toBeDefined();
-      const server = app.listen(2021, () => {
-        console.log("listening on port 2021");
+      const { app } = createAgentServer({
+        app: initapp,
+        agent: engine,
+        agentInfo: defaultAgentCard,
+        basePath: "/api/v1/agent",
+        agentInfoPath: "/api/v1/agent/agentCard",
       });
+      expect(app).toBeDefined();
+      const server = app.listen(2021, () => {});
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await request(app).get("/api/v1/agent/agentCard");
-      console.log("response", response.text);
+      await request(app).get("/api/v1/agent/agentCard");
       server.close();
     });
   });

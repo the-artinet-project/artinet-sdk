@@ -9,9 +9,7 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  A2AServer,
   InMemoryTaskStore,
-  ExecutionContext,
   UpdateEvent,
   INTERNAL_ERROR,
   AgentCard,
@@ -22,18 +20,22 @@ import {
   MessageSendParams,
   SendMessageRequest,
 } from "../src/index.js";
-
+import {
+  AgentServer,
+  createAgentServer,
+} from "../src/server/trpc/servers/express.js";
+import { AgentEngine } from "../src/types/services/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
-async function* serverImplTestHandler(
-  context: ExecutionContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+const serverImplTestHandler: AgentEngine = async function* (
+  command: MessageSendParams
+) {
+  const params = command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
@@ -41,7 +43,7 @@ async function* serverImplTestHandler(
 
   // Need to specifically test error conditions
   if (text.includes("throw-internal")) {
-    throw INTERNAL_ERROR(new Error("Internal test error"));
+    throw INTERNAL_ERROR({ data: { message: "Internal test error" } });
   }
 
   // Test for different state transitions in detail
@@ -150,10 +152,10 @@ async function* serverImplTestHandler(
     },
     final: true,
   };
-}
+};
 
 describe("Server Implementation Tests", () => {
-  let server: A2AServer;
+  let server: AgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
@@ -182,21 +184,18 @@ describe("Server Implementation Tests", () => {
       description: "Test agent description",
     };
 
-    server = new A2AServer({
-      handler: serverImplTestHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0, // Don't actually listen
-      card: customCard,
-      // Use custom CORS options to test that code path
+    server = createAgentServer({
+      agent: serverImplTestHandler,
+      agentInfo: customCard,
+      agentInfoPath: "/.well-known/agent.json",
       corsOptions: {
         origin: ["http://localhost:3000"],
         methods: ["GET", "POST", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
       },
-      // Use custom base path to test that code path
       basePath: "/api",
     });
-    app = server.start();
+    app = server.app;
     pendingRequests = [];
   });
 
@@ -212,10 +211,6 @@ describe("Server Implementation Tests", () => {
         }
       })
     );
-
-    await server.stop();
-    // Add a small delay to allow any open connections to close
-    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   // Helper function to track supertest requests

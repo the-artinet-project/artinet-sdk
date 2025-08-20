@@ -1,4 +1,7 @@
-import { TaskAndHistory, TaskStore } from "../../interfaces/store.js";
+import {
+  TaskAndHistory,
+  TaskStore,
+} from "../../../types/interfaces/storage.js";
 import { logDebug } from "../../../utils/logging/log.js";
 
 /**

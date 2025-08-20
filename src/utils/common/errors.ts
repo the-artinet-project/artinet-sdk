@@ -79,7 +79,7 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
   data: T["data"]
 ) =>
   new SystemError<T>(
-    "Push Notification is not supported",
+    "Push Notifications is not supported",
     ErrorCodePushNotificationNotSupported,
     data
   );
@@ -131,28 +131,15 @@ export const FAILED_UPDATE = (
     },
   },
 });
+//todo: move to server function
 
 /**
  * Express error handler middleware.
  */
-export type ErrorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => void;
-
-/**
- * Express error handler middleware.
- */
-export function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+export function errorHandler(err: Error, req: Request, res: Response): void {
+  let headersSent = false;
   if (res.headersSent) {
-    return next(err);
+    headersSent = true;
   }
   logError("errorHandler", JSON.stringify(err), err);
   let reqId = null;
@@ -182,5 +169,10 @@ export function errorHandler(
     error: jsonRpcError,
   };
 
-  res.status(200).json(errorResponse);
+  if (!headersSent) {
+    res.json(errorResponse);
+  } else {
+    res.write(JSON.stringify(errorResponse));
+    res.end();
+  }
 }

@@ -108,7 +108,7 @@ describe("Error Handling Utilities", () => {
       );
       expect(error).toBeInstanceOf(SystemError);
       expect(error.code).toBe(ErrorCodePushNotificationNotSupported);
-      expect(error.message).toBe("Push Notification is not supported");
+      expect(error.message).toBe("Push Notifications is not supported");
     });
 
     it("should include data in created error", () => {
