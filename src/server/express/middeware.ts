@@ -132,7 +132,7 @@ export async function jsonRPCMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
-    logError("error", error);
+    logError("jsonRPCMiddleware", "error detected", error, req.body);
     return next(error);
   }
 }
