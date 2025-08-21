@@ -1,0 +1,78 @@
+src/
+├── index.ts # Main entry point
+├── client/ # Client-side A2A implementation
+│ ├── a2a-client.ts # Main A2A client logic
+│ └── index.ts
+├── server/ # Server implementations
+│ ├── index.ts
+│ └── express/ # Express.js server
+│ ├── server.ts # Express server setup
+│ ├── middeware.ts # Express middleware
+│ ├── errors.ts # Error handling
+│ └── index.ts
+├── services/ # Core business logic services
+│ ├── index.ts
+│ ├── a2a/ # A2A protocol services
+│ │ ├── service.ts # Main A2A service implementation
+│ │ ├── index.ts
+│ │ ├── factory/ # Service factory patterns
+│ │ ├── managers/ # Service managers
+│ │ │ ├── connection.ts # Connection management
+│ │ │ ├── context.ts # Context management
+│ │ │ ├── cancellation.ts # Cancellation handling
+│ │ │ ├── task.ts # Task management
+│ │ │ └── index.ts
+│ │ ├── methods/ # A2A method implementations
+│ │ └── state/ # State management
+│ ├── core/ # Core execution services
+│ │ ├── index.ts
+│ │ ├── managers/ # Core managers
+│ │ └── execution/ # Execution engine
+│ │ ├── execute.ts # Main execution logic
+│ │ └── index.ts
+│ └── mcp/ # MCP protocol services
+├── types/ # Type definitions
+│ ├── index.ts
+│ ├── ext.ts # External type extensions
+│ ├── interfaces/ # TypeScript interfaces
+│ │ ├── index.ts
+│ │ ├── client.ts # Client interfaces
+│ │ ├── storage.ts # Storage interfaces
+│ │ └── services/ # Service interfaces
+│ │ ├── index.ts
+│ │ ├── protocol.ts # Protocol interfaces
+│ │ ├── a2a/ # A2A service interfaces
+│ │ │ ├── engine.ts # A2A Engine type (your core logic!)
+│ │ │ ├── service.ts # A2A Service interfaces
+│ │ │ ├── legacy.ts # Legacy type definitions
+│ │ │ ├── context.ts # A2A context types
+│ │ │ └── index.ts
+│ │ ├── core/ # Core service interfaces
+│ │ │ ├── service.ts # Core service interfaces
+│ │ │ ├── index.ts
+│ │ │ ├── managers/ # Manager interfaces
+│ │ │ ├── execution/ # Execution interfaces
+│ │ │ └── context/ # Context interfaces
+│ │ └── mcp/ # MCP interfaces
+│ ├── schemas/ # Schema definitions
+│ │ ├── index.ts
+│ │ ├── a2a/ # A2A schemas
+│ │ └── deployment/ # Deployment schemas
+│ └── utils/ # Type utilities
+├── transport/ # Transport layer implementations
+│ ├── index.ts
+│ ├── trpc/ # tRPC transport
+│ │ ├── index.ts
+│ │ └── a2a/ # A2A over tRPC
+│ ├── streaming/ # Streaming transport
+│ └── rpc/ # RPC transport
+├── utils/ # Utility functions
+│ ├── index.ts
+│ ├── common/ # Common utilities
+│ ├── logging/ # Logging utilities
+│ ├── storage/ # Storage utilities
+│ ├── deployment/ # Deployment utilities
+│ └── api/ # API utilities
+└── registry/ # Service registry
+├── registry.ts # Main registry implementation
+└── index.ts
