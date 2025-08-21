@@ -97,7 +97,6 @@ export function createAgentServer(
       trpcExpress.createExpressMiddleware({
         router: agentRouter,
         createContext: async (ctx: trpcExpress.CreateExpressContextOptions) => {
-          console.log("createContext");
           return {
             ...ctx,
             service: serviceInstance,
