@@ -5,6 +5,7 @@ import {
   CoreCommand,
   CoreState,
   CoreUpdate,
+  CoreContext,
 } from "~/types/index.js";
 
 export class EventManager<
@@ -28,11 +29,13 @@ export class EventManager<
     this.options = options;
   }
 
-  onStart = async (request?: TCommand): Promise<TState> => {
+  onStart = async (
+    context: CoreContext<TCommand, TState, TUpdate>
+  ): Promise<TState> => {
     if (this.options.onStart) {
-      this.currentState = await this.options.onStart(request);
+      this.currentState = await this.options.onStart(context);
     }
-    this.emit("start", request, this.currentState);
+    this.emit("start", context.command, this.currentState);
     return this.currentState;
   };
 

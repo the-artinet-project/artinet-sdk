@@ -15,6 +15,7 @@ import {
   A2AEngine,
   ExpressAgentServer,
   createAgentServer,
+  Context,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
@@ -22,10 +23,8 @@ import { configureLogger } from "../src/utils/logging/index.js";
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
-const errorProneEngine: A2AEngine = async function* (
-  command: MessageSendParams
-) {
-  const params = command;
+const errorProneEngine: A2AEngine = async function* (context: Context) {
+  const params = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
   const text = params.message.parts

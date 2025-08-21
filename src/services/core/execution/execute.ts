@@ -16,14 +16,14 @@ export const coreExecute = async <
     TUpdate
   >,
 >(
-  engine: ExecutionEngine<TCommand, TUpdate>,
+  engine: ExecutionEngine<TCommand, TState, TUpdate>,
   context: TContext
 ): Promise<void> => {
   try {
     if (context.events.onStart) {
-      await context.events.onStart(context.command);
+      await context.events.onStart(context);
     }
-    for await (const update of engine(context.command)) {
+    for await (const update of engine(context)) {
       if (context.isCancelled() || context.signal.aborted) {
         await context.events.onCancel(update);
         break;

@@ -11,6 +11,6 @@ export type ExecuteFunction<
   TState extends CoreState = CoreState,
   TUpdate extends CoreUpdate = CoreUpdate,
 > = (
-  engine: ExecutionEngine<TCommand, TUpdate>,
+  engine: ExecutionEngine<TCommand, TState, TUpdate>,
   context: CoreContext<TCommand, TState, TUpdate>
 ) => Promise<void>;

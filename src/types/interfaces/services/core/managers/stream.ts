@@ -18,7 +18,7 @@ export interface StreamManagerInterface<
     executionContext: CoreContext<TCommand, TState, TUpdate>
   ): void;
   stream(
-    engine: ExecutionEngine<TCommand, TUpdate>,
+    engine: ExecutionEngine<TCommand, TState, TUpdate>,
     service?: ServiceInterface<TCommand, TState, TUpdate>
   ): AsyncGenerator<TUpdate>;
 }

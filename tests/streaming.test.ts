@@ -9,13 +9,14 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  MessageSendParams,
   SendStreamingMessageRequest,
   TaskResubscriptionRequest,
   TaskState,
   UpdateEvent,
   ExpressAgentServer,
   createAgentServer,
+  Context,
+  AgentEngine,
 } from "../src/index.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 
@@ -24,10 +25,8 @@ jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Specialized task handler for streaming tests
-async function* streamingTestHandler(
-  command: MessageSendParams
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = command;
+const streamingTestHandler: AgentEngine = async function* (context: Context) {
+  const params = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
   const text = params.message.parts
@@ -153,7 +152,7 @@ async function* streamingTestHandler(
     },
     final: true,
   };
-}
+};
 
 describe("Streaming API Tests", () => {
   let server: ExpressAgentServer;

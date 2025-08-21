@@ -8,5 +8,5 @@ export interface ExecutionEnvironment<
   TUpdate extends CoreUpdate = CoreUpdate,
 > {
   service: ServiceInterface<TCommand, TState, TUpdate>;
-  engine?: ExecutionEngine<TCommand, TUpdate>;
+  engine?: ExecutionEngine<TCommand, TState, TUpdate>;
 }

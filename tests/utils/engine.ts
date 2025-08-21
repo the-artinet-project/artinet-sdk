@@ -1,13 +1,7 @@
-import {
-  A2AEngine,
-  MessageSendParams,
-  Task,
-  TaskState,
-} from "../../src/types/index.js";
+import { A2AEngine, Task, TaskState, Context } from "../../src/types/index.js";
 //echoes the users input back as a task
-export const TestAgentLogic: A2AEngine = async function* (
-  command: MessageSendParams
-) {
+export const TestAgentLogic: A2AEngine = async function* (context: Context) {
+  const command = context.command;
   const Task: Task = {
     id: command.message.taskId ?? "",
     contextId: command.message.contextId ?? "",

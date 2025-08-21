@@ -54,7 +54,7 @@ export namespace artinet {
         return;
       }
 
-      const generator = taskHandler(context.command);
+      const generator = taskHandler(context);
       for await (const yieldValue of generator) {
         console.info("taskManager: yieldValue", "task-manager", yieldValue);
         taskManagerProxy(yieldValue);

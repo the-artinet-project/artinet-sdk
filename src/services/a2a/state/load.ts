@@ -41,6 +41,9 @@ export async function loadState(
     metadata: metadata,
     history: [message],
   };
+  /**
+   * This will update the message with the task and context ids
+   */
   message.taskId = newTask.id;
   message.contextId = newTask.contextId;
   const newHistory: Message[] = [message];

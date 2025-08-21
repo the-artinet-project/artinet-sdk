@@ -5,3 +5,4 @@
  */
 export { AgentCardSchema as AgentInfoSchema } from "./schemas/a2a/index.js";
 export type { AgentCard as AgentInfo } from "./schemas/a2a/index.js";
+export type { A2AEngine as AgentEngine } from "./interfaces/services/a2a/index.js";

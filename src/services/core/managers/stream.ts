@@ -59,7 +59,7 @@ export class StreamManager<
     this.contextId = executionContext.events.contextId;
   }
   async *stream(
-    engine: ExecutionEngine<TCommand, TUpdate>,
+    engine: ExecutionEngine<TCommand, TState, TUpdate>,
     service?: ServiceInterface<TCommand, TState, TUpdate>
   ) {
     let executionError: Error | null = null;

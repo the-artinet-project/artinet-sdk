@@ -19,7 +19,7 @@ export async function createContext<
   contextId?: string,
   eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
 ): Promise<CoreContext<TCommand, TState, TUpdate>> {
-  //   if (contextId) {
+  //   if (contextId && contextId.length > 0) {
   //     //disable for testing
   //     const context = contextManager.getContext(contextId);
   //     if (!context) {

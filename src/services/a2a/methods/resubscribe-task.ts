@@ -9,6 +9,7 @@ import {
   CoreContext,
   TaskAndHistory,
   MethodParams,
+  Context,
 } from "~/types/index.js";
 import { createContext } from "../factory/context.js";
 import {
@@ -56,8 +57,9 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
       {
         ...service.eventOverrides,
         onStart: async (
-          request?: MessageSendParams
+          context: Context<MessageSendParams, TaskAndHistory, UpdateEvent>
         ): Promise<TaskAndHistory> => {
+          const request = context.command;
           const task: Task = (state as TaskAndHistory).task;
           const statusUpdate: TaskStatusUpdateEvent = {
             kind: "status-update",

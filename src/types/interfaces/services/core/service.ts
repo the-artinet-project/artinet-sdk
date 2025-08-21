@@ -12,7 +12,7 @@ export interface ServiceInterface<
   TUpdate extends CoreUpdate = CoreUpdate,
 > {
   execute: (
-    engine: ExecutionEngine<TCommand, TUpdate>,
+    engine: ExecutionEngine<TCommand, TState, TUpdate>,
     context: CoreContext<TCommand, TState, TUpdate>
   ) => Promise<void>;
   stop: () => Promise<void>;

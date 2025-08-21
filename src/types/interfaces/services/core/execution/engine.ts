@@ -1,10 +1,18 @@
-import { CoreCommand, CoreUpdate } from "../context/index.js";
+import {
+  CoreCommand,
+  CoreContext,
+  CoreState,
+  CoreUpdate,
+} from "../context/index.js";
 
 /**
  * @description The execution engine.
- * @type {ExecutionEngine<Context>}
+ * @type {ExecutionEngine<CoreContext>}
  */
 export type ExecutionEngine<
   TCommand extends CoreCommand = CoreCommand,
+  TState extends CoreState = CoreState,
   TUpdate extends CoreUpdate = CoreUpdate,
-> = (command: TCommand) => AsyncGenerator<TUpdate, void, unknown>;
+> = (
+  context: CoreContext<TCommand, TState, TUpdate>
+) => AsyncGenerator<TUpdate, void, unknown>;

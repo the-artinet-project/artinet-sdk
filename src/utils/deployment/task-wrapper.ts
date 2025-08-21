@@ -1,4 +1,4 @@
-import { UpdateEvent, Context as ExecutionContext } from "~/types/index.js";
+import { AgentEngine } from "~/types/index.js";
 import { artinet } from "./agents.js";
 
 /**
@@ -22,11 +22,7 @@ import { artinet } from "./agents.js";
  * @throws An error if the required `env.hostOnYield` or `env.Context` are not found,
  *         indicating an invalid runtime environment.
  */
-export const taskHandlerProxy = async (
-  taskHandler: (
-    context: ExecutionContext["command"]
-  ) => AsyncGenerator<UpdateEvent, void, unknown>
-) => {
+export const taskHandlerProxy = async (taskHandler: AgentEngine) => {
   return await artinet.v0.taskManager({ taskHandler });
 };
 

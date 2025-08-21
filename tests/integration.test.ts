@@ -25,12 +25,12 @@ configureLogger({ level: "info" });
 /**
  * Simple echo task handler for testing
  */
-const echoAgent: AgentEngine = async function* (command: Context["command"]) {
+const echoAgent: AgentEngine = async function* (context: Context) {
   // Extract user text
-  const params = command.message;
-  const taskId = params.taskId ?? "";
-  const contextId = params.contextId ?? "";
-  const userText = params.parts
+  const params = context.command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
+  const userText = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
     .join(" ");

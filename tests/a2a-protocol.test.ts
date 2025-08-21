@@ -7,9 +7,10 @@ import {
   TextPart,
   UpdateEvent,
   SendMessageRequest,
-  MessageSendParams,
   ExpressAgentServer,
   createAgentServer,
+  AgentEngine,
+  Context,
 } from "../src/index.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 configureLogger({ level: "silent" });
@@ -18,9 +19,10 @@ configureLogger({ level: "silent" });
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
-async function* protocolEngine(
-  request: MessageSendParams
+const protocolEngine: AgentEngine = async function* (
+  context: Context
 ): AsyncGenerator<UpdateEvent, void, unknown> {
+  const request = context.command;
   const taskId = request.message.taskId ?? "";
   const contextId = request.message.contextId ?? "";
   const text = request.message.parts
@@ -233,7 +235,7 @@ async function* protocolEngine(
       },
     },
   };
-}
+};
 
 describe("A2A Protocol Specification Tests", () => {
   let server: ExpressAgentServer;

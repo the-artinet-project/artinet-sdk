@@ -12,11 +12,11 @@ import {
   INTERNAL_ERROR,
   AgentCard,
   TaskState,
-  MessageSendParams,
   SendMessageRequest,
   ExpressAgentServer,
   createAgentServer,
   A2AEngine as AgentEngine,
+  Context,
 } from "../src/index.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
@@ -24,10 +24,8 @@ jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
-const serverImplTestHandler: AgentEngine = async function* (
-  command: MessageSendParams
-) {
-  const params = command;
+const serverImplTestHandler: AgentEngine = async function* (context: Context) {
+  const params = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
   const text = params.message.parts

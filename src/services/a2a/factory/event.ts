@@ -9,6 +9,7 @@ import {
   TaskStatusUpdateEvent,
   TaskState,
   Message,
+  Context,
 } from "~/types/index.js";
 import {
   INTERNAL_ERROR,
@@ -50,7 +51,10 @@ export async function createEventManager<
   };
 
   const options: EventManagerOptions<TCommand, TState, TUpdate> = {
-    onStart: async (request?: TCommand): Promise<TState> => {
+    onStart: async (
+      context: Context<TCommand, TState, TUpdate>
+    ): Promise<TState> => {
+      const request = context.command;
       if (!request || !("message" in request)) {
         throw INVALID_PARAMS("No request detected");
       }
