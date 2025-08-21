@@ -179,7 +179,7 @@ describe("Server Implementation Tests", () => {
     };
 
     server = createAgentServer({
-      agent: { agent: serverImplTestHandler, agentCard: customCard },
+      agent: { engine: serverImplTestHandler, agentCard: customCard },
       agentCardPath: "/.well-known/agent.json",
       corsOptions: {
         origin: ["http://localhost:3000"],

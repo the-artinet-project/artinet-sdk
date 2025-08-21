@@ -16,7 +16,7 @@ import {
 
 export async function cancelTask(
   input: TaskIdParams,
-  params: Omit<MethodParams, "agent" | "signal">
+  params: Omit<MethodParams, "engine" | "signal">
 ): Promise<Task> {
   const { service, contextManager } = params;
   const originalState: TaskAndHistory | undefined = service.getState(input.id);

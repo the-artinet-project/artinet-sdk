@@ -55,7 +55,7 @@ const resubscribeRoute = A2AProcedure.input(TaskIdParamsSchema)
       throw INVALID_REQUEST({ input: "No request detected" });
     }
     yield* opts.ctx.service.resubscribe(input, {
-      agent: opts.ctx.engine,
+      engine: opts.ctx.engine,
       signal: opts.signal,
     });
   });

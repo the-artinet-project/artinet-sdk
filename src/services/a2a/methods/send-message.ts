@@ -12,7 +12,7 @@ export async function sendMessage(
   input: MessageSendParams,
   params: MethodParams
 ): Promise<SendMessageSuccessResult> {
-  const { service, agent, contextManager, signal } = params;
+  const { service, engine, contextManager, signal } = params;
   const contextId: string = input.message.contextId ?? "";
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     await createContext(
@@ -30,7 +30,7 @@ export async function sendMessage(
   context.events.on("error", () => {
     context.events.onComplete();
   });
-  await service.execute(agent, context);
+  await service.execute(engine, context);
   const state: TaskAndHistory = context.events.getState();
   return state.task ?? state;
 }

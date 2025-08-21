@@ -18,7 +18,7 @@ import { A2AEngine } from "./engine.js";
 
 export interface FactoryParams {
   agentCard: AgentCard;
-  agent: A2AEngine;
+  engine: A2AEngine;
   contexts?: ContextManagerInterface<Command, State, Update>;
   connections?: ConnectionManagerInterface;
   cancellations?: CancellationManagerInterface;
@@ -29,7 +29,7 @@ export interface FactoryParams {
 
 export interface MethodParams {
   service: A2AServiceInterface<Command, State, Update>;
-  agent: A2AEngine;
+  engine: A2AEngine;
   contextManager: ContextManagerInterface<Command, State, Update>;
   signal: AbortSignal;
 }
@@ -37,11 +37,11 @@ export interface MethodParams {
 export interface MethodOptions {
   getTask: (
     input: TaskIdParams,
-    params: Omit<MethodParams, "agent" | "contextManager" | "signal">
+    params: Omit<MethodParams, "engine" | "contextManager" | "signal">
   ) => Promise<Task>;
   cancelTask: (
     input: TaskIdParams,
-    params: Omit<MethodParams, "agent" | "signal">
+    params: Omit<MethodParams, "engine" | "signal">
   ) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,

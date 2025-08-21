@@ -117,7 +117,7 @@ describe("Client-Server Integration Tests", () => {
   beforeEach(async () => {
     // Create a simple server
     server = createAgentServer({
-      agent: { agent: echoAgent, agentCard: defaultAgentCard },
+      agent: { engine: echoAgent, agentCard: defaultAgentCard },
       agentCardPath: "/.well-known/agent.json",
     });
     app = server.app;

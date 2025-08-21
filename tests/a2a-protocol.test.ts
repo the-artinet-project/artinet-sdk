@@ -18,7 +18,7 @@ configureLogger({ level: "silent" });
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
-async function* a2aProtocolTestAgent(
+async function* protocolEngine(
   request: MessageSendParams
 ): AsyncGenerator<UpdateEvent, void, unknown> {
   const taskId = request.message.taskId ?? "";
@@ -244,7 +244,7 @@ describe("A2A Protocol Specification Tests", () => {
     const agentServer: ExpressAgentServer = createAgentServer({
       agentCardPath: "/.well-known/agent.json",
       agent: {
-        agent: a2aProtocolTestAgent,
+        engine: protocolEngine,
         agentCard: {
           name: "A2A Protocol Test Agent",
           url: "http://localhost:41241",

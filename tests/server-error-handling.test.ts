@@ -100,7 +100,7 @@ describe("A2AServer Error Handling", () => {
 
   beforeEach(() => {
     server = createAgentServer({
-      agent: { agent: errorProneEngine, agentCard: defaultAgentCard },
+      agent: { engine: errorProneEngine, agentCard: defaultAgentCard },
     });
     app = server.app;
     pendingRequests = [];

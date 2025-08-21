@@ -6,6 +6,7 @@ import {
   INVALID_PARAMS,
   METHOD_NOT_FOUND,
 } from "~/utils/index.js";
+import { logError } from "~/utils/logging/index.js";
 
 const isValidMethod = (method: string) => {
   return (
@@ -131,7 +132,7 @@ export async function jsonRPCMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
-    console.error("error", error);
+    logError("error", error);
     return next(error);
   }
 }

@@ -20,7 +20,7 @@ export async function* streamMessage(
   input: MessageSendParams,
   params: MethodParams
 ) {
-  const { service, agent, contextManager, signal } = params;
+  const { service, engine, contextManager, signal } = params;
   let contextId: string = input.message.contextId ?? "";
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     await createContext(
@@ -69,6 +69,6 @@ export async function* streamMessage(
       )
     ); //don't know why I was sending this working update here
   });
-  yield* stream.stream(agent, service);
+  yield* stream.stream(engine, service);
 }
 export type StreamMessageMethod = typeof streamMessage;

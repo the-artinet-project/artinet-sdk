@@ -21,7 +21,7 @@ import { coreExecute } from "~/services/core/execution/execute.js";
 
 export class A2AService implements A2AServiceInterface {
   private agentInfo: AgentCard;
-  private agent: A2AEngine;
+  private engine: A2AEngine;
   private connections: ConnectionManagerInterface;
   private cancellations: CancellationManagerInterface;
   private tasks: TaskManagerInterface<TaskAndHistory>;
@@ -33,7 +33,7 @@ export class A2AService implements A2AServiceInterface {
 
   constructor(
     agentCard: AgentCard,
-    agent: A2AEngine,
+    engine: A2AEngine,
     contexts: ContextManagerInterface<Command, State, Update>,
     connections: ConnectionManagerInterface,
     cancellations: CancellationManagerInterface,
@@ -41,7 +41,7 @@ export class A2AService implements A2AServiceInterface {
     methods: MethodOptions,
     eventOverrides?: EventManagerOptions<Command, State, Update>
   ) {
-    this.agent = agent;
+    this.engine = engine;
     this.agentInfo = agentCard;
     this.contexts = contexts;
     this.connections = connections;
@@ -55,7 +55,7 @@ export class A2AService implements A2AServiceInterface {
     engine: A2AEngine,
     context: CoreContext<Command, State, Update>
   ): Promise<void> {
-    await coreExecute(engine ?? this.agent, context);
+    await coreExecute(engine ?? this.engine, context);
   }
 
   async stop(): Promise<void> {
@@ -116,7 +116,7 @@ export class A2AService implements A2AServiceInterface {
     return await this.methods.sendMessage(message, {
       ...params, //we may include additional params in the future that may not need to be handled by the service
       service: this,
-      agent: params?.agent ?? this.agent,
+      engine: params?.engine ?? this.engine,
       contextManager: this.contexts,
       signal: params?.signal ?? new AbortController().signal,
     });
@@ -129,7 +129,7 @@ export class A2AService implements A2AServiceInterface {
     yield* this.methods.streamMessage(message, {
       ...params,
       service: this,
-      agent: params?.agent ?? this.agent,
+      engine: params?.engine ?? this.engine,
       contextManager: this.contexts,
       signal: params?.signal ?? new AbortController().signal,
     });
@@ -142,7 +142,7 @@ export class A2AService implements A2AServiceInterface {
     yield* this.methods.resubscribe(input, {
       ...params,
       service: this,
-      agent: params?.agent ?? this.agent,
+      engine: params?.engine ?? this.engine,
       contextManager: this.contexts,
       signal: params?.signal ?? new AbortController().signal,
     });

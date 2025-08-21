@@ -39,7 +39,7 @@ const createMessageParams = (task: Task) => {
 };
 
 export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
-  const { service, agent, contextManager, signal } = params;
+  const { service, engine, contextManager, signal } = params;
   const state: TaskAndHistory | undefined = service.getState(input.id);
   if (!state || !((state as TaskAndHistory).task as Task)) {
     throw TASK_NOT_FOUND({ taskId: input.id });
@@ -101,6 +101,6 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
     context.events.onComplete();
   });
   stream.setExecutionContext(context);
-  yield* stream.stream(agent, service);
+  yield* stream.stream(engine, service);
 }
 export type ResubscribeTaskMethod = typeof resubscribe;

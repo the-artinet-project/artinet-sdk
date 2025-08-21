@@ -15,6 +15,7 @@ import {
   INVALID_PARAMS,
   CANCEL_UPDATE,
   FAILED_UPDATE,
+  logError,
 } from "~/utils/index.js";
 import { loadState, processUpdate } from "../state/index.js";
 import { v4 as uuidv4 } from "uuid";
@@ -35,7 +36,6 @@ export async function createEventManager<
   const taskStore: TaskStore = {
     save: async (data: TState) => {
       if (!data.task?.id) {
-        console.error("save: data", data);
         throw INTERNAL_ERROR({
           data: {
             message: "Task ID is required",
@@ -118,13 +118,13 @@ export async function createEventManager<
         })) as TState;
         return currentState;
       } catch (error) {
-        console.error(`onUpdate[${contextId}]:`, error);
+        logError(`onUpdate[${contextId}]:`, "error detected", error, update);
         throw error;
       }
     },
 
     onError: async (current: TState, error: any): Promise<void> => {
-      console.error(`onError[${contextId}]`, current, error);
+      logError(`onError[${contextId}]`, "error detected", error, current);
       if (
         !current ||
         (!current.task?.contextId && !(current as any)?.contextId)

@@ -14,7 +14,7 @@ const sendMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
       throw INVALID_PARAMS({ input: "No request detected" });
     }
     return await opts.ctx.service.sendMessage(input, {
-      agent: opts.ctx.engine,
+      engine: opts.ctx.engine,
       signal: opts.signal,
     });
   });
@@ -31,7 +31,7 @@ const streamMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
       throw INVALID_PARAMS({ input: "No request detected" });
     }
     yield* opts.ctx.service.streamMessage(input, {
-      agent: opts.ctx.engine,
+      engine: opts.ctx.engine,
       signal: opts.signal,
     });
   });

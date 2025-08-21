@@ -38,8 +38,8 @@ function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
   } else if (
     agentOrParams &&
     typeof agentOrParams === "object" &&
-    "agent" in agentOrParams &&
-    typeof agentOrParams.agent === "function" &&
+    "engine" in agentOrParams &&
+    typeof agentOrParams.engine === "function" &&
     "agentCard" in agentOrParams &&
     typeof agentOrParams.agentCard === "object"
   ) {

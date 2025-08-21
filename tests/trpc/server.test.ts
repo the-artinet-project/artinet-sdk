@@ -24,7 +24,7 @@ describe("trpc-server", () => {
   let agent = agentRouter.createCaller({
     service: createAgent({
       agentCard: defaultAgentCard,
-      agent: engine,
+      engine: engine,
     }),
   });
 
@@ -34,7 +34,7 @@ describe("trpc-server", () => {
     agent = agentRouter.createCaller({
       service: createAgent({
         agentCard: defaultAgentCard,
-        agent: engine,
+        engine: engine,
       }),
     });
   });
@@ -146,7 +146,7 @@ describe("trpc-server", () => {
         app: initapp,
         agent: {
           agentCard: defaultAgentCard,
-          agent: engine,
+          engine: engine,
         },
         basePath: "/api/v1/agent",
         agentCardPath: "/api/v1/agent/agentCard",

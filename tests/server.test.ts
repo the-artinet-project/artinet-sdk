@@ -106,7 +106,7 @@ describe("A2AServer", () => {
   beforeEach(() => {
     taskStore = new InMemoryTaskStore();
     server = createAgentServer({
-      agent: { agent: basicTaskHandler, agentCard: defaultAgentCard },
+      agent: { engine: basicTaskHandler, agentCard: defaultAgentCard },
       agentCardPath: "/.well-known/agent.json",
     });
     app = server.app;

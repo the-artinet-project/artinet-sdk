@@ -163,7 +163,7 @@ describe("Streaming API Tests", () => {
   beforeEach(() => {
     server = createAgentServer({
       agent: {
-        agent: streamingTestHandler,
+        engine: streamingTestHandler,
         agentCard: {
           name: "Streaming Test Agent",
           url: "http://localhost:41241",
