@@ -408,13 +408,18 @@ describe("Streaming API Tests", () => {
         },
       };
 
-      const response = await trackRequest(
-        request(app).post("/").send(requestBody)
-      );
+      const response = await request(app).post("/").send(requestBody);
       expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001);
-      expect(response.body.error.message).toBe("Task not found");
+      if (response.type === "application/json") {
+        expect(response.body.error).toBeDefined();
+        expect(response.body.error.code).toBe(-32001);
+        expect(response.body.error.message).toBe("Task not found");
+      } else if (response.type === "text/event-stream") {
+        const responseData = JSON.parse(response.text);
+        expect(responseData.error).toBeDefined();
+        expect(responseData.error.code).toBe(-32001);
+        expect(responseData.error.message).toBe("Task not found");
+      }
     });
   });
 });

@@ -6,7 +6,7 @@ import {
 } from "~/types/index.js";
 import { createAgent } from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
-import { createMiddleware } from "./middeware.js";
+import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
 
 export interface ServerParams {
@@ -58,7 +58,7 @@ export function createAgentServer(
   const {
     app = express(),
     basePath = "/",
-    agentCardPath = "/.well-known/agent.json",
+    agentCardPath = "/.well-known/agent-card.json",
     agent,
   } = params;
 
@@ -85,7 +85,7 @@ export function createAgentServer(
     ) => {
       const { jsonrpc } = req.body;
       if (jsonrpc === "2.0") {
-        return await createMiddleware(agentInstance, req, res, next);
+        return await jsonRPCMiddleware(agentInstance, req, res, next);
       }
       next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));
     }

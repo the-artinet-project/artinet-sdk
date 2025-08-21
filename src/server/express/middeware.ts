@@ -31,7 +31,7 @@ const checkParams = (params: any, method: string) => {
   }
 };
 
-export async function createMiddleware(
+export async function jsonRPCMiddleware(
   service: A2AServiceInterface,
   req: Request,
   res: Response,
@@ -68,15 +68,13 @@ export async function createMiddleware(
       }
       case "message/stream": {
         checkParams(params, method);
+        res.writeHead(200, {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+        });
         const stream = service.streamMessage(params);
         for await (const data of stream) {
-          if (!res.headersSent) {
-            res.writeHead(200, {
-              "Content-Type": "text/event-stream",
-              "Cache-Control": "no-cache",
-              Connection: "keep-alive",
-            });
-          }
           res.write(
             `data: ${JSON.stringify({ jsonrpc: "2.0", id, result: data })}\n\n`
           );
@@ -88,14 +86,12 @@ export async function createMiddleware(
         checkParams(params, method);
         const stream = service.resubscribe(params);
 
+        res.writeHead(200, {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+        });
         for await (const data of stream) {
-          if (!res.headersSent) {
-            res.writeHead(200, {
-              "Content-Type": "text/event-stream",
-              "Cache-Control": "no-cache",
-              Connection: "keep-alive",
-            });
-          }
           res.write(
             `data: ${JSON.stringify({ jsonrpc: "2.0", id, result: data })}\n\n`
           );
