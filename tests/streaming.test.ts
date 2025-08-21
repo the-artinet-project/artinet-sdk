@@ -9,19 +9,15 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  InMemoryTaskStore,
   MessageSendParams,
   SendStreamingMessageRequest,
   TaskResubscriptionRequest,
   TaskState,
   UpdateEvent,
-  configureLogger,
-} from "../src/index.js";
-import {
-  AgentServer,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
-import { AgentEngine } from "../src/types/interfaces/services/index.js";
+} from "../src/index.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
@@ -160,34 +156,36 @@ async function* streamingTestHandler(
 }
 
 describe("Streaming API Tests", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
     server = createAgentServer({
-      agent: streamingTestHandler,
-      agentInfo: {
-        name: "Streaming Test Agent",
-        url: "http://localhost:41241",
-        version: "1.0.0",
-        protocolVersion: "0.3.0",
-        capabilities: {
-          streaming: true,
-          pushNotifications: false,
-          stateTransitionHistory: true,
-        },
-        skills: [
-          {
-            id: "streaming-test",
-            name: "Streaming Test Skill",
-            description: "Streaming Test Skill",
-            tags: ["streaming", "test"],
+      agent: {
+        agent: streamingTestHandler,
+        agentCard: {
+          name: "Streaming Test Agent",
+          url: "http://localhost:41241",
+          version: "1.0.0",
+          protocolVersion: "0.3.0",
+          capabilities: {
+            streaming: true,
+            pushNotifications: false,
+            stateTransitionHistory: true,
           },
-        ],
-        description: "Streaming Test Agent",
-        defaultInputModes: ["text"],
-        defaultOutputModes: ["text"],
+          skills: [
+            {
+              id: "streaming-test",
+              name: "Streaming Test Skill",
+              description: "Streaming Test Skill",
+              tags: ["streaming", "test"],
+            },
+          ],
+          description: "Streaming Test Agent",
+          defaultInputModes: ["text"],
+          defaultOutputModes: ["text"],
+        },
       },
     });
     app = server.app;
@@ -286,7 +284,6 @@ describe("Streaming API Tests", () => {
       );
 
       const events = await collectStreamEvents(req);
-
       // Check for all expected events
       expect(events.length).toBeGreaterThanOrEqual(5); // submitted + 3 working + completed
 

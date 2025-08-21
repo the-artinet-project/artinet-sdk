@@ -2,15 +2,15 @@ import {
   ExecutionEngine,
   CoreState,
   CoreUpdate,
-  Context,
+  CoreContext,
   CoreCommand,
-} from "~types/index.js";
+} from "~/types/index.js";
 
 export const coreExecute = async <
   TCommand extends CoreCommand = CoreCommand,
   TUpdate extends CoreUpdate = CoreUpdate,
   TState extends CoreState = CoreState,
-  TContext extends Context<TCommand, TState, TUpdate> = Context<
+  TContext extends CoreContext<TCommand, TState, TUpdate> = CoreContext<
     TCommand,
     TState,
     TUpdate

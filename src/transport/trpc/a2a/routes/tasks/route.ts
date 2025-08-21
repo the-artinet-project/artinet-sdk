@@ -1,5 +1,5 @@
-import { router } from "../../transport.js";
 import { z } from "zod/v4";
+import { router, A2AProcedure } from "../../trpc.js";
 import {
   TaskPushNotificationConfigSchema,
   GetTaskPushNotificationConfigParamsSchema,
@@ -9,48 +9,41 @@ import {
   TaskIdParamsSchema,
   TaskSchema,
   SendStreamingMessageSuccessResultSchema,
-} from "../../../../types/index.js";
+} from "~/types/index.js";
 import {
   INVALID_REQUEST,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
-} from "../../../../utils/index.js";
-import { agentProcedure } from "../../procedures/service.js";
-import { zAsyncIterable } from "../../zAsyncIterable.js";
-import { A2AServiceImpl } from "../../protocol/index.js";
+  zAsyncIterable,
+} from "~/utils/index.js";
 
 const pushNotificationConfigRouter = router({
-  set: agentProcedure
-    .input(TaskPushNotificationConfigSchema)
+  set: A2AProcedure.input(TaskPushNotificationConfigSchema)
     .output(TaskPushNotificationConfigSchema)
     .mutation(async ({ input }) => {
-      console.log("task/pushNotificationConfig/set", input);
+      console.warn("task/pushNotificationConfig/set", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  get: agentProcedure
-    .input(GetTaskPushNotificationConfigParamsSchema)
+  get: A2AProcedure.input(GetTaskPushNotificationConfigParamsSchema)
     .output(TaskPushNotificationConfigSchema)
     .query(async ({ input }) => {
-      console.log("task/pushNotificationConfig/get", input);
+      console.warn("task/pushNotificationConfig/get", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  list: agentProcedure
-    .input(ListTaskPushNotificationConfigsParamsSchema)
+  list: A2AProcedure.input(ListTaskPushNotificationConfigsParamsSchema)
     .output(ListTaskPushNotificationConfigResultSchema)
     .query(async ({ input }) => {
-      console.log("task/pushNotificationConfig/list", input);
+      console.warn("task/pushNotificationConfig/list", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  delete: agentProcedure
-    .input(DeleteTaskPushNotificationConfigParamsSchema)
+  delete: A2AProcedure.input(DeleteTaskPushNotificationConfigParamsSchema)
     .output(z.null())
     .mutation(async ({ input }) => {
-      console.log("task/pushNotificationConfig/delete", input);
+      console.warn("task/pushNotificationConfig/delete", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
 });
 
-const resubscribeRoute = agentProcedure
-  .input(TaskIdParamsSchema)
+const resubscribeRoute = A2AProcedure.input(TaskIdParamsSchema)
   .output(
     zAsyncIterable({
       yield: SendStreamingMessageSuccessResultSchema,
@@ -59,27 +52,30 @@ const resubscribeRoute = agentProcedure
   .subscription(async function* (opts) {
     const { input } = opts;
     if (!input) {
-      throw INVALID_REQUEST({ input: "No input" });
+      throw INVALID_REQUEST({ input: "No request detected" });
     }
-    yield* (opts.ctx.service as A2AServiceImpl).resubscribe(
-      input,
-      opts.ctx.engine,
-      opts.signal
-    );
+    yield* opts.ctx.service.resubscribe(input, {
+      agent: opts.ctx.engine,
+      signal: opts.signal,
+    });
   });
 
-const getTaskRoute = agentProcedure
-  .input(TaskIdParamsSchema)
+const getTaskRoute = A2AProcedure.input(TaskIdParamsSchema)
   .output(TaskSchema)
   .query(async ({ input, ctx }) => {
-    return await (ctx.service as A2AServiceImpl).getTask(input);
+    if (!input) {
+      throw INVALID_REQUEST({ input: "No request detected" });
+    }
+    return await ctx.service.getTask(input);
   });
 
-const cancelTaskRoute = agentProcedure
-  .input(TaskIdParamsSchema)
+const cancelTaskRoute = A2AProcedure.input(TaskIdParamsSchema)
   .output(TaskSchema)
   .mutation(async ({ input, ctx }) => {
-    return await (ctx.service as A2AServiceImpl).cancelTask(input);
+    if (!input) {
+      throw INVALID_REQUEST({ input: "No request detected" });
+    }
+    return await ctx.service.cancelTask(input);
   });
 
 export const taskRouter = router({

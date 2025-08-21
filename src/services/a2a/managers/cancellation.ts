@@ -1,4 +1,4 @@
-import { CancellationManagerInterface } from "~types/index.js";
+import { CancellationManagerInterface } from "~/types/index.js";
 
 export class CancellationManager implements CancellationManagerInterface {
   private cancellations: Set<string> = new Set();

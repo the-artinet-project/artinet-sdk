@@ -5,7 +5,7 @@ import {
   CoreCommand,
   CoreState,
   CoreUpdate,
-} from "~types/index.js";
+} from "~/types/index.js";
 
 export class EventManager<
     TCommand extends CoreCommand = CoreCommand,

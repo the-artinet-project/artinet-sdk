@@ -5,7 +5,7 @@ import { EventManagerOptions } from "~/types/index.js";
 import { createEventManager } from "./event.js";
 import { v4 as uuidv4 } from "uuid";
 import { EventManager } from "~/services/core/managers/event.js";
-import { Context } from "~/types/index.js";
+import { CoreContext } from "~/types/index.js";
 
 export async function createContext<
   TCommand extends Command = Command,
@@ -17,8 +17,8 @@ export async function createContext<
   contextManager: ContextManagerInterface<TCommand, TState, TUpdate>,
   abortSignal?: AbortSignal,
   contextId?: string,
-  additionalOptions?: EventManagerOptions<TCommand, TState, TUpdate>
-): Promise<Context<TCommand, TState, TUpdate>> {
+  eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
+): Promise<CoreContext<TCommand, TState, TUpdate>> {
   //   if (contextId) {
   //     //disable for testing
   //     const context = contextManager.getContext(contextId);
@@ -31,13 +31,14 @@ export async function createContext<
   //     }
   //     return context;
   //   }
-  const contextId_ = contextId ?? uuidv4();
+  const contextId_ =
+    !contextId || contextId.length === 0 ? uuidv4() : contextId;
   const signal = abortSignal ?? new AbortController().signal; //do we need to cancel a task when the client disconnects?
   const events: EventManager<TCommand, TState, TUpdate> =
     await createEventManager<TCommand, TState, TUpdate>(
       service,
       contextId_,
-      additionalOptions
+      eventOverrides
     );
   const context = {
     contextId: contextId_,

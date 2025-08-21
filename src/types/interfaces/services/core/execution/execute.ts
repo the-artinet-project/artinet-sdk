@@ -1,5 +1,5 @@
 import {
-  Context,
+  CoreContext,
   CoreCommand,
   CoreState,
   CoreUpdate,
@@ -12,5 +12,5 @@ export type ExecuteFunction<
   TUpdate extends CoreUpdate = CoreUpdate,
 > = (
   engine: ExecutionEngine<TCommand, TUpdate>,
-  context: Context<TCommand, TState, TUpdate>
+  context: CoreContext<TCommand, TState, TUpdate>
 ) => Promise<void>;

@@ -1,6 +1,3 @@
-import { NextFunction, Request, Response } from "express";
-import { JSONParseError } from "../../types/extended-schema.js";
-import { logError } from "../../utils/logging/log.js";
 import {
   A2AError,
   ErrorCodeInternalError,
@@ -25,7 +22,8 @@ import {
   ErrorCodeInvalidAgentResponse,
   TaskState,
   TaskStatusUpdateEvent,
-} from "../../types/schemas/index.js";
+  JSONParseError,
+} from "~/types/index.js";
 
 export class SystemError<T extends JSONRPCError> extends Error {
   message: string;
@@ -132,47 +130,3 @@ export const FAILED_UPDATE = (
   },
 });
 //todo: move to server function
-
-/**
- * Express error handler middleware.
- */
-export function errorHandler(err: Error, req: Request, res: Response): void {
-  let headersSent = false;
-  if (res.headersSent) {
-    headersSent = true;
-  }
-  logError("errorHandler", JSON.stringify(err), err);
-  let reqId = null;
-  try {
-    if (req.body && typeof req.body === "object" && "id" in req.body) {
-      reqId = req.body.id;
-    }
-  } catch (e) {
-    logError("A2AServer", "Error extracting request ID", e);
-  }
-
-  let jsonRpcError: JSONRPCError;
-  if (err instanceof SystemError) {
-    jsonRpcError = { code: err.code, message: err.message, data: err.data };
-  } else {
-    const internalError = INTERNAL_ERROR(err.stack);
-    jsonRpcError = {
-      code: internalError.code,
-      message: internalError.message,
-      data: internalError.data,
-    };
-  }
-
-  const errorResponse = {
-    jsonrpc: "2.0",
-    id: reqId,
-    error: jsonRpcError,
-  };
-
-  if (!headersSent) {
-    res.json(errorResponse);
-  } else {
-    res.write(JSON.stringify(errorResponse));
-    res.end();
-  }
-}

@@ -21,10 +21,10 @@ import {
   TaskIdParams,
   TaskQueryParams,
   PushNotificationConfig,
-  configureLogger,
 } from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
+import { configureLogger } from "../src/utils/logging/index.js";
 
 configureLogger({ level: "silent" });
 

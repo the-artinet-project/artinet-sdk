@@ -1,10 +1,10 @@
+import { A2ARequest } from "~/types/index.js";
+import { executeJsonRpcRequest } from "~/transport/index.js";
 import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
   ServerDeploymentRequest,
-  A2ARequest,
-} from "../../types/index.js";
-import { executeJsonRpcRequest } from "../../transport/index.js";
+} from "~/types/schemas/deployment/index.js";
 
 /**
  * @description The base URL of the deployment server.

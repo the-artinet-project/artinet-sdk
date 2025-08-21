@@ -9,25 +9,20 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  InMemoryTaskStore,
   MessageSendParams,
   TaskState,
   Message,
-  configureLogger,
-} from "../src/index.js";
-import { ExecutionEngine } from "../src/server/trpc/protocol/execute.js";
-import { A2AContext } from "../src/types/services/context.js";
-import { A2AService } from "../src/services/a2a/index.js";
-import {
-  AgentServer,
+  A2AEngine,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
-import { defaultAgentCard } from "../src/server/trpc/repository.js";
+} from "../src/index.js";
+import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
-const errorProneEngine: ExecutionEngine<A2AContext> = async function* (
+const errorProneEngine: A2AEngine = async function* (
   command: MessageSendParams
 ) {
   const params = command;
@@ -99,14 +94,13 @@ const errorProneEngine: ExecutionEngine<A2AContext> = async function* (
 };
 
 describe("A2AServer Error Handling", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
     server = createAgentServer({
-      agent: errorProneEngine,
-      agentInfo: defaultAgentCard,
+      agent: { agent: errorProneEngine, agentCard: defaultAgentCard },
     });
     app = server.app;
     pendingRequests = [];

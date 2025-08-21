@@ -9,7 +9,7 @@ import {
   TaskStatusUpdateEvent,
   TaskState,
   Message,
-} from "~types/index.js";
+} from "~/types/index.js";
 import {
   INTERNAL_ERROR,
   INVALID_PARAMS,
@@ -26,7 +26,7 @@ export async function createEventManager<
 >(
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
   id?: string,
-  additionalOptions?: EventManagerOptions<TCommand, TState, TUpdate>
+  eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
 ): Promise<EventManager<TCommand, TState, TUpdate>> {
   const contextId = id ?? uuidv4();
   /**
@@ -165,6 +165,6 @@ export async function createEventManager<
 
   return new EventManager(contextId, {
     ...options,
-    ...additionalOptions,
+    ...eventOverrides,
   });
 }

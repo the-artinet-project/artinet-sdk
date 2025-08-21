@@ -2,9 +2,9 @@ import {
   JSONRPCError,
   JSONRPCResponse,
   JSONRPCErrorSchema,
-} from "../../types/extended-schema.js";
-import { SystemError, PARSE_ERROR } from "../../utils/common/errors.js";
-import { logError } from "../../utils/logging/log.js";
+} from "~/types/index.js";
+import { SystemError, PARSE_ERROR } from "~/utils/index.js";
+import { logError } from "~/utils/logging/index.js";
 
 /**
  * Parses a JSON-RPC response string and validates its structure.

@@ -1,7 +1,7 @@
 import {
   CoreCommand,
   CoreState,
-  Context,
+  CoreContext,
   CoreUpdate,
 } from "../context/index.js";
 
@@ -17,7 +17,12 @@ export interface ContextManagerInterface<
   TState extends CoreState = CoreState,
   TUpdate extends CoreUpdate = CoreUpdate,
 > {
-  getContext: (id: string) => Context<TCommand, TState, TUpdate> | undefined;
-  setContext: (id: string, context: Context<TCommand, TState, TUpdate>) => void;
+  getContext: (
+    id: string
+  ) => CoreContext<TCommand, TState, TUpdate> | undefined;
+  setContext: (
+    id: string,
+    context: CoreContext<TCommand, TState, TUpdate>
+  ) => void;
   deleteContext: (id: string) => void;
 }

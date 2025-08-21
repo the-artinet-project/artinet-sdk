@@ -5,8 +5,9 @@ import {
   type Message,
   A2ARequest,
   MessageSendParams,
-} from "~types/schemas/a2a/index.js";
+} from "~/types/schemas/a2a/index.js";
 import { CoreCommand, CoreState, CoreUpdate } from "../core/context/types.js";
+import { CoreContext } from "../core/context/context.js";
 import { TaskAndHistory } from "./legacy.js";
 
 /**
@@ -25,3 +26,8 @@ export type Command<
 export type State = CoreState<TaskAndHistory>;
 export type Update<TUpdate extends UpdateEvent = UpdateEvent> =
   CoreUpdate<TUpdate>;
+export type Context<
+  TCommand extends Command = Command<MessageSendParams>,
+  TState extends State = State,
+  TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>,
+> = CoreContext<TCommand, TState, TUpdate>;

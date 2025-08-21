@@ -1,13 +1,12 @@
 import {
-  Context,
+  CoreContext,
   TaskIdParams,
-  A2AServiceInterface,
-  ContextManagerInterface,
   Task,
   TaskState,
   MessageSendParams,
   TaskAndHistory,
   UpdateEvent,
+  MethodParams,
 } from "~/types/index.js";
 import {
   FINAL_STATES,
@@ -17,13 +16,9 @@ import {
 
 export async function cancelTask(
   input: TaskIdParams,
-  service: A2AServiceInterface,
-  contextManager: ContextManagerInterface<
-    MessageSendParams,
-    TaskAndHistory,
-    UpdateEvent
-  >
+  params: Omit<MethodParams, "agent" | "signal">
 ): Promise<Task> {
+  const { service, contextManager } = params;
   const originalState: TaskAndHistory | undefined = service.getState(input.id);
   const task: Task | undefined = originalState?.task;
 
@@ -46,7 +41,7 @@ export async function cancelTask(
   };
 
   const context:
-    | Context<MessageSendParams, TaskAndHistory, UpdateEvent>
+    | CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent>
     | undefined = contextManager.getContext(task.contextId ?? input.id);
 
   if (!context) {

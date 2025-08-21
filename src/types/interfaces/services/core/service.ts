@@ -1,5 +1,5 @@
 import {
-  Context,
+  CoreContext,
   CoreCommand,
   CoreState,
   CoreUpdate,
@@ -13,7 +13,7 @@ export interface ServiceInterface<
 > {
   execute: (
     engine: ExecutionEngine<TCommand, TUpdate>,
-    context: Context<TCommand, TState, TUpdate>
+    context: CoreContext<TCommand, TState, TUpdate>
   ) => Promise<void>;
   stop: () => Promise<void>;
 }

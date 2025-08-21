@@ -1,4 +1,4 @@
-import { ConnectionManagerInterface } from "~types/index.js";
+import { ConnectionManagerInterface } from "~/types/index.js";
 
 export class ConnectionManager implements ConnectionManagerInterface {
   private connections: Set<string> = new Set();

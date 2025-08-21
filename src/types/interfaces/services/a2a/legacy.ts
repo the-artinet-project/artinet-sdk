@@ -2,7 +2,7 @@ import {
   type Task,
   type Message,
   type MessageSendConfiguration,
-} from "~types/schemas/a2a/index.js";
+} from "~/types/schemas/a2a/index.js";
 import { A2AEngine } from "./engine.js";
 
 /**

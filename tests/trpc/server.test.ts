@@ -6,56 +6,42 @@ import {
   afterEach,
   expect,
 } from "@jest/globals";
-import { createAgentRouter } from "../../src/server/trpc/server.js";
-import { globalRepository } from "../../src/server/trpc/repository.js";
+import { createA2ARouter, createAgent } from "../../src/index.js";
 import { configureLogger, TaskState, TASK_NOT_FOUND } from "../../src/index.js";
 import express from "express";
 import request from "supertest";
-import { createAgentServer } from "../../src/server/trpc/servers/express.js";
-import { engine } from "../../src/server/trpc/test-engine.js";
-import { defaultAgentCard } from "../../src/server/trpc/repository.js";
+import { createAgentServer } from "../../src/index.js";
+import { TestAgentLogic as engine } from "../utils/engine.js";
+import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "error" });
-const agentRouter = createAgentRouter({
+const agentRouter = createA2ARouter({
   agentInfoPath: "agentCard",
 });
 describe("trpc-server", () => {
   const testId = "123";
-  const agent = agentRouter.createCaller({
-    session: {
-      id: testId,
-    },
-    auth: {
-      userId: testId,
-    },
-    service: globalRepository.getService(),
+  let agent = agentRouter.createCaller({
+    service: createAgent({
+      agentCard: defaultAgentCard,
+      agent: engine,
+    }),
   });
 
   beforeEach(() => {});
 
   afterEach(() => {
-    globalRepository.getService().setState(testId, undefined);
+    agent = agentRouter.createCaller({
+      service: createAgent({
+        agentCard: defaultAgentCard,
+        agent: engine,
+      }),
+    });
   });
 
   it("should be able to call the agentCard procedure", async () => {
     const result = await agent.agentCard();
-    expect(result).toEqual({
-      protocolVersion: "0.3.0",
-      name: "A2A Server",
-      description: "A general-purpose A2A protocol server",
-      version: "0.1.0",
-      url: "http://localhost",
-      capabilities: {
-        streaming: false,
-        pushNotifications: false,
-        stateTransitionHistory: false,
-        extensions: [],
-      },
-      skills: [],
-      defaultInputModes: ["text"],
-      defaultOutputModes: ["text"],
-    });
+    expect(result).toEqual(defaultAgentCard);
   });
   describe("message", () => {
     it("should call send", async () => {
@@ -86,13 +72,15 @@ describe("trpc-server", () => {
             parts: [{ kind: "text", text: "hello world" }],
           },
         ],
-        metadata: undefined,
+        metadata: {},
         status: {
           message: {
             kind: "message",
+            taskId: testId,
+            contextId: testId,
             messageId: testId,
-            role: "agent",
-            parts: [{ kind: "text", text: "Thinking..." }],
+            role: "user",
+            parts: [{ kind: "text", text: "hello world" }],
           },
           state: TaskState.completed,
           timestamp: "2024-01-01T00:00:00.000Z",
@@ -124,6 +112,7 @@ describe("trpc-server", () => {
       const messages: any[] = [];
       try {
         for await (const message of stream) {
+          console.log("message", message);
           messages.push(message);
         }
       } catch (error) {
@@ -155,10 +144,12 @@ describe("trpc-server", () => {
       });
       const { app } = createAgentServer({
         app: initapp,
-        agent: engine,
-        agentInfo: defaultAgentCard,
+        agent: {
+          agentCard: defaultAgentCard,
+          agent: engine,
+        },
         basePath: "/api/v1/agent",
-        agentInfoPath: "/api/v1/agent/agentCard",
+        agentCardPath: "/api/v1/agent/agentCard",
       });
       expect(app).toBeDefined();
       const server = app.listen(2021, () => {});

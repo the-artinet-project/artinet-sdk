@@ -1,8 +1,7 @@
 import {
-  A2AEngine,
   MessageSendParams,
   TaskState,
-  Context,
+  CoreContext,
   TaskAndHistory,
   UpdateEvent,
   TaskStatusUpdateEvent,
@@ -15,23 +14,23 @@ import {
   WORKING_UPDATE,
   INVALID_PARAMS,
 } from "~/utils/index.js";
-import { A2AServiceInterface } from "~/types/index.js";
-import { ContextManagerInterface } from "~/types/index.js";
+import { MethodParams } from "~/types/index.js";
 
 export async function* streamMessage(
   input: MessageSendParams,
-  service: A2AServiceInterface,
-  agent: A2AEngine,
-  contextManager: ContextManagerInterface<
-    MessageSendParams,
-    TaskAndHistory,
-    UpdateEvent
-  >,
-  signal: AbortSignal
+  params: MethodParams
 ) {
+  const { service, agent, contextManager, signal } = params;
   let contextId: string = input.message.contextId ?? "";
-  const context: Context<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    await createContext(input, service, contextManager, signal, contextId);
+  const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
+    await createContext(
+      input,
+      service,
+      contextManager,
+      signal,
+      contextId,
+      service.eventOverrides
+    );
 
   const stream: StreamManager<MessageSendParams, TaskAndHistory, UpdateEvent> =
     new StreamManager(context);

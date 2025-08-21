@@ -1,4 +1,4 @@
-import { TaskManagerInterface, TaskAndHistory } from "~types/index.js";
+import { TaskManagerInterface, TaskAndHistory } from "~/types/index.js";
 
 export class TaskManager<TaskType extends TaskAndHistory>
   implements TaskManagerInterface<TaskType>

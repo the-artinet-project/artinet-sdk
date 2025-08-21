@@ -16,6 +16,9 @@ export function createService(params: FactoryParams) {
     params.connections ?? new ConnectionManager(),
     params.cancellations ?? new CancellationManager(),
     params.tasks ?? new TaskManager(),
-    createMethods(params.methods)
+    createMethods(params.methods),
+    params.events
   );
 }
+export const createAgent = createService;
+export type AgentImpl = ReturnType<typeof createAgent>;

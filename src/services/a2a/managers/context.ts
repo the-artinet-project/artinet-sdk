@@ -2,9 +2,9 @@ import {
   Command,
   State,
   Update,
-  Context,
+  CoreContext,
   ContextManagerInterface,
-} from "~types/index.js";
+} from "~/types/index.js";
 
 export class ContextManager<
   TCommand extends Command = Command,
@@ -12,11 +12,12 @@ export class ContextManager<
   TUpdate extends Update = Update,
 > implements ContextManagerInterface<TCommand, TState, TUpdate>
 {
-  private contexts: Map<string, Context<TCommand, TState, TUpdate>> = new Map();
+  private contexts: Map<string, CoreContext<TCommand, TState, TUpdate>> =
+    new Map();
   deleteContext(id: string) {
     this.contexts.delete(id);
   }
-  setContext(id: string, context: Context<TCommand, TState, TUpdate>) {
+  setContext(id: string, context: CoreContext<TCommand, TState, TUpdate>) {
     this.contexts.set(id, context);
   }
   getContext(id: string) {

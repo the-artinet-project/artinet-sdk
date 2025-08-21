@@ -4,6 +4,7 @@ import {
   ContextManagerInterface,
   ServiceInterface,
   TaskManagerInterface,
+  EventManagerOptions,
 } from "../core/index.js";
 import {
   AgentCard,
@@ -11,7 +12,7 @@ import {
   SendMessageSuccessResult,
   Task,
   TaskIdParams,
-} from "~types/schemas/a2a/index.js";
+} from "~/types/schemas/a2a/index.js";
 import { UpdateEvent, Command, State, Update } from "./context.js";
 import { A2AEngine } from "./engine.js";
 
@@ -23,35 +24,36 @@ export interface FactoryParams {
   cancellations?: CancellationManagerInterface;
   tasks?: TaskManagerInterface<State>;
   methods?: Partial<MethodOptions>;
+  events?: EventManagerOptions<Command, State, Update>;
+}
+
+export interface MethodParams {
+  service: A2AServiceInterface<Command, State, Update>;
+  agent: A2AEngine;
+  contextManager: ContextManagerInterface<Command, State, Update>;
+  signal: AbortSignal;
 }
 
 export interface MethodOptions {
-  getTask: (input: TaskIdParams, service: A2AServiceInterface) => Promise<Task>;
+  getTask: (
+    input: TaskIdParams,
+    params: Omit<MethodParams, "agent" | "contextManager" | "signal">
+  ) => Promise<Task>;
   cancelTask: (
     input: TaskIdParams,
-    service: A2AServiceInterface,
-    contextManager: ContextManagerInterface<Command, State, Update>
+    params: Omit<MethodParams, "agent" | "signal">
   ) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,
-    service: A2AServiceInterface,
-    agent: A2AEngine,
-    contextManager: ContextManagerInterface<Command, State, Update>,
-    signal: AbortSignal
+    params: MethodParams
   ) => Promise<SendMessageSuccessResult>;
   streamMessage: (
     message: MessageSendParams,
-    service: A2AServiceInterface,
-    agent: A2AEngine,
-    contextManager: ContextManagerInterface<Command, State, Update>,
-    signal: AbortSignal
+    params: MethodParams
   ) => AsyncGenerator<UpdateEvent>;
   resubscribe: (
     input: TaskIdParams,
-    service: A2AServiceInterface,
-    agent: A2AEngine,
-    contextManager: ContextManagerInterface<Command, State, Update>,
-    signal: AbortSignal
+    params: MethodParams
   ) => AsyncGenerator<UpdateEvent>;
 }
 
@@ -60,18 +62,15 @@ export interface MethodsInterface {
   cancelTask: (input: TaskIdParams) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,
-    agent?: A2AEngine,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) => Promise<SendMessageSuccessResult>;
   streamMessage: (
     message: MessageSendParams,
-    agent?: A2AEngine,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) => AsyncGenerator<UpdateEvent>;
   resubscribe: (
     input: TaskIdParams,
-    agent?: A2AEngine,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) => AsyncGenerator<UpdateEvent>;
 }
 
@@ -81,6 +80,9 @@ export interface A2AServiceInterface<
   TUpdate extends Update = Update,
 > extends ServiceInterface<TCommand, TState, TUpdate>,
     MethodsInterface {
+  readonly eventOverrides:
+    | EventManagerOptions<TCommand, TState, TUpdate>
+    | undefined;
   getAgentCard: () => AgentCard;
   addConnection: (id: string) => void;
   removeConnection: (id: string) => void;

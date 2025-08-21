@@ -7,12 +7,9 @@ import {
   EventSourceMessage,
   ParseError,
 } from "eventsource-parser";
-import type {
-  JSONRPCResponse,
-  A2ARequest,
-} from "../../types/extended-schema.js";
+import type { JSONRPCResponse, A2ARequest } from "~/types/index.js";
 import { sendJsonRpcRequest } from "../rpc/rpc-client.js";
-import { logError, logWarn, logDebug } from "../../utils/logging/log.js";
+import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
 
 /**
  * Creates an async generator for processing task events from an SSE stream

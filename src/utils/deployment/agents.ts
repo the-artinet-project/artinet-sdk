@@ -7,8 +7,8 @@ import {
   TaskManager,
   TaskManagerProps,
   TaskProxy,
-} from "../../types/proxy.js";
-import { ExecutionContext } from "../../types/index.js";
+} from "~/types/schemas/deployment/index.js";
+import { Context as ExecutionContext } from "~/types/index.js";
 
 const env = process.env;
 
@@ -54,7 +54,7 @@ export namespace artinet {
         return;
       }
 
-      const generator = taskHandler(context);
+      const generator = taskHandler(context.command);
       for await (const yieldValue of generator) {
         console.info("taskManager: yieldValue", "task-manager", yieldValue);
         taskManagerProxy(yieldValue);

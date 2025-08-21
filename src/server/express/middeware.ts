@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { A2AServiceInterface } from "../protocol/index.js";
+import { A2AServiceInterface } from "~/types/index.js";
 import {
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   INVALID_REQUEST,
   INVALID_PARAMS,
   METHOD_NOT_FOUND,
-  SystemError,
-} from "../../../utils/common/errors.js";
+} from "~/utils/index.js";
 
 const isValidMethod = (method: string) => {
   return (
@@ -32,7 +31,7 @@ const checkParams = (params: any, method: string) => {
   }
 };
 
-export async function jsonRpcExpressMiddleware(
+export async function createMiddleware(
   service: A2AServiceInterface,
   req: Request,
   res: Response,
@@ -69,16 +68,14 @@ export async function jsonRpcExpressMiddleware(
       }
       case "message/stream": {
         checkParams(params, method);
-        let headersSent = false;
         const stream = service.streamMessage(params);
         for await (const data of stream) {
-          if (!headersSent) {
+          if (!res.headersSent) {
             res.writeHead(200, {
               "Content-Type": "text/event-stream",
               "Cache-Control": "no-cache",
               Connection: "keep-alive",
             });
-            headersSent = true;
           }
           res.write(
             `data: ${JSON.stringify({ jsonrpc: "2.0", id, result: data })}\n\n`
@@ -89,16 +86,15 @@ export async function jsonRpcExpressMiddleware(
       }
       case "tasks/resubscribe": {
         checkParams(params, method);
-        let headersSent = false;
         const stream = service.resubscribe(params);
+
         for await (const data of stream) {
-          if (!headersSent) {
+          if (!res.headersSent) {
             res.writeHead(200, {
               "Content-Type": "text/event-stream",
               "Cache-Control": "no-cache",
               Connection: "keep-alive",
             });
-            headersSent = true;
           }
           res.write(
             `data: ${JSON.stringify({ jsonrpc: "2.0", id, result: data })}\n\n`
@@ -139,38 +135,7 @@ export async function jsonRpcExpressMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
+    console.error("error", error);
     return next(error);
-    // console.error("jsonRPC Error:", id, method, error);
-    // if (error instanceof SystemError) {
-    //   console.log("system jsonRPC Error:");
-    //   try {
-    //     res.json({
-    //       jsonrpc: "2.0",
-    //       id,
-    //       error: {
-    //         code: error.code,
-    //         message: error.message,
-    //         data: error.data,
-    //       },
-    //     });
-    //   } catch (error) {
-    //     console.log("system jsonRPC Error response error:", error);
-    //   }
-    //   console.log("system jsonRPC Error response:");
-    // } else {
-    //   console.log("non-system jsonRPC Error:");
-    //   res.json({
-    //     jsonrpc: "2.0",
-    //     id,
-    //     error: {
-    //       code: -32603,
-    //       message: "Internal error",
-    //       data: error instanceof Error ? error.message : String(error),
-    //     },
-    //   });
-    //   console.log("non-system jsonRPC Error response:", id, method, error);
-    // }
-    // console.log("jsonRPC Error done:", id, method, error);
-    // return;
   }
 }

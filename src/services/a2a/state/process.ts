@@ -1,11 +1,11 @@
-import { TaskAndHistory, TaskStore } from "~types/index.js";
-import { update, UpdateProps } from "./update/update.js";
+import { TaskAndHistory, TaskStore } from "~/types/index.js";
+import { updateState, UpdateProps } from "./update/update.js";
 
 export async function processUpdate(
   taskStore: TaskStore,
   updateProps: UpdateProps
 ): Promise<TaskAndHistory> {
-  if (!(await update(updateProps))) {
+  if (!(await updateState(updateProps))) {
     console.error("processUpdate: Invalid update", updateProps);
     throw new Error("processUpdate: Invalid update");
   }

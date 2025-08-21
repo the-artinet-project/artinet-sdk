@@ -2,28 +2,27 @@ import { createContext } from "../factory/context.js";
 import {
   MessageSendParams,
   SendMessageSuccessResult,
-  A2AEngine,
-  A2AServiceInterface,
-  ContextManagerInterface,
   TaskAndHistory,
   UpdateEvent,
-  Context,
+  CoreContext,
+  MethodParams,
 } from "~/types/index.js";
 
 export async function sendMessage(
   input: MessageSendParams,
-  service: A2AServiceInterface,
-  agent: A2AEngine,
-  contextManager: ContextManagerInterface<
-    MessageSendParams,
-    TaskAndHistory,
-    UpdateEvent
-  >,
-  signal: AbortSignal
+  params: MethodParams
 ): Promise<SendMessageSuccessResult> {
+  const { service, agent, contextManager, signal } = params;
   const contextId: string = input.message.contextId ?? "";
-  const context: Context<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    await createContext(input, service, contextManager, signal, contextId);
+  const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
+    await createContext(
+      input,
+      service,
+      contextManager,
+      signal,
+      contextId,
+      service.eventOverrides
+    );
 
   context.events.on("complete", () => {
     contextManager.deleteContext(context.events.contextId);

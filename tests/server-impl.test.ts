@@ -9,22 +9,16 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  InMemoryTaskStore,
-  UpdateEvent,
   INTERNAL_ERROR,
   AgentCard,
-  configureLogger,
-  TaskYieldUpdate,
   TaskState,
-  Message,
   MessageSendParams,
   SendMessageRequest,
-} from "../src/index.js";
-import {
-  AgentServer,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
-import { AgentEngine } from "../src/types/services/index.js";
+  A2AEngine as AgentEngine,
+} from "../src/index.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
@@ -155,7 +149,7 @@ const serverImplTestHandler: AgentEngine = async function* (
 };
 
 describe("Server Implementation Tests", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
@@ -185,9 +179,8 @@ describe("Server Implementation Tests", () => {
     };
 
     server = createAgentServer({
-      agent: serverImplTestHandler,
-      agentInfo: customCard,
-      agentInfoPath: "/.well-known/agent.json",
+      agent: { agent: serverImplTestHandler, agentCard: customCard },
+      agentCardPath: "/.well-known/agent.json",
       corsOptions: {
         origin: ["http://localhost:3000"],
         methods: ["GET", "POST", "OPTIONS"],

@@ -1,4 +1,4 @@
-import { TaskState, TaskStatusUpdateEvent } from "../../types/schemas/index.js";
+import { TaskState, TaskStatusUpdateEvent } from "~/types/index.js";
 import { getCurrentTimestamp } from "../index.js";
 //todo: protocol specific so move to protocol folder
 

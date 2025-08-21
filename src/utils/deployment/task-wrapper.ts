@@ -1,4 +1,4 @@
-import { UpdateEvent, ExecutionContext } from "../../types/index.js";
+import { UpdateEvent, Context as ExecutionContext } from "~/types/index.js";
 import { artinet } from "./agents.js";
 
 /**
@@ -24,7 +24,7 @@ import { artinet } from "./agents.js";
  */
 export const taskHandlerProxy = async (
   taskHandler: (
-    context: ExecutionContext
+    context: ExecutionContext["command"]
   ) => AsyncGenerator<UpdateEvent, void, unknown>
 ) => {
   return await artinet.v0.taskManager({ taskHandler });

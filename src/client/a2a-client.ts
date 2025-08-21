@@ -28,7 +28,8 @@ import {
   executeStreamEvents,
 } from "../transport/index.js";
 
-import { logError, INTERNAL_ERROR } from "../utils/index.js";
+import { INTERNAL_ERROR } from "../utils/index.js";
+import { logError } from "../utils/logging/index.js";
 
 import type { Client } from "../types/interfaces/client.js";
 

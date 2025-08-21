@@ -11,18 +11,14 @@ import request from "supertest";
 import {
   InMemoryTaskStore,
   TaskStore,
-  configureLogger,
   TaskState,
   MessageSendParams,
-  logInfo,
-  SendMessageRequest,
-} from "../src/index.js";
-import {
-  AgentServer,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
-import { AgentEngine } from "../src/types/services/index.js";
-import { defaultAgentCard } from "../src/server/trpc/repository.js";
+  A2AEngine as AgentEngine,
+} from "../src/index.js";
+import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
@@ -101,7 +97,7 @@ const basicTaskHandler: AgentEngine = async function* (
 };
 
 describe("A2AServer", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let taskStore: TaskStore;
   // Track any pending requests for cleanup
@@ -110,9 +106,8 @@ describe("A2AServer", () => {
   beforeEach(() => {
     taskStore = new InMemoryTaskStore();
     server = createAgentServer({
-      agent: basicTaskHandler,
-      agentInfo: defaultAgentCard,
-      agentInfoPath: "/.well-known/agent.json",
+      agent: { agent: basicTaskHandler, agentCard: defaultAgentCard },
+      agentCardPath: "/.well-known/agent.json",
     });
     app = server.app;
     app.get("/agent-card", (req, res) => {

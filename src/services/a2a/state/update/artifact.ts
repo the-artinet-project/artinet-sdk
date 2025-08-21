@@ -1,4 +1,4 @@
-import { Artifact } from "~types/index.js";
+import { Artifact } from "~/types/index.js";
 
 export function updateByIndex(
   append: boolean,

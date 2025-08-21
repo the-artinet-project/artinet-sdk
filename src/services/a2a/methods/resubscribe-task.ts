@@ -5,12 +5,10 @@ import {
   TaskArtifactUpdateEvent,
   MessageSendParams,
   Message,
-  A2AEngine,
   UpdateEvent,
-  Context,
-  A2AServiceInterface,
+  CoreContext,
   TaskAndHistory,
-  ContextManagerInterface,
+  MethodParams,
 } from "~/types/index.js";
 import { createContext } from "../factory/context.js";
 import {
@@ -40,24 +38,15 @@ const createMessageParams = (task: Task) => {
   return messageParams;
 };
 
-export async function* resubscribe(
-  input: TaskIdParams,
-  service: A2AServiceInterface,
-  agent: A2AEngine,
-  contextManager: ContextManagerInterface<
-    MessageSendParams,
-    TaskAndHistory,
-    UpdateEvent
-  >,
-  signal: AbortSignal
-) {
+export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
+  const { service, agent, contextManager, signal } = params;
   const state: TaskAndHistory | undefined = service.getState(input.id);
   if (!state || !((state as TaskAndHistory).task as Task)) {
     throw TASK_NOT_FOUND({ taskId: input.id });
   }
   const stream: StreamManager<MessageSendParams, TaskAndHistory, UpdateEvent> =
     new StreamManager();
-  const context: Context<MessageSendParams, TaskAndHistory, UpdateEvent> =
+  const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     await createContext(
       createMessageParams((state as TaskAndHistory).task),
       service,
@@ -65,6 +54,7 @@ export async function* resubscribe(
       signal,
       input.id,
       {
+        ...service.eventOverrides,
         onStart: async (
           request?: MessageSendParams
         ): Promise<TaskAndHistory> => {

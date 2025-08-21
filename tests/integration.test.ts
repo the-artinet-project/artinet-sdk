@@ -9,20 +9,15 @@ import {
 import express from "express";
 import {
   A2AClient,
-  InMemoryTaskStore,
+  Context,
   Task,
   TaskState,
-  configureLogger,
-  MessageSendParams,
-} from "../src/index.js";
-import {
-  AgentServer,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
-import { ExecutionEngine } from "../src/server/trpc/protocol/execute.js";
-import { Context } from "../src/server/trpc/protocol/context.js";
-import { AgentEngine } from "../src/types/services/index.js";
-import { defaultAgentCard } from "../src/server/trpc/repository.js";
+  A2AEngine as AgentEngine,
+} from "../src/index.js";
+import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "info" });
@@ -113,7 +108,7 @@ const echoAgent: AgentEngine = async function* (command: Context["command"]) {
 };
 
 describe("Client-Server Integration Tests", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let expressServer: any;
   let port: number;
@@ -122,9 +117,8 @@ describe("Client-Server Integration Tests", () => {
   beforeEach(async () => {
     // Create a simple server
     server = createAgentServer({
-      agent: echoAgent,
-      agentInfo: defaultAgentCard,
-      agentInfoPath: "/.well-known/agent.json",
+      agent: { agent: echoAgent, agentCard: defaultAgentCard },
+      agentCardPath: "/.well-known/agent.json",
     });
     app = server.app;
 
@@ -149,7 +143,7 @@ describe("Client-Server Integration Tests", () => {
     const card = await client.agentCard();
 
     expect(card).toBeDefined();
-    expect(card.name).toBe("A2A Server");
+    expect(card.name).toBe(defaultAgentCard.name);
     expect(card.capabilities.streaming).toBe(
       defaultAgentCard.capabilities.streaming
     );

@@ -6,21 +6,19 @@ import {
   TaskStatusUpdateEvent,
   TextPart,
   UpdateEvent,
-  configureLogger,
   SendMessageRequest,
   MessageSendParams,
-} from "../src/index.js";
-import {
-  AgentServer,
+  ExpressAgentServer,
   createAgentServer,
-} from "../src/server/trpc/servers/express.js";
+} from "../src/index.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 configureLogger({ level: "silent" });
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
-async function* a2aProtocolTestHandler(
+async function* a2aProtocolTestAgent(
   request: MessageSendParams
 ): AsyncGenerator<UpdateEvent, void, unknown> {
   const taskId = request.message.taskId ?? "";
@@ -238,35 +236,37 @@ async function* a2aProtocolTestHandler(
 }
 
 describe("A2A Protocol Specification Tests", () => {
-  let server: AgentServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    const agentServer: AgentServer = createAgentServer({
-      agent: a2aProtocolTestHandler,
-      agentInfoPath: "/.well-known/agent.json",
-      agentInfo: {
-        name: "A2A Protocol Test Agent",
-        url: "http://localhost:41241",
-        version: "1.0.0",
-        protocolVersion: "0.3.0",
-        description: "A2A Protocol Test Agent",
-        defaultInputModes: ["text"],
-        defaultOutputModes: ["text"],
-        capabilities: {
-          streaming: true,
-          pushNotifications: true,
-          stateTransitionHistory: true,
-        },
-        skills: [
-          {
-            id: "test",
-            name: "test",
-            description: "Test Skill Description",
-            tags: ["test", "skill"],
+    const agentServer: ExpressAgentServer = createAgentServer({
+      agentCardPath: "/.well-known/agent.json",
+      agent: {
+        agent: a2aProtocolTestAgent,
+        agentCard: {
+          name: "A2A Protocol Test Agent",
+          url: "http://localhost:41241",
+          version: "1.0.0",
+          protocolVersion: "0.3.0",
+          description: "A2A Protocol Test Agent",
+          defaultInputModes: ["text"],
+          defaultOutputModes: ["text"],
+          capabilities: {
+            streaming: true,
+            pushNotifications: true,
+            stateTransitionHistory: true,
           },
-        ],
+          skills: [
+            {
+              id: "test",
+              name: "test",
+              description: "Test Skill Description",
+              tags: ["test", "skill"],
+            },
+          ],
+        },
       },
     });
     app = agentServer.app;

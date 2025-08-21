@@ -6,8 +6,9 @@ import {
   TaskStatusUpdateEvent,
   UpdateEvent,
   TaskAndHistory,
-} from "~types/index.js";
-import { getCurrentTimestamp, logError } from "~/utils/index.js";
+} from "~/types/index.js";
+import { getCurrentTimestamp } from "~/utils/index.js";
+import { logError } from "~/utils/logging/index.js";
 import { processArtifactUpdate } from "./artifact.js";
 
 export enum UpdateKind {
@@ -23,7 +24,7 @@ export interface UpdateProps<T extends UpdateEvent = UpdateEvent> {
   update: T;
 }
 
-export type Update<T extends UpdateEvent> = (
+type Update<T extends UpdateEvent> = (
   props: UpdateProps<T>
 ) => Promise<boolean>;
 
@@ -108,7 +109,9 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
   return true; //!
 };
 
-export const update: Update<UpdateEvent> = async (props): Promise<boolean> => {
+export const updateState: Update<UpdateEvent> = async (
+  props
+): Promise<boolean> => {
   const { context, current, update } = props;
   if (!update || !update.kind) {
     logError("update", "Invalid update", update);

@@ -1,8 +1,5 @@
-import {
-  TaskAndHistory,
-  TaskStore,
-} from "../../../types/interfaces/storage.js";
-import { logDebug } from "../../../utils/logging/log.js";
+import { TaskAndHistory, TaskStore } from "~/types/index.js";
+import { logDebug } from "../logging/log.js";
 
 /**
  * In-memory implementation of the TaskStore interface.

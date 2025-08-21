@@ -13,7 +13,9 @@ import {
   Command,
   State,
   Update,
-  Context,
+  CoreContext,
+  EventManagerOptions,
+  MethodParams,
 } from "~/types/index.js";
 import { coreExecute } from "~/services/core/execution/execute.js";
 
@@ -25,6 +27,10 @@ export class A2AService implements A2AServiceInterface {
   private tasks: TaskManagerInterface<TaskAndHistory>;
   private contexts: ContextManagerInterface<Command, State, Update>;
   private methods: MethodOptions;
+  readonly eventOverrides:
+    | EventManagerOptions<Command, State, Update>
+    | undefined;
+
   constructor(
     agentCard: AgentCard,
     agent: A2AEngine,
@@ -32,7 +38,8 @@ export class A2AService implements A2AServiceInterface {
     connections: ConnectionManagerInterface,
     cancellations: CancellationManagerInterface,
     tasks: TaskManagerInterface<TaskAndHistory>,
-    methods: MethodOptions
+    methods: MethodOptions,
+    eventOverrides?: EventManagerOptions<Command, State, Update>
   ) {
     this.agent = agent;
     this.agentInfo = agentCard;
@@ -41,13 +48,14 @@ export class A2AService implements A2AServiceInterface {
     this.cancellations = cancellations;
     this.tasks = tasks;
     this.methods = methods;
+    this.eventOverrides = eventOverrides;
   }
 
   async execute(
     engine: A2AEngine,
-    context: Context<Command, State, Update>
+    context: CoreContext<Command, State, Update>
   ): Promise<void> {
-    await coreExecute(engine, context);
+    await coreExecute(engine ?? this.agent, context);
   }
 
   async stop(): Promise<void> {
@@ -91,52 +99,52 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async getTask(input: TaskIdParams) {
-    return await this.methods.getTask(input, this);
+    return await this.methods.getTask(input, { service: this });
   }
 
   async cancelTask(input: TaskIdParams) {
-    return await this.methods.cancelTask(input, this, this.contexts);
+    return await this.methods.cancelTask(input, {
+      service: this,
+      contextManager: this.contexts,
+    });
   }
 
   async sendMessage(
     message: MessageSendParams,
-    agent: A2AEngine = this.agent,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    return await this.methods.sendMessage(
-      message,
-      this,
-      agent,
-      this.contexts,
-      signal ?? new AbortController().signal
-    );
+    return await this.methods.sendMessage(message, {
+      ...params, //we may include additional params in the future that may not need to be handled by the service
+      service: this,
+      agent: params?.agent ?? this.agent,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
   }
 
   async *streamMessage(
     message: MessageSendParams,
-    agent: A2AEngine = this.agent,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    yield* this.methods.streamMessage(
-      message,
-      this,
-      agent,
-      this.contexts,
-      signal ?? new AbortController().signal
-    );
+    yield* this.methods.streamMessage(message, {
+      ...params,
+      service: this,
+      agent: params?.agent ?? this.agent,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
   }
 
   async *resubscribe(
     input: TaskIdParams,
-    agent: A2AEngine = this.agent,
-    signal?: AbortSignal
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    yield* this.methods.resubscribe(
-      input,
-      this,
-      agent,
-      this.contexts,
-      signal ?? new AbortController().signal
-    );
+    yield* this.methods.resubscribe(input, {
+      ...params,
+      service: this,
+      agent: params?.agent ?? this.agent,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
   }
 }

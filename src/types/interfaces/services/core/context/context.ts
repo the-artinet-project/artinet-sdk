@@ -3,7 +3,7 @@ import { CoreCommand, CoreState, CoreUpdate } from "./types.js";
 
 /**
  * @description The context of the task.
- * @type {Context<TCommand, TState>}
+ * @type {CoreContext<TCommand, TState>}
  * @param {TCommand} command - The command to execute.
  * @param {TState} state - The state of the task.
  * @param {EventManager<TCommand, TState>} events - The event manager for the task.
@@ -11,7 +11,7 @@ import { CoreCommand, CoreState, CoreUpdate } from "./types.js";
  * @param {boolean} isCancelled - Whether the task is cancelled.
  * @note This will become an increasingly important part of the system as Context Engineering becomes more important.
  */
-export interface Context<
+export interface CoreContext<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
   TUpdate extends CoreUpdate = CoreUpdate,

@@ -2,16 +2,18 @@ import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
   TestServerDeploymentRequest,
+  ServerDeploymentSuccessResponseParams,
+} from "~/types/schemas/deployment/index.js";
+import {
   JSONRPCResponse,
   Task,
   SendMessageRequest,
   Message,
-  ServerDeploymentSuccessResponseParams,
   A2ARequest,
-} from "../../types/index.js";
-import { A2AClient } from "../../client/a2a-client.js";
-import { executeStreamEvents } from "../../transport/index.js";
-import { logDebug, logWarn } from "../../index.js";
+} from "~/types/index.js";
+import { A2AClient } from "~/client/index.js";
+import { executeStreamEvents } from "~/transport/index.js";
+import { logDebug, logWarn } from "../logging/log.js";
 
 /**
  * @fileoverview Provides a utility for testing agent deployments.

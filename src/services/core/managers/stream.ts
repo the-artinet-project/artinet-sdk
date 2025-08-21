@@ -1,7 +1,7 @@
 import {
   StreamManagerInterface,
   ExecutionEngine,
-  Context,
+  CoreContext,
   ServiceInterface,
   CoreCommand,
   CoreState,
@@ -18,8 +18,9 @@ export class StreamManager<
   private contextId: string | null = null;
   private completed: boolean = false;
   private updates: TUpdate[] = [];
-  private executionContext: Context<TCommand, TState, TUpdate> | null = null;
-  constructor(executionContext?: Context<TCommand, TState, TUpdate>) {
+  private executionContext: CoreContext<TCommand, TState, TUpdate> | null =
+    null;
+  constructor(executionContext?: CoreContext<TCommand, TState, TUpdate>) {
     if (executionContext) {
       this.executionContext = executionContext;
       this.contextId = executionContext.events.contextId;
@@ -51,7 +52,9 @@ export class StreamManager<
     }
     return this.executionContext;
   }
-  setExecutionContext(executionContext: Context<TCommand, TState, TUpdate>) {
+  setExecutionContext(
+    executionContext: CoreContext<TCommand, TState, TUpdate>
+  ) {
     this.executionContext = executionContext;
     this.contextId = executionContext.events.contextId;
   }
