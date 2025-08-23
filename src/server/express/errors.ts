@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { JSONRPCError } from "~/types/index.js";
 import { SystemError, INTERNAL_ERROR } from "~/utils/index.js";
 import { logError } from "~/utils/logging/index.js";

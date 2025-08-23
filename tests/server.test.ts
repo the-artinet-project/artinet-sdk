@@ -12,7 +12,6 @@ import {
   InMemoryTaskStore,
   TaskStore,
   TaskState,
-  MessageSendParams,
   ExpressAgentServer,
   createAgentServer,
   A2AEngine as AgentEngine,

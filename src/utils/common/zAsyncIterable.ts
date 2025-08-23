@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import type { TrackedEnvelope } from "@trpc/server";
 import { isTrackedEnvelope, tracked } from "@trpc/server";
 import { z } from "zod/v4";

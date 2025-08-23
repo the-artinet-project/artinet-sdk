@@ -1,11 +1,28 @@
-import { Command, State, Update } from "~/types/index.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import {
+  Command,
+  CommandChannelInterface,
+  State,
+  Update,
+  Context,
+} from "~/types/index.js";
 import { A2AServiceInterface } from "~/types/index.js";
 import { ContextManagerInterface } from "~/types/index.js";
 import { EventManagerOptions } from "~/types/index.js";
 import { createEventManager } from "./event.js";
 import { v4 as uuidv4 } from "uuid";
 import { EventManager } from "~/services/core/managers/event.js";
-import { CoreContext } from "~/types/index.js";
+import { CommandChannel } from "~/services/core/managers/command.js";
+
+export async function createCommandChannel<TCommand extends Command = Command>(
+  request: TCommand
+): Promise<CommandChannelInterface<TCommand>> {
+  return CommandChannel.create<TCommand>(request);
+}
 
 export async function createContext<
   TCommand extends Command = Command,
@@ -18,7 +35,7 @@ export async function createContext<
   abortSignal?: AbortSignal,
   contextId?: string,
   eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
-): Promise<CoreContext<TCommand, TState, TUpdate>> {
+): Promise<Context<TCommand, TState, TUpdate>> {
   //   if (contextId && contextId.length > 0) {
   //     //disable for testing
   //     const context = contextManager.getContext(contextId);
@@ -31,16 +48,16 @@ export async function createContext<
   //     }
   //     return context;
   //   }
-  const contextId_ =
+  const contextId_: string =
     !contextId || contextId.length === 0 ? uuidv4() : contextId;
-  const signal = abortSignal ?? new AbortController().signal; //do we need to cancel a task when the client disconnects?
+  const signal: AbortSignal = abortSignal ?? new AbortController().signal; //do we need to cancel a task when the client disconnects?
   const events: EventManager<TCommand, TState, TUpdate> =
     await createEventManager<TCommand, TState, TUpdate>(
       service,
       contextId_,
       eventOverrides
     );
-  const context = {
+  const context: Context<TCommand, TState, TUpdate> = {
     contextId: contextId_,
     command: request,
     events: events,

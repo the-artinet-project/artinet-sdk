@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   A2AServiceInterface as Agent,
   Command,
@@ -28,7 +33,7 @@ export class AgentRegistry {
   createAgent(
     id: string = uuidv4(),
     agentParams: Omit<CreateAgentParams, "contexts">
-  ) {
+  ): Agent {
     const agent = createAgent({
       ...agentParams,
       contexts: this.contextManager,
@@ -36,19 +41,30 @@ export class AgentRegistry {
     this.agents.set(id, agent);
     return agent;
   }
-  getAgent(id: string) {
+  getAgent(id: string): Agent | undefined {
     return this.agents.get(id);
   }
-  removeAgent(id: string) {
+  removeAgent(id: string): void {
     this.agents.delete(id);
   }
-  getAgents() {
+  getAgents(): Agent[] {
     return Array.from(this.agents.values());
   }
-  getAgentCount() {
+  getAgentCount(): number {
     return this.agents.size;
   }
-  getAgentIds() {
+  getAgentIds(): string[] {
     return Array.from(this.agents.keys());
+  }
+  getRandomAgent(
+    currentAgentid?: string
+  ): { agent: Agent | undefined; id: string } | undefined {
+    const agentIds = this.getAgentIds();
+    const randomIndex = Math.floor(Math.random() * agentIds.length);
+    const randomAgentId = agentIds[randomIndex];
+    if (randomAgentId === currentAgentid) {
+      return this.getRandomAgent(currentAgentid);
+    }
+    return { agent: this.getAgent(randomAgentId), id: randomAgentId };
   }
 }

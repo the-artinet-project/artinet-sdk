@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   StreamManagerInterface,
   ExecutionEngine,
@@ -65,11 +70,8 @@ export class StreamManager<
     let executionError: Error | null = null;
     const context = this.getExecutionContext();
 
-    context.events.on("update", (current, update) => {
-      if (
-        !context.isCancelled() &&
-        current.task?.contextId === this.contextId
-      ) {
+    context.events.on("update", (_, update) => {
+      if (!context.isCancelled()) {
         this.addUpdate(update);
       }
     });

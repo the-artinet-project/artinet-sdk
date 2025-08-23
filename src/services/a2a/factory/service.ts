@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { FactoryParams, Command, State, Update } from "~/types/index.js";
 import { A2AService } from "../service.js";
 import {

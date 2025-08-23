@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { TaskState, TaskStatusUpdateEvent } from "~/types/index.js";
 import { getCurrentTimestamp } from "../index.js";
 //todo: protocol specific so move to protocol folder

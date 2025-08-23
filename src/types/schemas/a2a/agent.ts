@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { z } from "zod/v4";
 import { SecuritySchemeSchema } from "./auth.js";
 import { TransportProtocolSchema, AgentInterfaceSchema } from "./transport.js";

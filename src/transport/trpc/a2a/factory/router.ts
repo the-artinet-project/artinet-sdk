@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { agentInfoRoute } from "../routes/info.js";
 import { messageRouter } from "../routes/message/route.js";
 import { taskRouter } from "../routes/tasks/route.js";

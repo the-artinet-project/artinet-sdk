@@ -24,7 +24,6 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "~types/*": ["./src/types/*"],
       "~/*": ["./src/*"]
     }
   },

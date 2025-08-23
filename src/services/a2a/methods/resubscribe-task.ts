@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   TaskIdParams,
   Task,
@@ -105,4 +110,5 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
   stream.setExecutionContext(context);
   yield* stream.stream(engine, service);
 }
+
 export type ResubscribeTaskMethod = typeof resubscribe;

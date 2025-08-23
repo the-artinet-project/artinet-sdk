@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { CoreCommand, CoreState, CoreUpdate } from "~/types/index.js";
 import { CoreContext } from "../context/index.js";
 import { ExecutionEngine } from "../execution/index.js";

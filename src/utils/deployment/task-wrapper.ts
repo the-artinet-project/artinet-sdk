@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { AgentEngine } from "~/types/index.js";
 import { artinet } from "./agents.js";
 

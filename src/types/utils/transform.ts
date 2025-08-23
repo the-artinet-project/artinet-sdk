@@ -1,4 +1,9 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * Type-safe object key transformation utilities using built-in TypeScript utility types
  */
 

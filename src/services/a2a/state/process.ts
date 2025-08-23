@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { TaskAndHistory, TaskStore } from "~/types/index.js";
 import { updateState, UpdateProps } from "./update/update.js";
 

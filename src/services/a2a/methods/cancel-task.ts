@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   CoreContext,
   TaskIdParams,
@@ -69,4 +74,5 @@ export async function cancelTask(
   await context.events.onCancel(cancelledTask);
   return cancelledTask;
 }
+
 export type CancelTaskMethod = typeof cancelTask;

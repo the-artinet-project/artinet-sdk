@@ -1,4 +1,9 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * HTTP JSON-RPC client utilities.
  * Handles the common pattern of sending JSON-RPC requests and processing responses.
  */

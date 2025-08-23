@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { EventEmitter } from "events";
 import {
   EventManagerInterface,
@@ -6,6 +11,7 @@ import {
   CoreState,
   CoreUpdate,
   CoreContext,
+  EventManagerMap,
 } from "~/types/index.js";
 
 export class EventManager<
@@ -13,7 +19,7 @@ export class EventManager<
     TState extends CoreState = CoreState,
     TUpdate extends CoreUpdate = CoreUpdate,
   >
-  extends EventEmitter
+  extends EventEmitter<EventManagerMap<TCommand, TState, TUpdate>>
   implements EventManagerInterface<TCommand, TState, TUpdate>
 {
   public readonly contextId: string;
@@ -35,7 +41,7 @@ export class EventManager<
     if (this.options.onStart) {
       this.currentState = await this.options.onStart(context);
     }
-    this.emit("start", context.command, this.currentState);
+    this.emit("start", context.command as TCommand, this.currentState);
     return this.currentState;
   };
 

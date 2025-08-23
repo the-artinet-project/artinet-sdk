@@ -1,6 +1,11 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { EventManagerInterface } from "../managers/event.js";
 import { CoreCommand, CoreState, CoreUpdate } from "./types.js";
-
+import { ReceiveCommandProxyInterface } from "./command.js";
 /**
  * @description The context of the task.
  * @type {CoreContext<TCommand, TState>}
@@ -17,7 +22,7 @@ export interface CoreContext<
   TUpdate extends CoreUpdate = CoreUpdate,
 > {
   readonly contextId: string;
-  command: TCommand;
+  command: TCommand | ReceiveCommandProxyInterface<TCommand>;
   readonly isCancelled: () => boolean;
   readonly signal: AbortSignal;
   readonly events: EventManagerInterface<TCommand, TState, TUpdate>;

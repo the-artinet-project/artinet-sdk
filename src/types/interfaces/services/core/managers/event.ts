@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { EventEmitter } from "events";
 import {
   CoreCommand,
@@ -21,11 +26,23 @@ export interface EventManagerOptions<
   readonly getState?: () => TState; //May be removed soon
 }
 
+export interface EventManagerMap<
+  TCommand extends CoreCommand = CoreCommand,
+  TState extends CoreState = CoreState,
+  TUpdate extends CoreUpdate = CoreUpdate,
+> {
+  start: [TCommand, TState];
+  cancel: [TUpdate];
+  update: [TState, TUpdate];
+  error: [any, TState];
+  complete: [TState];
+}
+
 export interface EventManagerInterface<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
   TUpdate extends CoreUpdate = CoreUpdate,
-> extends EventEmitter {
+> extends EventEmitter<EventManagerMap<TCommand, TState, TUpdate>> {
   readonly contextId: string;
   readonly onStart?: (
     context: CoreContext<TCommand, TState, TUpdate>

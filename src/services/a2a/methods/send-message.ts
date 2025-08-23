@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { createContext } from "../factory/context.js";
 import {
   MessageSendParams,
@@ -34,4 +39,5 @@ export async function sendMessage(
   const state: TaskAndHistory = context.events.getState();
   return state.task ?? state;
 }
+
 export type SendMessageMethod = typeof sendMessage;

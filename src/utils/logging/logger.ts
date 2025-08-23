@@ -1,4 +1,9 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * Logger utility for the SDK using Pino
  */
 import { pino } from "pino";

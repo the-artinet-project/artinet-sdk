@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Task, TaskIdParams, MethodParams } from "~/types/index.js";
 import { TASK_NOT_FOUND } from "~/utils/index.js";
 
@@ -12,4 +17,5 @@ export async function getTask(
   }
   return task;
 }
+
 export type GetTaskMethod = typeof getTask;

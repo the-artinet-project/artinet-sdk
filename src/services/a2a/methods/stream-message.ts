@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   MessageSendParams,
   TaskState,
@@ -69,6 +74,8 @@ export async function* streamMessage(
       )
     ); //don't know why I was sending this working update here
   });
+
   yield* stream.stream(engine, service);
 }
+
 export type StreamMessageMethod = typeof streamMessage;

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { TaskAndHistory, TaskStore, Task, Message } from "~/types/index.js";
 import { logError, logDebug } from "../logging/log.js";
 import fs from "fs/promises";

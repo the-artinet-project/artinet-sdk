@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import express from "express";
 import { INVALID_REQUEST } from "~/utils/index.js";
 import {

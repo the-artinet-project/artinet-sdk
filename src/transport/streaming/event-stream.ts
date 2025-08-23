@@ -1,4 +1,9 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * Event stream utilities for handling Server-Sent Events (SSE).
  */
 import { parseResponse } from "../rpc/parser.js";

@@ -1,4 +1,9 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * @description The protocol enum.
  */
 export enum Protocol {
