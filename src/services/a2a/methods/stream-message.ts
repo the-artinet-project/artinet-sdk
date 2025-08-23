@@ -28,7 +28,7 @@ export async function* streamMessage(
   const { service, engine, contextManager, signal } = params;
   let contextId: string = input.message.contextId ?? "";
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    await createContext(
+    createContext(
       input,
       service,
       contextManager,

@@ -71,27 +71,27 @@ export class A2AService implements A2AServiceInterface {
     return;
   }
 
-  getAgentCard(): AgentCard {
+  get agentCard(): AgentCard {
     return this.agentInfo;
   }
 
-  addConnection(id: string) {
+  addConnection(id: string): void {
     this.connections.addConnection(id);
   }
 
-  removeConnection(id: string) {
+  removeConnection(id: string): void {
     this.connections.removeConnection(id);
   }
 
-  isCancelled(id: string) {
+  isCancelled(id: string): boolean {
     return this.cancellations.isCancelled(id);
   }
 
-  addCancellation(id: string) {
+  addCancellation(id: string): void {
     this.cancellations.addCancellation(id);
   }
 
-  removeCancellation(id: string) {
+  removeCancellation(id: string): void {
     this.cancellations.removeCancellation(id);
   }
 
@@ -99,7 +99,7 @@ export class A2AService implements A2AServiceInterface {
     return this.tasks.getState(id);
   }
 
-  setState(id: string, data: TaskAndHistory) {
+  setState(id: string, data: TaskAndHistory): void {
     this.tasks.setState(id, data);
   }
 

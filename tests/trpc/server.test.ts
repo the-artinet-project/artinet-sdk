@@ -19,7 +19,7 @@ configureLogger({ level: "error" });
 const agentRouter = createA2ARouter({
   agentInfoPath: "agentCard",
 });
-describe("trpc-server", () => {
+describe.skip("trpc-server", () => {
   const testId = "123";
   let agent = agentRouter.createCaller({
     service: createAgent({

@@ -20,7 +20,7 @@ export async function sendMessage(
   const { service, engine, contextManager, signal } = params;
   const contextId: string = input.message.contextId ?? "";
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    await createContext(
+    createContext(
       input,
       service,
       contextManager,

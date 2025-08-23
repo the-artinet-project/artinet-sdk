@@ -53,7 +53,7 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
   const stream: StreamManager<MessageSendParams, TaskAndHistory, UpdateEvent> =
     new StreamManager();
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    await createContext(
+    createContext(
       createMessageParams((state as TaskAndHistory).task),
       service,
       contextManager,
@@ -66,6 +66,7 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
         ): Promise<TaskAndHistory> => {
           const request = context.command;
           const task: Task = (state as TaskAndHistory).task;
+
           const statusUpdate: TaskStatusUpdateEvent = {
             kind: "status-update",
             taskId: request?.message.taskId ?? task.id,

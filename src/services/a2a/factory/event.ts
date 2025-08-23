@@ -26,7 +26,7 @@ import {
 import { loadState, processUpdate } from "../state/index.js";
 import { v4 as uuidv4 } from "uuid";
 
-export async function createEventManager<
+export function createEventManager<
   TCommand extends Command = Command,
   TState extends State = State,
   TUpdate extends Update = Update,
@@ -34,7 +34,7 @@ export async function createEventManager<
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
   id?: string,
   eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
-): Promise<EventManager<TCommand, TState, TUpdate>> {
+): EventManager<TCommand, TState, TUpdate> {
   const contextId = id ?? uuidv4();
   /**
    * Needed inorder to bind to legacy update logic
@@ -60,7 +60,7 @@ export async function createEventManager<
       context: Context<TCommand, TState, TUpdate>
     ): Promise<TState> => {
       const request = context.command;
-      if (!request || !("message" in request)) {
+      if (!request || (!request.message && !("message" in request))) {
         throw INVALID_PARAMS("No request detected");
       }
       let currentContextId = contextId;

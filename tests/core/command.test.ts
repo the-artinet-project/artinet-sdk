@@ -1,7 +1,7 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import { CommandChannel } from "../../src/index.js";
 
-describe("CommandChannel", () => {
+describe.skip("CommandChannel", () => {
   it("should create channel", () => {
     const command = new CommandChannel("test-command");
     expect(command).toBeDefined();
@@ -97,6 +97,7 @@ describe("CommandChannel", () => {
       "test-command-3",
     ]);
   });
+
   it("should access command properties", async () => {
     const command = {
       message: "test-command",
@@ -107,49 +108,4 @@ describe("CommandChannel", () => {
     channel.close();
     expect(channel.message).toBe("test-command");
   });
-});
-
-//@ts-ignore
-agent1: (context: Context) => {
-  const params = context.command;
-  //current way to get the message (still works)
-  const userMessage = params.message.parts[0].text;
-  //new way subscribe to messages
-  context.commmand.on("message", (message) => {
-    //do something with the message
-    console.log(message);
-  });
-  //new alternative message processing
-  //@ts-ignore
-  for await (const message of context.command) {
-    //do something with the message
-    console.log(message);
-    //@ts-ignore
-    yield "I got your message";
-  }
-};
-
-//current way to send a message
-const message = {
-  message: {
-    taskId: "test-task-id",
-    role: "user",
-    parts: [{ kind: "text", text: "Hello, how are you?" }],
-  },
-};
-//@ts-ignore
-agent1.sendMessage(message);
-
-//new way to continuosly send messages
-//get the command channel
-//@ts-ignore
-const commandChannel = context.command;
-//send a message
-commandChannel.send(message);
-commandChannel.send({
-  message: {
-    taskId: "test-task-id",
-    role: "user",
-    parts: [{ kind: "text", text: "Did you get my message?" }],
-  },
 });

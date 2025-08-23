@@ -88,7 +88,7 @@ export interface A2AServiceInterface<
   readonly eventOverrides:
     | EventManagerOptions<TCommand, TState, TUpdate>
     | undefined;
-  getAgentCard: () => AgentCard;
+  agentCard: AgentCard;
   addConnection: (id: string) => void;
   removeConnection: (id: string) => void;
   isCancelled: (id: string) => boolean;

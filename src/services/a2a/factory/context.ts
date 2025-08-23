@@ -5,26 +5,25 @@
 
 import {
   Command,
-  CommandChannelInterface,
+  ReceiveCommandProxyInterface,
   State,
   Update,
   Context,
+  A2AServiceInterface,
+  ContextManagerInterface,
+  EventManagerOptions,
 } from "~/types/index.js";
-import { A2AServiceInterface } from "~/types/index.js";
-import { ContextManagerInterface } from "~/types/index.js";
-import { EventManagerOptions } from "~/types/index.js";
 import { createEventManager } from "./event.js";
 import { v4 as uuidv4 } from "uuid";
-import { EventManager } from "~/services/core/managers/event.js";
-import { CommandChannel } from "~/services/core/managers/command.js";
+import { CommandChannel } from "../../core/managers/command.js";
 
-export async function createCommandChannel<TCommand extends Command = Command>(
+export function createCommandChannel<TCommand extends Command = Command>(
   request: TCommand
-): Promise<CommandChannelInterface<TCommand>> {
+): ReceiveCommandProxyInterface<TCommand> {
   return CommandChannel.create<TCommand>(request);
 }
 
-export async function createContext<
+export function createContext<
   TCommand extends Command = Command,
   TState extends State = State,
   TUpdate extends Update = Update,
@@ -32,10 +31,10 @@ export async function createContext<
   request: TCommand,
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
   contextManager: ContextManagerInterface<TCommand, TState, TUpdate>,
-  abortSignal?: AbortSignal,
-  contextId?: string,
+  abortSignal: AbortSignal = new AbortController().signal,
+  contextId: string = uuidv4(),
   eventOverrides?: EventManagerOptions<TCommand, TState, TUpdate>
-): Promise<Context<TCommand, TState, TUpdate>> {
+): Context<TCommand, TState, TUpdate> {
   //   if (contextId && contextId.length > 0) {
   //     //disable for testing
   //     const context = contextManager.getContext(contextId);
@@ -48,25 +47,17 @@ export async function createContext<
   //     }
   //     return context;
   //   }
-  const contextId_: string =
-    !contextId || contextId.length === 0 ? uuidv4() : contextId;
-  const signal: AbortSignal = abortSignal ?? new AbortController().signal; //do we need to cancel a task when the client disconnects?
-  const events: EventManager<TCommand, TState, TUpdate> =
-    await createEventManager<TCommand, TState, TUpdate>(
-      service,
-      contextId_,
-      eventOverrides
-    );
   const context: Context<TCommand, TState, TUpdate> = {
-    contextId: contextId_,
-    command: request,
-    events: events,
-    signal,
-    isCancelled: () => {
-      return signal.aborted || service.isCancelled(contextId_);
-    },
+    contextId: contextId,
+    command: createCommandChannel<TCommand>(request),
+    events: createEventManager<TCommand, TState, TUpdate>(
+      service,
+      contextId,
+      eventOverrides
+    ),
+    signal: abortSignal,
+    isCancelled: () => abortSignal?.aborted || service.isCancelled(contextId),
   };
-
-  contextManager.setContext(contextId_, context);
+  contextManager.setContext(contextId, context);
   return context;
 }
