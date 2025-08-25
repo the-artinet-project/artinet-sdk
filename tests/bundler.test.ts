@@ -1,6 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
-import { bundle } from "../src/index.js";
-import { configureLogger } from "../src/index.js";
+import { bundle } from "../src/utils/deployment/bundler.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 
 configureLogger({ level: "silent" });
 

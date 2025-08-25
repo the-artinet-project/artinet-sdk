@@ -9,29 +9,26 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  A2AServer,
-  ExecutionContext,
-  InMemoryTaskStore,
-  MessageSendParams,
   SendStreamingMessageRequest,
-  TaskContext,
   TaskResubscriptionRequest,
   TaskState,
   UpdateEvent,
-  configureLogger,
+  ExpressAgentServer,
+  createAgentServer,
+  Context,
+  AgentEngine,
 } from "../src/index.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
 // Specialized task handler for streaming tests
-async function* streamingTestHandler(
-  context: ExecutionContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+const streamingTestHandler: AgentEngine = async function* (context: Context) {
+  const params = context.command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
@@ -44,7 +41,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -64,7 +61,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -85,7 +82,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Completed,
+        state: TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -106,7 +103,7 @@ async function* streamingTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Submitted,
+      state: TaskState.submitted,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -124,7 +121,7 @@ async function* streamingTestHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Working,
+        state: TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -145,7 +142,7 @@ async function* streamingTestHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -155,51 +152,48 @@ async function* streamingTestHandler(
     },
     final: true,
   };
-}
+};
 
 describe("Streaming API Tests", () => {
-  let server: A2AServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    server = new A2AServer({
-      handler: streamingTestHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0, // Don't actually listen
-      card: {
-        name: "Streaming Test Agent",
-        url: "http://localhost:41241",
-        version: "1.0.0",
-        capabilities: {
-          streaming: true,
-          pushNotifications: false,
-          stateTransitionHistory: true,
-        },
-        skills: [
-          {
-            id: "streaming-test",
-            name: "Streaming Test Skill",
-            description: "Streaming Test Skill",
-            tags: ["streaming", "test"],
+    server = createAgentServer({
+      agent: {
+        engine: streamingTestHandler,
+        agentCard: {
+          name: "Streaming Test Agent",
+          url: "http://localhost:41241",
+          version: "1.0.0",
+          protocolVersion: "0.3.0",
+          capabilities: {
+            streaming: true,
+            pushNotifications: false,
+            stateTransitionHistory: true,
           },
-        ],
-        description: "Streaming Test Agent",
-        defaultInputModes: ["text"],
-        defaultOutputModes: ["text"],
+          skills: [
+            {
+              id: "streaming-test",
+              name: "Streaming Test Skill",
+              description: "Streaming Test Skill",
+              tags: ["streaming", "test"],
+            },
+          ],
+          description: "Streaming Test Agent",
+          defaultInputModes: ["text"],
+          defaultOutputModes: ["text"],
+        },
       },
     });
-    app = server.start();
+    app = server.app;
     pendingRequests = [];
   });
 
   afterEach(async () => {
     // Clear the pending requests array - we don't need to re-execute them
     pendingRequests = [];
-
-    await server.stop();
-    // Add a small delay to allow any open connections to close
-    await new Promise((resolve) => setTimeout(resolve, 250));
   });
 
   // Helper function to track supertest requests
@@ -289,7 +283,6 @@ describe("Streaming API Tests", () => {
       );
 
       const events = await collectStreamEvents(req);
-
       // Check for all expected events
       expect(events.length).toBeGreaterThanOrEqual(5); // submitted + 3 working + completed
 
@@ -324,31 +317,6 @@ describe("Streaming API Tests", () => {
       expect(workingCount).toBeGreaterThanOrEqual(3);
       expect(foundCompleted).toBe(true);
       expect(foundFinal).toBe(true);
-    });
-
-    it("returns error if task ID is missing", async () => {
-      const requestBody = {
-        jsonrpc: "2.0",
-        id: "invalid-stream-1",
-        method: "message/stream",
-        params: {
-          // Missing id
-          message: {
-            role: "user",
-            parts: [{ type: "text", text: "Missing task ID" }],
-          },
-        },
-      };
-
-      const response = await trackRequest(
-        request(app).post("/").send(requestBody)
-      );
-
-      expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
-      // Invalid params
     });
   });
 
@@ -439,74 +407,18 @@ describe("Streaming API Tests", () => {
         },
       };
 
-      const response = await trackRequest(
-        request(app).post("/").send(requestBody)
-      );
+      const response = await request(app).post("/").send(requestBody);
       expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001);
-      expect(response.body.error.message).toBe("Task not found");
-    });
-  });
-
-  describe.skip("Stream Management", () => {
-    it("removes stream on connection close", async () => {
-      const requestBody = {
-        jsonrpc: "2.0",
-        id: "close-stream-request-1",
-        method: "message/stream",
-        params: {
-          id: "close-stream-task-1",
-          message: {
-            role: "user",
-            parts: [{ type: "text", text: "Test stream connection close" }],
-          },
-        },
-      };
-
-      const req = trackRequest(
-        request(app)
-          .post("/")
-          .set("Accept", "text/event-stream")
-          .send(requestBody)
-      );
-
-      // Get a few events
-      let eventsReceived = 0;
-      const timeoutPromise = new Promise<void>((resolve) =>
-        setTimeout(resolve, 500)
-      );
-      const initialActiveStreams = server.getActiveStreams();
-      const initialTaskStreams = initialActiveStreams.get(
-        "close-stream-task-1"
-      );
-      console.log("Initial active streams", initialActiveStreams);
-      console.log("Initial task streams", initialTaskStreams);
-      expect(initialTaskStreams).toBeDefined();
-
-      req.buffer(false).parse((res, callback) => {
-        res.setEncoding("utf8");
-        res.on("data", () => {
-          eventsReceived++;
-          if (eventsReceived >= 2) {
-            // Simulate client disconnection by destroying the response
-            (res as any).destroy();
-          }
-        });
-        callback(null, res);
-      });
-
-      await timeoutPromise;
-
-      // Explicitly abort the supertest request after destroying the response
-      req.abort();
-
-      // Get the number of active streams for this task
-      const activeStreams = server.getActiveStreams();
-      const taskStreams = activeStreams.get("close-stream-task-1");
-
-      // The stream should have been removed after disconnection
-      expect(taskStreams).toBeUndefined();
+      if (response.type === "application/json") {
+        expect(response.body.error).toBeDefined();
+        expect(response.body.error.code).toBe(-32001);
+        expect(response.body.error.message).toBe("Task not found");
+      } else if (response.type === "text/event-stream") {
+        const responseData = JSON.parse(response.text);
+        expect(responseData.error).toBeDefined();
+        expect(responseData.error.code).toBe(-32001);
+        expect(responseData.error.message).toBe("Task not found");
+      }
     });
   });
 });

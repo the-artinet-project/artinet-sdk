@@ -1,7 +1,7 @@
-import { jest, describe, test, expect } from "@jest/globals";
-import { register, convert, AgentCard, configureLogger } from "../src/index.js";
+import { jest, describe, test, expect, beforeEach } from "@jest/globals";
+import { register, convert, AgentCard } from "../src/index.js";
 import { MetadataValidator } from "@artinet/metadata-validator";
-
+import { configureLogger } from "../src/utils/logging/index.js";
 configureLogger({ level: "silent" });
 // Mock global fetch with proper typing for mock implementation
 global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
@@ -28,6 +28,7 @@ describe("register Function", () => {
 
     // Define a basic AgentCard for testing
     sampleAgentCard = {
+      protocolVersion: "0.3.0",
       name: "Test Agent",
       description: "A test agent card",
       url: "https://agents.artinet.io/agent",

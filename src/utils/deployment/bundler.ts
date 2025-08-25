@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { logDebug, logError } from "../logging/log.js";
 import * as esbuild from "esbuild";
 import { fileURLToPath } from "node:url";

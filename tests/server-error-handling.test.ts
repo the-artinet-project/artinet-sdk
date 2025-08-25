@@ -9,28 +9,24 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  A2AServer,
-  ExecutionContext,
-  InMemoryTaskStore,
-  Message,
   MessageSendParams,
-  TaskContext,
   TaskState,
-  UpdateEvent,
-  configureLogger,
+  Message,
+  A2AEngine,
+  ExpressAgentServer,
+  createAgentServer,
+  Context,
 } from "../src/index.js";
-
+import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 
-// Define an error-prone task handler for testing
-async function* errorProneTaskHandler(
-  context: ExecutionContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+const errorProneEngine: A2AEngine = async function* (context: Context) {
+  const params = context.command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   const text = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
@@ -48,7 +44,7 @@ async function* errorProneTaskHandler(
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Failed,
+        state: TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -67,7 +63,7 @@ async function* errorProneTaskHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -83,7 +79,7 @@ async function* errorProneTaskHandler(
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -93,39 +89,20 @@ async function* errorProneTaskHandler(
     },
     final: true,
   };
-}
+  return;
+};
 
 describe("A2AServer Error Handling", () => {
-  let server: A2AServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    server = new A2AServer({
-      handler: errorProneTaskHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0, // Don't actually listen
+    server = createAgentServer({
+      agent: { engine: errorProneEngine, agentCard: defaultAgentCard },
     });
-    app = server.start();
+    app = server.app;
     pendingRequests = [];
-  });
-
-  afterEach(async () => {
-    // Ensure all pending requests are completed
-    await Promise.all(
-      pendingRequests.map((req) => {
-        try {
-          return req;
-        } catch (e) {
-          // Ignore errors during cleanup
-          return null;
-        }
-      })
-    );
-
-    await server.stop();
-    // Add a small delay to allow any open connections to close
-    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   // Helper function to track supertest requests

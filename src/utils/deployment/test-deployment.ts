@@ -1,16 +1,24 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   ServerDeploymentRequestParams,
   ServerDeploymentResponse,
   TestServerDeploymentRequest,
-  A2AExecutionContext,
+  ServerDeploymentSuccessResponseParams,
+} from "~/types/schemas/deployment/index.js";
+import {
   JSONRPCResponse,
   Task,
   SendMessageRequest,
   Message,
-} from "../../types/index.js";
-import { A2AClient } from "../../client/a2a-client.js";
-import { executeStreamEvents } from "../../transport/index.js";
-import { logDebug } from "../../index.js";
+  A2ARequest,
+} from "~/types/index.js";
+import { A2AClient } from "~/client/index.js";
+import { executeStreamEvents } from "~/transport/index.js";
+import { logDebug, logWarn } from "../logging/log.js";
 
 /**
  * @fileoverview Provides a utility for testing agent deployments.
@@ -19,7 +27,7 @@ import { logDebug } from "../../index.js";
  */
 
 const testExecuteStreamEvents = executeStreamEvents as <
-  Req extends A2AExecutionContext | TestServerDeploymentRequest,
+  Req extends A2ARequest | TestServerDeploymentRequest,
   StreamRes extends JSONRPCResponse | ServerDeploymentResponse,
 >(
   baseUrl: URL,
@@ -51,7 +59,9 @@ const testExecuteStreamEvents = executeStreamEvents as <
 export async function* testDeployment(
   params: ServerDeploymentRequestParams,
   requests: SendMessageRequest[]
-): AsyncIterable<Message | Task | ServerDeploymentResponse | null> {
+): AsyncIterable<
+  Message | Task | ServerDeploymentSuccessResponseParams | null
+> {
   const generator = await testExecuteStreamEvents(
     new URL("https://agents.artinet.io/test/deploy"),
     "/test/deploy" as any,
@@ -63,26 +73,29 @@ export async function* testDeployment(
     async function* () {
       const testClient = new A2AClient(url);
       for (const request of requests) {
-        const task = await testClient.sendTask({
-          message: request.params.message,
-        });
+        const task = await testClient
+          .sendMessage({
+            message: request.params.message,
+          })
+          .catch((error) => {
+            logWarn("testDeployment", "error: ", error);
+            return null;
+          });
         logDebug("testDeployment", "task: ", task);
         yield task;
       }
     };
 
   for await (const event of generator) {
-    const deploymentEvent: ServerDeploymentResponse =
-      event as ServerDeploymentResponse;
+    const deploymentEvent = event as ServerDeploymentSuccessResponseParams;
     if (
       deploymentEvent &&
-      deploymentEvent.result &&
-      deploymentEvent.result.deploymentId &&
-      deploymentEvent.result.url
+      deploymentEvent.deploymentId &&
+      deploymentEvent.url
     ) {
       logDebug("testDeployment", "deployment-event: ", deploymentEvent);
       yield deploymentEvent;
-      const innerGenerator = await requestExecutor(deploymentEvent.result.url);
+      const innerGenerator = await requestExecutor(deploymentEvent.url);
       for await (const updateEvent of innerGenerator()) {
         yield updateEvent;
       }

@@ -1,4 +1,9 @@
-import { UpdateEvent, ExecutionContext } from "../../types/index.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { AgentEngine } from "~/types/index.js";
 import { artinet } from "./agents.js";
 
 /**
@@ -22,11 +27,7 @@ import { artinet } from "./agents.js";
  * @throws An error if the required `env.hostOnYield` or `env.Context` are not found,
  *         indicating an invalid runtime environment.
  */
-export const taskHandlerProxy = async (
-  taskHandler: (
-    context: ExecutionContext
-  ) => AsyncGenerator<UpdateEvent, void, unknown>
-) => {
+export const taskHandlerProxy = async (taskHandler: AgentEngine) => {
   return await artinet.v0.taskManager({ taskHandler });
 };
 

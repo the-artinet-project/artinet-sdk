@@ -1,18 +1,24 @@
-import {
-  TaskState,
-  TaskStatusUpdateEvent,
-} from "../../types/schemas/a2a/index.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { TaskState, TaskStatusUpdateEvent } from "~/types/index.js";
+import { getCurrentTimestamp } from "../index.js";
+//todo: protocol specific so move to protocol folder
 
 export const WORKING_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
+      timestamp: timestamp,
     },
     final: false,
   };
@@ -20,14 +26,16 @@ export const WORKING_UPDATE = (
 
 export const CANCEL_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Canceled,
+      state: TaskState.canceled,
+      timestamp: timestamp,
     },
     final: true,
   };
@@ -35,22 +43,24 @@ export const CANCEL_UPDATE = (
 
 export const SUBMITTED_UPDATE = (
   taskId: string,
-  contextId: string
+  contextId: string,
+  timestamp: string = getCurrentTimestamp()
 ): TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Submitted,
+      state: TaskState.submitted,
+      timestamp: timestamp,
     },
     final: false,
   };
 };
 
 export const FINAL_STATES: TaskState[] = [
-  TaskState.Completed,
-  TaskState.Failed,
-  TaskState.Canceled,
-  TaskState.Rejected,
+  TaskState.completed,
+  TaskState.failed,
+  TaskState.canceled,
+  TaskState.rejected,
 ];

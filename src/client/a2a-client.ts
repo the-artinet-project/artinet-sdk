@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import type {
   AgentCard,
   SendMessageRequest,
@@ -28,9 +33,10 @@ import {
   executeStreamEvents,
 } from "../transport/index.js";
 
-import { logError, INTERNAL_ERROR } from "../utils/index.js";
+import { INTERNAL_ERROR } from "../utils/index.js";
+import { logError } from "../utils/logging/index.js";
 
-import type { Client } from "../types/client.js";
+import type { Client } from "../types/interfaces/client.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.

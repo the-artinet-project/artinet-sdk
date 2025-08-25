@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { IRegistration, MetadataValidator } from "@artinet/metadata-validator";
 import { AgentCard, AgentSkill } from "../../types/index.js";
 import { logDebug, logInfo, logWarn } from "../logging/log.js";

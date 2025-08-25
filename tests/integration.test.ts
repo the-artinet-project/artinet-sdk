@@ -9,32 +9,27 @@ import {
 import express from "express";
 import {
   A2AClient,
-  A2AServer,
-  InMemoryTaskStore,
-  Message,
+  Context,
   Task,
-  TaskContext,
   TaskState,
-  UpdateEvent,
-  configureLogger,
-  ExecutionContext,
-  MessageSendParams,
+  ExpressAgentServer,
+  createAgentServer,
+  A2AEngine as AgentEngine,
 } from "../src/index.js";
-
+import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
+configureLogger({ level: "info" });
 
 /**
  * Simple echo task handler for testing
  */
-async function* echoHandler(
-  context: ExecutionContext
-): AsyncGenerator<UpdateEvent, void, unknown> {
+const echoAgent: AgentEngine = async function* (context: Context) {
   // Extract user text
-  const params = context.getRequestParams() as MessageSendParams;
-  const taskId = params.message.taskId ?? context.id;
-  const contextId = context.id;
+  const params = context.command;
+  const taskId = params.message.taskId ?? "";
+  const contextId = params.message.contextId ?? "";
   const userText = params.message.parts
     .filter((part) => part.kind === "text")
     .map((part) => (part as any).text)
@@ -46,7 +41,7 @@ async function* echoHandler(
     contextId,
     kind: "status-update",
     status: {
-      state: TaskState.Working,
+      state: TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -57,6 +52,9 @@ async function* echoHandler(
     final: false,
   };
   await new Promise((resolve) => setTimeout(resolve, 300));
+  if (userText.includes("Task to be canceled")) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
   // Check cancellation
   if (context.isCancelled()) {
     yield {
@@ -64,7 +62,7 @@ async function* echoHandler(
       contextId,
       kind: "status-update",
       status: {
-        state: TaskState.Canceled,
+        state: TaskState.canceled,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -98,7 +96,7 @@ async function* echoHandler(
     contextId,
     kind: "task",
     status: {
-      state: TaskState.Completed,
+      state: TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -107,10 +105,10 @@ async function* echoHandler(
       },
     },
   };
-}
+};
 
 describe("Client-Server Integration Tests", () => {
-  let server: A2AServer;
+  let server: ExpressAgentServer;
   let app: express.Express;
   let expressServer: any;
   let port: number;
@@ -118,12 +116,11 @@ describe("Client-Server Integration Tests", () => {
 
   beforeEach(async () => {
     // Create a simple server
-    server = new A2AServer({
-      handler: echoHandler,
-      taskStore: new InMemoryTaskStore(),
-      port: 0,
+    server = createAgentServer({
+      agent: { engine: echoAgent, agentCard: defaultAgentCard },
+      agentCardPath: "/.well-known/agent.json",
     });
-    app = server.start();
+    app = server.app;
 
     // Get the actual port
     expressServer = app.listen(0);
@@ -136,11 +133,6 @@ describe("Client-Server Integration Tests", () => {
   afterEach(async () => {
     // Force close any open connections
     return new Promise<void>((resolve) => {
-      // Close the express server gracefully
-      server.stop().then(() => {
-        // Allow some time for connections to fully close
-        setTimeout(resolve, 100);
-      });
       expressServer.close(() => {
         resolve();
       });
@@ -151,8 +143,10 @@ describe("Client-Server Integration Tests", () => {
     const card = await client.agentCard();
 
     expect(card).toBeDefined();
-    expect(card.name).toBe("A2A Server");
-    expect(card.capabilities.streaming).toBe(true);
+    expect(card.name).toBe(defaultAgentCard.name);
+    expect(card.capabilities.streaming).toBe(
+      defaultAgentCard.capabilities.streaming
+    );
   });
 
   test("client can send task and get response", async () => {
@@ -186,7 +180,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can stream task updates", async () => {
     const testMessage = "Test streaming";
-    const stream = client.sendTaskSubscribe({
+    const stream = client.sendStreamingMessage({
       message: {
         taskId: "stream-task-test",
         messageId: "test-message-id",
@@ -236,7 +230,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can cancel a task", async () => {
     // First send a task to create it
-    const task = client.sendTask({
+    const task = client.sendMessage({
       message: {
         taskId: "cancel-task-test",
         messageId: "test-message-id",
@@ -255,7 +249,7 @@ describe("Client-Server Integration Tests", () => {
   });
 
   test("client can get task by ID", async () => {
-    await client.sendTask({
+    await client.sendMessage({
       message: {
         taskId: "get-task-test",
         messageId: "test-message-id",
