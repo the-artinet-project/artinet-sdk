@@ -50,6 +50,7 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
   if (!state || !((state as TaskAndHistory).task as Task)) {
     throw TASK_NOT_FOUND({ taskId: input.id });
   }
+  const contextId: string | undefined = state.task?.contextId;
   const stream: StreamManager<MessageSendParams, TaskAndHistory, UpdateEvent> =
     new StreamManager();
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
@@ -58,7 +59,7 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
       service,
       contextManager,
       signal,
-      input.id,
+      contextId,
       {
         ...service.eventOverrides,
         onStart: async (

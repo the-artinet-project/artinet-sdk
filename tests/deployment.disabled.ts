@@ -1,17 +1,21 @@
 import { jest, describe, it, expect } from "@jest/globals";
 import {
-  testDeployment,
   configureLogger,
   SendMessageRequest,
   Message,
   AgentCard,
-  ServerDeploymentRequestParams,
-  ServerDeploymentResponse,
   Task,
-  bundle,
-  fullDeployment,
   MessageSendParams,
 } from "../src/index.js";
+import {
+  testDeployment,
+  bundle,
+  fullDeployment,
+} from "../src/utils/deployment/index.js";
+import {
+  ServerDeploymentRequestParams,
+  ServerDeploymentResponse,
+} from "../src/types/schemas/deployment/index.js";
 import { logDebug } from "../src/utils/logging/log.js";
 import { A2AClient } from "../src/index.js";
 

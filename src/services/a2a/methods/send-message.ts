@@ -18,7 +18,7 @@ export async function sendMessage(
   params: MethodParams
 ): Promise<SendMessageSuccessResult> {
   const { service, engine, contextManager, signal } = params;
-  const contextId: string = input.message.contextId ?? "";
+  const contextId: string | undefined = input.message.contextId;
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     createContext(
       input,

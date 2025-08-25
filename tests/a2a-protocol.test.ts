@@ -281,7 +281,7 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await request(app).get("/.well-known/agent.json");
 
       expect(response.status).toBe(200);
-      //  console.log("response", response.body);
+      // console.log("response", response.body);
       expect(response.body.name).toBe("A2A Protocol Test Agent");
       expect(response.body.capabilities.streaming).toBe(true);
       expect(response.body.capabilities.pushNotifications).toBe(true);
