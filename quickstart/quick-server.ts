@@ -1,18 +1,17 @@
 import {
   logger,
   configureLogger,
-  A2AEngine as AgentEngine,
+  AgentEngine,
   createAgentServer,
-  MessageSendParams,
   TaskStatusUpdateEvent,
   TextPart,
+  Context,
 } from "@artinet/sdk";
 
 configureLogger({ level: "info" });
 // Define the simplest possible agent logic
-const quickAgentLogic: AgentEngine = async function* (
-  params: MessageSendParams
-) {
+const quickAgentLogic: AgentEngine = async function* (context: Context) {
+  const params = context.command;
   const userInput = (params.message.parts[0] as TextPart).text || "";
   logger.info(`Quick server received: ${userInput}`);
   const workingUpdate: TaskStatusUpdateEvent = {

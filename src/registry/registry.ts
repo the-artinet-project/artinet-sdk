@@ -4,7 +4,7 @@
  */
 
 import {
-  A2AServiceInterface as Agent,
+  Agent,
   Command,
   ContextManagerInterface,
   FactoryParams as CreateAgentParams,

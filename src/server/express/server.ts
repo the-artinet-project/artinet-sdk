@@ -5,10 +5,7 @@
 
 import express from "express";
 import { INVALID_REQUEST } from "~/utils/index.js";
-import {
-  A2AServiceInterface as Agent,
-  FactoryParams as CreateAgentParams,
-} from "~/types/index.js";
+import { Agent, FactoryParams as CreateAgentParams } from "~/types/index.js";
 import { createAgent } from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
@@ -24,8 +21,8 @@ function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
   if (
     agentOrParams &&
     typeof agentOrParams === "object" &&
-    "getAgentCard" in agentOrParams &&
-    typeof agentOrParams.getAgentCard === "function" &&
+    "agentCard" in agentOrParams &&
+    typeof agentOrParams.agentCard === "object" &&
     "sendMessage" in agentOrParams &&
     typeof agentOrParams.sendMessage === "function" &&
     "streamMessage" in agentOrParams &&
@@ -72,7 +69,7 @@ export function createAgentServer(
   app.use(express.json());
   app.use(cors(params.corsOptions));
   app.get(agentCardPath, (_, res) => {
-    res.json(agentInstance.getAgentCard());
+    res.json(agentInstance.agentCard);
   });
   /**
    * Now that agents are services we can wrap them in any kind of transport layer

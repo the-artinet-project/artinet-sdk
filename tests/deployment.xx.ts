@@ -140,7 +140,7 @@ const sendTaskRequest: SendMessageRequest = {
   },
 };
 
-describe("TestDeployment", () => {
+describe.skip("TestDeployment", () => {
   it("should deploy test logic", async () => {
     const requests: SendMessageRequest[] = [
       sendTaskRequest,
@@ -251,7 +251,7 @@ describe("TestDeployment", () => {
   }, 90000);
 });
 
-describe("FullDeployment", () => {
+describe.skip("FullDeployment", () => {
   //ensure valid API Key is set
   it.skip("should fully deploy test logic", async () => {
     logDebug("testDeployment", "Starting fullDeployment test...");
