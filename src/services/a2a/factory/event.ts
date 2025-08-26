@@ -51,7 +51,7 @@ export function createEventManager<
       service.setState(data.task.id, data);
     },
     load: async (taskId: string) => {
-      return service.getState(taskId) ?? null;
+      return (await service.getState(taskId)) ?? null;
     },
   };
 

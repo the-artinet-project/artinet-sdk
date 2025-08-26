@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Task, TaskIdParams, MethodParams } from "~/types/index.js";
+import {
+  Task,
+  TaskIdParams,
+  MethodParams,
+  TaskAndHistory,
+} from "~/types/index.js";
 import { TASK_NOT_FOUND } from "~/utils/index.js";
 
 export async function getTask(
@@ -11,7 +16,8 @@ export async function getTask(
   params: Omit<MethodParams, "engine" | "contextManager" | "signal">
 ) {
   const { service } = params;
-  const task: Task | undefined = service.getState(input.id)?.task;
+  const state: TaskAndHistory | undefined = await service.getState(input.id);
+  const task: Task | undefined = state?.task;
   if (!task) {
     throw TASK_NOT_FOUND({ taskId: input.id });
   }

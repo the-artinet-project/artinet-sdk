@@ -39,10 +39,10 @@ describe("FileStore", () => {
     };
 
     // Save the task
-    await fileStore.save({ task, history: [] });
+    await fileStore.setState(taskId, { task, history: [] });
 
     // Retrieve the task
-    const result = await fileStore.load(taskId);
+    const result = await fileStore.getState(taskId);
 
     expect(result).toBeDefined();
     expect(result?.task.id).toBe(taskId);
@@ -61,7 +61,7 @@ describe("FileStore", () => {
     };
 
     // Save the task initially
-    await fileStore.save({ task, history: [] });
+    await fileStore.setState(taskId, { task, history: [] });
 
     // Update the task
     const updatedTask: Task = {
@@ -85,10 +85,10 @@ describe("FileStore", () => {
       ],
     };
 
-    await fileStore.save({ task: updatedTask, history: [] });
+    await fileStore.setState(taskId, { task: updatedTask, history: [] });
 
     // Retrieve the updated task
-    const result = await fileStore.load(taskId);
+    const result = await fileStore.getState(taskId);
 
     expect(result).toBeDefined();
     expect(result?.task.id).toBe(taskId);
@@ -98,12 +98,10 @@ describe("FileStore", () => {
     expect(result?.task.artifacts?.[0].name).toBe("result.txt");
   });
 
-  it("should return null for non-existent task", async () => {
+  it("should throw for non-existent task", async () => {
     const nonExistentTaskId = "non-existent-task";
 
-    const result = await fileStore.load(nonExistentTaskId);
-
-    expect(result).toBeNull();
+    expect(fileStore.getState(nonExistentTaskId)).rejects.toThrowError();
   });
 
   it("should handle tasks with artifacts containing file parts", async () => {
@@ -136,10 +134,10 @@ describe("FileStore", () => {
     };
 
     // Save the task
-    await fileStore.save({ task, history: [] });
+    await fileStore.setState(taskId, { task, history: [] });
 
     // Retrieve the task
-    const result = await fileStore.load(taskId);
+    const result = await fileStore.getState(taskId);
 
     expect(result).toBeDefined();
     expect(result?.task.artifacts).toBeDefined();
@@ -186,10 +184,10 @@ describe("FileStore", () => {
     };
 
     // Save the task
-    await fileStore.save({ task, history: [] });
+    await fileStore.setState(taskId, { task, history: [] });
 
     // Retrieve the task
-    const result = await fileStore.load(taskId);
+    const result = await fileStore.getState(taskId);
 
     expect(result).toBeDefined();
     expect(result?.task.artifacts).toBeDefined();
@@ -236,10 +234,10 @@ describe("FileStore", () => {
     ];
 
     // Save the task with history
-    await fileStore.save({ task, history });
+    await fileStore.setState(taskId, { task, history });
 
     // Retrieve the task and history
-    const result = await fileStore.load(taskId);
+    const result = await fileStore.getState(taskId);
 
     expect(result).toBeDefined();
     expect(result?.history).toBeDefined();

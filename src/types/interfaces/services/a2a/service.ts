@@ -94,6 +94,6 @@ export interface A2AServiceInterface<
   isCancelled: (id: string) => boolean;
   addCancellation: (id: string) => void;
   removeCancellation: (id: string) => void;
-  getState: (id: string) => TState | undefined;
-  setState: (id: string, data: TState) => void;
+  getState: (id: string) => Promise<TState | undefined>;
+  setState: (id: string, data: TState) => Promise<void>;
 }

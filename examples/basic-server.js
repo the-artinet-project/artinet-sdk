@@ -6,7 +6,7 @@
  */
 
 import {
-  A2AServer,
+  createAgentServer,
   InMemoryTaskStore,
   configureLogger,
 } from "../dist/index.js";
@@ -19,7 +19,7 @@ configureLogger({ level: "info" });
  */
 async function* simpleEchoAgent(context) {
   // Extract the user's message
-  const userText = context.userMessage.parts
+  const userText = context.command.message.parts
     .filter((part) => part.type === "text")
     .map((part) => part.text)
     .join(" ");
@@ -71,12 +71,31 @@ async function* simpleEchoAgent(context) {
 }
 
 // Create a server
-const server = new A2AServer({
-  // Use in-memory storage (no persistence between restarts)
-  handler: simpleEchoAgent,
-  taskStore: new InMemoryTaskStore(),
-  // Customize the port
-  port: 3000,
+const { app, agent } = createAgentServer({
+  agent: {
+    engine: simpleEchoAgent,
+    // Use in-memory storage (no persistence between restarts)
+    tasks: new InMemoryTaskStore(),
+    // Customize the agent card
+    card: {
+      name: "Echo Agent",
+      description: "A simple echo agent that responds with your message",
+      version: "1.0.0",
+      url: "http://localhost:3000",
+      skills: [
+        {
+          id: "echo",
+          name: "echo",
+          description: "Echoes back the user's message",
+        },
+      ],
+      capabilities: {
+        streaming: true,
+        pushNotifications: false,
+        stateTransitionHistory: true,
+      },
+    },
+  },
 
   // Base path for the API endpoint
   basePath: "/api",
@@ -87,31 +106,12 @@ const server = new A2AServer({
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   },
-
-  // Customize the agent card
-  card: {
-    name: "Echo Agent",
-    description: "A simple echo agent that responds with your message",
-    version: "1.0.0",
-    url: "http://localhost:3000",
-    skills: [
-      {
-        id: "echo",
-        name: "echo",
-        description: "Echoes back the user's message",
-      },
-    ],
-    capabilities: {
-      streaming: true,
-      pushNotifications: false,
-      stateTransitionHistory: true,
-    },
-  },
 });
 
 // Start the server
-server.start();
-console.log("A2A Server started on port 3000");
+app.listen(3000, () => {
+  console.log("A2A Server started on port 3000");
+});
 console.log("Try connecting with an A2A client:");
 console.log("  A2A Endpoint: http://localhost:3000/api");
 console.log("  Agent Card: http://localhost:3000/.well-known/agent.json");

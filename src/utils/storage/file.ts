@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TaskAndHistory, TaskStore, Task, Message } from "~/types/index.js";
+import {
+  TaskAndHistory,
+  TaskManagerInterface,
+  Task,
+  Message,
+} from "~/types/index.js";
 import { logError, logDebug } from "../logging/log.js";
 import fs from "fs/promises";
 import path from "path";
@@ -12,7 +17,7 @@ import path from "path";
  * File-based implementation of the TaskStore interface.
  * Stores tasks and their history as JSON files on disk.
  */
-export class FileStore implements TaskStore {
+export class FileStore implements TaskManagerInterface<TaskAndHistory> {
   private baseDir: string;
 
   /**
@@ -116,7 +121,7 @@ export class FileStore implements TaskStore {
    * @param taskId The ID of the task to load.
    * @returns A promise resolving to the task and history, or null if not found.
    */
-  async load(taskId: string): Promise<TaskAndHistory | null> {
+  async getState(taskId: string): Promise<TaskAndHistory> {
     logDebug("FileStore", `Loading task: ${taskId}`);
 
     const taskFilePath = this.getTaskFilePath(taskId);
@@ -125,7 +130,7 @@ export class FileStore implements TaskStore {
     // Read task file first - if it doesn't exist, the task doesn't exist.
     const task = await this.readJsonFile<Task>(taskFilePath);
     if (!task) {
-      return null; // Task not found
+      throw new Error(`Task not found: ${taskId}`); // Task not found
     }
 
     // Task exists, now try to read history. It might not exist yet.
@@ -165,11 +170,13 @@ export class FileStore implements TaskStore {
    * @param data The task and history to save.
    * @returns A promise that resolves when the save is complete.
    */
-  async save(data: TaskAndHistory): Promise<void> {
+  async setState(taskId: string, data: TaskAndHistory): Promise<void> {
     logDebug("FileStore", `Saving task: ${data.task.id}`);
-
-    const taskFilePath = this.getTaskFilePath(data.task.id);
-    const historyFilePath = this.getHistoryFilePath(data.task.id);
+    if (taskId !== data.task.id) {
+      throw new Error("Task ID mismatch");
+    }
+    const taskFilePath = this.getTaskFilePath(taskId);
+    const historyFilePath = this.getHistoryFilePath(taskId);
 
     // For simplicity and atomicity, we'll write each file individually
     // First, write the task file
@@ -180,5 +187,10 @@ export class FileStore implements TaskStore {
     await this.writeJsonFile(historyFilePath, {
       messageHistory: data.history,
     });
+  }
+
+  async getStates(): Promise<string[]> {
+    const taskIds = await fs.readdir(this.baseDir);
+    return taskIds.map((taskId) => taskId.replace(".task.json", ""));
   }
 }

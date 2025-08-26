@@ -9,13 +9,13 @@ export class TaskManager<TaskType extends TaskAndHistory>
   implements TaskManagerInterface<TaskType>
 {
   private states: Map<string, TaskType> = new Map();
-  getState(id: string) {
+  getState(id: string): TaskType | Promise<TaskType | undefined> | undefined {
     return this.states.get(id);
   }
-  setState(id: string, data: TaskType) {
+  setState(id: string, data: TaskType): Promise<void> | void {
     this.states.set(id, data);
   }
-  getTasks() {
+  getStates(): Promise<string[]> | string[] {
     return Array.from(this.states.keys());
   }
 }

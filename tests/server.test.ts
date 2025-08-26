@@ -10,20 +10,12 @@ import express from "express";
 import request from "supertest";
 import {
   InMemoryTaskStore,
-  TaskStore,
   TaskState,
   ExpressAgentServer,
   createAgentServer,
-  A2AEngine as AgentEngine,
+  AgentEngine,
   Context,
-  ReceiveCommandProxyInterface,
-  MessageSendParams,
-  Update,
-  TextPart,
-  DataPart,
-  FilePart,
-  Part,
-  TaskStatusUpdateEvent,
+  TaskManagerInterface,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
@@ -104,7 +96,7 @@ const basicTaskHandler: AgentEngine = async function* (context: Context) {
 describe("A2AServer", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
-  let taskStore: TaskStore;
+  let taskStore: TaskManagerInterface;
   // Track any pending requests for cleanup
   let pendingRequests: request.Test[] = [];
 

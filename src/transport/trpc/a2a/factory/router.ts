@@ -10,7 +10,7 @@ import { router } from "../trpc.js";
 
 export interface CreateA2ARouterParams {}
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const createA2ARouter = (_params: CreateA2ARouterParams) => {
+export const createA2ARouter = (_params?: CreateA2ARouterParams) => {
   return router({
     agentCard: agentInfoRoute,
     message: messageRouter,
@@ -18,3 +18,5 @@ export const createA2ARouter = (_params: CreateA2ARouterParams) => {
   });
 };
 export type A2ARouter = Awaited<ReturnType<typeof createA2ARouter>>;
+export const createAgentRouter = createA2ARouter;
+export type AgentRouter = A2ARouter;

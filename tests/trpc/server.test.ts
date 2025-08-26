@@ -16,9 +16,7 @@ import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "error" });
-const agentRouter = createA2ARouter({
-  agentInfoPath: "agentCard",
-});
+const agentRouter = createA2ARouter({});
 describe.skip("trpc-server", () => {
   const testId = "123";
   let agent = agentRouter.createCaller({

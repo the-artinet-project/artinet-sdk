@@ -46,7 +46,7 @@ const createMessageParams = (task: Task) => {
 
 export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
   const { service, engine, contextManager, signal } = params;
-  const state: TaskAndHistory | undefined = service.getState(input.id);
+  const state: TaskAndHistory | undefined = await service.getState(input.id);
   if (!state || !((state as TaskAndHistory).task as Task)) {
     throw TASK_NOT_FOUND({ taskId: input.id });
   }

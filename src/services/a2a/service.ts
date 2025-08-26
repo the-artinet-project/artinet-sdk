@@ -64,7 +64,7 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async stop(): Promise<void> {
-    const currentTasks = this.tasks.getTasks();
+    const currentTasks = await this.tasks.getStates();
     for (const id of currentTasks) {
       this.addCancellation(id);
     }
@@ -95,12 +95,12 @@ export class A2AService implements A2AServiceInterface {
     this.cancellations.removeCancellation(id);
   }
 
-  getState(id: string) {
-    return this.tasks.getState(id);
+  async getState(id: string): Promise<TaskAndHistory | undefined> {
+    return await this.tasks.getState(id);
   }
 
-  setState(id: string, data: TaskAndHistory): void {
-    this.tasks.setState(id, data);
+  async setState(id: string, data: TaskAndHistory): Promise<void> {
+    await this.tasks.setState(id, data);
   }
 
   async getTask(input: TaskIdParams) {
