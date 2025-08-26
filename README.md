@@ -40,6 +40,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
       - [Authentication](#authentication)
     - [Server](#server)
       - [Implementing an A2A Agent](#implementing-an-a2a-agent)
+      - [Event Handling \& Monitoring](#event-handling--monitoring)
       - [Persistent Storage](#persistent-storage)
       - [Logging](#logging)
       - [Server Registration \& Discovery](#server-registration--discovery)
@@ -65,6 +66,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 | **Request Handling** | Define agent logic using async generators with enhanced execution context.  | `AgentEngine`, `ExecutionContext`, `UpdateEvent`                                                                                      |
 | **Storage**          | Persist event state. In-memory and file-based options included.             | `Store`, `InMemoryTaskStore`, `FileStore`                                                                                             |
 | **Streaming (SSE)**  | Handle real-time updates via Server-Sent Events with middleware support.    | Built-in SSE handling, streaming generators                                                                                           |
+| **Event Handling**   | Monitor agent execution with comprehensive event system.                    | `EventManager`, `eventOverrides`, Event listeners (`onStart`, `onUpdate`, `onError`, `onComplete`, `onCancel`)                        |
 | **Logging**          | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                                                               |
 | **Transport Layers** | Support for multiple transport protocols with modular design.               | Express middleware, tRPC integration, WebSocket support                                                                               |
 | **Core Types**       | Zod-based schemas derived from official A2A JSON specifications.            | `Tool`, `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                                                      |
@@ -343,12 +345,13 @@ When you need full control over the execution flow, implement an `AgentEngine` d
 ```typescript
 import {
   createAgentServer,
-  ExecutionContext,
+  Context,
   AgentEngine,
   TaskManager,
 } from "@artinet/sdk";
 
-const myAgent: AgentEngine = async function* (context: ExecutionContext) {
+const myAgent: AgentEngine = async function* (context: Context) {
+  const task: TaskAndHistory = context.events.getState();
   yield {
     state: "working",
     message: {
@@ -397,6 +400,68 @@ app.listen(3000, () => {
   console.log("A2A Server running on http://localhost:3000/a2a");
 });
 ```
+
+#### Event Handling & Monitoring
+
+The SDK provides comprehensive event handling capabilities that allow you to modify agent execution, monitor events, handle errors, and respond to state changes in real-time.
+
+**Override Event Behaviour**
+
+When using the service layer, you can provide your own Event Handlers:
+
+```typescript
+import { createAgent, TaskManager, ContextManager } from "@artinet/sdk";
+
+const customContextManager = new ContextManger();
+const agent = createAgent({
+  engine: (context: Context){
+    context.events.on("update", (currentState, nextState) => {
+      //allow other processes to subscribe to your agent
+    })
+    ...
+  },
+  agentCard: {
+    name: "Event-Monitored Agent",
+    url: "http://localhost:3000/a2a",
+    version: "1.0.0",
+    capabilities: { streaming: true },
+    skills: [{ id: "monitor", name: "Monitored Agent" }],
+  },
+  contexts: customContextManager,
+  tasks: new TaskManager(),
+  eventOverrides: { //for even greater control create your own Event Handlers
+    onStart: async (context) => {
+      ....
+      return context.events.getState();
+    },
+    onUpdate: async (currentState, nextState) => {
+      return { ...currentState, lastUpdate: updateEvent };
+    },
+    ...
+  },
+});
+
+const result = await agent.sendMessage({
+  contextId: "123"
+  ...
+});
+
+//or subscribe to the events from a specific context
+customContextManager.getContext("123").events.on("complete", () {
+...
+//errors thrown here will be triggered in the original context
+});
+```
+
+**Available Event Types**
+
+The EventManager supports the following event types:
+
+- **`start`**: Fired when agent execution begins
+- **`update`**: Fired on each state update during execution
+- **`error`**: Fired when an error occurs during execution
+- **`complete`**: Fired when agent execution completes successfully
+- **`cancel`**: Fired when agent execution is cancelled
 
 #### Persistent Storage
 
@@ -449,7 +514,7 @@ taskLogger.info("Processing step X");
 
 The SDK includes features to help make your agent discoverable using the new service-based architecture:
 
-- **Automatic Registration:** You can configure your agent server to automatically register your `AgentCard` with the [A2A Registry](https://artinet.io) upon startup by setting `register: true` in the server parameters.
+- **Automatic Registration:** You can configure your agent server to automatically register your `AgentCard` with the [A2A Registry](https://artinet.io) upon startup by setting `register: true` in the server parameters (temporarily unavailable in v0.5.6).
 
 ```typescript
 const { app, agent } = createAgentServer({
@@ -728,6 +793,5 @@ This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) P
 Libraries used include:
 
 - [Express.js](https://expressjs.com/) for the server framework.
-- [Jayson](https://github.com/tedeh/jayson) for JSON-RPC handling.
 - [Pino](https://getpino.io/) for logging.
 - [EventSource Parser](https://github.com/rexxars/eventsource-parser) for SSE streaming.
