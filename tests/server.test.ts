@@ -16,13 +16,20 @@ import {
   createAgentServer,
   A2AEngine as AgentEngine,
   Context,
+  ReceiveCommandProxyInterface,
+  MessageSendParams,
+  Update,
+  TextPart,
+  DataPart,
+  FilePart,
+  Part,
+  TaskStatusUpdateEvent,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 configureLogger({ level: "silent" });
-
 // Define test task handler
 const basicTaskHandler: AgentEngine = async function* (context: Context) {
   const params = context.command;
