@@ -305,7 +305,7 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32001);
-      expect(response.body.error.message).toBe("Task not found"); //todo not returning error message
+      expect(response.body.error.message).toBe("Task not found");
     });
 
     it("returns METHOD_NOT_FOUND error for invalid method", async () => {

@@ -134,4 +134,3 @@ export const FAILED_UPDATE = (
     },
   },
 });
-//todo: move to server function

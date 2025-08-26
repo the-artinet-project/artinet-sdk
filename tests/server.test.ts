@@ -199,10 +199,10 @@ describe("A2AServer", () => {
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32600); // Invalid request error
+      expect(response.body.error.code).toBe(-32600);
       expect(response.body.error.message).toBe(
         "Request payload validation error"
-      ); //todo expected "Request payload validation error" but may be caused by the jsonrpc middleware
+      );
     });
   });
 
