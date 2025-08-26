@@ -23,7 +23,7 @@ const isValidMethod = (method: string) => {
   );
 };
 
-const checkParams = (params: any, method: string) => {
+const checkParams = (params: unknown, method: string) => {
   if (
     !params ||
     (typeof params === "object" && Object.keys(params).length === 0)

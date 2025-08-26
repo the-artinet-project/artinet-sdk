@@ -8,9 +8,7 @@ import { messageRouter } from "../routes/message/route.js";
 import { taskRouter } from "../routes/tasks/route.js";
 import { router } from "../trpc.js";
 
-export interface CreateA2ARouterParams {}
-//eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const createA2ARouter = (_params?: CreateA2ARouterParams) => {
+export const createA2ARouter = () => {
   return router({
     agentCard: agentInfoRoute,
     message: messageRouter,

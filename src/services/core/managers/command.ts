@@ -69,9 +69,11 @@ export class CommandChannel<TCommand extends CoreCommand = CoreCommand>
       throw new Error("Command channel is closed");
     }
     const resolver = this.resolvers.shift();
-    resolver
-      ? resolver({ value: command, done: false })
-      : this.commands.push(command);
+    if (resolver) {
+      resolver({ value: command, done: false });
+    } else {
+      this.commands.push(command);
+    }
     this.emit("send", command);
   }
 

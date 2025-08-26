@@ -71,6 +71,7 @@
     "@types/pino": "^7.0.4",
     "cors": "^2.8.5",
     "esbuild": "^0.25.4",
+    "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
     "pino": "^9.6.0",
@@ -80,6 +81,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/escape-html": "^1.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.50",
     "@types/supertest": "latest",

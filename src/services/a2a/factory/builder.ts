@@ -61,7 +61,7 @@ export type dataStep<
     | Array<TPart>
     | TPart = StepOutput<TPart>,
 > = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
-
+//@typescript-eslint/no-explicit-any
 type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
 
 export class EngineBuilder<
@@ -69,8 +69,10 @@ export class EngineBuilder<
   TInboundArgs extends readonly unknown[] = [],
 > implements StepBuilder<TCommand, TInboundArgs>
 {
+  //@typescript-eslint/no-explicit-any
   private steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = [];
   private constructor(
+    //@typescript-eslint/no-explicit-any
     steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = []
   ) {
     this.steps = steps;
@@ -182,9 +184,10 @@ const partToMessagePart = (
   part: FilePart["file"] | DataPart["data"] | TextPart["text"]
 ): FilePart | DataPart | TextPart => {
   switch (kind) {
-    case "text":
+    case "text": {
       return { kind: "text", text: part as TextPart["text"] };
-    case "file":
+    }
+    case "file": {
       const filePart: FilePart["file"] = part as FilePart["file"];
       return filePart.uri
         ? {
@@ -203,8 +206,10 @@ const partToMessagePart = (
               mimeType: filePart.mimeType,
             },
           };
-    case "data":
+    }
+    case "data": {
       return { kind: "data", data: part as DataPart["data"] };
+    }
     default:
       throw new Error("Invalid part kind");
   }
@@ -234,7 +239,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       final: false,
     };
     yield taskStarted;
-    let finalMessage: Message = {
+    const finalMessage: Message = {
       taskId: taskId,
       contextId: contextId,
       messageId: messageId,

@@ -54,7 +54,7 @@ export async function* streamMessage(
     if (!request.message.taskId && !currentState?.task?.id) {
       throw INVALID_PARAMS("No task id found");
     }
-    let update: Task | TaskStatusUpdateEvent =
+    const update: Task | TaskStatusUpdateEvent =
       currentState?.task ??
       SUBMITTED_UPDATE(
         request.message.taskId ?? currentState?.task?.id,

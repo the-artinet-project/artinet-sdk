@@ -15,6 +15,7 @@ import {
   TaskState,
   Message,
   Context,
+  Task,
 } from "~/types/index.js";
 import {
   INTERNAL_ERROR,
@@ -80,9 +81,10 @@ export function createEventManager<
 
     onCancel: async (current: TState, update: TUpdate): Promise<void> => {
       const localContextId = update.contextId ?? contextId;
-      const localTaskId = (update as any).taskId ?? (update as any).id;
+      const localTaskId =
+        (update as TaskStatusUpdateEvent).taskId ?? (update as Task).id;
       service.addCancellation(localContextId);
-      let cancellation: TaskStatusUpdateEvent = CANCEL_UPDATE(
+      const cancellation: TaskStatusUpdateEvent = CANCEL_UPDATE(
         localTaskId,
         localContextId
       );
@@ -90,7 +92,7 @@ export function createEventManager<
         ...update,
         ...cancellation,
         status: {
-          ...(update as any).status,
+          ...(update as TaskStatusUpdateEvent).status,
           ...cancellation.status,
           state: TaskState.canceled,
         },
