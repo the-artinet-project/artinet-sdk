@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   ClientFactory,
   ClientProps,
@@ -7,8 +12,8 @@ import {
   TaskManager,
   TaskManagerProps,
   TaskProxy,
-} from "../../types/proxy.js";
-import { ExecutionContext } from "../../types/index.js";
+} from "~/types/schemas/deployment/index.js";
+import { Context as ExecutionContext } from "~/types/index.js";
 
 const env = process.env;
 

@@ -1,4 +1,12 @@
-import { jest } from "@jest/globals";
+import {
+  describe,
+  it,
+  beforeEach,
+  beforeAll,
+  afterAll,
+  expect,
+  test,
+} from "@jest/globals";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import {
@@ -265,9 +273,7 @@ describe("HTTP Utils", () => {
         }),
       });
 
-      const result = await handleJsonRpcResponse<
-        JSONRPCResponse<{ foo: string }>
-      >(response, "test/method");
+      const result = await handleJsonRpcResponse(response, "test/method");
       expect(result).toEqual({ foo: "bar" });
     });
 
@@ -428,7 +434,7 @@ describe("HTTP Utils", () => {
         result: { foo: "bar" },
       });
 
-      const result = parseResponse<JSONRPCResponse<{ foo: string }>>(data);
+      const result = parseResponse(data);
       expect(result).toEqual({
         jsonrpc: "2.0",
         id: "test-id",

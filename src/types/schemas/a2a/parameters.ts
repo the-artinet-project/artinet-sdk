@@ -1,215 +1,314 @@
 /**
- * @description Represents the base entity for FileParts
- * @optional name
- * @optional mimeType
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
  */
-export interface FileBase {
-  /**
-   * @optional name of the file.
-   */
-  name?: string;
 
-  /**
-   * @optional MIME type of the file content.
-   */
-  mimeType?: string;
-}
+import { z } from "zod/v4";
+import { KindSchema } from "./kind.js";
 
 /**
- * @description Represents a file with its content encoded as a Base64 string.
- * @required bytes
- * @optional uri
+ * @description Defines base properties common to all message or artifact parts.
  */
-export interface FileWithBytes extends FileBase {
-  /**
-   * @required File content encoded as a Base64 string. Use this OR `uri`.
-   */
-  bytes: string;
+export const PartBaseSchema = z
+  .object({
+    /**
+     * @optional Optional metadata associated with this part.
+     */
+    metadata: z
+      .record(z.string(), z.unknown())
+      .optional()
+      .describe("Optional metadata associated with this part."),
+  })
+  .describe("Defines base properties common to all message or artifact parts.");
 
-  /**
-   * @optional URI pointing to the file content.
-   */
-  uri?: never;
-}
+export type PartBase = z.infer<typeof PartBaseSchema>;
 
 /**
- * @description Represents a file with its content encoded as a Base64 string.
- * @required uri
- * @optional bytes
+ * @description Defines base properties for a file.
  */
-export interface FileWithUri extends FileBase {
-  /**
-   * @required URI pointing to the file content.
-   */
-  uri: string;
+export const FileBaseSchema = z
+  .object({
+    /**
+     * @optional An optional name for the file (e.g., "document.pdf").
+     */
+    name: z
+      .string()
+      .optional()
+      .describe("An optional name for the file (e.g., 'document.pdf')."),
+    /**
+     * @optional The MIME type of the file (e.g., "application/pdf").
+     */
+    mimeType: z
+      .string()
+      .optional()
+      .describe("The MIME type of the file (e.g., 'application/pdf')."),
+  })
+  .describe("Defines base properties for a file.");
 
-  /**
-   * @optional File content encoded as a Base64 string. Use this OR `uri`.
-   */
-  bytes?: never;
-}
+export type FileBase = z.infer<typeof FileBaseSchema>;
 
 /**
- * @description Represents the base entity for Parts
- * @optional metadata
+ * @description Represents a file with its content provided directly as a base64-encoded string.
  */
-export interface PartBase {
+export const FileWithBytesSchema = FileBaseSchema.extend({
   /**
-   * @optional metadata associated with the part.
+   * @required The base64-encoded content of the file.
    */
-  metadata?: Record<string, unknown>;
-}
+  bytes: z.string().describe("The base64-encoded content of the file."),
+  /**
+   * @optional The `uri` property must be absent when `bytes` is present.
+   */
+  uri: z.never().optional().describe("The URI of the file."),
+}).describe(
+  "Represents a file with its content provided directly as a base64-encoded string."
+);
+
+export type FileWithBytes = z.infer<typeof FileWithBytesSchema>;
 
 /**
- * @description Represents a part of a message containing text content.
- * @required kind
- * @required text
+ * @description Represents a file with its content located at a specific URI.
  */
-export interface TextPart extends PartBase {
+export const FileWithUriSchema = FileBaseSchema.extend({
   /**
-   * @required Type identifier for this part.
+   * @required A URL pointing to the file's content. (keeping as string for now)
    */
-  kind: "text";
-
+  uri: z.string().describe("A URL pointing to the file's content."),
   /**
-   * @required The text content.
+   * @optional The `bytes` property must be absent when `uri` is present.
    */
-  text: string;
-}
+  bytes: z
+    .never()
+    .optional()
+    .describe("The base64-encoded content of the file."),
+}).describe("Represents a file with its content located at a specific URI.");
+export type FileWithUri = z.infer<typeof FileWithUriSchema>;
 
 /**
- * @description Represents a part of a message containing file content.
- * @required kind
- * @required file
+ * @description Represents a file with its content provided directly as a base64-encoded string or located at a specific URI.
  */
-export interface FilePart extends PartBase {
-  /**
-   * @required Type identifier for this part.
-   */
-  kind: "file";
+export const FileSchema = z
+  .union([FileWithBytesSchema, FileWithUriSchema])
+  .describe(
+    "Represents a file with its content provided directly as a base64-encoded string or located at a specific URI."
+  );
 
-  /**
-   * @required The file content, provided either inline or via URI.
-   */
-  file: FileWithBytes | FileWithUri;
-}
+export type File = z.infer<typeof FileSchema>;
 
 /**
- * @description Represents a part of a message containing structured data (JSON).
- * @required kind
- * @required data
+ * @description Represents a file segment within a message or artifact. The file content can be
+ * provided either directly as bytes or as a URI.
  */
-export interface DataPart extends PartBase {
+export const FilePartSchema = PartBaseSchema.extend({
   /**
-   * @required Type identifier for this part.
+   * @required The type of this part, used as a discriminator. Always 'file'.
    */
-  kind: "data";
+  kind: KindSchema.refine((kind) => kind === "file").describe(
+    "The type of this object, used as a discriminator. Always 'file' for a FilePart."
+  ),
+  /**
+   * @required The file content, represented as either a URI or as base64-encoded bytes.
+   */
+  file: FileSchema.describe(
+    "The file content, represented as either a URI or as base64-encoded bytes."
+  ),
+}).describe("Represents a file segment within a message or artifact.");
 
-  /**
-   * @required The structured data content as a JSON object.
-   */
-  data: Record<string, unknown>;
-}
+export type FilePart = z.infer<typeof FilePartSchema>;
 
 /**
- * @description Represents a single part of a multi-part message. Can be text, file, or data.
+ * @description Represents a text segment within a message or artifact.
  */
-export type Part = TextPart | FilePart | DataPart;
+export const TextPartSchema = PartBaseSchema.extend({
+  /**
+   * @required The type of this object, used as a discriminator. Always 'text' for a TextPart.
+   */
+  kind: KindSchema.refine((kind) => kind === "text").describe(
+    "The type of this object, used as a discriminator. Always 'text' for a TextPart."
+  ),
+  /**
+   * @required The string content of the text part.
+   */
+  text: z.string().describe("The string content of the text part."),
+}).describe("Represents a text segment within a message or artifact.");
+export type TextPart = z.infer<typeof TextPartSchema>;
 
 /**
- * @description Represents an artifact generated or used by a task, potentially composed of multiple parts.
- * @required artifactId
- * @optional name
- * @optional description
- * @required parts
- * @optional metadata
- * @optional extensions
+ * @description Represents a structured data segment (e.g., JSON) within a message or artifact.
  */
-export interface Artifact {
+export const DataPartSchema = PartBaseSchema.extend({
   /**
-   * @required Unique identifier for the artifact.
+   * @required The type of this object, used as a discriminator. Always 'data' for a DataPart.
    */
-  artifactId: string;
-
+  kind: KindSchema.refine((kind) => kind === "data").describe(
+    "The type of this object, used as a discriminator. Always 'data' for a DataPart."
+  ),
   /**
-   * @optional name for the artifact.
+   * @required The structured data content of the data part.
    */
-  name?: string;
-
-  /**
-   * @optional description of the artifact.
-   */
-  description?: string;
-
-  /**
-   * @required The constituent parts of the artifact.
-   */
-  parts: Part[];
-
-  /**
-   * @optional metadata associated with the artifact.
-   */
-  metadata?: Record<string, unknown>;
-
-  /**
-   * @optional The URIs of extensions that are present or contributed to this Artifact.
-   */
-  extension?: string;
-}
+  data: z
+    .record(z.string(), z.unknown())
+    .describe("The structured data content of the data part."),
+}).describe(
+  "Represents a structured data segment (e.g., JSON) within a message or artifact."
+);
+export type DataPart = z.infer<typeof DataPartSchema>;
 
 /**
- * @description Represents a message exchanged between a user and an agent.
- * @required role
- * @required parts
- * @optional metadata
- * @optional extensions
- * @optional referenceTaskIds
- * @optional messageId
- * @optional taskId
+ * @description A discriminated union representing a part of a message or artifact, which can
+ * be text, a file, or structured data.
  */
-export interface Message {
-  /**
-   * @required The role of the sender (user or agent).
-   */
-  role: "user" | "agent";
+export const PartSchema = z
+  .union([TextPartSchema, FilePartSchema, DataPartSchema])
+  .describe(
+    "A discriminated union representing a part of a message or artifact, which can be text, a file, or structured data."
+  );
+export type Part = z.infer<typeof PartSchema>;
 
-  /**
-   * @required The content of the message, composed of one or more parts.
-   */
-  parts: Part[];
+/**
+ * @description Represents a file, data structure, or other resource generated by an agent during a task.
+ */
+export const ArtifactSchema = z
+  .object({
+    /**
+     * @required A unique identifier for the artifact within the scope of the task.
+     */
+    artifactId: z
+      .string()
+      .describe(
+        "A unique identifier for the artifact within the scope of the task."
+      ),
+    /**
+     * @optional A human-readable name for the artifact.
+     */
+    name: z
+      .string()
+      .optional()
+      .describe("A human-readable name for the artifact."),
+    /**
+     * @optional A human-readable description of the artifact.
+     */
+    description: z
+      .string()
+      .optional()
+      .describe("A human-readable description of the artifact."),
+    /**
+     * @optional An array of content parts that make up the artifact.
+     */
+    parts: z
+      .array(PartSchema)
+      .describe("An array of content parts that make up the artifact."),
+    /**
+     * @optional Optional metadata for extensions. The key is an extension-specific identifier.
+     */
+    metadata: z
+      .record(z.string(), z.unknown())
+      .optional()
+      .describe(
+        "Optional metadata for extensions. The key is an extension-specific identifier."
+      ),
+    /**
+     * @optional The URIs of extensions that are relevant to this artifact.
+     */
+    extension: z
+      .array(z.string())
+      .optional()
+      .describe("The URIs of extensions that are relevant to this artifact."),
+  })
+  .describe(
+    "Represents a file, data structure, or other resource generated by an agent during a task. It can be composed of multiple parts."
+  );
+export type Artifact = z.infer<typeof ArtifactSchema>;
 
-  /**
-   * @optional metadata associated with the message.
-   */
-  metadata?: Record<string, unknown>;
+/**
+ * @description Represents the role of a message sender.
+ */
+export const MessageRoleSchema = z
+  .enum(["user", "agent"])
+  .describe(
+    "Identifies the sender of the message. `user` for the client, `agent` for the service."
+  );
+export type MessageRole = z.infer<typeof MessageRoleSchema>;
 
-  /**
-   * @optional The URIs of extensions that are present or contributed to this Message.
-   */
-  extensions?: string[];
+/**
+ * @description Represents a single message in the conversation between a user and an agent.
+ */
+export const MessageSchema = z
+  .object({
+    /**
+     * @required Identifies the sender of the message. `user` for the client, `agent` for the service.
+     */
+    role: MessageRoleSchema.describe(
+      "Identifies the sender of the message. `user` for the client, `agent` for the service."
+    ),
 
-  /**
-   * @optional List of tasks referenced as context by this message.
-   */
-  referenceTaskIds?: string[];
-
-  /**
-   * @required Identifier created by the message creator
-   */
-  messageId: string;
-
-  /**
-   * @optional Identifier of task the message is related to
-   */
-  taskId?: string;
-
-  /**
-   * @optional The context the message is associated with
-   */
-  contextId?: string;
-
-  /**
-   * @required Event type
-   */
-  kind: "message";
-}
+    /**
+     * @required An array of content parts that form the message body. A message can be
+     * composed of multiple parts of different types (e.g., text and files).
+     */
+    parts: z
+      .array(PartSchema)
+      .describe(
+        "An array of content parts that form the message body. A message can be composed of multiple parts of different types (e.g., text and files)."
+      ),
+    /**
+     * @optional Optional metadata for extensions. The key is an extension-specific identifier.
+     */
+    metadata: z
+      .record(z.string(), z.unknown())
+      .optional()
+      .describe(
+        "Optional metadata for extensions. The key is an extension-specific identifier."
+      ),
+    /**
+     * @optional The URIs of extensions that are relevant to this message.
+     */
+    extensions: z
+      .array(z.string())
+      .optional()
+      .describe("The URIs of extensions that are relevant to this message."),
+    /**
+     * @optional A list of other task IDs that this message references for additional context.
+     */
+    referenceTaskIds: z
+      .array(z.string())
+      .optional()
+      .describe(
+        "A list of other task IDs that this message references for additional context."
+      ),
+    /**
+     * @required A unique identifier for the message, typically a UUID, generated by the sender.
+     */
+    messageId: z
+      .string()
+      .describe(
+        "A unique identifier for the message, typically a UUID, generated by the sender."
+      ),
+    /**
+     * @optional The identifier of the task this message is part of. Can be omitted for the first message of a new task.
+     */
+    taskId: z
+      .string()
+      .optional()
+      .describe(
+        "The identifier of the task this message is part of. Can be omitted for the first message of a new task."
+      ),
+    /**
+     * @optional The context identifier for this message, used to group related interactions.
+     */
+    contextId: z
+      .string()
+      .optional()
+      .describe(
+        "The context identifier for this message, used to group related interactions."
+      ),
+    /**
+     * @required The type of this object, used as a discriminator. Always 'message' for a Message.
+     */
+    kind: KindSchema.refine((kind) => kind === "message").describe(
+      "The type of this object, used as a discriminator. Always 'message' for a Message."
+    ),
+  })
+  .describe(
+    "Represents a single message in the conversation between a user and an agent."
+  );
+export type Message = z.infer<typeof MessageSchema>;

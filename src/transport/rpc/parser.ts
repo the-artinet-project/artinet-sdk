@@ -1,6 +1,15 @@
-import { JSONRPCError, JSONRPCResponse } from "../../types/extended-schema.js";
-import { SystemError, PARSE_ERROR } from "../../utils/common/errors.js";
-import { logError } from "../../utils/logging/log.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import {
+  JSONRPCError,
+  JSONRPCResponse,
+  JSONRPCErrorSchema,
+} from "~/types/index.js";
+import { SystemError, PARSE_ERROR } from "~/utils/index.js";
+import { logError } from "~/utils/logging/index.js";
 
 /**
  * Parses a JSON-RPC response string and validates its structure.
@@ -17,13 +26,16 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
   }
 
   try {
-    const parsed = JSON.parse(data) as Res;
+    const parsed = JSON.parse(data) as Res; //todo: leverage safe parse
     if (parsed.error) {
-      const parsedError = parsed.error as JSONRPCError<number, unknown>;
-      throw new SystemError<JSONRPCError<number, unknown>>(
-        parsedError.message,
-        parsedError.code,
-        parsedError.data
+      const parsedError = JSONRPCErrorSchema.safeParse(parsed.error);
+      if (!parsedError.success) {
+        throw PARSE_ERROR(parsedError.error);
+      }
+      throw new SystemError<JSONRPCError>(
+        parsedError.data.message,
+        parsedError.data.code,
+        parsedError.data.data
       );
     }
 
@@ -39,7 +51,7 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
       throw PARSE_ERROR("result is undefined");
     }
 
-    return parsed;
+    return parsed as Res;
   } catch (error) {
     if (error instanceof SystemError) {
       logError("parseResponse", "SystemError:", error.message);

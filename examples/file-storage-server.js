@@ -6,7 +6,11 @@
  * between server restarts.
  */
 
-import { A2AServer, FileStore, configureLogger } from "../dist/index.js";
+import {
+  createAgentServer,
+  FileStore,
+  configureLogger,
+} from "../dist/index.js";
 import path from "path";
 import fs from "fs/promises";
 
@@ -28,7 +32,7 @@ try {
  */
 async function* historyAwareAgent(context) {
   // Extract the user's most recent message
-  const userText = context.userMessage.parts
+  const userText = context.command.message.parts
     .filter((part) => part.type === "text")
     .map((part) => part.text)
     .join(" ");

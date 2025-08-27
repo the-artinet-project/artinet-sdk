@@ -1,6 +1,8 @@
-import { NextFunction, Request, Response } from "express";
-import { JSONParseError } from "../../types/extended-schema.js";
-import { logError } from "../../utils/logging/log.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   A2AError,
   ErrorCodeInternalError,
@@ -25,11 +27,10 @@ import {
   ErrorCodeInvalidAgentResponse,
   TaskState,
   TaskStatusUpdateEvent,
-} from "../../types/schemas/a2a/index.js";
+  JSONParseError,
+} from "~/types/index.js";
 
-export class SystemError<
-  T extends JSONRPCError<number, unknown>,
-> extends Error {
+export class SystemError<T extends JSONRPCError> extends Error {
   message: string;
   code: T["code"];
   data: T["data"];
@@ -81,7 +82,7 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
   data: T["data"]
 ) =>
   new SystemError<T>(
-    "Push Notification is not supported",
+    "Push Notifications is not supported",
     ErrorCodePushNotificationNotSupported,
     data
   );
@@ -124,7 +125,7 @@ export const FAILED_UPDATE = (
   kind: "status-update",
   final: true,
   status: {
-    state: TaskState.Failed,
+    state: TaskState.failed,
     message: {
       messageId,
       role: "agent",
@@ -133,56 +134,3 @@ export const FAILED_UPDATE = (
     },
   },
 });
-
-/**
- * Express error handler middleware.
- */
-export type ErrorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => void;
-
-/**
- * Express error handler middleware.
- */
-export function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
-  if (res.headersSent) {
-    return next(err);
-  }
-  logError("errorHandler", JSON.stringify(err), err);
-  let reqId = null;
-  try {
-    if (req.body && typeof req.body === "object" && "id" in req.body) {
-      reqId = req.body.id;
-    }
-  } catch (e) {
-    logError("A2AServer", "Error extracting request ID", e);
-  }
-
-  let jsonRpcError: JSONRPCError<number, unknown>;
-  if (err instanceof SystemError) {
-    jsonRpcError = { code: err.code, message: err.message, data: err.data };
-  } else {
-    const internalError = INTERNAL_ERROR(err.stack);
-    jsonRpcError = {
-      code: internalError.code,
-      message: internalError.message,
-      data: internalError.data,
-    };
-  }
-
-  const errorResponse = {
-    jsonrpc: "2.0",
-    id: reqId,
-    error: jsonRpcError,
-  };
-
-  res.status(200).json(errorResponse);
-}

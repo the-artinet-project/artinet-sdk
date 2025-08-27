@@ -1,427 +1,155 @@
-import {
-  defaultCancelTaskMethod,
-  createJSONRPCMethod,
-  defaultGetTaskPushNotificationMethod,
-  defaultSetTaskPushNotificationMethod,
-  defaultGetTaskMethod,
-  defaultSendTaskMethod,
-  CreateJSONRPCServerParams,
-  JSONRPCCallback,
-} from "../../server/index.js";
-import {
-  Task,
-  Message,
-  TaskResubscriptionRequest,
-  SendStreamingMessageRequest,
-  SendMessageRequest,
-  SendMessageResponse,
-  A2ARequest,
-  A2AResponse,
-  GetTaskRequest,
-  CancelTaskRequest,
-  SetTaskPushNotificationConfigRequest,
-  GetTaskPushNotificationConfigRequest,
-  TaskState,
-  TaskArtifactUpdateEvent,
-} from "../../types/index.js";
-import {
-  AgentEngine,
-  ExecutionContext,
-  A2AExecutionContext,
-} from "../../types/services/context.js";
-import { Protocol } from "../../types/services/protocol.js";
-import { Response } from "express";
-import { loadState, processUpdate } from "../../server/lib/state.js";
-import {
-  FINAL_STATES,
-  getCurrentTimestamp,
-  INVALID_PARAMS,
-  INVALID_REQUEST,
-  logError,
-  METHOD_NOT_FOUND,
-  TASK_NOT_FOUND,
-  validateSendMessageParams,
-  WORKING_UPDATE,
-} from "../../utils/index.js";
-import { processTaskStream } from "../../transport/streaming/stream.js";
-import { sendSSEEvent, setupSseStream } from "../../index.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   A2AServiceInterface,
-  A2AServiceOptions,
-} from "../../types/services/a2a/service.js";
-import { A2ARepository } from "./repository.js";
+  A2AEngine,
+  AgentCard,
+  ContextManagerInterface,
+  ConnectionManagerInterface,
+  CancellationManagerInterface,
+  TaskManagerInterface,
+  MethodOptions,
+  TaskAndHistory,
+  TaskIdParams,
+  MessageSendParams,
+  Command,
+  State,
+  Update,
+  CoreContext,
+  EventManagerOptions,
+  MethodParams,
+} from "~/types/index.js";
+import { coreExecute } from "~/services/core/execution/execute.js";
 
 export class A2AService implements A2AServiceInterface {
-  readonly name: string = "a2a";
-  readonly protocol: Protocol = Protocol.A2A;
-  readonly engine: AgentEngine;
-  readonly state: A2ARepository;
+  private agentInfo: AgentCard;
+  private engine: A2AEngine;
+  private connections: ConnectionManagerInterface;
+  private cancellations: CancellationManagerInterface;
+  private tasks: TaskManagerInterface<TaskAndHistory>;
+  private contexts: ContextManagerInterface<Command, State, Update>;
+  private methods: MethodOptions;
+  readonly eventOverrides:
+    | EventManagerOptions<Command, State, Update>
+    | undefined;
 
-  constructor(options: A2AServiceOptions) {
-    this.engine = options.engine;
-    this.state = new A2ARepository(options);
+  constructor(
+    agentCard: AgentCard,
+    engine: A2AEngine,
+    contexts: ContextManagerInterface<Command, State, Update>,
+    connections: ConnectionManagerInterface,
+    cancellations: CancellationManagerInterface,
+    tasks: TaskManagerInterface<TaskAndHistory>,
+    methods: MethodOptions,
+    eventOverrides?: EventManagerOptions<Command, State, Update>
+  ) {
+    this.engine = engine;
+    this.agentInfo = agentCard;
+    this.contexts = contexts;
+    this.connections = connections;
+    this.cancellations = cancellations;
+    this.tasks = tasks;
+    this.methods = methods;
+    this.eventOverrides = eventOverrides;
   }
 
-  /**
-   * Handles the message/stream method.
-   * @param req The SendTaskRequest object
-   * @param res The Express Response object
-   */
-  public async handleSendStreamingMessage(
-    req: SendStreamingMessageRequest,
-    res: Response
+  async execute(
+    engine: A2AEngine,
+    context: CoreContext<Command, State, Update>
   ): Promise<void> {
-    validateSendMessageParams(req.params);
-    const { message, metadata } = req.params;
-    if (!message.taskId) {
-      throw INVALID_PARAMS("Missing task ID");
-    }
-    const taskId = message.taskId;
-    let contextId = message.contextId ?? "unknown";
-
-    const executionContext: ExecutionContext<
-      A2AExecutionContext<SendStreamingMessageRequest>
-    > = {
-      id: taskId,
-      protocol: Protocol.A2A,
-      getRequestParams: () => req.params,
-      isCancelled: () => this.state.activeCancellations.has(taskId),
-    };
-    // Set up SSE stream with initial status
-    setupSseStream(
-      res,
-      taskId,
-      {
-        taskId: taskId,
-        contextId: contextId,
-        kind: "status-update",
-        status: {
-          state: TaskState.Submitted,
-          timestamp: getCurrentTimestamp(),
-        },
-        final: false,
-      },
-      this.state.addStreamForTask.bind(this.state)
-    );
-    // Load or create task
-    let currentData = await loadState(
-      this.state.getTaskStore(),
-      message,
-      metadata,
-      taskId,
-      contextId
-    );
-
-    // Create task context
-    const context = this.state.createTaskContext(
-      currentData.task,
-      message,
-      currentData.history
-    );
-
-    contextId = currentData.task.contextId || contextId;
-    const workingUpdate = WORKING_UPDATE(taskId, contextId);
-    currentData = await processUpdate(this.state.getTaskStore(), {
-      context: context,
-      current: currentData,
-      update: workingUpdate,
-    });
-
-    // Send the working status
-    sendSSEEvent(res, currentData.task.id, workingUpdate);
-
-    // Process the task using the shared method
-    await processTaskStream(
-      context,
-      this.state.getTaskStore(),
-      this.engine,
-      res,
-      taskId,
-      currentData,
-      this.state.onCancel.bind(this.state),
-      this.state.onEnd.bind(this.state),
-      executionContext
-    );
-  }
-
-  /**
-   * Handles the tasks/resubscribe method.
-   * @param req The TaskResubscriptionRequest object
-   * @param res The Express Response object
-   */
-  public async handleTaskResubscribe(
-    req: TaskResubscriptionRequest,
-    res: Response
-  ): Promise<void> {
-    const { id: taskId } = req.params;
-    if (!taskId) {
-      logError("A2AService", "Task ID is required", req);
-      throw INVALID_PARAMS("Missing task ID");
-    }
-    const executionContext: ExecutionContext<
-      A2AExecutionContext<TaskResubscriptionRequest>
-    > = {
-      id: taskId,
-      protocol: Protocol.A2A,
-      getRequestParams: () => req.params,
-      isCancelled: () => this.state.activeCancellations.has(taskId),
-    };
-    // Try to load the task
-    const data = await this.state.getTaskStore().load(taskId);
-    if (!data) {
-      throw TASK_NOT_FOUND("Task Id: " + taskId);
-    }
-
-    // Set up SSE stream with current task status
-    setupSseStream(
-      res,
-      taskId,
-      {
-        taskId: taskId,
-        contextId: data.task.contextId || "unknown",
-        kind: "status-update",
-        status: data.task.status,
-        final: false,
-        metadata: data.task.metadata,
-      },
-      this.state.addStreamForTask.bind(this.state)
-    );
-
-    // Check if task is in final state
-    if (FINAL_STATES.includes(data.task.status.state)) {
-      // If the task is already complete, send all artifacts and close
-      if (data.task.artifacts && data.task.artifacts.length > 0) {
-        for (const artifact of data.task.artifacts) {
-          const response: TaskArtifactUpdateEvent = {
-            taskId: taskId,
-            contextId: data.task.contextId || "unknown",
-            kind: "artifact-update",
-            artifact,
-            lastChunk: true,
-            metadata: data.task.metadata,
-          };
-          sendSSEEvent(res, taskId, response);
-        }
-      }
-
-      // Remove from tracking and close
-      this.state.removeStreamForTask(taskId, res);
-      res.write("event: close\ndata: {}\n\n");
-      res.end();
-      return;
-    }
-
-    // For non-final states, create context and continue processing
-    // We need to use the last user message as the current message
-    const lastUserMessage = data.history
-      .filter((msg) => msg.role === "user")
-      .pop();
-    if (!lastUserMessage) {
-      throw INVALID_REQUEST("No user message found");
-    }
-
-    const context = this.state.createTaskContext(
-      data.task,
-      lastUserMessage,
-      data.history
-    );
-
-    // Continue processing the task using the shared method
-    await processTaskStream(
-      context,
-      this.state.getTaskStore(),
-      this.engine,
-      res,
-      taskId,
-      data,
-      this.state.onCancel.bind(this.state),
-      this.state.onEnd.bind(this.state),
-      executionContext
-    );
-  }
-
-  /**
-   * Executes a method on the A2A service.
-   * @param executionContext The execution context.
-   * @param engine The agent engine.
-   */
-  async execute({
-    executionContext,
-    engine,
-  }: {
-    executionContext: ExecutionContext<A2AExecutionContext>;
-    engine: AgentEngine;
-  }): Promise<void> {
-    if (!executionContext.requestContext) {
-      throw INVALID_REQUEST({
-        message: "Invalid request",
-        data: {
-          method: "unknown",
-          params: executionContext.getRequestParams(),
-        },
-      });
-    }
-    if (!executionContext.requestContext?.method) {
-      throw METHOD_NOT_FOUND({ method: "unknown" });
-    }
-    //todo better callback sanitization
-    let closeConnection = false;
-    const callback = (error: any, result: any) => {
-      const responseHandler = executionContext.requestContext?.response;
-      if (error) {
-        responseHandler.status(200);
-        responseHandler.send({
-          jsonrpc: "2.0",
-          id: executionContext.id,
-          error: error,
-        });
-        closeConnection = true;
-      } else {
-        responseHandler.status(200);
-        responseHandler.send({
-          jsonrpc: "2.0",
-          id: executionContext.id,
-          result,
-        });
-      }
-      if (closeConnection) {
-        responseHandler.end();
-      }
-    };
-    switch (executionContext.requestContext?.method) {
-      case "message/send":
-      case "tasks/get":
-      case "tasks/cancel":
-      case "tasks/pushNotificationConfig/set":
-      case "tasks/pushNotificationConfig/get":
-        closeConnection = true;
-        return await A2AService.dispatchMethod(
-          executionContext.requestContext.method,
-          executionContext.requestContext.params,
-          callback,
-          {
-            taskStore: this.state.getTaskStore(),
-            card: this.state.getCard(),
-            taskHandler: engine,
-            activeCancellations: this.state.activeCancellations,
-            createTaskContext: this.state.createTaskContext.bind(this.state),
-            closeStreamsForTask: this.state.closeStreamsForTask.bind(
-              this.state
-            ),
-          }
-        ).catch((error) => {
-          logError(
-            "A2AService",
-            `Error dispatching method: ${executionContext.requestContext?.method}`,
-            error
-          );
-          closeConnection = true;
-          callback(error, null);
-        });
-      case "message/stream":
-        {
-          //todo make the following functions leverage callback
-          const params = executionContext.requestContext.request
-            .body as SendStreamingMessageRequest;
-          return await this.handleSendStreamingMessage(
-            params,
-            executionContext.requestContext.response
-          ).catch((error) => {
-            logError(
-              "A2AService",
-              `Error dispatching method: ${executionContext.requestContext?.method}`,
-              error
-            );
-            closeConnection = true;
-            callback(error, null);
-          });
-        }
-        break;
-      case "tasks/resubscribe":
-        {
-          const params = executionContext.requestContext.request
-            .body as TaskResubscriptionRequest;
-          return await this.handleTaskResubscribe(
-            params,
-            executionContext.requestContext.response
-          ).catch((error) => {
-            logError(
-              "A2AService",
-              `Error dispatching method: ${executionContext.requestContext?.method}`,
-              error
-            );
-            closeConnection = true;
-            callback(error, null);
-          });
-        }
-        break;
-      default:
-        logError(
-          "A2AService",
-          `Unknown method: ${executionContext.requestContext?.method}`,
-          null
-        );
-        callback(
-          METHOD_NOT_FOUND({ method: executionContext.requestContext?.method }),
-          null
-        );
-        break;
-    }
+    await coreExecute(engine ?? this.engine, context);
   }
 
   async stop(): Promise<void> {
-    await this.state.destroy();
+    const currentTasks = await this.tasks.getStates();
+    for (const id of currentTasks) {
+      this.addCancellation(id);
+    }
+    return;
   }
 
-  /**
-   * Dispatches a method to the A2A service.
-   * @param method The method to dispatch.
-   * @param params The parameters to dispatch.
-   * @param callback The callback to dispatch.
-   * @param deps The dependencies to dispatch.
-   */
-  static async dispatchMethod<T extends A2ARequest>(
-    method: T["method"],
-    params: T["params"],
-    callback: JSONRPCCallback<A2AResponse | Task | Message | null>,
-    deps: CreateJSONRPCServerParams
+  get agentCard(): AgentCard {
+    return this.agentInfo;
+  }
+
+  addConnection(id: string): void {
+    this.connections.addConnection(id);
+  }
+
+  removeConnection(id: string): void {
+    this.connections.removeConnection(id);
+  }
+
+  isCancelled(id: string): boolean {
+    return this.cancellations.isCancelled(id);
+  }
+
+  addCancellation(id: string): void {
+    this.cancellations.addCancellation(id);
+  }
+
+  removeCancellation(id: string): void {
+    this.cancellations.removeCancellation(id);
+  }
+
+  async getState(id: string): Promise<TaskAndHistory | undefined> {
+    return await this.tasks.getState(id);
+  }
+
+  async setState(id: string, data: TaskAndHistory): Promise<void> {
+    await this.tasks.setState(id, data);
+  }
+
+  async getTask(input: TaskIdParams) {
+    return await this.methods.getTask(input, { service: this });
+  }
+
+  async cancelTask(input: TaskIdParams) {
+    return await this.methods.cancelTask(input, {
+      service: this,
+      contextManager: this.contexts,
+    });
+  }
+
+  async sendMessage(
+    message: MessageSendParams,
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    switch (method) {
-      case "message/send":
-        return await createJSONRPCMethod<
-          SendMessageRequest["params"],
-          SendMessageResponse | Task | Message | null
-        >(
-          deps,
-          defaultSendTaskMethod,
-          method
-        )(params as SendMessageRequest["params"], callback);
-      case "tasks/get":
-        return await createJSONRPCMethod(
-          deps,
-          defaultGetTaskMethod,
-          method
-        )(params as GetTaskRequest["params"], callback);
-      case "tasks/cancel":
-        return await createJSONRPCMethod(
-          deps,
-          defaultCancelTaskMethod,
-          method
-        )(params as CancelTaskRequest["params"], callback);
-      case "tasks/pushNotificationConfig/set":
-        return await createJSONRPCMethod(
-          deps,
-          defaultSetTaskPushNotificationMethod,
-          method
-        )(params as SetTaskPushNotificationConfigRequest["params"], callback);
-      case "tasks/pushNotificationConfig/get":
-        return await createJSONRPCMethod(
-          deps,
-          defaultGetTaskPushNotificationMethod,
-          method
-        )(params as GetTaskPushNotificationConfigRequest["params"], callback);
-      default:
-        throw new Error(`Unknown method: ${method}`);
-    }
+    return await this.methods.sendMessage(message, {
+      ...params, //we may include additional params in the future that may not need to be handled by the service
+      service: this,
+      engine: params?.engine ?? this.engine,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
+  }
+
+  async *streamMessage(
+    message: MessageSendParams,
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
+  ) {
+    yield* this.methods.streamMessage(message, {
+      ...params,
+      service: this,
+      engine: params?.engine ?? this.engine,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
+  }
+
+  async *resubscribe(
+    input: TaskIdParams,
+    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
+  ) {
+    yield* this.methods.resubscribe(input, {
+      ...params,
+      service: this,
+      engine: params?.engine ?? this.engine,
+      contextManager: this.contexts,
+      signal: params?.signal ?? new AbortController().signal,
+    });
   }
 }

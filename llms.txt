@@ -1,90 +1,114 @@
 # Artinet SDK (@artinet/sdk) High-Level Summary
 
-This project provides the **Artinet SDK**, a production-ready, feature-rich TypeScript library for building clients and servers compliant with the Agent2Agent (A2A) protocol. Developed by the Artinet Team, it aims to simplify A2A implementation by offering robust, easy-to-use components with a focus on developer experience and reliability, significantly enhancing the foundational concepts presented in the official A2A samples.
+This project provides the **Artinet SDK**, a production-ready, feature-rich TypeScript library for building clients and servers compliant with the Agent2Agent (A2A) protocol. Developed by the Artinet Team, it aims to simplify A2A implementation by offering robust, easy-to-use components with a focus on developer experience and reliability.
 
-The SDK is distributed as the `@artinet/sdk` npm package.
+The SDK is distributed as the `@artinet/sdk` npm package (current version: 0.5.6).
 
 ## 1. Core Components & Purpose
 
 *   **Purpose:** Enable developers to easily create A2A-compliant AI agent clients and servers in TypeScript/JavaScript environments.
 *   **Target Audience:** Developers building AI agents or applications that need to communicate using the standardized A2A protocol.
 *   **Key Modules:**
-    *   **`@artinet/sdk/client`**: Provides `A2AClient` for interacting with A2A servers.
-    *   **`@artinet/sdk/server`**: Provides `A2AServer` for implementing A2A agent endpoints.
-    *   **`@artinet/sdk/types`**: Contains TypeScript interfaces for all A2A protocol structures derived from the official JSON schema, plus extended types for SDK usage (e.g., `TaskYieldUpdate`, `ServerDeploymentRequestParams`, `ClientProxy`, `TaskContext`).
-    *   **`@artinet/sdk/transport`**: Handles underlying communication logic (JSON-RPC, SSE streaming).
-    *   **`@artinet/sdk/utils`**: Includes common utilities, error definitions, logging integration, and deployment utilities.
-        *   **`@artinet/sdk/agents`**: A sub-path providing the `artinet.v0` namespace with `taskManager`, `connect`, and `agent` for sandboxed/managed agent environments.
+    *   **`@artinet/sdk`** (main export): Provides core client, server, and service functionality including types, transport, utilities, and registry.
+    *   **`@artinet/sdk/agents`**: Provides `artinet.v0` namespace with `taskManager`, `connect`, and `agent` for sandboxed/managed agent environments.
+    *   **`@artinet/sdk/deployment`**: Provides deployment utilities like `fullDeployment` and `testDeployment`.
 
-## 2. Features & Enhancements (vs. Basic A2A Samples)
+## 2. Architecture & Core Concepts
 
-*   **Production-Grade Server (`A2AServer`):**
-    *   Built on **Express.js**, providing a robust and familiar foundation.
-    *   Simplifies setup: Handles JSON-RPC request/response/error handling, SSE stream management, and routing automatically.
-    *   Requires only a core `TaskHandler` (async generator function) for agent logic implementation.
-    *   Manages task state transitions based on `TaskHandler` yields.
-    *   Configurable Agent Card served automatically (`/.well-known/agent.json`).
+*   **Service-Based Architecture:** The SDK is built around an A2A service layer rather than direct server classes:
+    *   **`A2AService`**: Core service implementation that handles A2A protocol methods
+    *   **`A2AEngine`**: Type alias for `ExecutionEngine<Command, Update>` - the core user logic interface (async generator function)
+    *   **`createAgentServer()`**: Factory function that creates an Express-based server with A2A service integration
+    *   **`ExpressAgentServer`**: Return type of `createAgentServer()` providing the actual server instance
+
+*   **Engine Pattern:** Uses execution engines rather than task handlers:
+    *   **`ExecutionEngine<TCommand, TState, TUpdate>`**: Core interface for agent logic - takes a `CoreContext` and returns an `AsyncGenerator<TUpdate, void, unknown>`
+    *   **`A2AEngine`**: Specialized execution engine for A2A contexts with `Command`, `State`, and `Update` types
+
+*   **Factory Pattern:** Services are created using factory functions with `FactoryParams`:
+    *   **`createAgent(params: FactoryParams)`**: Creates A2A service instances
+    *   **`FactoryParams`**: Configuration object requiring `agentCard`, `engine`, and optional managers for contexts, connections, cancellations, tasks, methods, and events
+
+## 3. Features & Enhancements
+
+*   **Production-Grade Server (`createAgentServer`):**
+    *   Built on **Express.js** v5.1.0, providing a robust foundation.
+    *   Simplifies setup: Handles JSON-RPC request/response/error handling and routing automatically.
+    *   Requires an `A2AEngine` (async generator function) or `FactoryParams` for agent logic implementation.
+    *   Manages task state transitions based on engine yields.
+    *   Configurable Agent Card served automatically at `/.well-known/agent.json`.
     *   Integrated support for CORS configuration.
-    *   Optional custom JSON-RPC server implementation via `createJSONRPCServer` factory function parameter.
-    *   Corrected internal parameter name from `taskHandler` to `handler` for consistency, though `taskHandler` might have worked due to JS flexibility.
+    *   Uses custom JSON-RPC middleware, not jayson server directly.
+
 *   **Enhanced Client (`A2AClient`):**
     *   Reliable streaming support (`sendStreamingMessage`) using `eventsource-parser`.
     *   Convenience methods for capability checking (`supports`).
     *   Flexible header management for authentication (`addHeader`, `setHeaders`).
-    *   Informative client-side error handling (`RpcError`).
+    *   Informative client-side error handling with structured error classes.
+    *   Agent card caching and validation.
+
 *   **Developer Experience:**
-    *   **Strong Typing:** Comprehensive TypeScript types for the entire A2A protocol and SDK interfaces.
+    *   **Strong Typing:** Comprehensive TypeScript types for the entire A2A protocol derived from JSON schemas.
     *   **Simplified APIs:** Abstracts protocol complexities for both client and server.
     *   **Structured Logging:** Integrated, configurable logging using `pino`. Defaults to `error` level, configurable via `configureLogger`.
-    *   **Enhanced Context Handling:** New `ExecutionContext` interface for improved parameter management, with protocol-specific extensions (`MCPExecutionContext`, `NLWebExecutionContext`).
+    *   **Enhanced Context Handling:** `ExecutionContext` interface for improved parameter management.
+
 *   **Reliability & Testing:**
-    *   **High Test Coverage:** (>95% reported) using Jest, covering core logic, streaming, error handling, push notification config, and edge cases.
+    *   **High Test Coverage:** Comprehensive Jest test suite covering core logic, streaming, error handling, and edge cases.
     *   Standardized error classes (`A2AError`, `RpcError`) mapped to JSON-RPC error codes.
+
 *   **Flexible Storage:**
     *   Pluggable `TaskStore` interface.
     *   Includes `InMemoryTaskStore` (default, for development/testing).
-    *   Includes `FileStore` for basic file-based persistence. Easily extensible for custom database integrations.
-*   **Code Deployment & Management (Alpha/Beta):**
-    *   `bundle`: Utility to bundle agent code using `esbuild`.
-    *   `taskHandlerProxy`, `fetchResponseProxy` (**DEPRECATED**): Older utilities to assist in creating deployable agent logic. Developers should migrate to `artinet.v0.taskManager` and `artinet.v0.connect`.
-    *   **`artinet.v0.taskManager`**: Standard utility for agents in managed environments to interact with the host for task lifecycle management. Replaces `taskHandlerProxy`.
-    *   **`artinet.v0.connect`**: Standard utility for agents in managed environments to make proxied calls to other agents or LLMs. Replaces `fetchResponseProxy`.
-    *   **`artinet.v0.agent`**: Factory function for agents in managed environments to obtain a `ClientProxy` for type-safe, host-managed communication with other A2A services.
+    *   Includes `FileStore` for basic file-based persistence in `src/utils/storage/file.ts`.
+
+*   **Agent Registry System:**
+    *   **`AgentRegistry`**: Allows multiple agents to share a common context manager.
+    *   Supports dynamic agent creation and management with shared state.
+
+*   **Code Deployment & Management:**
+    *   **`artinet.v0.taskManager`**: Standard utility for agents in managed environments to interact with the host for task lifecycle management.
+    *   **`artinet.v0.connect`**: Standard utility for agents in managed environments to make proxied calls to other agents or LLMs.
+    *   **`artinet.v0.agent`**: Factory function for agents in managed environments to obtain a `ClientProxy` for type-safe communication.
+    *   `bundler`: Utility to bundle agent code using `esbuild`.
     *   `testDeployment`: Utility to test agent deployments in a sandboxed environment.
-    *   `fullDeployment` (Beta): Utility to deploy bundled agent code and its `AgentCard` directly to the Artinet platform (requires `ARTINET_API_KEY`).
-    *   New types: `ServerDeploymentRequestParams`, `ServerDeploymentResponse` in `src/types/extended-schema.ts`. New proxy-related types (`TaskProxy`, `TaskManagerProps`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory`, etc.) in `src/types/proxy.ts`.
+    *   `fullDeployment`: Utility to deploy bundled agent code to the Artinet platform.
+
 *   **Protocol Compliance:**
-    *   Full implementation based on the official A2A JSON Schema (`a2a.json`).
+    *   Full implementation based on the official A2A JSON Schema.
     *   Supports core methods: `message/send`, `tasks/get`, `tasks/cancel`.
     *   Supports streaming method: `message/stream`.
-    *   Supports push notification configuration methods: `tasks/pushNotificationConfig/set`, `tasks/pushNotificationConfig/get` (though full push *sending* logic might be agent-specific).
+    *   Supports push notification configuration methods: `tasks/pushNotificationConfig/set`, `tasks/pushNotificationConfig/get`.
     *   Supports streaming resubscription: `tasks/resubscribe`.
-    *   Agent registration now includes `tags: ["a2a"]`.
-    *   Improved agent card fetching in client with URL validation and checks for card content.
-    *   Registration attempts with localhost/empty URLs are now prevented.
 
-## 3. Technical Details
+## 4. Technical Details
 
 *   **Language:** TypeScript
-*   **Module System:** ES Modules (ESM) (`"type": "module"` in `package.json`). Requires Node.js >= 16 (Node.js 22 recommended).
+*   **Module System:** ES Modules (ESM) (`"type": "module"` in `package.json`). Requires Node.js >= 22.0.0.
 *   **Build System:** Uses `tsc` to compile TypeScript to JavaScript in the `dist` directory.
-*   **Exports:** Provides main SDK exports from `./dist/index.js` and agent utilities from `./dist/utils/deployment/agents.js` (accessible via `@artinet/sdk/agents`).
-*   **Type Definitions:** Main type definitions are in `dist/types/index.d.ts`. Agent utility types are in `dist/utils/deployment/agents.d.ts`.
-*   **File Structure Changes:**
-    *   `src/client/interfaces/client.ts` moved to `src/types/client.ts`.
-    *   `src/server/interfaces/context.ts` moved to `src/types/context.ts`.
-    *   Schema definitions reorganized under `schemas/a2a` directory.
-*   **Testing:** Jest (`ts-jest`).
+*   **Exports:** 
+    *   Main SDK exports from `./dist/index.js`
+    *   Agent utilities from `./dist/utils/deployment/agents.js` (accessible via `@artinet/sdk/agents`)
+    *   Deployment utilities from `./dist/utils/deployment/index.js` (accessible via `@artinet/sdk/deployment`)
+*   **Type Definitions:** 
+    *   Main types in `dist/types/index.d.ts`
+    *   Agent utility types in `dist/types/utils/deployment/agents.d.ts`
+    *   Deployment types in `dist/types/utils/deployment/index.d.ts`
+*   **Testing:** Jest with `ts-jest` and Node.js experimental VM modules.
 *   **Linting:** ESLint with TypeScript-ESLint (Flat Config `eslint.config.js`).
-*   **Core Dependencies:** `express`, `jayson` (for JSON-RPC server), `pino`, `eventsource-parser`, `cors`.
+*   **Core Dependencies:** `express` (^5.1.0), `jayson` (^4.2.0), `pino` (^9.6.0), `eventsource-parser` (^3.0.1), `cors` (^2.8.5), `@trpc/server` (^11.4.3), `zod` (^3.25.42).
 
-## 4. Usage (High-Level)
+## 5. Usage (High-Level)
 
-*   **Server:** Instantiate `A2AServer`, providing a `TaskHandler` async generator function and optionally a `TaskStore` and other configurations. Call `server.start()`.
+*   **Server:** Use `createAgentServer()` with either:
+    *   An `A2AEngine` and `AgentCard` via `FactoryParams`: `createAgentServer({ agent: { engine: myEngine, agentCard: myCard } })`
+    *   A pre-built `A2AService` instance: `createAgentServer({ agent: myServiceInstance })`
 *   **Client:** Instantiate `A2AClient` with the server's A2A endpoint URL. Use methods like `sendMessage`, `sendStreamingMessage`, `getTask`, `cancelTask`, `supports`.
+*   **Registry:** Use `AgentRegistry` to manage multiple agents with shared context managers.
 
-## 5. Project Goals
+## 6. Project Goals
 
 *   Provide a reliable, easy-to-use, and fully-typed SDK for A2A development in the Node.js ecosystem.
-*   Offer a more complete and production-oriented solution compared to basic protocol samples.
+*   Offer a complete and production-oriented solution with service-based architecture.
 *   Encourage adoption of the A2A standard by lowering the barrier to implementation.
+*   Support both standalone and managed deployment environments through comprehensive utilities.

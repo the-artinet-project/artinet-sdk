@@ -1,303 +1,191 @@
-import { Message, Artifact } from "./parameters.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { z } from "zod/v4";
+import { MessageSchema, ArtifactSchema } from "./parameters.js";
 import {
-  JSONRPCErrorResponse,
-  JSONRPCRequestWithParams,
-  JSONRPCSuccessResponse,
+  JSONRPCErrorResponseSchema,
+  JSONRPCRequestSchema,
+  JSONRPCSuccessResponseSchema,
 } from "./rpc.js";
+import { KindSchema } from "./kind.js";
 
 /**
  * @description Represents the state of a task within the A2A protocol.
  */
-export enum TaskState {
-  Submitted = "submitted",
-  Working = "working",
-  InputRequired = "input-required",
-  Completed = "completed",
-  Canceled = "canceled",
-  Failed = "failed",
-  Rejected = "rejected",
-  AuthRequired = "auth-required",
-  Unknown = "unknown",
-}
+export const TaskStateSchema = z
+  .enum([
+    "submitted",
+    "working",
+    "input-required",
+    "completed",
+    "canceled",
+    "failed",
+    "rejected",
+    "auth-required",
+    "unknown",
+  ])
+  .describe("Defines the lifecycle states of a Task.");
+
+export const TaskState = TaskStateSchema.enum;
+export type TaskState = z.infer<typeof TaskStateSchema>;
 
 /**
  * Basic parameters used for task ID operations.
- * Used by: `tasks/cancel`, `tasks/pushNotificationConfig/get`.
  */
-export interface TaskIdParams {
-  /**
-   * The unique identifier of the task.
-   */
-  id: string;
-
-  /**
-   * Optional metadata to include with the operation.
-   */
-  metadata?: Record<string, unknown>;
-}
+export const TaskIdParamsSchema = z
+  .object({
+    id: z.string().describe("The ID of the task to query."),
+    metadata: z
+      .record(z.string(), z.unknown())
+      .optional()
+      .describe("Additional metadata to include in the request."),
+  })
+  .describe("Defines the parameters for a request to get a task.");
+export type TaskIdParams = z.infer<typeof TaskIdParamsSchema>;
 
 /**
  * Parameters used for querying task-related information by ID.
- * Used by: `tasks/get`, `tasks/getHistory`, `tasks/subscribe`, `tasks/resubscribe`.
  */
-export interface TaskQueryParams extends TaskIdParams {
-  /**
-   * Optional history length to retrieve for the task.
-   */
-  historyLength?: number;
-}
-
-/**
- * Basic parameters used for task ID operations.
- * Used by: `tasks/cancel`, `tasks/pushNotificationConfig/get`.
- * @description Basic parameters used for task ID operations.
- * @required id
- * @optional metadata
- */
-export interface TaskIdParams {
-  /**
-   * @required The unique identifier of the task.
-   */
-  id: string;
-
-  /**
-   * @optional metadata to include with the operation.
-   */
-  metadata?: Record<string, unknown>;
-}
-
-/**
- * Parameters used for querying task-related information by ID.
- * @description Parameters used for querying task-related information by ID.
- * @required id
- * @optional historyLength
- */
-export interface TaskQueryParams extends TaskIdParams {
-  /**
-   * @optional Number of recent messages to be retrieved.
-   */
-  historyLength?: number;
-}
+export const TaskQueryParamsSchema = TaskIdParamsSchema.extend({
+  historyLength: z.number().optional(),
+});
+export type TaskQueryParams = z.infer<typeof TaskQueryParamsSchema>;
 
 /**
  * Represents the status of a task at a specific point in time.
- * @description A task status is a snapshot of the task at a specific point in time.
- * @required state
- * @optional message
- * @optional timestamp
  */
-export interface TaskStatus {
-  /**
-   * @required The current state of the task.
-   */
-  state: TaskState;
-
-  /**
-   * @optional An optional message associated with the current status (e.g., progress update, final response).
-   */
-  message?: Message;
-
-  /**
-   * @optional The timestamp when this status was recorded (ISO 8601 format).
-   * @format date-time
-   */
-  timestamp?: string;
-}
+export const TaskStatusSchema = z.object({
+  state: TaskStateSchema,
+  message: MessageSchema.optional(),
+  timestamp: z.string().datetime().optional(),
+});
+export type TaskStatus = z.infer<typeof TaskStatusSchema>;
 
 /**
  * Represents a task being processed by an agent.
- * @description A task is a unit of work that an agent can perform.
- * @required id
- * @optional contextId
- * @required status
- * @optional history
- * @optional artifacts
- * @optional metadata
- * @required kind
  */
-export interface Task {
-  /**
-   * @required Unique identifier for the task.
-   */
-  id: string;
-
-  /**
-   * @optional identifier for the session this task belongs to.
-   */
-  contextId?: string;
-
-  /**
-   * @required The current status of the task.
-   */
-  status: TaskStatus;
-
-  /**
-   * @optional list of historical messages associated with the task.
-   */
-  history?: Message[];
-
-  /**
-   * @optional list of artifacts associated with the task (e.g., outputs, intermediate files).
-   */
-  artifacts?: Artifact[];
-
-  /**
-   * @optional metadata associated with the task.
-   */
-  metadata?: Record<string, unknown>;
-
-  /**
-   * @required Event type
-   */
-  kind: "task";
-}
+export const TaskSchema = z.object({
+  id: z.string(),
+  contextId: z.string().optional(),
+  status: TaskStatusSchema,
+  history: z.array(MessageSchema).optional(),
+  artifacts: z.array(ArtifactSchema).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  kind: KindSchema.refine((kind) => kind === "task"),
+});
+export type Task = z.infer<typeof TaskSchema>;
 
 /**
  * Represents a status update event for a task, typically used in streaming scenarios.
- * @description A status update event is a snapshot of the task at a specific point in time.
- * @required taskId
- * @required contextId
- * @required kind
- * @required status
- * @optional metadata
  */
-export interface TaskStatusUpdateEvent {
-  /**
-   * @required The ID of the task being updated.
-   */
-  taskId: string;
-
-  /**
-   * @required The context the task is associated with
-   */
-  contextId: string;
-
-  /**
-   * @required Event type
-   */
-  kind: "status-update";
-
-  /**
-   * @required The current status of the task.
-   */
-  status: TaskStatus;
-
-  /**
-   * @required Flag indicating if this is the final update for the task.
-   */
-  final: boolean;
-
-  /**
-   * @optional metadata associated with this update event.
-   */
-  metadata?: Record<string, unknown>;
-}
+export const TaskStatusUpdateEventSchema = z.object({
+  taskId: z.string(),
+  contextId: z.string(),
+  kind: KindSchema.refine((kind) => kind === "status-update"),
+  status: TaskStatusSchema,
+  final: z.boolean(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+export type TaskStatusUpdateEvent = z.infer<typeof TaskStatusUpdateEventSchema>;
 
 /**
  * Represents an artifact update event for a task, typically used in streaming scenarios.
- * @description An artifact update event is a snapshot of the task at a specific point in time.
- * @required taskId
- * @required contextId
- * @required kind
- * @required artifact
- * @optional append
- * @optional lastChunk
- * @optional metadata
  */
-export interface TaskArtifactUpdateEvent {
-  /**
-   * @required The ID of the task being updated.
-   */
-  taskId: string;
-
-  /**
-   * @required The context the task is associated with
-   */
-  contextId: string;
-
-  /**
-   * @required Event type
-   */
-  kind: "artifact-update";
-
-  /**
-   * @required The new or updated artifact for the task.
-   */
-  artifact: Artifact;
-
-  /**
-   * @optional Indicates if this artifact appends to a previous one
-   */
-  append?: boolean;
-
-  /**
-   * @optional Indicates if this is the last chunk of the artifact
-   */
-  lastChunk?: boolean;
-
-  /**
-   * @optional metadata associated with this update event.
-   */
-  metadata?: Record<string, unknown>;
-}
+export const TaskArtifactUpdateEventSchema = z.object({
+  taskId: z.string(),
+  contextId: z.string(),
+  kind: KindSchema.refine((kind) => kind === "artifact-update"),
+  artifact: ArtifactSchema,
+  append: z.boolean().optional(),
+  lastChunk: z.boolean().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+export type TaskArtifactUpdateEvent = z.infer<
+  typeof TaskArtifactUpdateEventSchema
+>;
 
 /**
  * @description Request to retrieve the current state of a task.
- * @required id
- * @required method
- * @required params
  */
-export type GetTaskRequest = JSONRPCRequestWithParams<
-  "tasks/get",
-  TaskQueryParams
+export const GetTaskRequestSchema = JSONRPCRequestSchema.extend({
+  method: z.literal("tasks/get"),
+  params: TaskQueryParamsSchema.describe(
+    "Defines the parameters for a request to get a task."
+  ),
+}).describe("Represents a JSON-RPC request for the `tasks/get` method.");
+export type GetTaskRequest = z.infer<typeof GetTaskRequestSchema>;
+
+/**
+ * @description Represents a successful JSON-RPC response for the `tasks/get` method.
+ */
+export const GetTaskSuccessResponseSchema = JSONRPCSuccessResponseSchema.extend(
+  {
+    /**
+     * @required The result of the request, which can be a direct reply Message or the initial Task object.
+     */
+    result: TaskSchema.describe(
+      "The result of the request, which can be a direct reply Message or the initial Task object."
+    ),
+  }
+).describe("JSON-RPC success response model for the 'tasks/get' method.");
+export type GetTaskSuccessResponse = z.infer<
+  typeof GetTaskSuccessResponseSchema
 >;
 
 /**
- * @description JSON-RPC success response model for the 'tasks/get' method.
- * @required result
- * @never error
+ * @description Represents a JSON-RPC response for the `tasks/get` method.
  */
-export type GetTaskSuccessResponse = JSONRPCSuccessResponse<Task>;
+export const GetTaskResponseSchema = z
+  .union([GetTaskSuccessResponseSchema, JSONRPCErrorResponseSchema])
+  .describe("Represents a JSON-RPC response for the `tasks/get` method.");
+export type GetTaskResponse = z.infer<typeof GetTaskResponseSchema>;
 
 /**
- * @description Response to a `tasks/get` request. Contains the Task object or an error.
- * @oneOf GetTaskSuccessResponse | JSONRPCErrorResponse
+ * @description Request to re-subscribe to a task's updates.
  */
-export type GetTaskResponse = GetTaskSuccessResponse | JSONRPCErrorResponse;
-
-/**
- * @description Request to resubscribe to updates for a task after a connection interruption.
- * @required id
- * @required method
- * @required params
- */
-export type TaskResubscriptionRequest = JSONRPCRequestWithParams<
-  "tasks/resubscribe",
-  TaskQueryParams
+export const TaskResubscriptionRequestSchema = JSONRPCRequestSchema.extend({
+  method: z.literal("tasks/resubscribe"),
+  params: TaskIdParamsSchema.describe(
+    "Defines the parameters for a request to re-subscribe to a task's updates."
+  ),
+}).describe(
+  "Represents a JSON-RPC request for the `tasks/resubscribe` method."
+);
+export type TaskResubscriptionRequest = z.infer<
+  typeof TaskResubscriptionRequestSchema
 >;
 
 /**
- * @description Request to cancel a currently running task.
- * @required id
- * @required method
- * @required params
+ * @description Request to cancel a task.
  */
-export type CancelTaskRequest = JSONRPCRequestWithParams<
-  "tasks/cancel",
-  TaskIdParams
+export const CancelTaskRequestSchema = JSONRPCRequestSchema.extend({
+  method: z.literal("tasks/cancel"),
+  params: TaskIdParamsSchema.describe(
+    "Defines the parameters for a request to cancel a task."
+  ),
+}).describe("Represents a JSON-RPC request for the `tasks/cancel` method.");
+export type CancelTaskRequest = z.infer<typeof CancelTaskRequestSchema>;
+
+/**
+ * @description Represents a successful JSON-RPC response for the `tasks/cancel` method.
+ */
+export const CancelTaskSuccessResponseSchema =
+  JSONRPCSuccessResponseSchema.extend({
+    result: TaskSchema.describe(
+      "The result of the request, which can be a direct reply Message or the initial Task object."
+    ),
+  }).describe("JSON-RPC success response model for the 'tasks/cancel' method.");
+export type CancelTaskSuccessResponse = z.infer<
+  typeof CancelTaskSuccessResponseSchema
 >;
 
 /**
- * @description JSON-RPC success response model for the 'tasks/cancel' method.
- * @required result
- * @never error
+ * @description Represents a JSON-RPC response for the `tasks/cancel` method.
  */
-export type CancelTaskSuccessResponse = JSONRPCSuccessResponse<Task>;
-
-/**
- * @description Response to a `tasks/cancel` request. Contains the updated Task object (usually with 'canceled' state) or an error.
- * @oneOf CancelTaskSuccessResponse | JSONRPCErrorResponse
- */
-export type CancelTaskResponse =
-  | CancelTaskSuccessResponse
-  | JSONRPCErrorResponse;
+export const CancelTaskResponseSchema = z
+  .union([CancelTaskSuccessResponseSchema, JSONRPCErrorResponseSchema])
+  .describe("Represents a JSON-RPC response for the `tasks/cancel` method.");
+export type CancelTaskResponse = z.infer<typeof CancelTaskResponseSchema>;

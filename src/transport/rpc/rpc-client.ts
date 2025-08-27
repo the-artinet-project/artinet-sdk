@@ -1,20 +1,21 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * HTTP JSON-RPC client utilities.
  * Handles the common pattern of sending JSON-RPC requests and processing responses.
  */
 import { v4 as uuidv4 } from "uuid";
-import {
-  SystemError,
-  INTERNAL_ERROR,
-  PARSE_ERROR,
-} from "../../utils/common/errors.js";
+import { SystemError, INTERNAL_ERROR, PARSE_ERROR } from "~/utils/index.js";
 import type {
   JSONRPCRequest,
   JSONRPCResponse,
   A2ARequest,
-} from "../../types/extended-schema.js";
+} from "~/types/index.js";
 import { parseResponse } from "./parser.js";
-import { logError, logWarn } from "../../utils/logging/log.js";
+import { logError, logWarn } from "~/utils/logging/index.js";
 
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
@@ -62,9 +63,13 @@ export async function sendJsonRpcRequest<Req extends A2ARequest>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
         Accept: acceptHeader,
         ...headers,
       },
+      priority: "high",
+      mode: "cors",
+      keepalive: true,
       body: JSON.stringify(requestBody),
     });
   } catch (networkError) {
