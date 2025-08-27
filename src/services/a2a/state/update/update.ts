@@ -29,7 +29,7 @@ export interface UpdateProps<T extends UpdateEvent = UpdateEvent> {
   update: T;
 }
 
-type Update<T extends UpdateEvent> = (
+type UpdateFunction<T extends UpdateEvent> = (
   props: UpdateProps<T>
 ) => Promise<boolean>;
 
@@ -44,7 +44,7 @@ const updateHistory = (current: TaskAndHistory, updateMessage: Message) => {
   }
 };
 
-export const updateMessage: Update<Message> = async (props) => {
+export const updateMessage: UpdateFunction<Message> = async (props) => {
   const { context, update } = props;
   if (!update || update.kind !== UpdateKind.Message) {
     logError("updateMessage", "Invalid update", update);
@@ -54,7 +54,7 @@ export const updateMessage: Update<Message> = async (props) => {
   return true;
 };
 
-export const updateTask: Update<Task> = async (props) => {
+export const updateTask: UpdateFunction<Task> = async (props) => {
   const { context, current, update } = props;
   if (!update || update.kind !== UpdateKind.Task) {
     logError("updateTask", "Invalid update kind", update);
@@ -74,9 +74,9 @@ export const updateTask: Update<Task> = async (props) => {
   return true;
 };
 
-export const updateTaskStatusUpdate: Update<TaskStatusUpdateEvent> = async (
-  props
-) => {
+export const updateTaskStatusUpdate: UpdateFunction<
+  TaskStatusUpdateEvent
+> = async (props) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.StatusUpdate) {
     logError("updateTaskStatusUpdate", "Invalid update kind", update);
@@ -94,9 +94,9 @@ export const updateTaskStatusUpdate: Update<TaskStatusUpdateEvent> = async (
   return false;
 };
 
-export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
-  props
-) => {
+export const updateTaskArtifactUpdate: UpdateFunction<
+  TaskArtifactUpdateEvent
+> = async (props) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.ArtifactUpdate) {
     logError("updateTaskArtifactUpdate", "Invalid update kind", update);
@@ -114,7 +114,7 @@ export const updateTaskArtifactUpdate: Update<TaskArtifactUpdateEvent> = async (
   return true; //!
 };
 
-export const updateState: Update<UpdateEvent> = async (
+export const updateState: UpdateFunction<UpdateEvent> = async (
   props
 ): Promise<boolean> => {
   const { context, current, update } = props;

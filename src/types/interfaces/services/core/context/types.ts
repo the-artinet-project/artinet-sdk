@@ -8,8 +8,8 @@
  * The base types will expand as we determine what is common across all services.
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type CoreCommand<TCommand extends {} = {}> = TCommand;
+export type CoreCommand<TCommand extends object = object> = TCommand;
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type CoreState<TState extends {} = {}> = TState;
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type CoreUpdate<TUpdate extends {} = {}> = TUpdate;
+export type CoreUpdate<TUpdate = unknown> = TUpdate;

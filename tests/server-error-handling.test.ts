@@ -16,6 +16,7 @@ import {
   ExpressAgentServer,
   createAgentServer,
   Context,
+  getParts,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
@@ -27,10 +28,7 @@ const errorProneEngine: A2AEngine = async function* (context: Context) {
   const params = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
-  const text = params.message.parts
-    .filter((part) => part.kind === "text")
-    .map((part) => (part as any).text)
-    .join(" ");
+  const { text } = getParts(params.message.parts);
 
   // If the message contains "throw", we'll simulate an error
   if (text.includes("throw")) {

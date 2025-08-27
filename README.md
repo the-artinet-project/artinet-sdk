@@ -7,13 +7,13 @@
 
 # artinet SDK
 
-The artinet SDK is a TypeScript SDK for Agentic Communication written for [node.js](https://nodejs.org/) that aims to simplify the creation of interoperable AI agents. Learn more at [the artinet project](https://artinet.io/).
+The artinet SDK is a TypeScript library designed for Agentic Communication. It's written for [node.js](https://nodejs.org/) and aims to simplify the creation of interoperable AI agents. Learn more at [the artinet project](https://artinet.io/).
 
 This SDK leverages a service-oriented architecture for building AI agents allowing developers to easily create agents as simple processes or seamlessly embed them within a dedicated server.
 
 ### Quick Start
 
-To build your own agent/server use the [`create-quick-agent`](https://www.npmjs.com/package/@artinet/create-quick-agent) command:
+To build your own agent/server use the [`create-quick-agent`](https://www.npmjs.com/package/@artinet/create-quick-agent) (supports v0.5.2) command:
 
 ```bash
 npx @artinet/create-quick-agent@latest
@@ -40,38 +40,39 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
       - [Authentication](#authentication)
     - [Server](#server)
       - [Implementing an A2A Agent](#implementing-an-a2a-agent)
-      - [Event Handling \& Monitoring](#event-handling--monitoring)
+        - [AgentBuilder](#agentbuilder)
+        - [AgentEngine](#agentengine)
+      - [Event Handling/Monitoring \& Message Streaming](#event-handlingmonitoring--message-streaming)
       - [Persistent Storage](#persistent-storage)
       - [Logging](#logging)
-      - [Server Registration \& Discovery](#server-registration--discovery)
+      - [Server Registration \& Discovery (v0.5.2)](#server-registration--discovery-v052)
       - [Advanced Server Customization](#advanced-server-customization)
-    - [Quick-Agents (Alpha)](#quick-agents-alpha)
+    - [Quick-Agents (Alpha v0.5.2)](#quick-agents-alpha-v052)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
 
 ## Features
 
-- **Service-Oriented Architecture:** Modern, modular design with dedicated service layers for protocol handling, core execution management, and enhanced separation of concerns.
-- **Modern Express Server:** Built on Express.js with the `createAgentServer()` function that handles transport-layer complexity, JSON-RPC middleware, routing, and Server-Sent Events (SSE) streaming automatically.
-- **TypeScript First:** Fully written in TypeScript with comprehensive Zod-based type definitions and enhanced path aliases for a robust developer experience.
-- **Protocol Compliance:** Implements the complete A2A specification with support for any kind of transport layer (Express, tRPC, WebSockets, etc).
-- **Code Deployment:** Bundle, test, and deploy agent code onto the artinet via the `./deployment` module. Includes bundler, task wrapper, and deployment utilities.
+- **Service-Oriented Architecture:** Modern, modular design with a dedicated layer for protocol handling and state management.
+- **Modern Express Server:** Quickly create an Express Server with the `createAgentServer()` function. It handles all of the transport-layer complexity, adds an A2A <-> JSON-RPC middleware, and manages Server-Sent Events (SSE) automatically.
+- **TypeScript First:** Written in TypeScript with a fully implemented Zod <-> A2A schema.
+- **Protocol Compliance:** Implements the complete A2A specification (v0.3.0) with support for any kind of transport layer (Express, tRPC, WebSockets, etc).
+- **Code Deployment:** Bundle, test, and deploy agent code onto the artinet via the `./deployment` module (v0.5.3). Includes bundler, agent handler, and deployment utilities.
 
-| Component/Feature    | Description                                                                 | Key Classes/Types                                                                                                                     |
-| :------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| **Client**           | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`, `RpcError`                                                                                                               |
-| **Server**           | Host agents using modern Express-based architecture with service layers.    | `createAgentServer`, `ExpressAgentServer`, `jsonRPCMiddleware`                                                                        |
-| **Services**         | Service-oriented architecture for A2A protocol and core functionality.      | `A2AServiceInterface`, `createAgent`, Factory patterns, Core managers                                                                 |
-| **Request Handling** | Define agent logic using async generators with enhanced execution context.  | `AgentEngine`, `ExecutionContext`, `UpdateEvent`                                                                                      |
-| **Storage**          | Persist event state. In-memory and file-based options included.             | `Store`, `InMemoryTaskStore`, `FileStore`                                                                                             |
-| **Streaming (SSE)**  | Handle real-time updates via Server-Sent Events with middleware support.    | Built-in SSE handling, streaming generators                                                                                           |
-| **Event Handling**   | Monitor agent execution with comprehensive event system.                    | `EventManager`, `eventOverrides`, Event listeners (`onStart`, `onUpdate`, `onError`, `onComplete`, `onCancel`)                        |
-| **Logging**          | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                                                               |
-| **Transport Layers** | Support for multiple transport protocols with modular design.               | Express middleware, tRPC integration, WebSocket support                                                                               |
-| **Core Types**       | Zod-based schemas derived from official A2A JSON specifications.            | `Tool`, `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                                                      |
-| **Deployment**       | Bundle, test, and deploy agents with enhanced deployment utilities.         | `@artinet/sdk/deployment`, `fullDeployment`, `testDeployment`, `bundle`                                                               |
-| **Agent Utilities**  | Standardized utilities for agents in managed environments.                  | `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent`, `TaskProxy`, `ConnectAPICallback`, `ClientProxy`, `ClientFactory` |
+| Component/Feature    | Description                                                                 | Key Classes/Types                                                                                    |
+| :------------------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| **Client**           | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`                                                                                          |
+| **Server**           | Quickly spin up an Agent as a Server.                                       | `createAgentServer`, `ExpressAgentServer`, `jsonRPCMiddleware`                                       |
+| **Agent Creation**   | Design agents with the Agent Builder or take control with the Agent Engine. | `AgentEngine`, `Context`, `AgentBuilder`                                                             |
+| **Storage**          | Persist event state. In-memory and file-based options included.             | `Store`, `InMemoryTaskStore`, `FileStore`                                                            |
+| **Streaming (SSE)**  | Handle real-time updates via Server-Sent Events with middleware support.    | Built-in SSE handling, streaming generators                                                          |
+| **Event Handling**   | Monitor agent execution with our event system.                              | `EventManager`, `eventOverrides`, Event listeners (`start`, `update`, `error`, `complete`, `cancel`) |
+| **Logging**          | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                              |
+| **Transport Layers** | Built-in support for Express/TRPC.                                          | Express middleware, tRPC router, or easily create your own.                                          |
+| **Core Types**       | Fully implement A2A schema in Zod.                                          | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                             |
+| **Deployment**       | Bundle, test, and deploy agents onto the artinet platform (v0.5.2).         | `@artinet/sdk/deployment`, `fullDeployment`, `testDeployment`, `bundle`                              |
+| **Agent Utilities**  | Run agents in managed environments with our proxy system.                   | `artinet.v0.taskManager`, `artinet.v0.connect`, `artinet.v0.agent`                                   |
 
 ## Installation
 
@@ -81,7 +82,7 @@ npm install @artinet/sdk
 
 ## Requirements
 
-- Node.js (v22.0.0 or higher recommended, check `package.json` engines for exact requirement)
+- Node.js (v22.0.0 or higher recommended)
 
 ## Documentation
 
@@ -89,7 +90,7 @@ For more detailed documentation visit our documentation site [here](https://the-
 
 ## Example
 
-A basic A2A server and client interaction. For more detailed examples, see the `examples/` directory.
+A basic A2A server and client interaction (For simple agents see the [AgentBuilder](#agentbuilder) section). For more detailed examples, see the `examples/` directory.
 
 **1. Server (`quick-server.ts`)**
 
@@ -99,27 +100,33 @@ import {
   ExecutionContext,
   AgentEngine,
   TaskManager,
+  MessageSendParams,
+  getParts,
 } from "@artinet/sdk";
 
-// Minimal agent logic: receive text, yield working state, yield completed state with echo
-const quickAgentLogic: AgentEngine = async function* (
-  context: ExecutionContext
-) {
-  const params = context.getRequestParams(); // A2A request parameters
-  const userInput =
-    params.message.parts[0].kind === "text" ? params.message.parts[0].text : "";
-  yield { state: "working" };
-  // Simulate some work if needed, check context.isCancelled()
+//Define your Agents Behaviour
+const quickAgentLogic: AgentEngine = async function* (context: Context) {
+  const params: MessageSendParams = context.command; //MessageSendParams
+  const { text: userInput} = getParts(params.message.parts); //helper function to consume parts
+  const task = context.State(); //TaskAndHistory
   yield {
+      ...
+      state: "working"
+      ...
+    };
+
+  yield {
+    ...
     state: "completed",
     message: {
       role: "agent",
       parts: [{ kind: "text", text: `You said: ${userInput}` }],
     },
+    ...
   };
 };
 
-// Create the agent server using the new service-based architecture
+// Create an agent server
 const { app, agent } = createAgentServer({
   agent: {
     engine: quickAgentLogic,
@@ -129,10 +136,14 @@ const { app, agent } = createAgentServer({
       version: "0.1.0",
       capabilities: { streaming: true },
       skills: [{ id: "echo", name: "Echo Skill" }],
+      ...
     },
     tasks: new TaskManager(),
+    ...
   },
   basePath: "/a2a",
+  agentCardPath: "/.well-known/agent.json"
+  ...
 });
 
 app.listen(4000, () => {
@@ -152,13 +163,14 @@ async function runClient() {
     messageId: "test-message-id",
     kind: "message",
     role: "user",
-    parts: [{ kind: "text", text: "Hello Quick Start!" }],
+    parts: [{ kind: "text", text: "Hello World!" }],
+    ...
   };
 
   const stream = client.sendStreamingMessage({ message });
 
   for await (const update of stream) {
-    // process the update
+    // process the updates
     ...
   }
   console.log("Stream finished.");
@@ -203,6 +215,7 @@ async function runBasicTask() {
     kind: "message",
     role: "user",
     parts: [{ kind: "text", text: "What is the capital of France?" }],
+    ...
   };
 
   const task = await client.sendMessage({ message });
@@ -226,11 +239,11 @@ async function runStreamingTask() {
   const client = new A2AClient("https://your-a2a-server.com/a2a");
   const message: Message = {
     role: "user",
-    parts: [{ type: "text", text: "Tell me a short story." }],
+    parts: [{ kind: "text", text: "Tell me a short story." }],
+    ...
   };
 
   const stream = client.sendStreamingMessage({
-    id: "streaming-task-1",
     message,
   });
 
@@ -266,11 +279,13 @@ client.setHeaders({ Authorization: "Bearer ...", "X-Custom": "value" });
 
 ### Server
 
-Host agents using the new service-based architecture with `createAgentServer()`. Handles protocol details with enhanced modularity. See `examples/` for more.
+Use `createAgentServer()` to embed your Agents in an Express App.
 
 #### Implementing an A2A Agent
 
-Define agent behavior using an easy or robust pattern for implementing agents:
+The SDK provides a variety of options for creating complex ([AgentEngine](#agentengine)) or simple agents ([AgentBuilder](#agentbuilder)).
+
+##### AgentBuilder
 
 **Option 1: Using AgentBuilder (Recommended for Simple Workflows)**
 
@@ -325,7 +340,6 @@ const { app, agent } = createAgentServer({
   basePath: "/a2a",
 });
 
-// Start the HTTP server
 app.listen(3000, () => {
   console.log("Multi-Step A2A Server running on http://localhost:3000/a2a");
 });
@@ -333,10 +347,12 @@ app.listen(3000, () => {
 
 The `AgentBuilder` approach is particularly useful when you need:
 
-- **Step-by-step processing**: Break complex tasks into discrete, manageable steps
+- **Step-by-step processing**: Break down complex tasks into discrete, manageable steps
 - **Data flow between steps**: Pass results from one step to the next using the `args` parameter
 - **Different content types**: Mix text, file, and data processing in a single workflow
-- **Reusable components**: Build modular agents that can be easily modified or extended
+- **Reusable components**: Build modular agents that can be easily edited or extended
+
+##### AgentEngine
 
 **Option 2: Direct AgentEngine Implementation**
 
@@ -355,30 +371,31 @@ const myAgent: AgentEngine = async function* (context: Context) {
   yield {
     state: "working",
     message: {
+      ...
       role: "agent",
       parts: [{ kind: "text", text: "Processing..." }],
     },
+    ...
   };
-
-  // Check context.isCancelled() if operation is long
-  // await someAsyncTask();
-
   yield {
+    ...
     name: "result.txt",
     mimeType: "text/plain",
     parts: [{ kind: "text", text: "Report data" }],
   };
 
   yield {
+    ...
     state: "completed",
     message: {
+      kind: "message"
       role: "agent",
       parts: [{ kind: "text", text: "Finished processing." }],
+      ...
     },
   };
 };
 
-// Create agent server with the new architecture
 const { app, agent } = createAgentServer({
   agent: {
     engine: myAgent,
@@ -392,25 +409,20 @@ const { app, agent } = createAgentServer({
     tasks: new TaskManager(),
   },
   basePath: "/a2a",
-  agentCardPath: "/.well-known/agent-card.json", // Updated endpoint
-});
-
-// Start the HTTP server
-app.listen(3000, () => {
-  console.log("A2A Server running on http://localhost:3000/a2a");
+  agentCardPath: "/.well-known/agent-card.json",
 });
 ```
 
-#### Event Handling & Monitoring
+#### Event Handling/Monitoring & Message Streaming
 
-The SDK provides comprehensive event handling capabilities that allow you to modify agent execution, monitor events, handle errors, and respond to state changes in real-time.
+The SDK provides comprehensive event handling & message streaming capabilities that allow you to modify agent execution, subscribe to events, stream commands, and respond to state changes in real-time.
 
 **Override Event Behaviour**
 
 When using the service layer, you can provide your own Event Handlers:
 
 ```typescript
-import { createAgent, TaskManager, ContextManager } from "@artinet/sdk";
+import { createAgent, TaskManager, ContextManager, Command, SendCommandInterface } from "@artinet/sdk";
 
 const customContextManager = new ContextManger();
 const agent = createAgent({
@@ -419,6 +431,15 @@ const agent = createAgent({
       //allow other processes to subscribe to your agent
     })
     ...
+    //handle command streams directly within an agent
+    for await (const command of context.command) {
+      console.log("new command recieved: ", command);
+      //will continue polling until the command stream is closed by calling command.close();
+    }
+    //or process them asynchronously
+    context.command.on("send", (command) => {
+      ...
+    });
   },
   agentCard: {
     name: "Event-Monitored Agent",
@@ -431,11 +452,12 @@ const agent = createAgent({
   tasks: new TaskManager(),
   eventOverrides: { //for even greater control create your own Event Handlers
     onStart: async (context) => {
-      ....
-      return context.events.getState();
+      ...
+      return currentState;
     },
     onUpdate: async (currentState, nextState) => {
-      return { ...currentState, lastUpdate: updateEvent };
+      ...
+      return currentState;
     },
     ...
   },
@@ -446,32 +468,42 @@ const result = await agent.sendMessage({
   ...
 });
 
-//or subscribe to the events from a specific context
-customContextManager.getContext("123").events.on("complete", () {
-...
-//errors thrown here will be triggered in the original context
+const currentContext = customContextManager.getContext("123");
+
+//subscribe to the events from a specific context
+currentContext.events.on("complete", () {
+  ...
+  //errors thrown here will be triggered in the original context
 });
+
+//stream new commands into a running context
+(currentContext.command as SendCommandInterface<Command>).send({
+  ...
+});
+
+currentContext.command.close();
 ```
 
 **Available Event Types**
 
 The EventManager supports the following event types:
 
-- **`start`**: Fired when agent execution begins
-- **`update`**: Fired on each state update during execution
-- **`error`**: Fired when an error occurs during execution
-- **`complete`**: Fired when agent execution completes successfully
-- **`cancel`**: Fired when agent execution is cancelled
+- **`OnStart`/`start`**: Fired when agent execution begins
+- **`OnUpdate`/`update`**: Fired on each state update during execution
+- **`OnError`/`error`**: Fired when an error occurs during execution
+- **`OnComplete`/`complete`**: Fired when agent execution completes successfully
+- **`OnCancel`/`cancel`**: Fired when agent execution is cancelled
 
 #### Persistent Storage
 
-Use `FileStore` for file-based persistence with the new service architecture. Ensure the directory exists.
+For storage, use our out of the box storage providers like `FileStore`. Or implement the `Store` interface to create your own.
 
 ```typescript
 import path from "path";
 import fs from "fs";
 import { FileStore } from "@artinet/sdk";
 
+//make sure the directory exists
 const dataDir = path.join(process.cwd(), "a2a-data");
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
@@ -483,11 +515,11 @@ const { app, agent } = createAgentServer({
   agent: {
     engine: myAgent,
     agentCard: {
-      /* your agent card */
+      ...
     },
-    tasks: myStore, // Use persistent storage
+    tasks: myStore,
   },
-  // ... other options
+  ...
 });
 ```
 
@@ -505,12 +537,12 @@ logger.info("Server starting...");
 //use helper functions
 logDebug("LoggerTest", { taskId: "task-123" }, "Task status updated.");
 
-// Create child logger with bound context
+// Create child loggers with bounded contexts
 const taskLogger = logger.child({ taskId: "abc" });
 taskLogger.info("Processing step X");
 ```
 
-#### Server Registration & Discovery
+#### Server Registration & Discovery (v0.5.2)
 
 The SDK includes features to help make your agent discoverable using the new service-based architecture:
 
@@ -533,80 +565,69 @@ const { app, agent } = createAgentServer({
 
 ```typescript
 const { app, agent } = createAgentServer({
-  agent: {
-    /* agent configuration */
-  },
+  ...
   basePath: "/apiV2",
   agentCardPath: "/apiV2/custom-card-info", // Custom agent card path
 });
-// The AgentCard is now accessible at http://localhost:3001/apiV2/custom-card-info
+// The AgentCard is now accessible at http://localhost:3000/apiV2/custom-card-info
 ```
 
 #### Advanced Server Customization
 
-The new service-oriented architecture provides multiple ways to customize your agent server:
+Our new architecture provides multiple ways to customize your agent server:
 
-**1. Custom Express Middleware:**
-You can easily add custom middleware to the Express app returned by `createAgentServer()`:
+**1. Using `createAgentServer`:**
+Easily spin up an A2A Express app `createAgentServer()`:
 
 ```typescript
 const initialApp = express();
 
-// Add authentication middleware
+// custom middleware
 initialApp.use((req, res, next) => {
-  // Verify API keys, etc.
+  ...
   next();
 });
 
 const { app, agent } = createAgentServer({
   app: initialApp
   agent: {
-    /* agent config */
+    ...
   },
 });
 
-// Add custom middleware
+// custom middleware
 app.use("/custom", (req, res, next) => {
-  // Your custom logic
-  next();
+  ...
 });
 
 ```
 
-**2. Using Custom Transport Layers:**
-The service architecture supports different transport layers. You can use our preconfigured TRPC router, or create your own integration with WebSockets & other protocols:
-
-```typescript
-import { createAgentRouter } from "@artinet/sdk";
-
-const agentRouter = createAgentRouter();
-```
-
-**3. Custom JSON-RPC Handling:**
-Create a custom Express app with our preconfigured JSON-RPC middleware:
+**2. Use the JSON-RPC Middleware:**
+Directly import our preconfigured JSON-RPC middleware:
 
 ```typescript
 import express from "express";
-import { createAgent, jsonRPCMiddleware, errorHandler } from "@artinet/sdk";
+import { createAgent, jsonRPCMiddleware, errorHandler, InMemoryTaskStore } from "@artinet/sdk";
 
 const customApp = express();
 
 const agent = createAgent({
   engine: myAgentLogic,
   agentCard: {
-    /* your agent card */
+    ...
   },
   tasks: new InMemoryTaskStore(),
 });
 
 customApp.use("/auth", yourAuthMiddleware);
 customApp.use("/metrics", yourMetricsMiddleware);
+customApp.use(express.json());
 
 // Add the A2A middleware
-customApp.use(express.json());
 customApp.post("/", async (req, res, next) => {
   return await jsonRPCMiddleware(agent, req, res, next);
 });
+// Dont forget to add error handling*
 customApp.use(errorHandler);
 
 // Serve the agent card
@@ -620,8 +641,17 @@ const server = customApp.listen(3000, () => {
 });
 ```
 
-**Using the Service Layer Directly:**
-For maximum flexibility, you can use the service layer directly without the Express wrapper:
+**3. Using Custom Transport Layers:**
+Use our preconfigured TRPC router, or create your own integration with WebSockets & other protocols:
+
+```typescript
+import { createAgentRouter } from "@artinet/sdk";
+
+const agentRouter = createAgentRouter();
+```
+
+**Use the Agent:**
+Directly invoke the agent to use it locally:
 
 ```typescript
 import { createAgent } from "@artinet/sdk";
@@ -629,27 +659,23 @@ import { createAgent } from "@artinet/sdk";
 const agent = createAgent({
   engine: myAgentLogic,
   agentCard: {
-    /* your agent card */
+    ...
   },
   tasks: new InMemoryTaskStore(),
 });
 
-// Use the agent service with any transport layer
+// Wrap these calls in your desired transport logic
 const result = await agent.sendMessage({
-  message: {
-    /* message data */
-  },
+  ...
 });
 
-// Stream messages
+// Directly process streams
 const stream = agent.streamMessage({
-  message: {
-    /* message data */
-  },
+  ...
 });
 
 for await (const update of stream) {
-  // Handle streaming updates
+  ...
 }
 ```
 
@@ -660,7 +686,7 @@ for await (const update of stream) {
 - Proper error handling and JSON-RPC compliance
 - CORS headers if needed for web clients
 
-### Quick-Agents (Alpha)
+### Quick-Agents (Alpha v0.5.2)
 
 We are excited to introduce new capabilities for deploying agents directly onto the artinet.
 

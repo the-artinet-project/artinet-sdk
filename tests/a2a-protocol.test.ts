@@ -11,6 +11,9 @@ import {
   createAgentServer,
   AgentEngine,
   Context,
+  getParts,
+  MessageSendParams,
+  Message,
 } from "../src/index.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 configureLogger({ level: "silent" });
@@ -22,14 +25,13 @@ jest.setTimeout(10000);
 const protocolEngine: AgentEngine = async function* (
   context: Context
 ): AsyncGenerator<UpdateEvent, void, unknown> {
-  const request = context.command;
+  const request: MessageSendParams = context.command;
+  const message: Message = context.command.message;
   const taskId = request.message.taskId ?? "";
   const contextId = request.message.contextId ?? "";
-  const text = request.message.parts
-    .filter((part) => part.kind === "text")
-    .map((part) => (part as TextPart).text)
-    .join(" ");
+  const { text, file, data } = getParts(request.message.parts);
 
+  const taskState = context.State();
   // Test for all possible states in A2A protocol
   if (text.includes("throw")) {
     throw new Error("Simulated task error");

@@ -17,6 +17,7 @@ import {
   createAgentServer,
   Context,
   AgentEngine,
+  getParts,
 } from "../src/index.js";
 import { configureLogger } from "../src/utils/logging/index.js";
 
@@ -29,10 +30,7 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
   const params = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
-  const text = params.message.parts
-    .filter((part) => part.kind === "text")
-    .map((part) => (part as any).text)
-    .join(" ");
+  const { text } = getParts(params.message.parts);
 
   // Quick completion without streaming for non-streaming tests
   if (text.includes("quick")) {

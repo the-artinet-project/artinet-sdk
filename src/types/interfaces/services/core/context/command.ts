@@ -7,7 +7,7 @@ import { CoreCommand } from "./types.js";
 import { EventEmitter } from "events";
 
 export interface CommandChannelMap<TCommand extends CoreCommand = CoreCommand> {
-  send: [TCommand];
+  send: [TCommand]; //may change to recieved
   close: [];
 }
 

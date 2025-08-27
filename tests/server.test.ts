@@ -16,6 +16,7 @@ import {
   AgentEngine,
   Context,
   TaskManagerInterface,
+  MessageSendParams,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
@@ -24,7 +25,7 @@ jest.setTimeout(10000);
 configureLogger({ level: "silent" });
 // Define test task handler
 const basicTaskHandler: AgentEngine = async function* (context: Context) {
-  const params = context.command;
+  const params: MessageSendParams = context.command;
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
   // Check if task already has status, if not, use "working"
@@ -96,12 +97,10 @@ const basicTaskHandler: AgentEngine = async function* (context: Context) {
 describe("A2AServer", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
-  let taskStore: TaskManagerInterface;
   // Track any pending requests for cleanup
   let pendingRequests: request.Test[] = [];
 
   beforeEach(() => {
-    taskStore = new InMemoryTaskStore();
     server = createAgentServer({
       agent: { engine: basicTaskHandler, agentCard: defaultAgentCard },
       agentCardPath: "/.well-known/agent.json",

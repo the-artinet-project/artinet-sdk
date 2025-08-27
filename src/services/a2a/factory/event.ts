@@ -3,6 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview A2A Event Manager Factory
+ *
+ * This module provides factory functions for creating A2A-specific event managers
+ * that handle the complete lifecycle of agent-to-agent communication tasks.
+ * It integrates with the core event management system while providing A2A-specific
+ * behavior for state management, task tracking, and error handling.
+ *
+ * @module A2AEventFactory
+ * @version 1.0.0
+ * @since 0.5.6
+ * @author The Artinet Project
+ */
+
 import { EventManager } from "~/services/core/managers/event.js";
 import {
   Command,
@@ -27,6 +41,44 @@ import {
 import { loadState, processUpdate } from "../state/index.js";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Creates an A2A-specific event manager with integrated task and state management.
+ *
+ * This factory function creates an event manager tailored for A2A operations,
+ * providing comprehensive lifecycle management for agent-to-agent communication
+ * tasks. It handles state persistence, task tracking, error scenarios, and
+ * cancellation while integrating with the broader A2A service framework.
+ *
+ * @template TCommand - The command type, must extend Command
+ * @template TState - The state type, must extend State
+ * @template TUpdate - The update type, must extend Update
+ *
+ * @param service - The A2A service instance for state and connection management
+ * @param id - Optional context ID (generates UUID if not provided)
+ * @param eventOverrides - Optional event handling overrides
+ * @returns Configured EventManager instance for A2A operations
+ *
+ * @example
+ * ```typescript
+ * const eventManager = createEventManager(
+ *   a2aService,
+ *   'context-123',
+ *   {
+ *     onStart: async (context) => {
+ *       console.log('A2A task starting');
+ *       return await initializeA2AState(context);
+ *     },
+ *     onComplete: async (finalState) => {
+ *       console.log('A2A task completed');
+ *       await notifyCompletion(finalState);
+ *     }
+ *   }
+ * );
+ * ```
+ *
+ * @public
+ * @since 0.5.6
+ */
 export function createEventManager<
   TCommand extends Command = Command,
   TState extends State = State,
@@ -38,7 +90,10 @@ export function createEventManager<
 ): EventManager<TCommand, TState, TUpdate> {
   const contextId = id ?? uuidv4();
   /**
-   * Needed inorder to bind to legacy update logic
+   * Task store implementation that bridges between event management and A2A service state management.
+   *
+   * This store provides the interface needed by the legacy update processing logic
+   * while integrating with the A2A service's state management capabilities.
    */
   const taskStore: TaskStore = {
     save: async (data: TState) => {
@@ -51,24 +106,30 @@ export function createEventManager<
       }
       service.setState(data.task.id, data);
     },
+
     load: async (taskId: string) => {
       return (await service.getState(taskId)) ?? null;
     },
   };
 
+  // Configure A2A-specific event handling options
   const options: EventManagerOptions<TCommand, TState, TUpdate> = {
     onStart: async (
       context: Context<TCommand, TState, TUpdate>
     ): Promise<TState> => {
       const request = context.command;
+
       if (!request || (!request.message && !("message" in request))) {
         throw INVALID_PARAMS("No request detected");
       }
+
       let currentContextId = contextId;
       if (request.message.contextId) {
         currentContextId = request.message.contextId;
       }
+
       service.addConnection(currentContextId);
+
       const currentState = await loadState(
         taskStore,
         request.message,
@@ -76,6 +137,7 @@ export function createEventManager<
         request.message.taskId,
         currentContextId
       );
+
       return currentState as TState;
     },
 
@@ -83,11 +145,14 @@ export function createEventManager<
       const localContextId = update.contextId ?? contextId;
       const localTaskId =
         (update as TaskStatusUpdateEvent).taskId ?? (update as Task).id;
+
       service.addCancellation(localContextId);
+
       const cancellation: TaskStatusUpdateEvent = CANCEL_UPDATE(
         localTaskId,
         localContextId
       );
+
       const cancelUpdate: TaskStatusUpdateEvent = {
         ...update,
         ...cancellation,
@@ -98,13 +163,14 @@ export function createEventManager<
         },
         final: true,
       };
+
       await processUpdate(taskStore, {
         context: {
           contextId: localContextId,
           task: current.task,
           userMessage: current.task?.status?.message ?? ({} as Message),
           isCancelled: () => service.isCancelled(localContextId),
-          history: current.history,
+          history: current.history ?? current.task?.history ?? [],
         },
         current: current,
         update: cancelUpdate,
@@ -115,6 +181,7 @@ export function createEventManager<
       if (service.isCancelled(contextId)) {
         return current;
       }
+
       try {
         const currentState = (await processUpdate(taskStore, {
           context: {
@@ -122,11 +189,12 @@ export function createEventManager<
             task: current.task,
             userMessage: current.task?.status?.message ?? ({} as Message),
             isCancelled: () => service.isCancelled(contextId),
-            history: [],
+            history: current.history ?? current.task?.history ?? [],
           },
           current: current,
           update: update,
         })) as TState;
+
         return currentState;
       } catch (error) {
         logError(`onUpdate[${contextId}]:`, "error detected", error, update);
@@ -136,25 +204,28 @@ export function createEventManager<
 
     onError: async (current: TState, error: any): Promise<void> => {
       logError(`onError[${contextId}]`, "error detected", error, current);
+
       if (
         !current ||
         (!current.task?.contextId && !(current as any)?.contextId)
       ) {
         return;
       }
+
       const failedUpdate = FAILED_UPDATE(
         current.task?.id,
         current.task?.contextId ?? contextId,
         "failed-update",
         error instanceof Error ? error.message : String(error)
       );
+
       await processUpdate(taskStore, {
         context: {
           contextId: current.task?.contextId ?? contextId,
           task: current.task,
           userMessage: current.task?.status?.message ?? ({} as Message),
           isCancelled: () => service.isCancelled(contextId),
-          history: current.history,
+          history: current.history ?? current.task?.history ?? [],
         },
         current: current,
         update: failedUpdate,
@@ -165,9 +236,6 @@ export function createEventManager<
       service.removeCancellation(contextId);
       service.removeConnection(contextId);
     },
-    /**
-     * Disabling this for now, because state is based on the taskId, not the contextId
-     */
     // getState: (): TState => {
     //   const state = service.getState(contextId) ?? ({} as TState);
     //   return state;
@@ -176,6 +244,6 @@ export function createEventManager<
 
   return new EventManager(contextId, {
     ...options,
-    ...eventOverrides,
+    ...eventOverrides, // Override options take precedence over defaults
   });
 }

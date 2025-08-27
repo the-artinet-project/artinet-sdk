@@ -4,15 +4,15 @@ import {
   AgentEngine,
   createAgentServer,
   TaskStatusUpdateEvent,
-  TextPart,
   Context,
+  getPayload,
 } from "@artinet/sdk";
 
 configureLogger({ level: "info" });
 // Define the simplest possible agent logic
 const quickAgentLogic: AgentEngine = async function* (context: Context) {
   const params = context.command;
-  const userInput = (params.message.parts[0] as TextPart).text || "";
+  const { text: userInput } = getPayload(params.message);
   logger.info(`Quick server received: ${userInput}`);
   const workingUpdate: TaskStatusUpdateEvent = {
     taskId: params.message.taskId || "",
@@ -56,8 +56,9 @@ const quickAgentLogic: AgentEngine = async function* (context: Context) {
 const { app, agent } = createAgentServer({
   basePath: "/a2a",
   agent: {
-    agent: quickAgentLogic,
+    engine: quickAgentLogic,
     agentCard: {
+      protocolVersion: "0.3.0",
       name: "QuickStart Agent",
       url: "http://localhost:4000/a2a",
       version: "0.1.0",
