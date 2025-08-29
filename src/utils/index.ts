@@ -1,7 +1,7 @@
 export * from "./common/constants.js";
 export * from "./common/errors.js";
 export * from "./common/utils.js";
-export * from "./common/zAsyncIterable.js";
+export * from "./common/zAsyncIterable-v3.js";
 export * from "./logging/index.js";
 // export * from "./logging/log.js";
 // export * from "./logging/logger.js";

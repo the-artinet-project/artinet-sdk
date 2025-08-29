@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 import {
   JSONRPCErrorResponseSchema,
   JSONRPCRequestSchema,
@@ -100,6 +100,7 @@ export const PushNotificationConfigSchema = z
      * @required The callback URL where the agent should send push notifications.
      */
     url: z
+      .string()
       .url()
       .describe(
         "The callback URL where the agent should send push notifications."

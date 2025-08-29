@@ -47,6 +47,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
       - [Logging](#logging)
       - [Server Registration \& Discovery (v0.5.2)](#server-registration--discovery-v052)
       - [Advanced Server Customization](#advanced-server-customization)
+      - [Cross Protocol Support](#cross-protocol-support)
     - [Quick-Agents (Alpha v0.5.2)](#quick-agents-alpha-v052)
   - [Contributing](#contributing)
   - [License](#license)
@@ -685,6 +686,78 @@ for await (const update of stream) {
 - Agent card endpoints at `/.well-known/agent-card.json`
 - Proper error handling and JSON-RPC compliance
 - CORS headers if needed for web clients
+
+#### Cross Protocol Support
+
+**MCP (Model Context Protocol) Integration**
+
+The SDK provides a Model Context Protocol (MCP) <-> A2A compatability layer.
+
+Use `createMCPAgent` to expose your agent via MCP:
+
+```typescript
+import { createMCPAgent, createAgent } from "@artinet/sdk";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+
+// Wrap your agent in an MCP Server
+const mcpAgent = createMCPAgent({
+  serverInfo: {
+    name: "My MCP Agent",
+    version: "1.0.0",
+  },
+  options: {
+    ...
+  },
+  agent: createAgent({
+    engine: myAgentEngine,
+    agentCard: {
+      name: "My Agent",
+      url: "http://localhost:3000/a2a",
+      version: "1.0.0",
+      capabilities: { streaming: true },
+      skills: [{ id: "helper", name: "Helper Agent" }],
+    },
+  }),
+  agentCardUri: "agent://card", //customize the URI for your AgentCard
+});
+
+// The MCPAgent is a fully compliant MCP Server so you can use it as you normally would.
+mcpAgent.registerTool({
+  ...
+});
+
+await mcpAgent.connect(new StdioServerTransport());
+```
+
+Use an MCP Client to interact with an mcpAgent:
+
+```typescript
+...
+// Access the AgentCard as a Resource
+const agentCard = await client.readResource({ uri: "agent://card" });
+
+// or send messages via Tool Calling
+const result = await client.callTool({
+  name: "send-message",
+  arguments: {
+    ...
+    message: {
+      ...
+      parts: [{ kind: "text", text: "Hello from MCP!" }],
+    },
+  },
+});
+```
+
+**MCP Tools & Resources:**
+
+- `send-message`: Send messages to the A2A agent
+- `get-task`: Retrieve tasks by ID
+- `cancel-task`: Cancel a running task
+- `agent://card`: Retrieve the AgentCard
+- `send-streaming-message`, `task-resubscribe` & `push-notifications` etc are currently not supported by default.
+  - Leverage the A2A Zod Schemas to implement them manually.
 
 ### Quick-Agents (Alpha v0.5.2)
 

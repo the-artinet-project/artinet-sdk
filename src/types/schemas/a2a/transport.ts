@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * @description Supported A2A transport protocols.
@@ -21,6 +21,7 @@ export const AgentInterfaceSchema = z.object({
    * @required The URL where this interface is available. Must be a valid absolute HTTPS URL in production.
    */
   url: z
+    .string()
     .url()
     .describe(
       "The URL where this interface is available. Must be a valid absolute HTTPS URL in production."

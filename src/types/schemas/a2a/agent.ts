@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 import { SecuritySchemeSchema } from "./auth.js";
 import { TransportProtocolSchema, AgentInterfaceSchema } from "./transport.js";
 import {
@@ -27,7 +27,7 @@ export const AgentProviderSchema = z
     /**
      * @required URL associated with the agent provider.
      */
-    url: z.url().describe("URL associated with the agent provider."),
+    url: z.string().url().describe("URL associated with the agent provider."),
   })
   .describe("The provider or organization behind an agent.");
 
@@ -245,6 +245,7 @@ export const AgentCardSchema = z
      * @required The preferred endpoint URL for interacting with the agent.
      */
     url: z
+      .string()
       .url()
       .describe("The preferred endpoint URL for interacting with the agent."),
 
@@ -269,7 +270,11 @@ export const AgentCardSchema = z
     /**
      * @optional The URL of the agent's icon.
      */
-    iconUrl: z.url().optional().describe("The URL of the agent's icon."),
+    iconUrl: z
+      .string()
+      .url()
+      .optional()
+      .describe("The URL of the agent's icon."),
 
     /**
      * @optional The service provider of the agent.
@@ -289,6 +294,7 @@ export const AgentCardSchema = z
      * @optional An optional URL pointing to the agent's documentation.
      */
     documentationUrl: z
+      .string()
       .url()
       .optional()
       .describe("An optional URL pointing to the agent's documentation."),

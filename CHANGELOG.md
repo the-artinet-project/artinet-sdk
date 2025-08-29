@@ -5,7 +5,29 @@ All notable changes to the @artinet/sdk package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.6] - 2025-01-25
+## [0.5.7] - 2025-08-30
+
+### Added
+
+- **MCP (Model Context Protocol) Support**: Reintroduced MCP integration with new service-based architecture
+  - `createMCPAgent()` function to wrap A2A agents with MCP protocol support
+  - `MCPService` class implementing both MCP Server and A2A Service interfaces
+  - MCP Tools: `send-message`, `get-task`, `cancel-task`
+  - MCP Resources: `agent://card` for accessing agent capabilities
+
+### Changed
+
+- **Dependency Updates**:
+  - Updated `@modelcontextprotocol/sdk` to latest version
+  - Updated `zod` package version
+  - **BREAKING**: Rolled back from `zod/v4` to standard `zod` for better compatibility
+- Improved service interface architecture to support multiple protocol bindings
+
+### Fixed
+
+- Resolved TypeScript interface compliance issues with MCP service implementations
+
+## [0.5.6] - 2025-08-25
 
 ### Added
 
