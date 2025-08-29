@@ -4,12 +4,13 @@ import {
   TaskIdParamsSchema,
   TaskSchema,
   AgentCardSchema,
+  MCPServiceInterface,
 } from "~/types/index.js";
 import { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { Agent } from "~/types/index.js";
 
-export class BaseMCPService extends McpServer {
+export class BaseMCPService extends McpServer implements MCPServiceInterface {
   readonly agent: Agent;
 
   private _registerBaseTools(uri: string = "agent://card") {
