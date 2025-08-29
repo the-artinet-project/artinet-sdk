@@ -12,7 +12,7 @@
  * behavior for state management, task tracking, and error handling.
  *
  * @module A2AEventFactory
- * @version 1.0.0
+ * @version 0.5.7
  * @since 0.5.6
  * @author The Artinet Project
  */

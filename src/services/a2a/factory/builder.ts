@@ -11,7 +11,7 @@
  * workflows with type-safe step composition and automatic execution orchestration.
  *
  * @module A2ABuilder
- * @version 1.0.0
+ * @version 0.5.7
  * @since 0.5.6
  * @author The Artinet Project
  */

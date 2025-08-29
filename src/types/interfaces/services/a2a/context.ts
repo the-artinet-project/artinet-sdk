@@ -11,7 +11,7 @@
  * message processing, and event management.
  *
  * @module A2AContext
- * @version 1.0.0
+ * @version 0.5.7
  * @since 0.5.6
  * @author The Artinet Project
  */

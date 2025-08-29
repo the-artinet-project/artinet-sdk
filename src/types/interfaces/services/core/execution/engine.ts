@@ -11,7 +11,7 @@
  * engines are responsible for transforming commands into streams of updates.
  *
  * @module CoreExecutionEngine
- * @version 1.0.0
+ * @version 0.5.7
  * @since 0.5.6
  * @author The Artinet Project
  */

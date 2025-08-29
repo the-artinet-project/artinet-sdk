@@ -11,7 +11,7 @@
  * and streaming results from execution engines to consumers.
  *
  * @module CoreStreamManager
- * @version 1.0.0
+ * @version 0.5.7
  * @since 0.5.6
  * @author The Artinet Project
  */
