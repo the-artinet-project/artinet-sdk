@@ -23,7 +23,6 @@ export class BaseMCPService extends McpServer {
       },
       async (args) => {
         const task = await this.agent.sendMessage(args);
-        console.log(task);
         return {
           content: [
             {
