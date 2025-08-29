@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 import {
   JSONRPCErrorResponseSchema,
   JSONRPCRequestSchema,
@@ -71,7 +71,7 @@ export const ServerDeploymentSuccessResponseParamsSchema =
     /**
      * @required The URL of the server
      */
-    url: z.url().describe("The URL of the server"),
+    url: z.string().url().describe("The URL of the server"),
     /**
      * @required The base path of the server
      */

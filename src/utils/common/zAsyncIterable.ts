@@ -7,6 +7,8 @@ import type { TrackedEnvelope } from "@trpc/server";
 import { isTrackedEnvelope, tracked } from "@trpc/server";
 import { z } from "zod/v4";
 
+// v4 version of: https://trpc.io/docs/server/subscriptions#output-validation
+
 function isAsyncIterable<TValue, TReturn = unknown>(
   value: unknown
 ): value is AsyncIterable<TValue, TReturn> {

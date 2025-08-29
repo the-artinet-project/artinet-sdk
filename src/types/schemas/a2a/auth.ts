@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * @description Type of a security scheme.
@@ -115,6 +115,7 @@ export const AuthorizationCodeOAuthFlowSchema = z
      * standard requires the use of TLS
      */
     authorizationUrl: z
+      .string()
       .url()
       .describe(
         "The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard requires the use of TLS"
@@ -125,6 +126,7 @@ export const AuthorizationCodeOAuthFlowSchema = z
      * requires the use of TLS.
      */
     tokenUrl: z
+      .string()
       .url()
       .describe(
         "The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard requires the use of TLS."
@@ -135,6 +137,7 @@ export const AuthorizationCodeOAuthFlowSchema = z
      * standard requires the use of TLS.
      */
     refreshUrl: z
+      .string()
       .url()
       .optional()
       .describe(
@@ -169,6 +172,7 @@ export const ClientCredentialsOAuthFlowSchema = z
      * requires the use of TLS.
      */
     tokenUrl: z
+      .string()
       .url()
       .describe(
         "The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard requires the use of TLS."
@@ -179,6 +183,7 @@ export const ClientCredentialsOAuthFlowSchema = z
      * standard requires the use of TLS.
      */
     refreshUrl: z
+      .string()
       .url()
       .optional()
       .describe(
@@ -213,6 +218,7 @@ export const ImplicitOAuthFlowSchema = z
      * standard requires the use of TLS
      */
     authorizationUrl: z
+      .string()
       .url()
       .describe(
         "The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard requires the use of TLS"
@@ -223,6 +229,7 @@ export const ImplicitOAuthFlowSchema = z
      * standard requires the use of TLS.
      */
     refreshUrl: z
+      .string()
       .url()
       .optional()
       .describe(
@@ -253,6 +260,7 @@ export const PasswordOAuthFlowSchema = z
      * requires the use of TLS.
      */
     tokenUrl: z
+      .string()
       .url()
       .describe(
         "The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard requires the use of TLS."
@@ -263,6 +271,7 @@ export const PasswordOAuthFlowSchema = z
      * standard requires the use of TLS.
      */
     refreshUrl: z
+      .string()
       .url()
       .optional()
       .describe(
@@ -343,6 +352,7 @@ export const OAuth2SecuritySchemeSchema = SecuritySchemeBaseSchema.extend({
    * [RFC8414](https://datatracker.ietf.org/doc/html/rfc8414). TLS is required.
    */
   oauth2MetadataUrl: z
+    .string()
     .url()
     .optional()
     .describe("URL to the oauth2 authorization server metadata"),

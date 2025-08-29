@@ -25,7 +25,7 @@ import {
 import { coreExecute } from "~/services/core/execution/execute.js";
 
 export class A2AService implements A2AServiceInterface {
-  private agentInfo: AgentCard;
+  readonly agentCard: AgentCard;
   private engine: A2AEngine;
   private connections: ConnectionManagerInterface;
   private cancellations: CancellationManagerInterface;
@@ -47,7 +47,7 @@ export class A2AService implements A2AServiceInterface {
     eventOverrides?: EventManagerOptions<Command, State, Update>
   ) {
     this.engine = engine;
-    this.agentInfo = agentCard;
+    this.agentCard = agentCard;
     this.contexts = contexts;
     this.connections = connections;
     this.cancellations = cancellations;
@@ -69,10 +69,6 @@ export class A2AService implements A2AServiceInterface {
       this.addCancellation(id);
     }
     return;
-  }
-
-  get agentCard(): AgentCard {
-    return this.agentInfo;
   }
 
   addConnection(id: string): void {
