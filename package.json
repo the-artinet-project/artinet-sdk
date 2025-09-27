@@ -39,6 +39,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "postinstall": "tsc -p tsconfig.json --pretty true",
     "prepare": "ts-patch install -s",
     "build": "tsc",
     "clean": "rimraf dist",
