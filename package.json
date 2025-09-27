@@ -31,13 +31,13 @@
   "rootDir": ".",
   "files": [
     "dist",
+    "src",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
     "prepare": "ts-patch install -s",
-    "postinstall": "npm run build",
     "build": "tsc",
     "clean": "rimraf dist",
     "rebuild": "rimraf dist node_modules/ && npm i && npm run build",
