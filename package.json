@@ -32,6 +32,8 @@
   "files": [
     "dist",
     "src",
+    "tsconfig.json",
+    "package.json",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
