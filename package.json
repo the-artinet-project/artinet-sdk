@@ -31,15 +31,12 @@
   "rootDir": ".",
   "files": [
     "dist",
-    "src",
-    "tsconfig.json",
     "package.json",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
-    "postinstall": "tsc -p tsconfig.json --pretty true",
     "prepare": "ts-patch install -s",
     "build": "tsc",
     "clean": "rimraf dist",
