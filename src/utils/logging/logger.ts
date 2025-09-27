@@ -6,7 +6,7 @@
 /**
  * Logger utility for the SDK using Pino
  */
-import { pino } from "pino";
+import pino from "pino";
 
 // Define log levels for type safety
 export type LogLevel = "silent" | "error" | "warn" | "info" | "debug" | "trace";

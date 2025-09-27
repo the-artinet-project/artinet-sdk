@@ -21,14 +21,14 @@ import { artinet } from "./agents.js";
  * made available in the `env` by the host environment.
  *
  * The `Context` (ExecutionContext) is also expected to be provided by the host environment via `env`.
- * @deprecated This function is deprecated and will be removed in a future version. Use the `Artinet.v0.taskManager` function instead.
+ * @deprecated This function is deprecated and will be removed in a future version. Use the `artinet.v0.agentExecutor` function instead.
  * @param taskHandler - An asynchronous generator function that takes a `ExecutionContext`
  *                      and yields `UpdateEvent` objects, eventually returning a `Task` or void.
  * @throws An error if the required `env.hostOnYield` or `env.Context` are not found,
  *         indicating an invalid runtime environment.
  */
 export const taskHandlerProxy = async (taskHandler: AgentEngine) => {
-  return await artinet.v0.taskManager({ taskHandler });
+  return await artinet.v0.agentExecutor({ taskHandler });
 };
 
 /**

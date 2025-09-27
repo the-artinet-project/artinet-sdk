@@ -9,9 +9,10 @@ import {
   ClientProxy,
   ConnectAPICallback,
   ConnectProps,
-  TaskManager,
+  AgentExecutor,
   TaskManagerProps,
   TaskProxy,
+  TaskManager,
 } from "~/types/schemas/deployment/index.js";
 import { Context as ExecutionContext } from "~/types/index.js";
 
@@ -38,7 +39,9 @@ export namespace artinet {
      * @throws An error if the `taskManagerStub` or `context` is not set in `process.env`,
      *         indicating an invalid runtime environment.
      */
-    export const taskManager: TaskManager = async (props: TaskManagerProps) => {
+    export const agentExecutor: AgentExecutor = async (
+      props: TaskManagerProps
+    ) => {
       const { taskHandler } = props;
       if (!env.taskManagerStub && !env.context) {
         console.warn(
@@ -65,6 +68,11 @@ export namespace artinet {
         taskManagerProxy(yieldValue);
       }
     };
+
+    /**
+     * @deprecated Use agentExecutor instead.
+     */
+    export const taskManager: TaskManager = agentExecutor;
 
     /**
      * Establishes a connection or sends a request to another agent or service.

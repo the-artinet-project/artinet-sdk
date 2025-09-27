@@ -32,12 +32,21 @@ export interface TaskManagerProps {
 
 /**
  * Defines the signature for a TaskManager function.
+ * An AgentExecutor is responsible for orchestrating the execution of an agent's task,
+ * typically by interfacing with a host environment.
+ * @param props - The properties for the agent executor, including the taskHandler.
+ * @returns A promise that resolves when the task handler has completed.
+ */
+export type AgentExecutor = (props: TaskManagerProps) => Promise<void>;
+
+/**
+ * @deprecated Use AgentExecutor instead.
  * A TaskManager is responsible for orchestrating the execution of an agent's task,
  * typically by interfacing with a host environment.
  * @param props - The properties for the task manager, including the taskHandler.
  * @returns A promise that resolves when the task handler has completed.
  */
-export type TaskManager = (props: TaskManagerProps) => Promise<void>;
+export type TaskManager = AgentExecutor;
 
 /**
  * Properties for the Connect function.

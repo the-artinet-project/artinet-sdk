@@ -86,5 +86,5 @@ export const coderAgent: AgentEngine = async function* (context: Context) {
   yield finalUpdate;
 };
 
-await artinet.v0.taskManager({ taskHandler: coderAgent });
+await artinet.v0.agentExecutor({ taskHandler: coderAgent });
 console.log("[CoderAgent] Finished");

@@ -98,6 +98,7 @@ export interface TaskContext {
  * or artifact updates (TaskYieldUpdate). The server consumes these yields,
  * updates the task state in the store, and streams events if applicable.
  *
+ * @deprecated Use A2AEngine instead.
  * @param context The TaskContext object containing task details and state.
  * @yields Updates to the task's status or artifacts.
  * @returns Optionally returns the final complete Task object (needed for non-streaming 'message/send').
