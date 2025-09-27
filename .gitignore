@@ -1,5 +1,3 @@
 node_modules
-dist
-data
-coverage
-.github
+# dist
+package-lock.json

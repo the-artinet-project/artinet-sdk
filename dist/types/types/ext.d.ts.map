@@ -1,0 +1,1 @@
+{"version":3,"file":"ext.d.ts","sourceRoot":"","sources":["../../../src/types/ext.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH;;;;GAIG;AACH,OAAO,EAAE,eAAe,IAAI,eAAe,EAAE,MAAM,wBAAwB,CAAC;AAC5E,YAAY,EAAE,SAAS,IAAI,SAAS,EAAE,MAAM,wBAAwB,CAAC;AACrE,YAAY,EAAE,SAAS,IAAI,WAAW,EAAE,MAAM,oCAAoC,CAAC;AACnF,YAAY,EAAE,mBAAmB,IAAI,KAAK,EAAE,MAAM,oCAAoC,CAAC"}

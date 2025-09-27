@@ -1,0 +1,1 @@
+{"version":3,"file":"connection.d.ts","sourceRoot":"","sources":["../../../../../../../src/types/interfaces/services/core/managers/connection.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,MAAM,WAAW,0BAA0B;IACzC,aAAa,CAAC,EAAE,EAAE,MAAM,GAAG,IAAI,CAAC;IAChC,gBAAgB,CAAC,EAAE,EAAE,MAAM,GAAG,IAAI,CAAC;IACnC,WAAW,CAAC,EAAE,EAAE,MAAM,GAAG,OAAO,CAAC;CAClC"}

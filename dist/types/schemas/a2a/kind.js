@@ -1,0 +1,21 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { z } from "zod";
+/**
+ * @description Represents the type of event that occurred in the context of a task.
+ */
+export const KindSchema = z
+    .enum([
+    "artifact-update",
+    "data",
+    "file",
+    "message",
+    "status-update",
+    "task",
+    "text",
+])
+    .describe("Represents the type of event that occurred in the context of a task.");
+export const Kind = KindSchema.enum;
+//# sourceMappingURL=kind.js.map
