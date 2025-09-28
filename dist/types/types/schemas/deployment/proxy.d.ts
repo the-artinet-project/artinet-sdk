@@ -72,7 +72,7 @@ export type ConnectAPICallback = (props: ConnectProps) => Promise<string>;
  * This interface omits methods related to direct task management and header manipulation,
  * focusing on core interaction capabilities suitable for a proxied environment.
  */
-export interface ClientProxy extends Omit<Client, "sendTaskSubscribe" | "getTask" | "cancelTask" | "getTaskPushNotification" | "setTaskPushNotification" | "resubscribeTask" | "refreshAgentCard" | "setHeaders" | "addHeader" | "removeHeader" | "clearHeaders"> {
+export interface ClientProxy extends Omit<Client, "sendTask" | "sendTaskSubscribe" | "sendStreamingMessage" | "getTask" | "cancelTask" | "getTaskPushNotification" | "setTaskPushNotification" | "resubscribeTask" | "refreshAgentCard" | "setHeaders" | "addHeader" | "removeHeader" | "clearHeaders"> {
 }
 /**
  * Properties for the ClientFactory function.
