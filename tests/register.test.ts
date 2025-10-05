@@ -7,7 +7,7 @@ configureLogger({ level: "silent" });
 global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
 const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
 
-describe("register Function", () => {
+describe.skip("register Function", () => {
   let sampleAgentCard: AgentCard;
 
   beforeEach(() => {

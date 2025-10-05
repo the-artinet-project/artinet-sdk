@@ -109,6 +109,7 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
     content: unknown
   ): content is { messageHistory: Message[] } {
     return (
+      content !== undefined &&
       typeof content === "object" &&
       content !== null &&
       "messageHistory" in content &&
@@ -121,22 +122,26 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param taskId The ID of the task to load.
    * @returns A promise resolving to the task and history, or null if not found.
    */
-  async getState(taskId: string): Promise<TaskAndHistory> {
+  async getState(taskId: string): Promise<TaskAndHistory | undefined> {
     logDebug("FileStore", `Loading task: ${taskId}`);
 
     const taskFilePath = this.getTaskFilePath(taskId);
     const historyFilePath = this.getHistoryFilePath(taskId);
 
     // Read task file first - if it doesn't exist, the task doesn't exist.
-    const task = await this.readJsonFile<Task>(taskFilePath);
+    const task = await this.readJsonFile<Task>(taskFilePath).catch(
+      () => undefined
+    );
     if (!task) {
-      throw new Error(`Task not found: ${taskId}`); // Task not found
+      return undefined; // Task not found
     }
 
     // Task exists, now try to read history. It might not exist yet.
     let history: Message[] = [];
     try {
-      const historyContent = await this.readJsonFile<unknown>(historyFilePath);
+      const historyContent = await this.readJsonFile<unknown>(
+        historyFilePath
+      ).catch(() => undefined);
       // Validate the structure
       if (this.isHistoryFileContent(historyContent)) {
         history = historyContent.messageHistory;

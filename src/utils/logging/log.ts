@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { logger } from "./logger.js";
+import { logger, level } from "./logger.js";
 
 /**
  * Logger utility for server operations
@@ -19,6 +19,9 @@ export function logDebug(
   const logData: Record<string, unknown> = { component: context };
   if (data !== undefined) {
     logData.data = data;
+  }
+  if (level === "silent" || level === "warning" || level === "error") {
+    return;
   }
   logger.debug(logData, message);
 }
@@ -43,6 +46,9 @@ export function logError(
   if (data !== undefined) {
     logData.data = data;
   }
+  if (level === "silent") {
+    return;
+  }
   logger.error(logData, message);
 }
 
@@ -61,6 +67,9 @@ export function logWarn(
   if (data !== undefined) {
     logData.data = data;
   }
+  if (level === "silent" || level === "error") {
+    return;
+  }
   logger.warn(logData, message);
 }
 
@@ -78,6 +87,14 @@ export function logInfo(
   const logData: Record<string, unknown> = { component: context };
   if (data !== undefined) {
     logData.data = data;
+  }
+  if (
+    level === "silent" ||
+    level === "error" ||
+    level === "warning" ||
+    level === "debug"
+  ) {
+    return;
   }
   logger.info(logData, message);
 }

@@ -28,7 +28,7 @@ export namespace artinet {
      * managed environment. It takes the agent's core task-handling generator function
      * and iterates over its yielded updates, passing them to a proxy function
      * made available by the host environment.
-     *
+     * @deprecated Deployment moving to a new package.
      * The `TaskContext` and the `TaskProxy` (for yielding updates) are expected
      * to be provided by the host environment via `process.env`.
      *
@@ -80,7 +80,7 @@ export namespace artinet {
      * agents in a managed environment to make external calls (e.g., to an LLM or another agent)
      * without needing direct network access or credentials. The actual implementation
      * is delegated to `env.connectStub`, provided by the host environment.
-     *
+     * @deprecated Deployment moving to a new package.
      * @param {ConnectProps} props - The properties for the connect call, including the target agentID and messages.
      * @param {string} props.agentID - The identifier of the target agent or LLM to which the request is directed.
      * @param {object[]} props.messages - An array of messages forming the conversation history or prompt.
@@ -108,7 +108,7 @@ export namespace artinet {
      * provided by the host environment. This allows agents to communicate with
      * other entities in a managed environment without direct awareness of the
      * underlying communication mechanisms.
-     *
+     * @deprecated Deployment moving to a new package.
      * @param {ClientProps} props - The properties for creating the client.
      * @returns {ClientProxy} A proxy object for interacting with a client service or agent.
      * @throws An error if `env.clientStub` is not found,

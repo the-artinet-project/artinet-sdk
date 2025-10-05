@@ -1,1 +1,0 @@
-{"version":3,"file":"cancellation.d.ts","sourceRoot":"","sources":["../../../../../src/services/a2a/managers/cancellation.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,EAAE,4BAA4B,EAAE,gCAAyB;AAEhE,qBAAa,mBAAoB,YAAW,4BAA4B;IACtE,OAAO,CAAC,aAAa,CAA0B;IAC/C,eAAe,CAAC,EAAE,EAAE,MAAM;IAG1B,kBAAkB,CAAC,EAAE,EAAE,MAAM;IAG7B,WAAW,CAAC,EAAE,EAAE,MAAM;CAGvB"}

@@ -11,20 +11,9 @@ The artinet SDK is a TypeScript library designed for Agentic Communication. It's
 
 This SDK leverages a service-oriented architecture for building AI agents allowing developers to easily create agents as simple processes or seamlessly embed them within a dedicated server.
 
-### Quick Start
-
-To build your own agent/server use the [`create-quick-agent`](https://www.npmjs.com/package/@artinet/create-quick-agent) (supports v0.5.2) command:
-
-```bash
-npx @artinet/create-quick-agent@latest
-```
-
-It has [serveral template projects](https://github.com/the-artinet-project/create-quick-agent) that you can use to get started building agents today.
-
 ## Table of Contents
 
 - [artinet SDK](#artinet-sdk)
-    - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
@@ -32,7 +21,6 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
   - [Documentation](#documentation)
   - [Example](#example)
   - [Running Tests](#running-tests)
-  - [Typescript](#typescript)
   - [Usage](#usage)
     - [Client](#client)
       - [Basic Client Usage](#basic-client-usage)
@@ -44,36 +32,17 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
         - [AgentEngine](#agentengine)
       - [Event Handling/Monitoring \& Message Streaming](#event-handlingmonitoring--message-streaming)
       - [Persistent Storage](#persistent-storage)
-      - [Logging](#logging)
-      - [Server Registration \& Discovery (v0.5.2)](#server-registration--discovery-v052)
       - [Advanced Server Customization](#advanced-server-customization)
       - [Cross Protocol Support](#cross-protocol-support)
-    - [Quick-Agents (Alpha v0.5.2)](#quick-agents-alpha-v052)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
 
 ## Features
 
-- **Service-Oriented Architecture:** Modern, modular design with a dedicated layer for protocol handling and state management.
-- **Modern Express Server:** Quickly create an Express Server with the `createAgentServer()` function. It handles all of the transport-layer complexity, adds an A2A <-> JSON-RPC middleware, and manages Server-Sent Events (SSE) automatically.
-- **TypeScript First:** Written in TypeScript with a fully implemented Zod <-> A2A schema.
-- **Protocol Compliance:** Implements the complete A2A specification (v0.3.0) with support for any kind of transport layer (Express, tRPC, WebSockets, etc).
-- **Code Deployment:** Bundle, test, and deploy agent code onto the artinet via the `./deployment` module (v0.5.3). Includes bundler, agent handler, and deployment utilities.
-
-| Component/Feature    | Description                                                                 | Key Classes/Types                                                                                    |
-| :------------------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
-| **Client**           | Interact with A2A-compliant agents. Supports standard & streaming requests. | `A2AClient`                                                                                          |
-| **Server**           | Quickly spin up an Agent as a Server.                                       | `createAgentServer`, `ExpressAgentServer`, `jsonRPCMiddleware`                                       |
-| **Agent Creation**   | Design agents with the Agent Builder or take control with the Agent Engine. | `AgentEngine`, `Context`, `AgentBuilder`                                                             |
-| **Storage**          | Persist event state. In-memory and file-based options included.             | `Store`, `InMemoryTaskStore`, `FileStore`                                                            |
-| **Streaming (SSE)**  | Handle real-time updates via Server-Sent Events with middleware support.    | Built-in SSE handling, streaming generators                                                          |
-| **Event Handling**   | Monitor agent execution with our event system.                              | `EventManager`, `eventOverrides`, Event listeners (`start`, `update`, `error`, `complete`, `cancel`) |
-| **Logging**          | Configure structured logging for debugging and monitoring.                  | `logger`, `configureLogger`, `LogLevel`                                                              |
-| **Transport Layers** | Built-in support for Express/TRPC.                                          | Express middleware, tRPC router, or easily create your own.                                          |
-| **Core Types**       | Fully implement A2A schema in Zod.                                          | `AgentCard`, `Task`, `Message`, `Part`, `Artifact`, etc.                                             |
-| **Deployment**       | Bundle, test, and deploy agents onto the artinet platform (v0.5.2).         | `@artinet/sdk/deployment`, `fullDeployment`, `testDeployment`, `bundle`                              |
-| **Agent Utilities**  | Run agents in managed environments with our proxy system.                   | `artinet.v0.agentExecutor`, `artinet.v0.connect`, `artinet.v0.agent`                                   |
+- **Modular Design:** Everything you need to get started building collaborative agents + its flexible enough for advanced configuration.
+- **Express:** Scaffold an Express Server with the `createAgentServer()` function. It handles all of the transport-layer complexity, adds A2A <-> JSON-RPC middleware, and manages Server-Sent Events (SSE) automatically.
+- **Protocol Compliance:** Implements the complete A2A specification (v0.3.0) with support for any kind of transport layer (tRPC, WebSockets, etc).
 
 ## Installation
 
@@ -177,7 +146,7 @@ async function runClient() {
   console.log("Stream finished.");
 }
 
-runClient().catch(console.error);
+await runClient().catch(console.error);
 ```
 
 ## Running Tests
@@ -185,16 +154,6 @@ runClient().catch(console.error);
 ```bash
 npm test
 ```
-
-To run tests with coverage:
-
-```bash
-npm run test:coverage
-```
-
-## Typescript
-
-The Artinet SDK is written entirely in TypeScript and includes comprehensive type definitions, providing strong typing and enhanced developer experience.
 
 ## Usage
 
@@ -284,11 +243,11 @@ Use `createAgentServer()` to embed your Agents in an Express App.
 
 #### Implementing an A2A Agent
 
-The SDK provides a variety of options for creating complex ([AgentEngine](#agentengine)) or simple agents ([AgentBuilder](#agentbuilder)).
+The SDK provides a variety of options for creating complex ([AgentEngines](#agentengine)) or simple agents ([AgentBuilder](#agentbuilder)).
 
 ##### AgentBuilder
 
-**Option 1: Using AgentBuilder (Recommended for Simple Workflows)**
+**Option 1: Using the AgentBuilder (Recommended for Simple Workflows)**
 
 For simple agents with one or more processing steps, use the `AgentBuilder` pattern:
 
@@ -298,7 +257,7 @@ import { createAgentServer, AgentBuilder, TaskManager } from "@artinet/sdk";
 //create a simple agent
 const simpleAgent = AgentBuilder().text(() => "hello world!");
 
-//or design a powerful workflow
+//or design a powerful multi-step agent
 const { app, agent } = createAgentServer({
   agent: AgentBuilder()
     .text(({ command, context }) => {
@@ -350,7 +309,7 @@ The `AgentBuilder` approach is particularly useful when you need:
 
 - **Step-by-step processing**: Break down complex tasks into discrete, manageable steps
 - **Data flow between steps**: Pass results from one step to the next using the `args` parameter
-- **Different content types**: Mix text, file, and data processing in a single workflow
+- **Different content types**: Mix text, file, and data processing in a single flow
 - **Reusable components**: Build modular agents that can be easily edited or extended
 
 ##### AgentEngine
@@ -406,6 +365,7 @@ const { app, agent } = createAgentServer({
       version: "1.0.0",
       capabilities: { streaming: true },
       skills: [{ id: "processor", name: "Text Processor" }],
+      ...
     },
     tasks: new TaskManager(),
   },
@@ -524,55 +484,6 @@ const { app, agent } = createAgentServer({
 });
 ```
 
-#### Logging
-
-Use the built-in `pino`-based logger. Configure with `configureLogger`.
-
-```typescript
-import { logger, configureLogger, LogLevel, logDebug } from "@artinet/sdk";
-
-// Configure logging level (optional)
-configureLogger({ level: "debug" });
-
-logger.info("Server starting...");
-//use helper functions
-logDebug("LoggerTest", { taskId: "task-123" }, "Task status updated.");
-
-// Create child loggers with bounded contexts
-const taskLogger = logger.child({ taskId: "abc" });
-taskLogger.info("Processing step X");
-```
-
-#### Server Registration & Discovery (v0.5.2)
-
-The SDK includes features to help make your agent discoverable using the new service-based architecture:
-
-- **Automatic Registration:** You can configure your agent server to automatically register your `AgentCard` with the [A2A Registry](https://artinet.io) upon startup by setting `register: true` in the server parameters (temporarily unavailable in v0.5.6).
-
-```typescript
-const { app, agent } = createAgentServer({
-  agent: {
-    engine: myAgent,
-    agentCard: {
-      // ...
-      url: "http://my-public-domain:3000/my-agent", // Publicly accessible URL
-      // ...
-    },
-  },
-});
-```
-
-- **Custom Agent Card Path:** By default, the server exposes its `AgentCard` at `/.well-known/agent-card.json` following [RFC8615](https://datatracker.ietf.org/doc/html/rfc8615). You can specify a custom path using the `agentCardPath` option.
-
-```typescript
-const { app, agent } = createAgentServer({
-  ...
-  basePath: "/apiV2",
-  agentCardPath: "/apiV2/custom-card-info", // Custom agent card path
-});
-// The AgentCard is now accessible at http://localhost:3000/apiV2/custom-card-info
-```
-
 #### Advanced Server Customization
 
 Our new architecture provides multiple ways to customize your agent server:
@@ -596,7 +507,7 @@ const { app, agent } = createAgentServer({
   },
 });
 
-// custom middleware
+// more custom middleware
 app.use("/custom", (req, res, next) => {
   ...
 });
@@ -759,122 +670,6 @@ const result = await client.callTool({
 - `send-streaming-message`, `task-resubscribe` & `push-notifications` etc are currently not supported by default.
   - Leverage the A2A Zod Schemas to implement them manually.
 
-### Quick-Agents (Alpha v0.5.2)
-
-We are excited to introduce new capabilities for deploying agents directly onto the artinet.
-
-We've added a `testDeployment` utility which is available for all users letting you bundle and test your agent logic in a temporary sandboxed environment.
-
-**QUICK-AGENTS** Use the `fullDeployment` utility, which allows direct deployment of your bundled agent code and `AgentCard` to the Artinet platform (requires an `ARTINET_API_KEY`).
-
-To join the beta waitlist, please email us at humans@artinet.io and stay tuned for more updates!
-
-Key features include:
-
-- **Easy Agent Bundling:** Bundle your agent's code and dependencies into a single file using the `bundle` utility from the new deployment export.
-
-  ```typescript
-  import { bundle } from "@artinet/sdk/deployment";
-
-  const bundledCode = await bundle(new URL("./your-agent.ts", import.meta.url));
-  ```
-
-- **Sandboxed Enviroments:** Streamline agent logic for quick and easy deployments. The new `artinet.v0` namespace (accessible via `@artinet/sdk/agents`) provides `taskManager`, `connect`, and `agent`.
-
-  - `artinet.v0.agentExecutor`: Manages the agent's lifecycle by iterating over the agent's `TaskHandler` and communicating updates to the host environment.
-  - `artinet.v0.connect`: Replaces the deprecated `fetchResponseProxy`. Allows agents to make proxied calls to other agents or LLMs via the host environment.
-  - `artinet.v0.agent`: A factory function to obtain a `ClientProxy` for type-safe communication with other agents, managed by the host environment.
-
-  Example of using the new `artinet.v0` utilities in an agent:
-
-  ```typescript
-  import { TaskContext, TaskYieldUpdate, Task } from "@artinet/sdk";
-  import { artinet } from "@artinet/sdk/agents";
-
-  export async function* myAgentLogic(context: TaskContext): AsyncGenerator<TaskYieldUpdate, Task | void, unknown> {
-    yield { state: "working" };
-
-    // Call another agent/LLM using artinet.v0.connect
-    const llmResponse = await artinet.v0.connect({
-      agentId: "SomeLLMAgentID",
-      messages: [{ role: "user", content: "Tell me a joke." }]
-    });
-
-    // Or communicate tasks with artinet.v0.agent
-    const anotherAgent = artinet.v0.agent({
-      baseUrl: "https://agents.artinet.io/agentId=456",
-    });
-    const taskResult = await anotherAgent.sendTask({
-      ...
-    });
-
-  }
-
-  // The host environment will invoke this taskManager with the agent's logic.
-  await artinet.v0.agentExecutor({ taskHandler: myAgentLogic });
-  ```
-
-  _Note: The `taskHandlerProxy` and `fetchResponseProxy` utilities are now deprecated in favor of `artinet.v0.agentExecutor` and `artinet.v0.connect` respectively._
-
-- **Test-Agents (Experimental):** Simulate and test your agents @ agents.artinet.io/test/deploy using the `testDeployment` tool.
-
-  ```typescript
-  import {
-    testDeployment,
-    ServerDeploymentRequestParams,
-    SendTaskRequest,
-  } from "@artinet/sdk/deployment";
-
-  const deploymentParams: ServerDeploymentRequestParams = {
-    code: "/* bundled code string */",
-  };
-  //create a list of tasks for your agent to complete once deployed
-  const testRequests: SendTaskRequest[] = [
-    {
-      id: "t1",
-      message: { role: "user", parts: [{ type: "text", text: "Hi!" }] },
-    },
-  ];
-
-  for await (const result of testDeployment(deploymentParams, testRequests)) {
-    console.log(result); //process the task completion requests as they come in to confirm your agents logic
-  }
-  ```
-
-- **Full Deployment (Experimental):** Deploy your agent to the Artinet platform using the `fullDeployment` utility.
-
-  ```typescript
-  import {
-    fullDeployment,
-    ServerDeploymentRequestParams,
-  } from "@artinet/sdk/deployment";
-
-  const deploymentParams: ServerDeploymentRequestParams = {
-    name: "My Awesome Agent",
-    agentCard: {
-      /* your agent card */
-    },
-    code: "/* bundled code string */",
-  };
-
-  const deploymentResult = await fullDeployment(deploymentParams); // Requires an ARTINET_API_KEY environment variable
-  console.log("Deployment Result:", deploymentResult);
-  ```
-
-- **Dedicated Endpoints:** Once deployed your agent will be available On-Demand at its dedicated enpoint. (e.g. "https://agents.artinet.io/agentId=0xabf698845743538727a81352bfcfdb724e5c2bbe3113a26362482248f9f3e5fa/.well-known/agent-card.json")
-- **New Types:** To support these features, new types for server deployment requests and responses (such as `ServerDeploymentRequestParams`, `ServerDeploymentResponse`) have been added to `src/types/extended-schema.ts`. New types for sandboxed agent interactions (`TaskProxy`, `ConnectAPICallback`, `ClientProxy`, etc.) are in `src/types/proxy.ts`.
-
-**QUICK-AGENT FAQs**
-
-- Test-Agents expire after 60s (need more time? let us know @humans@artinet.io)
-- Quick-Agents do not have access to a filesystem or networking (limited persistance & networking capabalities are on the project roadmap).
-- Quick-Agents v0 does not support streaming, push notifications or state transition history (these capabilities are on the project roadmap).
-- Larger deployments can take significant time to deploy which may cause `fullDeployment` to timeout. In such cases wait to see if the listing has been added to your account before trying to deploy again.
-- Quick-Agent logic is public, therefore the artinet project is not liable for any sensitive material held within a deployment.
-- Available with version 0.5.6+ of the SDK with enhanced deployment capabilities.
-
-Sign-up at [artinet.io](https://artinet.io/) to deploy your Quick-Agent today!
-
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a Pull Request on [GitHub](https://github.com/the-artinet-project/artinet-sdk).
@@ -887,10 +682,9 @@ This project is licensed under the Apache License 2.0 - see the `LICENSE` file f
 
 ## Acknowledgements
 
-This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A) initiated by Google. It utilizes the official [A2A JSON Schema](https://github.com/google-a2a/A2A/blob/main/specification/json/a2a.json) for protocol compliance.
+This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A).
 
 Libraries used include:
 
 - [Express.js](https://expressjs.com/) for the server framework.
-- [Pino](https://getpino.io/) for logging.
 - [EventSource Parser](https://github.com/rexxars/eventsource-parser) for SSE streaming.

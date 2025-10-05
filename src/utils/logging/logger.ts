@@ -4,58 +4,30 @@
  */
 
 /**
- * Logger utility for the SDK using Pino
- */
-import pino from "pino";
-
-// Define log levels for type safety
-export type LogLevel = "silent" | "error" | "warn" | "info" | "debug" | "trace";
-
-// Create the base logger with default configuration
-const baseLogger = pino({
-  name: "A2A",
-  level: "error", // Default level
-  browser: {
-    asObject: true,
-    formatters: {
-      level(label, _number) {
-        return { level: label.toUpperCase() };
-      },
-    },
-    write: (o) => console.log(JSON.stringify(o)),
-  },
-  // In production, don't use the pretty transport by default
-  ...(process.env.NODE_ENV !== "production" && {
-    transport: {
-      target: "pino-pretty",
-      options: {
-        colorize: true,
-        translateTime: true,
-        ignore: "pid,hostname",
-      },
-    },
-  }),
-});
-
-/**
  * SDK logger instance
  */
-export const logger = baseLogger;
-
+export const logger = console;
+export let level:
+  | "verbose"
+  | "debug"
+  | "info"
+  | "warning"
+  | "error"
+  | "silent" = "silent";
 /**
  * Configures the logger with the specified options
- *
+ * @deprecated Use the logger instance directly instead
  * @param options - Logger configuration options
  */
 export function configureLogger(options: {
-  level?: LogLevel;
+  level?: "verbose" | "debug" | "info" | "warning" | "error" | "silent";
   name?: string;
   prettyPrint?: boolean;
 }) {
-  // Change log level if specified
-  if (options.level) {
-    logger.level = options.level;
-  }
-  // Return the logger instance for chaining
+  logger.warn(
+    "logger deprecated and will be removed in the next major release",
+    options
+  );
+  level = options.level || "silent";
   return logger;
 }

@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
  * This utility leverages `esbuild` for efficient bundling, minification, and sourcemap generation.
  * It's designed to prepare agent code for deployment by packaging it and its local dependencies.
  *
+ * @deprecated Deployment moving to a new package.
  * @param filePath - The URL of the entry point file to bundle.
  * @returns A promise that resolves to a string containing the bundled and minified code.
  * @throws An error if the file path does not exist, is not a file, or if bundling fails for any reason.
