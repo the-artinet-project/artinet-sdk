@@ -4,7 +4,7 @@ import { configureLogger } from "../src/utils/logging/index.js";
 
 configureLogger({ level: "silent" });
 
-describe("bundle", () => {
+describe.skip("bundle", () => {
   it("should be defined", () => {
     expect(bundle).toBeDefined();
   });

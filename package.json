@@ -1,7 +1,7 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.7",
-  "description": "TypeScript SDK for the Agent2Agent (A2A) Protocol",
+  "version": "0.5.8",
+  "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -22,8 +22,7 @@
       "import": "./dist/utils/deployment/index.js",
       "default": "./dist/utils/deployment/index.js"
     },
-    "./types":
-    {
+    "./types": {
       "types": "./dist/types/types/index.d.ts",
       "import": "./dist/types/index.js",
       "default": "./dist/types/index.js"
@@ -32,6 +31,7 @@
   "rootDir": ".",
   "files": [
     "dist",
+    "package.json",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
@@ -55,7 +55,12 @@
     "ai",
     "agent",
     "sdk",
-    "protocol"
+    "artificial intelligence",
+    "ai agent",
+    "a2a",
+    "multi-agent",
+    "multi-agent system",
+    "orchestration"
   ],
   "author": "artinet",
   "license": "Apache-2.0",
@@ -69,21 +74,17 @@
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
     "@artinet/metadata-validator": "^0.0.3",
-    "@modelcontextprotocol/sdk": "latest",
+    "@modelcontextprotocol/sdk": "^1.19.1",
     "@trpc/server": "^11.4.3",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/mime-types": "^3.0.0",
-    "@types/pino": "^7.0.4",
     "cors": "^2.8.5",
     "esbuild": "^0.25.4",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
-    "pino": "^9.6.0",
-    "pino-pretty": "^10.2.0",
     "uuid": "^11.1.0",
-    "zod": "latest"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",

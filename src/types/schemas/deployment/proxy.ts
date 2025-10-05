@@ -84,7 +84,9 @@ export type ConnectAPICallback = (props: ConnectProps) => Promise<string>;
 export interface ClientProxy
   extends Omit<
     Client,
+    | "sendTask"
     | "sendTaskSubscribe"
+    | "sendStreamingMessage"
     | "getTask"
     | "cancelTask"
     | "getTaskPushNotification"

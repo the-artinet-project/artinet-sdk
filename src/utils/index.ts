@@ -1,14 +1,12 @@
+/**
+ * @deprecated Many of these utils will be removed in the next major release.
+ * @fileoverview Provides a collection of utility functions for the Artinet SDK.
+ */
 export * from "./common/constants.js";
 export * from "./common/errors.js";
 export * from "./common/utils.js";
 export * from "./common/zAsyncIterable-v3.js";
 export * from "./logging/index.js";
-// export * from "./logging/log.js";
-// export * from "./logging/logger.js";
 export * from "./api/register.js";
-// export * from "./deployment/test-deployment.js";
-// export * from "./deployment/task-wrapper.js";
-// export * from "./deployment/bundler.js";
-// export * from "./deployment/full-deployment.js";
 export * from "./storage/file.js";
 export * from "./storage/memory.js";

@@ -28,6 +28,7 @@ type FullDeploymentRequest = A2ARequest | ServerDeploymentRequest;
 
 /**
  * Sends a full deployment request to the server.
+ * @deprecated Deployment moving to a new package.
  * @param baseUrl The base URL of the server.
  * @param method The method to call.
  * @param params The parameters to pass to the method.
@@ -47,6 +48,7 @@ const executeFullDeploymentRequest = executeJsonRpcRequest as <
 
 /**
  * Sends a full deployment request to the server.
+ * @deprecated Deployment moving to a new package.
  * @param params The parameters to pass to the method.
  * @returns The response from the server.
  */

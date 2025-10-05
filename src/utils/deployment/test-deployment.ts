@@ -21,6 +21,7 @@ import { executeStreamEvents } from "~/transport/index.js";
 import { logDebug, logWarn } from "../logging/log.js";
 
 /**
+ * @deprecated Deployment moving to a new package.
  * @fileoverview Provides a utility for testing agent deployments.
  * This module allows developers to simulate the deployment of an agent's code
  * to a sandboxed environment and then send test tasks to it to verify its behavior.
@@ -48,6 +49,7 @@ const testExecuteStreamEvents = executeStreamEvents as <
  * It yields all events from the deployment stream and all resulting tasks from the
  * test requests.
  *
+ * @deprecated Deployment moving to a new package.
  * @param params - The parameters for the server deployment, including the agent's
  *                 name, agent card, and the bundled code.
  * @param requests - An array of `SendTaskRequest` objects to be sent to the
