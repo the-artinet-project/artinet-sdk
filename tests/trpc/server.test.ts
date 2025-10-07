@@ -17,7 +17,7 @@ import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 jest.setTimeout(10000);
 configureLogger({ level: "error" });
 const agentRouter = createA2ARouter();
-describe.skip("trpc-server", () => {
+describe("trpc-server", () => {
   const testId = "123";
   let agent = agentRouter.createCaller({
     service: createAgent({
@@ -99,7 +99,7 @@ describe.skip("trpc-server", () => {
       for await (const message of result) {
         messages.push(message);
       }
-      expect(messages.length).toEqual(3);
+      expect(messages.length).toEqual(2);
     });
   });
   describe("task", () => {

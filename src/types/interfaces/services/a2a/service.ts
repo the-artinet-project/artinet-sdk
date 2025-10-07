@@ -31,6 +31,7 @@ import {
   SendMessageSuccessResult,
   Task,
   TaskIdParams,
+  TaskQueryParams,
 } from "~/types/schemas/a2a/index.js";
 import { UpdateEvent, Command, State, Update } from "./context.js";
 import { A2AEngine } from "./engine.js";
@@ -170,7 +171,7 @@ export interface MethodOptions {
    * @returns Promise resolving to the requested task
    */
   getTask: (
-    input: TaskIdParams,
+    input: TaskQueryParams,
     params: Omit<MethodParams, "engine" | "contextManager" | "signal">
   ) => Promise<Task>;
 
@@ -264,7 +265,7 @@ export interface MethodsInterface {
    * @param input - Task identification parameters
    * @returns Promise resolving to the requested task
    */
-  getTask: (input: TaskIdParams) => Promise<Task>;
+  getTask: (input: TaskQueryParams) => Promise<Task>;
 
   /**
    * Cancels a task by its ID.
@@ -354,7 +355,7 @@ export interface MethodsInterface {
 export interface A2AServiceInterface<
   TCommand extends Command = Command,
   TState extends State = State,
-  TUpdate extends Update = Update,
+  TUpdate extends Update = Update
 > extends ServiceInterface<TCommand, TState, TUpdate>,
     MethodsInterface {
   /**

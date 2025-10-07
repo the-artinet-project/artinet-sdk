@@ -20,7 +20,7 @@ export function logDebug(
   if (data !== undefined) {
     logData.data = data;
   }
-  if (level === "silent" || level === "warning" || level === "error") {
+  if (level === "silent" || level === "warning" || level === "error" || level === "info") {
     return;
   }
   logger.debug(logData, message);
@@ -89,10 +89,9 @@ export function logInfo(
     logData.data = data;
   }
   if (
-    level === "silent" ||
     level === "error" ||
     level === "warning" ||
-    level === "debug"
+    level === "silent"
   ) {
     return;
   }

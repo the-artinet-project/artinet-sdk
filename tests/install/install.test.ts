@@ -1,3 +1,4 @@
+import { describe, expect, beforeAll, afterAll, test } from "@jest/globals";
 import { exec } from "child_process";
 import { promisify } from "util";
 import * as fs from "fs/promises";
@@ -79,20 +80,11 @@ describe("NPM Package Installation", () => {
     expect(packageData.name).toBe("@artinet/sdk");
     expect(packageData.exports).toBeDefined();
     expect(packageData.exports["."]).toBeDefined();
-    expect(packageData.exports["./agents"]).toBeDefined();
-    expect(packageData.exports["./deployment"]).toBeDefined();
   });
 
   test("should have all required export files", async () => {
     // Check export files exist
-    const exportFiles = [
-      "dist/index.js",
-      "dist/utils/deployment/agents.js",
-      "dist/utils/deployment/index.js",
-      "dist/types/index.d.ts",
-      "dist/types/utils/deployment/agents.d.ts",
-      "dist/types/utils/deployment/index.d.ts",
-    ];
+    const exportFiles = ["dist/index.js", "dist/types/index.d.ts"];
 
     for (const file of exportFiles) {
       const filePath = path.join(sdkPath, file);
@@ -104,7 +96,7 @@ describe("NPM Package Installation", () => {
     }
 
     // Verify all required package files exist
-    const packageFiles = ["README.md", "CHANGELOG.md", "LICENSE"];
+    const packageFiles = ["README.md", "LICENSE"];
     for (const file of packageFiles) {
       await fs.access(path.join(sdkPath, file));
     }
@@ -115,13 +107,9 @@ describe("NPM Package Installation", () => {
     const scriptContent = `
 try {
   const { createAgent } = await import('@artinet/sdk');
-  const agents = await import('@artinet/sdk/agents');
-  const deployment = await import('@artinet/sdk/deployment');
   
   const results = {
     createAgent: typeof createAgent === 'function',
-    agents: typeof agents === 'object',
-    deployment: typeof deployment === 'object',
     success: true
   };
   
@@ -145,7 +133,5 @@ try {
     const result = JSON.parse(stdout.trim());
     expect(result.success).toBe(true);
     expect(result.createAgent).toBe(true);
-    expect(result.agents).toBe(true);
-    expect(result.deployment).toBe(true);
   }, 30000);
 });

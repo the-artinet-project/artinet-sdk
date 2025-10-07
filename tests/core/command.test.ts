@@ -1,7 +1,7 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import { CommandChannel } from "../../src/index.js";
 
-describe.skip("CommandChannel", () => {
+describe("CommandChannel", () => {
   it("should create channel", () => {
     const command = new CommandChannel("test-command");
     expect(command).toBeDefined();

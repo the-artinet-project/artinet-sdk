@@ -5,20 +5,12 @@
 
 import {
   MessageSendParams,
-  TaskState,
   CoreContext,
   TaskAndHistory,
   UpdateEvent,
-  TaskStatusUpdateEvent,
-  Task,
 } from "~/types/index.js";
 import { StreamManager } from "../../core/managers/stream.js";
 import { createContext } from "../factory/context.js";
-import {
-  SUBMITTED_UPDATE,
-  WORKING_UPDATE,
-  INVALID_PARAMS,
-} from "~/utils/index.js";
 import { MethodParams } from "~/types/index.js";
 
 export async function* streamMessage(
@@ -48,31 +40,6 @@ export async function* streamMessage(
 
   context.events.on("error", () => {
     context.events.onComplete();
-  });
-
-  context.events.on("start", (request: MessageSendParams, currentState) => {
-    if (!request.message.taskId && !currentState?.task?.id) {
-      throw INVALID_PARAMS("No task id found");
-    }
-    const update: Task | TaskStatusUpdateEvent =
-      currentState?.task ??
-      SUBMITTED_UPDATE(
-        request.message.taskId ?? currentState?.task?.id,
-        contextId
-      );
-    stream.addUpdate({
-      ...update,
-      status: {
-        ...update.status,
-        state: TaskState.submitted,
-      },
-    });
-    stream.addUpdate(
-      WORKING_UPDATE(
-        request.message.taskId ?? currentState?.task?.id,
-        contextId
-      )
-    ); //don't know why I was sending this working update here
   });
 
   yield* stream.stream(engine, service);

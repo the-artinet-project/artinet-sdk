@@ -18,7 +18,6 @@ This SDK leverages a service-oriented architecture for building AI agents allowi
   - [Features](#features)
   - [Installation](#installation)
   - [Requirements](#requirements)
-  - [Documentation](#documentation)
   - [Example](#example)
   - [Running Tests](#running-tests)
   - [Usage](#usage)
@@ -38,6 +37,15 @@ This SDK leverages a service-oriented architecture for building AI agents allowi
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
 
+**Breaking Changes in v0.5.8**
+- Pino has been removed and replaced with console for better portability and is set to silent by default. 
+- The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
+- Agent Registration, Bundling and Deployment utils have been removed (email us: humans@artinet.io for support).
+- `@artinet/metadata-validator` has been removed due to build issues.
+- getTask now correctly takes TaskQueryParams as an argument vs TaskIdParams in accordance with the A2A spec.
+- AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
+- In a future release the following packages will be set as peer dependancies to reduce the size of the build:  `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
+
 ## Features
 
 - **Modular Design:** Everything you need to get started building collaborative agents + its flexible enough for advanced configuration.
@@ -53,10 +61,10 @@ npm install @artinet/sdk
 ## Requirements
 
 - Node.js (v22.0.0 or higher recommended)
-
+<!-- 
 ## Documentation
 
-For more detailed documentation visit our documentation site [here](https://the-artinet-project.github.io/artinet-documentation/).
+For more detailed documentation visit our documentation site [here](https://the-artinet-project.github.io/artinet-documentation/). -->
 
 ## Example
 

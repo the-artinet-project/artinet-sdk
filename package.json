@@ -5,25 +5,15 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./agents": {
-      "types": "./dist/types/utils/deployment/agents.d.ts",
-      "import": "./dist/utils/deployment/agents.js",
-      "default": "./dist/utils/deployment/agents.js"
-    },
-    "./deployment": {
-      "types": "./dist/types/utils/deployment/index.d.ts",
-      "import": "./dist/utils/deployment/index.js",
-      "default": "./dist/utils/deployment/index.js"
-    },
     "./types": {
-      "types": "./dist/types/types/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/types/index.js",
       "default": "./dist/types/index.js"
     }
@@ -33,12 +23,11 @@
     "dist",
     "package.json",
     "README.md",
-    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
     "prepare": "ts-patch install -s",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json",
     "clean": "rimraf dist",
     "rebuild": "rimraf dist node_modules/ && npm i && npm run build",
     "lint": "eslint src --ext .ts",
@@ -57,10 +46,10 @@
     "sdk",
     "artificial intelligence",
     "ai agent",
-    "a2a",
     "multi-agent",
     "multi-agent system",
-    "orchestration"
+    "orchestration",
+    "swarms"
   ],
   "author": "artinet",
   "license": "Apache-2.0",
@@ -73,13 +62,9 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@artinet/metadata-validator": "^0.0.3",
     "@modelcontextprotocol/sdk": "^1.19.1",
     "@trpc/server": "^11.4.3",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
     "cors": "^2.8.5",
-    "esbuild": "^0.25.4",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
@@ -88,7 +73,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/cors": "^2.8.17",
     "@types/escape-html": "^1.0.4",
+    "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.50",
     "@types/supertest": "latest",
