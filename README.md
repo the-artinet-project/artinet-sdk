@@ -13,7 +13,7 @@ This SDK leverages a service-oriented architecture for building AI agents allowi
 
 ## Quick Start
 
-Use the [`create-agent`](https://github.com/the-artinet-project/create-agent) command:
+Use the [`create-agent`](https://www.npmjs.com/package/@artinet/create-agent) command:
 
 ```bash
 npx @artinet/create-agent@latest
