@@ -11,9 +11,20 @@ The artinet SDK is a TypeScript library designed for Agentic Communication. It's
 
 This SDK leverages a service-oriented architecture for building AI agents allowing developers to easily create agents as simple processes or seamlessly embed them within a dedicated server.
 
+## Quick Start
+
+Use the [`create-agent`](https://github.com/the-artinet-project/create-agent) command:
+
+```bash
+npx @artinet/create-agent@latest
+```
+
+It has [serveral template projects](https://github.com/the-artinet-project/create-agent/tree/main/templates) that you can use to jump right into agent building.
+
 ## Table of Contents
 
 - [artinet SDK](#artinet-sdk)
+  - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
