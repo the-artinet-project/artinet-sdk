@@ -108,7 +108,7 @@ export function createEventManager<
     },
 
     load: async (taskId: string) => {
-      return (await service.getState(taskId)) ?? null;
+      return (await service.getState(taskId).catch(() => null)) ?? null;
     },
   };
 

@@ -354,6 +354,6 @@ describe("Agent Builder Tests", () => {
     expect(result.status.message.parts[2].data.entry2).toBe("goodbye there 3");
     expect(result.status.message.taskId).toBe("789");
     expect(result.status.message.contextId).toBe("456");
-    expect(result.status.message.messageId).toBe("123");
+    expect(result.status.message.messageId).toBeDefined();
   });
 });

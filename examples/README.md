@@ -69,23 +69,6 @@ And after restarting the server, test persistence with:
 node examples/file-storage-client-continued.js
 ```
 
-### Code Deployment Examples
-
-These examples demonstrate how to prepare your agent code for deployment, including bundling and using the task handling proxies.
-
--   `examples/code-deployment.js`: Shows a JavaScript agent structured for deployment.
--   `examples/code-deployment.ts`: Shows a TypeScript agent structured for deployment, which will be bundled by the deployment process.
-
-These examples utilize `taskHandlerProxy` and `fetchResponseProxy` (from `examples/task-wrapper.js`, which is a simplified version of `src/utils/deployment/task-wrapper.ts`) to interact with a simulated deployment environment.
-
-## Test Deployment Feature
-
-The Artinet SDK now includes a **Test Deployment** feature. This allows you to bundle your agent code (as demonstrated in the Code Deployment Examples) and test its execution against a sandboxed deployment environment provided by Artinet. This is a crucial step for verifying your agent\'s behavior before a full deployment.
-
-You can see this in action in our internal tests (`tests/deployment.test.ts`), which use the `bundle` utility and the `testDeployment` function.
-
-**Coming Soon: Full Agent Deployment!** Beta users will get access to full serverless agent deployment capabilities in the coming days. This will allow you to host your agents directly on the Artinet platform, making them accessible to other agents and users. Stay tuned for more details!
-
 ## Known Issues
 
 - The file storage server does not properly maintain conversation history between restarts - it treats each message as if it were the first message in a conversation

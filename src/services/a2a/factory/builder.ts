@@ -38,6 +38,7 @@ import {
   Part,
 } from "~/types/index.js";
 import { createAgent } from "./service.js";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Type alias for text-based workflow steps.
@@ -505,7 +506,6 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
 
     const contextId = context.command.message.contextId;
     const taskId = context.command.message.taskId;
-    const messageId = context.command.message.messageId;
 
     if (!contextId || !taskId) {
       throw new Error("Context ID and task ID are required");
@@ -524,7 +524,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
     const finalMessage: Message = {
       taskId: taskId,
       contextId: contextId,
-      messageId: messageId,
+      messageId: uuidv4(),
       kind: "message",
       role: "agent",
       parts: [],
@@ -542,7 +542,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
             state: TaskState.working,
             timestamp: new Date().toISOString(),
             message: {
-              messageId: messageId,
+              messageId: uuidv4(),
               kind: "message",
               role: "agent",
               parts: parts,
@@ -563,7 +563,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
             state: TaskState.working,
             timestamp: new Date().toISOString(),
             message: {
-              messageId: messageId,
+              messageId: uuidv4(),
               kind: "message",
               role: "agent",
               parts: parts,
@@ -583,7 +583,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
             state: TaskState.working,
             timestamp: new Date().toISOString(),
             message: {
-              messageId: messageId,
+              messageId: uuidv4(),
               kind: "message",
               role: "agent",
               parts: parts,

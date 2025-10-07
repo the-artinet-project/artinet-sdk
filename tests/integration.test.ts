@@ -16,6 +16,7 @@ import {
   createAgentServer,
   A2AEngine as AgentEngine,
   getParts,
+  SUBMITTED_UPDATE,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configureLogger } from "../src/utils/logging/index.js";
@@ -32,7 +33,7 @@ const echoAgent: AgentEngine = async function* (context: Context) {
   const taskId = params.message.taskId ?? "";
   const contextId = params.message.contextId ?? "";
   const { text: userText } = getParts(params.message.parts);
-
+  yield SUBMITTED_UPDATE(taskId, contextId);
   // Send working status
   yield {
     taskId,

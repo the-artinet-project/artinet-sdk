@@ -1,7 +1,12 @@
 import { A2AEngine, Task, TaskState, Context } from "../../src/types/index.js";
+import { SUBMITTED_UPDATE } from "../../src/utils/common/constants.js";
 //echoes the users input back as a task
 export const TestAgentLogic: A2AEngine = async function* (context: Context) {
   const command = context.command;
+  yield SUBMITTED_UPDATE(
+    command.message.taskId ?? "",
+    command.message.contextId ?? ""
+  );
   const Task: Task = {
     id: command.message.taskId ?? "",
     contextId: command.message.contextId ?? "",
