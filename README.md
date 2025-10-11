@@ -1,8 +1,10 @@
-[![npm version](https://img.shields.io/npm/v/@artinet/sdk.svg)](https://www.npmjs.com/package/@artinet/sdk)
+[![Website](https://img.shields.io/badge/website-artinet.io-black)](https://artinet.io/)
+[![npm version](https://img.shields.io/npm/v/@artinet/sdk.svg?logoColor=black)](https://www.npmjs.com/package/@artinet/sdk)
 [![npm downloads](https://img.shields.io/npm/dt/@artinet/sdk.svg)](https://www.npmjs.com/package/@artinet/sdk)
 [![Apache License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Known Vulnerabilities](https://snyk.io/test/npm/@artinet/sdk/badge.svg)](https://snyk.io/test/npm/@artinet/sdk)
-
+[![GitHub stars](https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social)](https://github.com/the-artinet-project/artinet-sdk/stargazers)
+[![Discord](https://dcbadge.limes.pink/api/server/DaxzSchmmX?style=flat)](https://dcbadge.limes.pink/api/server/DaxzSchmmX?style=flat)
 <!-- [![Coverage Status](https://coveralls.io/repos/github/the-artinet-project/artinet-sdk/badge.svg?branch=main)](https://coveralls.io/github/the-artinet-project/artinet-sdk?branch=main) -->
 
 # artinet SDK
