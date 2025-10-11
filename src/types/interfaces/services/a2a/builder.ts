@@ -17,22 +17,23 @@ import {
  */
 export interface StepArgs<TCommand extends Command = Command> {
   command: TCommand;
+  context: Context;
 }
 
 export type StepParams<
   TCommand extends Command = Command,
-  TInboundArgs extends readonly unknown[] = [],
-> = StepArgs<TCommand> & Partial<{ context: Context; args: TInboundArgs }>;
+  TInboundArgs extends readonly unknown[] = []
+> = StepArgs<TCommand> & Partial<{ args: TInboundArgs }>;
 
 export type StepOutput<
-  TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"],
+  TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"]
 > = {
   parts: Array<TPart> | TPart;
 };
 
 export type StepOutputWithForwardArgs<
   TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"],
-  TForwardArgs extends readonly unknown[] = [],
+  TForwardArgs extends readonly unknown[] = []
 > = StepOutput<TPart> & {
   args: TForwardArgs;
 };
@@ -49,7 +50,7 @@ export type Step<
     | StepOutput<TPart>
     | StepOutputWithForwardArgs<TPart, TForwardArgs>
     | Array<TPart>
-    | TPart = StepOutput<TPart>,
+    | TPart = StepOutput<TPart>
 > = (params: StepParams<TCommand, TInboundArgs>) => Promise<TOutput> | TOutput;
 
 export type StepWithKind<
@@ -65,18 +66,19 @@ export type StepWithKind<
     | StepOutputWithForwardArgs<TPart, TForwardArgs>
     | Array<TPart>
     | TPart = StepOutput<TPart>,
-  TKind extends "text" | "file" | "data" = "text",
+  TKind extends "text" | "file" | "data" = "text"
 > = {
   step: Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
   kind: TKind;
 };
 
-export type OutArgsOf<O> =
-  O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
+export type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A>
+  ? A
+  : [];
 
 export interface StepBuilder<
   TCommand extends Command = Command,
-  TInboundArgs extends readonly unknown[] = [],
+  TInboundArgs extends readonly unknown[] = []
 > {
   /**
    * Add a step to the builder.
@@ -94,7 +96,7 @@ export interface StepBuilder<
       | StepOutputWithForwardArgs<TPart, TForwardArgs>
       | Array<TPart>
       | TPart = StepOutput<TPart>,
-    TKind extends "text" | "file" | "data" = "text",
+    TKind extends "text" | "file" | "data" = "text"
   >(
     step: StepWithKind<
       TCommand,

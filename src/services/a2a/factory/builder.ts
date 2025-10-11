@@ -74,7 +74,7 @@ export type textStep<
     | StepOutput<TPart>
     | StepOutputWithForwardArgs<TPart, TForwardArgs>
     | Array<TPart>
-    | TPart = StepOutput<TPart>,
+    | TPart = StepOutput<TPart>
 > = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
 
 /**
@@ -114,7 +114,7 @@ export type fileStep<
     | StepOutput<TPart>
     | StepOutputWithForwardArgs<TPart, TForwardArgs>
     | Array<TPart>
-    | TPart = StepOutput<TPart>,
+    | TPart = StepOutput<TPart>
 > = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
 
 /**
@@ -154,7 +154,7 @@ export type dataStep<
     | StepOutput<TPart>
     | StepOutputWithForwardArgs<TPart, TForwardArgs>
     | Array<TPart>
-    | TPart = StepOutput<TPart>,
+    | TPart = StepOutput<TPart>
 > = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
 /**
  * Utility type to extract forward arguments from step output.
@@ -198,7 +198,7 @@ type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
  */
 export class EngineBuilder<
   TCommand extends MessageSendParams = MessageSendParams,
-  TInboundArgs extends readonly unknown[] = [],
+  TInboundArgs extends readonly unknown[] = []
 > implements StepBuilder<TCommand, TInboundArgs>
 {
   //@typescript-eslint/no-explicit-any
@@ -230,7 +230,7 @@ export class EngineBuilder<
    */
   public static create<
     TCommand extends MessageSendParams = MessageSendParams,
-    TInboundArgs extends readonly unknown[] = [],
+    TInboundArgs extends readonly unknown[] = []
   >() {
     return new EngineBuilder<TCommand, TInboundArgs>();
   }
@@ -246,7 +246,7 @@ export class EngineBuilder<
       | StepOutputWithForwardArgs<TPart, TForwardArgs>
       | Array<TPart>
       | TPart = StepOutput<TPart>,
-    TKind extends "text" | "file" | "data" = "text",
+    TKind extends "text" | "file" | "data" = "text"
   >(
     step: StepWithKind<
       TCommand,
@@ -286,7 +286,7 @@ export class EngineBuilder<
       | StepOutput<TPart>
       | StepOutputWithForwardArgs<TPart, TForwardArgs>
       | Array<TPart>
-      | TPart = StepOutput<TPart>,
+      | TPart = StepOutput<TPart>
   >(step: textStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
     return this.addStep<TPart, TForwardArgs, TOutput, "text">({
       step: step,
@@ -321,7 +321,7 @@ export class EngineBuilder<
       | StepOutput<TPart>
       | StepOutputWithForwardArgs<TPart, TForwardArgs>
       | Array<TPart>
-      | TPart = StepOutput<TPart>,
+      | TPart = StepOutput<TPart>
   >(step: fileStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
     return this.addStep<TPart, TForwardArgs, TOutput, "file">({
       step: step,
@@ -355,7 +355,7 @@ export class EngineBuilder<
       | StepOutput<TPart>
       | StepOutputWithForwardArgs<TPart, TForwardArgs>
       | Array<TPart>
-      | TPart = StepOutput<TPart>,
+      | TPart = StepOutput<TPart>
   >(step: dataStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
     return this.addStep<TPart, TForwardArgs, TOutput, "data">({
       step: step,
@@ -504,8 +504,8 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       args: [],
     };
 
-    const contextId = context.command.message.contextId;
-    const taskId = context.command.message.taskId;
+    const contextId = context.contextId ?? context.command.message.contextId;
+    const taskId = context.State().task.id ?? context.command.message.taskId;
 
     if (!contextId || !taskId) {
       throw new Error("Context ID and task ID are required");

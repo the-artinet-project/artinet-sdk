@@ -49,18 +49,21 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
   - [Acknowledgements](#acknowledgements)
 
 **Breaking Changes in v0.5.8**
-- Pino has been removed and replaced with console for better portability and is set to silent by default. 
+
+- Pino has been removed and replaced with console for better portability and is set to silent by default.
 - The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
 - Agent Registration, Bundling and Deployment utils have been removed (email us: humans@artinet.io for support).
 - `@artinet/metadata-validator` has been removed due to build issues.
 - getTask now correctly takes TaskQueryParams as an argument vs TaskIdParams in accordance with the A2A spec.
 - AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
-- In a future release the following packages will be set as peer dependancies to reduce the size of the build:  `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
+- AgentBuilder now prefers the contextId & taskId from the calling context.
+- In a future release the following packages will be set as peer dependancies to reduce the size of the build: `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
 
 ## Features
 
-- **Modular Design:** Everything you need to get started building collaborative agents + its flexible enough for advanced configuration.
-- **Express:** Scaffold an Express Server with the `createAgentServer()` function. It handles all of the transport-layer complexity, adds A2A <-> JSON-RPC middleware, and manages Server-Sent Events (SSE) automatically.
+- **Modular Design:** Everything you need to get started building collaborative agents while remaining flexible enough for advanced configuration.
+- **Express Style Agent API:** Similar to scaffolding an Express Server, you can use the AgentBuilder to create an Agent2Agent API.
+  - Then wrap it in an actual Express Server with the `createAgentServer()` function. It handles all of the transport-layer complexity, adds A2A <-> JSON-RPC middleware, and manages Server-Sent Events (SSE) automatically.
 - **Protocol Compliance:** Implements the complete A2A specification (v0.3.0) with support for any kind of transport layer (tRPC, WebSockets, etc).
 
 ## Installation
@@ -72,7 +75,8 @@ npm install @artinet/sdk
 ## Requirements
 
 - Node.js (v22.0.0 or higher recommended)
-<!-- 
+<!--
+
 ## Documentation
 
 For more detailed documentation visit our documentation site [here](https://the-artinet-project.github.io/artinet-documentation/). -->
@@ -86,39 +90,24 @@ A basic A2A server and client interaction (For simple agents see the [AgentBuild
 ```typescript
 import {
   createAgentServer,
-  ExecutionContext,
-  AgentEngine,
-  TaskManager,
-  MessageSendParams,
-  getParts,
+  AgentBuilder,
+  getContent,
 } from "@artinet/sdk";
 
 //Define your Agents Behaviour
-const quickAgentLogic: AgentEngine = async function* (context: Context) {
-  const params: MessageSendParams = context.command; //MessageSendParams
-  const { text: userInput} = getParts(params.message.parts); //helper function to consume parts
-  const task = context.State(); //TaskAndHistory
-  yield {
-      ...
-      state: "working"
-      ...
-    };
-
-  yield {
+const quickAgentEngine: AgentEngine = AgentBuilder()
+  .text(async ({ command, context }) => {
+    const task = context.State();
     ...
-    state: "completed",
-    message: {
-      role: "agent",
-      parts: [{ kind: "text", text: `You said: ${userInput}` }],
-    },
-    ...
-  };
-};
+    const userInput = getContent(command.message);
+    return `You said: ${userInput}`;
+  })
+  .createAgentEngine();
 
 // Create an agent server
 const { app, agent } = createAgentServer({
   agent: {
-    engine: quickAgentLogic,
+    engine: quickAgentEngine,
     agentCard: {
       name: "QuickStart Agent",
       url: "http://localhost:4000/a2a",
