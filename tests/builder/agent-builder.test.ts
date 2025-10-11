@@ -1,17 +1,5 @@
-import {
-  jest,
-  describe,
-  it,
-  beforeEach,
-  expect,
-  beforeAll,
-} from "@jest/globals";
-import {
-  Agent,
-  createAgent,
-  createAgentExecutor,
-  AgentBuilder,
-} from "../../src/index.js";
+import { describe, it, expect } from "@jest/globals";
+import { createAgentExecutor, AgentBuilder } from "../../src/index.js";
 import { configureLogger } from "../../src/utils/logging/index.js";
 import { MOCK_AGENT_CARD } from "../utils/info.js";
 configureLogger({ level: "silent" });
@@ -200,6 +188,12 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      State: () => ({
+        task: {
+          id: "789",
+          contextId: "456",
+        },
+      }),
     })) {
       results.push(result);
       //   console.log(result);
@@ -260,6 +254,12 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      State: () => ({
+        task: {
+          id: "789",
+          contextId: "456",
+        },
+      }),
     })) {
       results.push(result);
     }
@@ -300,6 +300,12 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      State: () => ({
+        task: {
+          id: "789",
+          contextId: "456",
+        },
+      }),
     })) {
       results.push(result);
     }
@@ -316,7 +322,7 @@ describe("Agent Builder Tests", () => {
 
   it("should create agent", async () => {
     const agent = AgentBuilder()
-      .text(({ command, context }) => {
+      .text(({ command }) => {
         return {
           parts: ["hello there"],
           args: ["goodbye there"],
@@ -344,6 +350,12 @@ describe("Agent Builder Tests", () => {
         taskId: "789",
         message: "hello there",
       },
+      State: () => ({
+        task: {
+          id: "789",
+          contextId: "456",
+        },
+      }),
     });
     expect(result).toBeDefined();
     expect(result.status.state).toBe("completed");
