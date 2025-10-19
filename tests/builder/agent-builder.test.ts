@@ -319,6 +319,35 @@ describe("Agent Builder Tests", () => {
       "goodbye there 3"
     );
   });
+  it("should pass content to step", async () => {
+    const agent = AgentBuilder().text(({ content }) => {
+      expect(content).toBe("hello world");
+      return content;
+    });
+    const executionWrapper = agent.createAgentEngine();
+    const results: any[] = [];
+    for await (const result of executionWrapper({
+      command: {
+        kind: "message",
+        message: {
+          messageId: "123",
+          contextId: "456",
+          taskId: "789",
+          parts: [{ kind: "text", text: "hello world" }],
+        },
+      },
+      State: () => ({
+        task: {
+          id: "789",
+          contextId: "456",
+        },
+      }),
+    })) {
+      results.push(result);
+    }
+    expect(results).toHaveLength(3);
+    expect(results[1].status.message.parts[0].text).toBe("hello world");
+  });
 
   it("should create agent", async () => {
     const agent = AgentBuilder()

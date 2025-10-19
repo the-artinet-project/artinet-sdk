@@ -27,6 +27,7 @@ export function getContent(input: UpdateEvent): string | undefined {
   return (
     parts.text ??
     parts.file.map((file) => file.bytes).join("\n") ??
+    parts.file.map((file) => file.uri).join("\n") ??
     parts.data.map((data) => JSON.stringify(data)).join("\n") ??
     undefined
   );

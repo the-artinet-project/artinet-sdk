@@ -23,7 +23,7 @@ export interface StepArgs<TCommand extends Command = Command> {
 export type StepParams<
   TCommand extends Command = Command,
   TInboundArgs extends readonly unknown[] = []
-> = StepArgs<TCommand> & Partial<{ args: TInboundArgs }>;
+> = StepArgs<TCommand> & Partial<{ content: string; args: TInboundArgs }>;
 
 export type StepOutput<
   TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"]

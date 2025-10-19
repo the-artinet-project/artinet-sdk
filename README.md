@@ -5,6 +5,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/npm/@artinet/sdk/badge.svg)](https://snyk.io/test/npm/@artinet/sdk)
 [![GitHub stars](https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social)](https://github.com/the-artinet-project/artinet-sdk/stargazers)
 [![Discord](https://dcbadge.limes.pink/api/server/DaxzSchmmX?style=flat)](https://discord.gg/DaxzSchmmX)
+
 <!-- [![Coverage Status](https://coveralls.io/repos/github/the-artinet-project/artinet-sdk/badge.svg?branch=main)](https://coveralls.io/github/the-artinet-project/artinet-sdk?branch=main) -->
 
 # artinet SDK
@@ -92,16 +93,15 @@ A basic A2A server and client interaction (For simple agents see the [AgentBuild
 ```typescript
 import {
   createAgentServer,
-  AgentBuilder,
-  getContent,
+  AgentBuilder
 } from "@artinet/sdk";
 
 //Define your Agents Behaviour
 const quickAgentEngine: AgentEngine = AgentBuilder()
-  .text(async ({ command, context }) => {
+  .text(async ({ content, context }) => {
     const task = context.State();
     ...
-    const userInput = getContent(command.message);
+    const userInput = content;
     return `You said: ${userInput}`;
   })
   .createAgentEngine();
@@ -270,17 +270,14 @@ const simpleAgent = AgentBuilder().text(() => "hello world!");
 //or design a powerful multi-step agent
 const { app, agent } = createAgentServer({
   agent: AgentBuilder()
-    .text(({ command, context }) => {
-      const userMessage =
-        command.message.parts[0]?.kind === "text"
-          ? command.message.parts[0].text
-          : "";
+    .text(({ content, context }) => {
+      const userMessage = content ?? "no message detected";
       return {
         parts: [`Processing: ${userMessage}`], //parts are immediately sent back to the caller as TaskStatusUpdateEvents
         args: [userMessage], //args are passed to the next step
       };
     })
-    .file(({ command, args }) => {
+    .file(({ args }) => {
       const processedText = args[0];
       return {
         parts: [
@@ -293,7 +290,7 @@ const { app, agent } = createAgentServer({
         args: ["file-generated"],
       };
     })
-    .text(({ command, args }) => {
+    .text(({ args }) => {
       const status = args[0];
       return `Task completed. Status: ${status}`;
     }) //A final Task is returned to the caller which contains all of the emitted parts.
@@ -337,7 +334,7 @@ import {
 } from "@artinet/sdk";
 
 const myAgent: AgentEngine = async function* (context: Context) {
-  const task: TaskAndHistory = context.events.getState();
+  const task: TaskAndHistory = context.State();
   yield {
     state: "working",
     message: {
@@ -407,7 +404,7 @@ const agent = createAgent({
       console.log("new command recieved: ", command);
       //will continue polling until the command stream is closed by calling command.close();
     }
-    //or process them asynchronously
+    //or process them via events
     context.command.on("send", (command) => {
       ...
     });

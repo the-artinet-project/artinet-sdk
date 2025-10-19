@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -29,7 +29,7 @@
     "prepare": "ts-patch install -s",
     "build": "tsc --project tsconfig.json",
     "clean": "rimraf dist",
-    "rebuild": "rimraf dist node_modules/ && npm i && npm run build",
+    "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build",
     "lint": "eslint src --ext .ts",
     "prepublishOnly": "npm run clean && npm run build && npm run lint && npm test",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
