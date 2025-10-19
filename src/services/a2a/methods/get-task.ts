@@ -5,14 +5,14 @@
 
 import {
   Task,
-  TaskIdParams,
+  TaskQueryParams,
   MethodParams,
   TaskAndHistory,
 } from "~/types/index.js";
 import { TASK_NOT_FOUND } from "~/utils/index.js";
 
 export async function getTask(
-  input: TaskIdParams,
+  input: TaskQueryParams,
   params: Omit<MethodParams, "engine" | "contextManager" | "signal">
 ) {
   const { service } = params;

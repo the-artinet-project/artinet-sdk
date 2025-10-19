@@ -39,6 +39,7 @@ import {
 } from "~/types/index.js";
 import { createAgent } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
+import { getContent } from "../helpers/content.js";
 
 /**
  * Type alias for text-based workflow steps.
@@ -56,7 +57,7 @@ import { v4 as uuidv4 } from "uuid";
  *
  * @example
  * ```typescript
- * const greetingStep: textStep = async ({ command, context, args }) => {
+ * const greetingStep: textStep = async ({ command, context, content, args }) => {
  *   const userName = command.message.metadata?.userName || 'there';
  *   return `Hello, ${userName}! How can I help you today?`;
  * };
@@ -498,9 +499,11 @@ const partToMessagePart = (
  */
 export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
   return async function* (context: Context) {
+    const content = getContent(context.command.message);
     const stepArgs: StepParams = {
       command: context.command,
       context: context,
+      content: content,
       args: [],
     };
 

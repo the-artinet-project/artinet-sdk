@@ -236,10 +236,6 @@ export function createEventManager<
       service.removeCancellation(contextId);
       service.removeConnection(contextId);
     },
-    // getState: (): TState => {
-    //   const state = service.getState(contextId) ?? ({} as TState);
-    //   return state;
-    // },
   };
 
   return new EventManager(contextId, {
