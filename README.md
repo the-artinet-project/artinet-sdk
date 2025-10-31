@@ -93,15 +93,15 @@ A basic A2A server and client interaction (For simple agents see the [AgentBuild
 ```typescript
 import {
   createAgentServer,
-  AgentBuilder
+  AgentBuilder,
+  TaskandHistory
 } from "@artinet/sdk";
 
 //Define your Agents Behaviour
 const quickAgentEngine: AgentEngine = AgentBuilder()
-  .text(async ({ content, context }) => {
-    const task = context.State();
+  .text(async ({ content: userInput, context }) => {
+    const task: TaskandHistory = context.State();
     ...
-    const userInput = content;
     return `You said: ${userInput}`;
   })
   .createAgentEngine();
