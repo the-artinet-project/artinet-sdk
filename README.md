@@ -6,8 +6,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social)](https://github.com/the-artinet-project/artinet-sdk/stargazers)
 [![Discord](https://dcbadge.limes.pink/api/server/DaxzSchmmX?style=flat)](https://discord.gg/DaxzSchmmX)
 
-<!-- [![Coverage Status](https://coveralls.io/repos/github/the-artinet-project/artinet-sdk/badge.svg?branch=main)](https://coveralls.io/github/the-artinet-project/artinet-sdk?branch=main) -->
-
 # artinet SDK
 
 The artinet SDK is a TypeScript library designed for Agentic Communication. It's written for [node.js](https://nodejs.org/) and aims to simplify the creation of interoperable AI agents. Learn more at [the artinet project](https://artinet.io/).
