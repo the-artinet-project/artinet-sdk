@@ -73,7 +73,7 @@ export class A2AClient implements Client {
     }
 
     // Standard location for agent cards
-    const wellKnownUrl = new URL("/.well-known/agent.json", this.baseUrl);
+    const wellKnownUrl = new URL("/.well-known/agent-card.json", this.baseUrl);
     try {
       try {
         if (!URL.canParse(wellKnownUrl)) {

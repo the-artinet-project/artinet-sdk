@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.11",
+  "version": "0.5.12",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -94,6 +94,6 @@
     "typescript-transform-paths": "^3.5.5"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=18.9.1"
   }
 }

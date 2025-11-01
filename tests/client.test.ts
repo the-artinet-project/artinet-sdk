@@ -124,7 +124,7 @@ const MOCK_PUSH_NOTIFICATION_CONFIG: TaskPushNotificationConfig = {
 // Setup MSW server for mocking HTTP requests
 const server = setupServer(
   // Mock agent card endpoint
-  http.get("https://test-agent.example.com/.well-known/agent.json", () => {
+  http.get("https://test-agent.example.com/.well-known/agent-card.json", () => {
     return HttpResponse.json(MOCK_AGENT_CARD);
   }),
 
@@ -260,12 +260,15 @@ describe("A2AClient", () => {
     // Override the server to return a different card,
     // if the cache is used, we'll still get the original
     server.use(
-      http.get("https://test-agent.example.com/.well-known/agent.json", () => {
-        return HttpResponse.json({
-          ...MOCK_AGENT_CARD,
-          version: "2.0.0", // Changed version
-        });
-      })
+      http.get(
+        "https://test-agent.example.com/.well-known/agent-card.json",
+        () => {
+          return HttpResponse.json({
+            ...MOCK_AGENT_CARD,
+            version: "2.0.0", // Changed version
+          });
+        }
+      )
     );
 
     const cachedCard = await client.agentCard();
@@ -281,12 +284,15 @@ describe("A2AClient", () => {
 
     // Mock a change to the agent card on the server
     server.use(
-      http.get("https://test-agent.example.com/.well-known/agent.json", () => {
-        return HttpResponse.json({
-          ...MOCK_AGENT_CARD,
-          version: "1.1.0",
-        });
-      })
+      http.get(
+        "https://test-agent.example.com/.well-known/agent-card.json",
+        () => {
+          return HttpResponse.json({
+            ...MOCK_AGENT_CARD,
+            version: "1.1.0",
+          });
+        }
+      )
     );
 
     // Refresh the card
@@ -309,12 +315,15 @@ describe("A2AClient", () => {
   // Test agent card fetching error
   test("should throw when both agent card endpoints fail", async () => {
     server.use(
-      http.get("https://test-agent.example.com/.well-known/agent.json", () => {
-        return new HttpResponse("Not found", {
-          status: 404,
-          headers: { "Content-Type": "text/plain" },
-        });
-      }),
+      http.get(
+        "https://test-agent.example.com/.well-known/agent-card.json",
+        () => {
+          return new HttpResponse("Not found", {
+            status: 404,
+            headers: { "Content-Type": "text/plain" },
+          });
+        }
+      ),
       http.get("https://test-agent.example.com/agent-card", () => {
         return new HttpResponse("Server error", {
           status: 500,
@@ -564,12 +573,15 @@ describe("A2AClient", () => {
     await client.agentCard();
 
     server.use(
-      http.get("https://test-agent.example.com/.well-known/agent.json", () => {
-        return HttpResponse.json({
-          ...MOCK_AGENT_CARD,
-          capabilities: undefined,
-        });
-      })
+      http.get(
+        "https://test-agent.example.com/.well-known/agent-card.json",
+        () => {
+          return HttpResponse.json({
+            ...MOCK_AGENT_CARD,
+            capabilities: undefined,
+          });
+        }
+      )
     );
 
     // Force refresh to clear the cache

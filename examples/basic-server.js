@@ -114,4 +114,4 @@ app.listen(3000, () => {
 });
 console.log("Try connecting with an A2A client:");
 console.log("  A2A Endpoint: http://localhost:3000/api");
-console.log("  Agent Card: http://localhost:3000/.well-known/agent.json");
+console.log("  Agent Card: http://localhost:3000/.well-known/agent-card.json");

@@ -15,6 +15,7 @@ import {
   TaskAndHistory,
   MethodParams,
   Context,
+  Kind,
 } from "~/types/index.js";
 import { createContext } from "../factory/context.js";
 import {
@@ -44,6 +45,27 @@ const createMessageParams = (task: Task) => {
   return messageParams;
 };
 
+const flushArtifacts = (
+  taskId: string,
+  contextId: string,
+  task: Task,
+  stream: StreamManager<MessageSendParams, TaskAndHistory, UpdateEvent>
+) => {
+  if (task.artifacts && task.artifacts.length > 0) {
+    for (const artifact of task.artifacts) {
+      const artifactUpdate: TaskArtifactUpdateEvent = {
+        kind: Kind["artifact-update"],
+        taskId,
+        contextId,
+        artifact,
+        lastChunk: task.artifacts.length === 1,
+        metadata: task.metadata,
+      };
+      stream.addUpdate(artifactUpdate);
+      task.artifacts.shift();
+    }
+  }
+};
 export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
   const { service, engine, contextManager, signal } = params;
   const state: TaskAndHistory | undefined = await service.getState(input.id);
@@ -67,14 +89,15 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
         ): Promise<TaskAndHistory> => {
           const request = context.command;
           const task: Task = (state as TaskAndHistory).task;
-
+          const taskId: string = request?.message.taskId ?? task.id;
+          const contextId: string =
+            request?.message.contextId ??
+            task.contextId ??
+            stream.getContextId();
           const statusUpdate: TaskStatusUpdateEvent = {
             kind: "status-update",
-            taskId: request?.message.taskId ?? task.id,
-            contextId:
-              request?.message.contextId ??
-              task.contextId ??
-              stream.getContextId(),
+            taskId,
+            contextId,
             status: task.status,
             final: false,
             metadata: task.metadata,
@@ -83,23 +106,7 @@ export async function* resubscribe(input: TaskIdParams, params: MethodParams) {
           stream.addUpdate(statusUpdate);
 
           if (FINAL_STATES.includes(task.status.state)) {
-            if (task.artifacts && task.artifacts.length > 0) {
-              for (const artifact of task.artifacts) {
-                const artifactUpdate: TaskArtifactUpdateEvent = {
-                  kind: "artifact-update",
-                  taskId: request?.message.taskId ?? task.id,
-                  contextId:
-                    request?.message.contextId ??
-                    task.contextId ??
-                    stream.getContextId(),
-                  artifact,
-                  lastChunk: task.artifacts.length === 1,
-                  metadata: task.metadata,
-                };
-                stream.addUpdate(artifactUpdate);
-                task.artifacts.shift();
-              }
-            }
+            flushArtifacts(taskId, contextId, task, stream);
             stream.setCompleted();
           }
           return state;

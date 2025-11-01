@@ -246,7 +246,7 @@ describe("A2A Protocol Specification Tests", () => {
 
   beforeEach(() => {
     const agentServer: ExpressAgentServer = createAgentServer({
-      agentCardPath: "/.well-known/agent.json",
+      agentCardPath: "/.well-known/agent-card.json",
       agent: {
         engine: protocolEngine,
         agentCard: {
@@ -279,8 +279,8 @@ describe("A2A Protocol Specification Tests", () => {
   });
 
   describe("Agent Card", () => {
-    it("returns agent card at /.well-known/agent.json", async () => {
-      const response = await request(app).get("/.well-known/agent.json");
+    it("returns agent card at /.well-known/agent-card.json", async () => {
+      const response = await request(app).get("/.well-known/agent-card.json");
 
       expect(response.status).toBe(200);
       // console.log("response", response.body);
