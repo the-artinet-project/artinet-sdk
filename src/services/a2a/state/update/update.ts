@@ -15,7 +15,6 @@ import {
 import { getCurrentTimestamp } from "~/utils/index.js";
 import { logError } from "~/utils/logging/index.js";
 import { processArtifactUpdate } from "./artifact.js";
-
 export enum UpdateKind {
   Message = "message",
   Task = "task",
@@ -39,7 +38,7 @@ const isMessageInHistory = (task: Task, message: Message) => {
 
 const updateHistory = (current: TaskAndHistory, updateMessage: Message) => {
   if (!isMessageInHistory(current.task, updateMessage)) {
-    current.history = [...(current.history ?? []), updateMessage]; //todo deprecate history
+    // current.history = [...(current.history ?? []), updateMessage]; deprecating history
     current.task.history = [...(current.task.history ?? []), updateMessage];
   }
 };
@@ -65,11 +64,12 @@ export const updateTask: UpdateFunction<Task> = async (props) => {
     context.latestUserMessage &&
     !isMessageInHistory(current.task, context.latestUserMessage)
   ) {
+    //todo seems that we can use updateHistory here instead (will change after we deprecate history fully & add update specific tests)
     current.task.history = [
       context.latestUserMessage,
       ...(current.task.history ?? []),
     ];
-    current.history = [context.latestUserMessage, ...(current.history ?? [])]; //todo deprecate history
+    // current.history = [context.latestUserMessage, ...(current.history ?? [])]; deprecating history
   }
   return true;
 };
@@ -107,11 +107,11 @@ export const updateTaskArtifactUpdate: UpdateFunction<
       update.append ?? false,
       current.task.artifacts ?? [],
       update.artifact
-    ); //!TODO: hmm?
-    return true; //!
+    );
+    return true;
   }
-  logError("updateTaskArtifactUpdate", "Invalid task id", update); //!
-  return true; //!
+  logError("updateTaskArtifactUpdate", "Invalid task id", update); //we should never get here, but just in case
+  return true;
 };
 
 export const updateState: UpdateFunction<UpdateEvent> = async (

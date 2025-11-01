@@ -1,4 +1,10 @@
-import { A2AClient, configureLogger, logger, Message } from "@artinet/sdk";
+import {
+  A2AClient,
+  configureLogger,
+  logger,
+  Message,
+  getContent,
+} from "@artinet/sdk";
 
 configureLogger({ level: "info" });
 
@@ -18,11 +24,10 @@ async function runClient() {
 
     for await (const update of stream) {
       if ("status" in update && update.status.message) {
-        const agentText = update.status.message.parts
-          .filter((p) => p.kind === "text")
-          .map((p: any) => p.text)
-          .join(" ");
-        logger.info(`Client Received: [${update.status.state}] ${agentText}`);
+        const agentText = getContent(update.status.message);
+        logger.info(
+          `Client Received: [${update.status.state}] ${agentText ?? "No text"}`
+        );
       }
     }
     logger.info("Client finished.");

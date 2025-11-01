@@ -18,7 +18,10 @@ export interface TaskAndHistory {
   /** The task object */
   task: Task;
 
-  /** The complete message history associated with the task */
+  /**
+   * @deprecated This property is no longer being updated. Use the task.history property instead.
+   * The complete message history associated with the task
+   */
   history: Message[];
 }
 

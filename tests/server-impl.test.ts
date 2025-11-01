@@ -175,7 +175,7 @@ describe("Server Implementation Tests", () => {
 
     server = createAgentServer({
       agent: { engine: serverImplTestHandler, agentCard: customCard },
-      agentCardPath: "/.well-known/agent.json",
+      agentCardPath: "/.well-known/agent-card.json",
       corsOptions: {
         origin: ["http://localhost:3000"],
         methods: ["GET", "POST", "OPTIONS"],
@@ -236,7 +236,7 @@ describe("Server Implementation Tests", () => {
 
     it("uses custom agent card", async () => {
       const response = await trackRequest(
-        request(app).get("/.well-known/agent.json")
+        request(app).get("/.well-known/agent-card.json")
       );
 
       expect(response.status).toBe(200);

@@ -58,12 +58,7 @@ export async function cancelTask(
         ...originalState?.task,
         ...cancelledTask,
       },
-      history: Array.from(
-        new Set([
-          ...(originalState?.history ?? []),
-          ...(cancelledTask.history ?? []),
-        ])
-      ),
+      history: [], //deprecating history
     });
     return cancelledTask;
   }

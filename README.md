@@ -77,7 +77,9 @@ npm install @artinet/sdk
 
 ## Requirements
 
-- Node.js (v22.0.0 or higher recommended)
+- [Node.js](https://nodejs.org/en/download) ≥ 18.9.1
+  - Recommended: 20 || ≥ 22
+
 <!--
 
 ## Documentation
@@ -122,7 +124,7 @@ const { app, agent } = createAgentServer({
     ...
   },
   basePath: "/a2a",
-  agentCardPath: "/.well-known/agent.json"
+  agentCardPath: "/.well-known/agent-card.json"
   ...
 });
 

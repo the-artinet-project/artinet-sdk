@@ -82,7 +82,7 @@ import { v4 as uuidv4 } from "uuid";
 export function createEventManager<
   TCommand extends Command = Command,
   TState extends State = State,
-  TUpdate extends Update = Update,
+  TUpdate extends Update = Update
 >(
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
   id?: string,
@@ -170,7 +170,7 @@ export function createEventManager<
           task: current.task,
           userMessage: current.task?.status?.message ?? ({} as Message),
           isCancelled: () => service.isCancelled(localContextId),
-          history: current.history ?? current.task?.history ?? [],
+          history: [], //deprecating history
         },
         current: current,
         update: cancelUpdate,
@@ -189,7 +189,7 @@ export function createEventManager<
             task: current.task,
             userMessage: current.task?.status?.message ?? ({} as Message),
             isCancelled: () => service.isCancelled(contextId),
-            history: current.history ?? current.task?.history ?? [],
+            history: [], //deprecating history
           },
           current: current,
           update: update,
@@ -225,7 +225,7 @@ export function createEventManager<
           task: current.task,
           userMessage: current.task?.status?.message ?? ({} as Message),
           isCancelled: () => service.isCancelled(contextId),
-          history: current.history ?? current.task?.history ?? [],
+          history: [], //deprecating history
         },
         current: current,
         update: failedUpdate,

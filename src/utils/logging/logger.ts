@@ -21,9 +21,16 @@ export let level:
  * @param options - Logger configuration options
  */
 export function configureLogger(options: {
-  level?: "trace" | "verbose" | "debug" | "info" | "warning" | "error" | "silent";
+  level?:
+    | "trace"
+    | "verbose"
+    | "debug"
+    | "info"
+    | "warning"
+    | "error"
+    | "silent";
   name?: string;
-  prettyPrint?: boolean;
+  prettyPrint?: boolean; //deprecated
 }) {
   level = options.level || "silent";
   return logger;
