@@ -61,6 +61,8 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 - AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
 - AgentBuilder now prefers the contextId & taskId from the calling context.
 - In a future release the following packages will be set as peer dependancies to reduce the size of the build: `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
+- The `history` object from `TaskAndHistory` is deprecated and no longer being updated. Use `Task.history` instead.
+- The A2AClient now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
 
 ## Features
 
