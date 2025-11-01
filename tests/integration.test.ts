@@ -52,7 +52,7 @@ const echoAgent: AgentEngine = async function* (context: Context) {
   };
   await new Promise((resolve) => setTimeout(resolve, 300));
   if (userText.includes("Task to be canceled")) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
   // Check cancellation
   if (context.isCancelled()) {
