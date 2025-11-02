@@ -59,11 +59,17 @@ export async function loadState(
             //we'll update the metadata to ensure it's the latest
             ...existingData.task.metadata,
             ...metadata,
+            //we'll update the referencedTasks we have the latest versions
+            referencedTasks: await getReferences(
+              message.referenceTaskIds ?? [],
+              taskStore
+            ),
           },
         },
       };
     }
   }
+
   const timestamp = getCurrentTimestamp();
   const newTask: Task = {
     id: taskId ?? uuidv4(),
