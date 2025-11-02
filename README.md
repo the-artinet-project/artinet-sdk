@@ -49,7 +49,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
 
-**Breaking Changes in v0.5.8**
+**Breaking Changes since v0.5.8**
 
 - Pino has been removed and replaced with console for better portability and is set to silent by default.
 - The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
