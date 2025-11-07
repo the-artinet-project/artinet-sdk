@@ -9,10 +9,9 @@ configureLogger({ level: "info" });
 
 // Configure and start the server
 const { app } = createAgentServer({
-  basePath: "/a2a",
   agent: AgentBuilder()
     .text(({ content: userInput }) => {
-      logger.info(`Quick server received: ${userInput}`);
+      logger.info(`Server received: ${userInput}`);
       return "Thinking...";
     })
     .text(async ({ content: userInput }) => {
@@ -42,8 +41,9 @@ const { app } = createAgentServer({
         defaultOutputModes: ["text"],
       },
     }),
+  basePath: "/a2a",
 });
 
 app.listen(4000, () => {
-  logger.info("Quick Start A2A Server running on http://localhost:4000/a2a");
+  logger.info("A2A Server running on http://localhost:4000/a2a");
 });

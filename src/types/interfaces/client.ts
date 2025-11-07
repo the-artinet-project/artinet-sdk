@@ -52,7 +52,7 @@ export interface Client {
   sendMessage(params: MessageSendParams): Promise<Message | Task | null>;
 
   /**
-   * @deprecated Use sendMessage instead.
+   * @deprecated Will be removed in v6.Use sendMessage instead.
    * @description Sends a task request to the agent server.
    * @param {MessageSendParams} params Parameters required to send the task, including the task definition and metadata.
    * @returns {Promise<Task | null>} A promise that resolves with the initial Task object representing the submitted task, or null if the submission failed.
@@ -70,7 +70,7 @@ export interface Client {
   sendStreamingMessage(params: MessageSendParams): AsyncIterable<UpdateEvent>;
 
   /**
-   * @deprecated Use sendStreamingMessage instead.
+   * @deprecated Will be removed in v6Use sendStreamingMessage instead.
    * @description Sends a task request and subscribes to real-time updates (status changes, artifact updates) for that task.
    * This uses a streaming connection if available.
    * @param {MessageSendParams} params Parameters required to send the task.

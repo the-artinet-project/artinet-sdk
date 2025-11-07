@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -35,6 +35,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "dev:quickstart": "tsx watch quickstart/quick-server.ts",
     "dev-pack": "rimraf dist node_modules/ && npm i && npm run build && npm pack"
   },
   "keywords": [
