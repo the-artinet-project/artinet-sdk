@@ -23,6 +23,7 @@ import {
   MethodParams,
 } from "~/types/index.js";
 import { coreExecute } from "~/services/core/execution/execute.js";
+import { createMessageSendParams } from "./helpers/message-builder.js";
 
 export class A2AService implements A2AServiceInterface {
   readonly agentCard: AgentCard;
@@ -111,10 +112,10 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async sendMessage(
-    message: MessageSendParams,
+    message: MessageSendParams | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    return await this.methods.sendMessage(message, {
+    return await this.methods.sendMessage(createMessageSendParams(message), {
       ...params, //we may include additional params in the future that may not need to be handled by the service
       service: this,
       engine: params?.engine ?? this.engine,
@@ -124,10 +125,10 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async *streamMessage(
-    message: MessageSendParams,
+    message: MessageSendParams | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    yield* this.methods.streamMessage(message, {
+    yield* this.methods.streamMessage(createMessageSendParams(message), {
       ...params,
       service: this,
       engine: params?.engine ?? this.engine,

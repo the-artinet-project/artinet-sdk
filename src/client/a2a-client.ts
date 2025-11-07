@@ -37,6 +37,7 @@ import { INTERNAL_ERROR } from "../utils/index.js";
 import { logError } from "../utils/logging/index.js";
 
 import type { Client } from "../types/interfaces/client.js";
+import { createMessageSendParams } from "../services/a2a/helpers/message-builder.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
@@ -134,15 +135,17 @@ export class A2AClient implements Client {
   }
 
   /**
-   * Sends a task request to the agent (non-streaming).
+   * Sends a Message to an agent server.
    * @param params The parameters for the message/send method.
-   * @returns A promise resolving to the Task object or null.
+   * @returns A promise resolving to Message/Task response from the agent server or null.
    */
-  async sendMessage(params: MessageSendParams): Promise<Message | Task | null> {
+  async sendMessage(
+    params: MessageSendParams | string
+  ): Promise<Message | Task | null> {
     return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
       this.baseUrl,
       "message/send",
-      params,
+      createMessageSendParams(params),
       this.customHeaders
     );
   }
@@ -158,15 +161,22 @@ export class A2AClient implements Client {
   }
 
   /**
-   * Sends a task and returns a subscription to status and artifact updates.
+   * Sends a Message and returns a stream of status and artifact updates.
    * @param params Task parameters for the request
-   * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
+   * @returns An AsyncIterable that yields TaskStatusUpdateEvent/TaskArtifactUpdateEvent/Task/Message payloads.
    */
-  sendStreamingMessage(params: MessageSendParams): AsyncIterable<UpdateEvent> {
+  sendStreamingMessage(
+    params: MessageSendParams | string
+  ): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
       SendStreamingMessageRequest,
       SendStreamingMessageResponse
-    >(this.baseUrl, "message/stream", params, this.customHeaders);
+    >(
+      this.baseUrl,
+      "message/stream",
+      createMessageSendParams(params),
+      this.customHeaders
+    );
   }
 
   /**

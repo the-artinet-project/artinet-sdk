@@ -95,7 +95,7 @@ export const UNSUPPORTED_OPERATION = <T extends A2AError>(data: T["data"]) =>
   );
 
 export const CONTENT_TYPE_NOT_SUPPORTED = <
-  T extends ContentTypeNotSupportedError,
+  T extends ContentTypeNotSupportedError
 >(
   data: T["data"]
 ) =>
