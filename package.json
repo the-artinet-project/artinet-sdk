@@ -24,7 +24,6 @@
     "package.json",
     "src",
     "tsconfig.json",
-    "package.json",
     "README.md",
     "LICENSE"
   ],
