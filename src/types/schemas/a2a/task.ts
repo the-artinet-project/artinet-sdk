@@ -69,7 +69,7 @@ export type TaskStatus = z.infer<typeof TaskStatusSchema>;
  */
 export const TaskSchema = z.object({
   id: z.string(),
-  contextId: z.string().optional(),
+  contextId: z.string(),
   status: TaskStatusSchema,
   history: z.array(MessageSchema).optional(),
   artifacts: z.array(ArtifactSchema).optional(),
