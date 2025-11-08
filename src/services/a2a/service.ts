@@ -21,6 +21,7 @@ import {
   CoreContext,
   EventManagerOptions,
   MethodParams,
+  TaskQueryParams,
 } from "~/types/index.js";
 import { coreExecute } from "~/services/core/execution/execute.js";
 import { createMessageSendParams } from "./helpers/message-builder.js";
@@ -100,7 +101,7 @@ export class A2AService implements A2AServiceInterface {
     await this.tasks.setState(id, data);
   }
 
-  async getTask(input: TaskIdParams) {
+  async getTask(input: TaskQueryParams) {
     return await this.methods.getTask(input, { service: this });
   }
 

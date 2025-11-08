@@ -31,6 +31,7 @@ describe("FileStore", () => {
     const taskId = "test-task-1";
     const task: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "working" as TaskState,
@@ -53,6 +54,7 @@ describe("FileStore", () => {
     const taskId = "test-task-2";
     const task: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "submitted" as TaskState,
@@ -66,6 +68,7 @@ describe("FileStore", () => {
     // Update the task
     const updatedTask: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "completed" as TaskState,
@@ -110,6 +113,7 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "completed" as TaskState,
@@ -154,6 +158,7 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "completed" as TaskState,
@@ -201,6 +206,7 @@ describe("FileStore", () => {
 
     const task: Task = {
       id: taskId,
+      contextId: "test-context-id",
       kind: "task",
       status: {
         state: "completed" as TaskState,

@@ -18,14 +18,14 @@ export async function sendMessage(
   params: MethodParams
 ): Promise<SendMessageSuccessResult> {
   const { service, engine, contextManager, signal } = params;
-  const contextId: string | undefined = input.message.contextId;
+  const contextId: string | null | undefined = input.message.contextId;
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     createContext(
       input,
       service,
       contextManager,
       signal,
-      contextId,
+      contextId ?? undefined,
       service.eventOverrides
     );
 

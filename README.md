@@ -69,7 +69,9 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 - The `A2AClient` now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
 - The `A2AClient` now uses uses the `AgentCard`.url if an `AgentCard` has been successfully retrieved, else it will default to the `baseUrl`.
 - The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
-- In `Task` the `contextId` field is now required.
+- In `Task` the `contextId` field is now required (inline with the A2A spec).
+- In `AgentSkill` the `tag` field is now required (inline with the A2A spec).
+- Optional fields in Agent2Agent schema fields are now nullable for better interoperability.
 
 ## Installation
 
