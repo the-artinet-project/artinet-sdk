@@ -38,6 +38,7 @@ export const AgentExtensionSchema = z
     description: z
         .string()
         .optional()
+        .nullable()
         .describe("A description of how this agent uses this extension."),
     /**
      * @optional Whether the client must follow specific requirements of the extension.
@@ -45,6 +46,7 @@ export const AgentExtensionSchema = z
     required: z
         .boolean()
         .optional()
+        .nullable()
         .describe("Whether the client must follow specific requirements of the extension."),
     /**
      * @optional Optional configuration for the extension.
@@ -67,6 +69,7 @@ export const AgentCapabilitiesSchema = z
     streaming: z
         .boolean()
         .optional()
+        .nullable()
         .describe("Indicates if the agent supports streaming responses."),
     /**
      * @optional Indicates if the agent supports push notification mechanisms.
@@ -74,6 +77,7 @@ export const AgentCapabilitiesSchema = z
     pushNotifications: z
         .boolean()
         .optional()
+        .nullable()
         .describe("Indicates if the agent supports push notification mechanisms."),
     /**
      * @optional Indicates if the agent supports providing state transition history.
@@ -81,6 +85,7 @@ export const AgentCapabilitiesSchema = z
     stateTransitionHistory: z
         .boolean()
         .optional()
+        .nullable()
         .describe("Indicates if the agent supports providing state transition history."),
     /**
      * @optional Extensions supported by this agent.
@@ -88,6 +93,7 @@ export const AgentCapabilitiesSchema = z
     extensions: z
         .array(AgentExtensionSchema)
         .optional()
+        .nullable()
         .describe("Extensions supported by this agent."),
 })
     .describe("Defines optional capabilities supported by an agent.");
@@ -120,6 +126,7 @@ export const AgentSkillSchema = z
     examples: z
         .array(z.string())
         .optional()
+        .nullable()
         .describe("List of example inputs or use cases for the skill."),
     /**
      * @optional List of input modes supported by this skill.
@@ -127,6 +134,7 @@ export const AgentSkillSchema = z
     inputModes: z
         .array(z.string())
         .optional()
+        .nullable()
         .describe("List of input modes supported by this skill."),
     /**
      * @optional List of output modes supported by this skill.
@@ -134,6 +142,7 @@ export const AgentSkillSchema = z
     outputModes: z
         .array(z.string())
         .optional()
+        .nullable()
         .describe("List of output modes supported by this skill."),
     /**
      * @optional Security schemes necessary for the agent to leverage this skill.
@@ -141,6 +150,7 @@ export const AgentSkillSchema = z
     security: z
         .array(z.record(z.string(), z.array(z.string())))
         .optional()
+        .nullable()
         .describe("Security schemes necessary for the agent to leverage this skill."),
 })
     .describe("A unit of capability that an agent can perform.");
@@ -207,6 +217,7 @@ export const AgentCardSchema = z
     preferredTransport: z
         .union([TransportProtocolSchema, z.string()])
         .optional()
+        .nullable()
         .describe("The preferred transport protocol for the agent."),
     /**
      * @optional Additional supported interfaces (transport and URL combinations).
@@ -214,6 +225,7 @@ export const AgentCardSchema = z
     additionalInterfaces: z
         .array(AgentInterfaceSchema)
         .optional()
+        .nullable()
         .describe("Additional supported interfaces (transport and URL combinations)."),
     /**
      * @optional The URL of the agent's icon.
@@ -222,11 +234,14 @@ export const AgentCardSchema = z
         .string()
         .url()
         .optional()
+        .nullable()
         .describe("The URL of the agent's icon."),
     /**
      * @optional The service provider of the agent.
      */
-    provider: AgentProviderSchema.optional().describe("The service provider of the agent."),
+    provider: AgentProviderSchema.optional()
+        .nullable()
+        .describe("The service provider of the agent."),
     /**
      * @required The version identifier for the agent or its API.
      */
@@ -240,6 +255,7 @@ export const AgentCardSchema = z
         .string()
         .url()
         .optional()
+        .nullable()
         .describe("An optional URL pointing to the agent's documentation."),
     /**
      * @required The capabilities supported by the agent.
@@ -261,6 +277,7 @@ export const AgentCardSchema = z
     security: z
         .array(z.record(z.string(), z.array(z.string())))
         .optional()
+        .nullable()
         .describe("Security requirements for contacting the agent. Array of security requirement objects, where each object maps scheme names to scope arrays."),
     /**
      * @required The default input modes supported by the agent.
@@ -286,6 +303,7 @@ export const AgentCardSchema = z
     supportsAuthenticatedExtendedCard: z
         .boolean()
         .optional()
+        .nullable()
         .describe("True if the agent supports providing an extended agent card when the user is authenticated."),
     /**
      * @optional JSON Web Signatures computed for this AgentCard.
@@ -293,6 +311,7 @@ export const AgentCardSchema = z
     signatures: z
         .array(AgentCardSignatureSchema)
         .optional()
+        .nullable()
         .describe("JSON Web Signatures computed for this AgentCard."),
 })
     .describe("An AgentCard conveys key information about an agent's identity, capabilities, skills, authentication requirements, and communication modalities.");

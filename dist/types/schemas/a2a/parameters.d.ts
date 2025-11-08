@@ -24,17 +24,17 @@ export declare const FileBaseSchema: z.ZodObject<{
     /**
      * @optional An optional name for the file (e.g., "document.pdf").
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
      */
-    mimeType: z.ZodOptional<z.ZodString>;
+    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
 }, {
-    name?: string | undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
 }>;
 export type FileBase = z.infer<typeof FileBaseSchema>;
 /**
@@ -44,11 +44,11 @@ export declare const FileWithBytesSchema: z.ZodObject<{
     /**
      * @optional An optional name for the file (e.g., "document.pdf").
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
      */
-    mimeType: z.ZodOptional<z.ZodString>;
+    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     /**
      * @required The base64-encoded content of the file.
@@ -57,17 +57,17 @@ export declare const FileWithBytesSchema: z.ZodObject<{
     /**
      * @optional The `uri` property must be absent when `bytes` is present.
      */
-    uri: z.ZodOptional<z.ZodNever>;
+    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 }, "strip", z.ZodTypeAny, {
     bytes: string;
-    name?: string | undefined;
-    mimeType?: string | undefined;
-    uri?: undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
+    uri?: null | undefined;
 }, {
     bytes: string;
-    name?: string | undefined;
-    mimeType?: string | undefined;
-    uri?: undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
+    uri?: null | undefined;
 }>;
 export type FileWithBytes = z.infer<typeof FileWithBytesSchema>;
 /**
@@ -77,11 +77,11 @@ export declare const FileWithUriSchema: z.ZodObject<{
     /**
      * @optional An optional name for the file (e.g., "document.pdf").
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
      */
-    mimeType: z.ZodOptional<z.ZodString>;
+    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     /**
      * @required A URL pointing to the file's content. (keeping as string for now)
@@ -90,17 +90,17 @@ export declare const FileWithUriSchema: z.ZodObject<{
     /**
      * @optional The `bytes` property must be absent when `uri` is present.
      */
-    bytes: z.ZodOptional<z.ZodNever>;
+    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 }, "strip", z.ZodTypeAny, {
     uri: string;
-    name?: string | undefined;
-    bytes?: undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    bytes?: null | undefined;
+    mimeType?: string | null | undefined;
 }, {
     uri: string;
-    name?: string | undefined;
-    bytes?: undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    bytes?: null | undefined;
+    mimeType?: string | null | undefined;
 }>;
 export type FileWithUri = z.infer<typeof FileWithUriSchema>;
 /**
@@ -110,11 +110,11 @@ export declare const FileSchema: z.ZodUnion<[z.ZodObject<{
     /**
      * @optional An optional name for the file (e.g., "document.pdf").
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
      */
-    mimeType: z.ZodOptional<z.ZodString>;
+    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     /**
      * @required The base64-encoded content of the file.
@@ -123,26 +123,26 @@ export declare const FileSchema: z.ZodUnion<[z.ZodObject<{
     /**
      * @optional The `uri` property must be absent when `bytes` is present.
      */
-    uri: z.ZodOptional<z.ZodNever>;
+    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 }, "strip", z.ZodTypeAny, {
     bytes: string;
-    name?: string | undefined;
-    mimeType?: string | undefined;
-    uri?: undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
+    uri?: null | undefined;
 }, {
     bytes: string;
-    name?: string | undefined;
-    mimeType?: string | undefined;
-    uri?: undefined;
+    name?: string | null | undefined;
+    mimeType?: string | null | undefined;
+    uri?: null | undefined;
 }>, z.ZodObject<{
     /**
      * @optional An optional name for the file (e.g., "document.pdf").
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
      */
-    mimeType: z.ZodOptional<z.ZodString>;
+    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     /**
      * @required A URL pointing to the file's content. (keeping as string for now)
@@ -151,17 +151,17 @@ export declare const FileSchema: z.ZodUnion<[z.ZodObject<{
     /**
      * @optional The `bytes` property must be absent when `uri` is present.
      */
-    bytes: z.ZodOptional<z.ZodNever>;
+    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 }, "strip", z.ZodTypeAny, {
     uri: string;
-    name?: string | undefined;
-    bytes?: undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    bytes?: null | undefined;
+    mimeType?: string | null | undefined;
 }, {
     uri: string;
-    name?: string | undefined;
-    bytes?: undefined;
-    mimeType?: string | undefined;
+    name?: string | null | undefined;
+    bytes?: null | undefined;
+    mimeType?: string | null | undefined;
 }>]>;
 export type File = z.infer<typeof FileSchema>;
 /**
@@ -185,11 +185,11 @@ export declare const FilePartSchema: z.ZodObject<{
         /**
          * @optional An optional name for the file (e.g., "document.pdf").
          */
-        name: z.ZodOptional<z.ZodString>;
+        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional The MIME type of the file (e.g., "application/pdf").
          */
-        mimeType: z.ZodOptional<z.ZodString>;
+        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     } & {
         /**
          * @required The base64-encoded content of the file.
@@ -198,26 +198,26 @@ export declare const FilePartSchema: z.ZodObject<{
         /**
          * @optional The `uri` property must be absent when `bytes` is present.
          */
-        uri: z.ZodOptional<z.ZodNever>;
+        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     }, "strip", z.ZodTypeAny, {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     }, {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional An optional name for the file (e.g., "document.pdf").
          */
-        name: z.ZodOptional<z.ZodString>;
+        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional The MIME type of the file (e.g., "application/pdf").
          */
-        mimeType: z.ZodOptional<z.ZodString>;
+        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     } & {
         /**
          * @required A URL pointing to the file's content. (keeping as string for now)
@@ -226,43 +226,43 @@ export declare const FilePartSchema: z.ZodObject<{
         /**
          * @optional The `bytes` property must be absent when `uri` is present.
          */
-        bytes: z.ZodOptional<z.ZodNever>;
+        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     }, "strip", z.ZodTypeAny, {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     }, {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     file: {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     } | {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     };
     kind: "file";
     metadata?: Record<string, unknown> | null | undefined;
 }, {
     file: {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     } | {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
     metadata?: Record<string, unknown> | null | undefined;
@@ -365,11 +365,11 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
         /**
          * @optional An optional name for the file (e.g., "document.pdf").
          */
-        name: z.ZodOptional<z.ZodString>;
+        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional The MIME type of the file (e.g., "application/pdf").
          */
-        mimeType: z.ZodOptional<z.ZodString>;
+        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     } & {
         /**
          * @required The base64-encoded content of the file.
@@ -378,26 +378,26 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
         /**
          * @optional The `uri` property must be absent when `bytes` is present.
          */
-        uri: z.ZodOptional<z.ZodNever>;
+        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     }, "strip", z.ZodTypeAny, {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     }, {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional An optional name for the file (e.g., "document.pdf").
          */
-        name: z.ZodOptional<z.ZodString>;
+        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional The MIME type of the file (e.g., "application/pdf").
          */
-        mimeType: z.ZodOptional<z.ZodString>;
+        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     } & {
         /**
          * @required A URL pointing to the file's content. (keeping as string for now)
@@ -406,43 +406,43 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
         /**
          * @optional The `bytes` property must be absent when `uri` is present.
          */
-        bytes: z.ZodOptional<z.ZodNever>;
+        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     }, "strip", z.ZodTypeAny, {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     }, {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     file: {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     } | {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     };
     kind: "file";
     metadata?: Record<string, unknown> | null | undefined;
 }, {
     file: {
         bytes: string;
-        name?: string | undefined;
-        mimeType?: string | undefined;
-        uri?: undefined;
+        name?: string | null | undefined;
+        mimeType?: string | null | undefined;
+        uri?: null | undefined;
     } | {
         uri: string;
-        name?: string | undefined;
-        bytes?: undefined;
-        mimeType?: string | undefined;
+        name?: string | null | undefined;
+        bytes?: null | undefined;
+        mimeType?: string | null | undefined;
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
     metadata?: Record<string, unknown> | null | undefined;
@@ -481,11 +481,11 @@ export declare const ArtifactSchema: z.ZodObject<{
     /**
      * @optional A human-readable name for the artifact.
      */
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional A human-readable description of the artifact.
      */
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional An array of content parts that make up the artifact.
      */
@@ -528,11 +528,11 @@ export declare const ArtifactSchema: z.ZodObject<{
             /**
              * @optional An optional name for the file (e.g., "document.pdf").
              */
-            name: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional The MIME type of the file (e.g., "application/pdf").
              */
-            mimeType: z.ZodOptional<z.ZodString>;
+            mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             /**
              * @required The base64-encoded content of the file.
@@ -541,26 +541,26 @@ export declare const ArtifactSchema: z.ZodObject<{
             /**
              * @optional The `uri` property must be absent when `bytes` is present.
              */
-            uri: z.ZodOptional<z.ZodNever>;
+            uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
         }, "strip", z.ZodTypeAny, {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         }, {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         }>, z.ZodObject<{
             /**
              * @optional An optional name for the file (e.g., "document.pdf").
              */
-            name: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional The MIME type of the file (e.g., "application/pdf").
              */
-            mimeType: z.ZodOptional<z.ZodString>;
+            mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             /**
              * @required A URL pointing to the file's content. (keeping as string for now)
@@ -569,43 +569,43 @@ export declare const ArtifactSchema: z.ZodObject<{
             /**
              * @optional The `bytes` property must be absent when `uri` is present.
              */
-            bytes: z.ZodOptional<z.ZodNever>;
+            bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
         }, "strip", z.ZodTypeAny, {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         }, {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         }>]>;
     }, "strip", z.ZodTypeAny, {
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "file";
         metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         metadata?: Record<string, unknown> | null | undefined;
@@ -639,20 +639,20 @@ export declare const ArtifactSchema: z.ZodObject<{
     /**
      * @optional The URIs of extensions that are relevant to this artifact.
      */
-    extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
 }, "strip", z.ZodTypeAny, {
     artifactId: string;
     parts: ({
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "file";
         metadata?: Record<string, unknown> | null | undefined;
@@ -665,23 +665,23 @@ export declare const ArtifactSchema: z.ZodObject<{
         kind: "data";
         metadata?: Record<string, unknown> | null | undefined;
     })[];
-    name?: string | undefined;
+    name?: string | null | undefined;
     metadata?: Record<string, unknown> | null | undefined;
-    description?: string | undefined;
-    extension?: string[] | undefined;
+    description?: string | null | undefined;
+    extension?: string[] | null | undefined;
 }, {
     artifactId: string;
     parts: ({
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         metadata?: Record<string, unknown> | null | undefined;
@@ -694,10 +694,10 @@ export declare const ArtifactSchema: z.ZodObject<{
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         metadata?: Record<string, unknown> | null | undefined;
     })[];
-    name?: string | undefined;
+    name?: string | null | undefined;
     metadata?: Record<string, unknown> | null | undefined;
-    description?: string | undefined;
-    extension?: string[] | undefined;
+    description?: string | null | undefined;
+    extension?: string[] | null | undefined;
 }>;
 export type Artifact = z.infer<typeof ArtifactSchema>;
 /**
@@ -756,11 +756,11 @@ export declare const MessageSchema: z.ZodObject<{
             /**
              * @optional An optional name for the file (e.g., "document.pdf").
              */
-            name: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional The MIME type of the file (e.g., "application/pdf").
              */
-            mimeType: z.ZodOptional<z.ZodString>;
+            mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             /**
              * @required The base64-encoded content of the file.
@@ -769,26 +769,26 @@ export declare const MessageSchema: z.ZodObject<{
             /**
              * @optional The `uri` property must be absent when `bytes` is present.
              */
-            uri: z.ZodOptional<z.ZodNever>;
+            uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
         }, "strip", z.ZodTypeAny, {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         }, {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         }>, z.ZodObject<{
             /**
              * @optional An optional name for the file (e.g., "document.pdf").
              */
-            name: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional The MIME type of the file (e.g., "application/pdf").
              */
-            mimeType: z.ZodOptional<z.ZodString>;
+            mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             /**
              * @required A URL pointing to the file's content. (keeping as string for now)
@@ -797,43 +797,43 @@ export declare const MessageSchema: z.ZodObject<{
             /**
              * @optional The `bytes` property must be absent when `uri` is present.
              */
-            bytes: z.ZodOptional<z.ZodNever>;
+            bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
         }, "strip", z.ZodTypeAny, {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         }, {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         }>]>;
     }, "strip", z.ZodTypeAny, {
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "file";
         metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         metadata?: Record<string, unknown> | null | undefined;
@@ -867,11 +867,11 @@ export declare const MessageSchema: z.ZodObject<{
     /**
      * @optional The URIs of extensions that are relevant to this message.
      */
-    extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     /**
      * @optional A list of other task IDs that this message references for additional context.
      */
-    referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     /**
      * @required A unique identifier for the message, typically a UUID, generated by the sender.
      */
@@ -879,11 +879,11 @@ export declare const MessageSchema: z.ZodObject<{
     /**
      * @optional The identifier of the task this message is part of. Can be omitted for the first message of a new task.
      */
-    taskId: z.ZodOptional<z.ZodString>;
+    taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional The context identifier for this message, used to group related interactions.
      */
-    contextId: z.ZodOptional<z.ZodString>;
+    contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The type of this object, used as a discriminator. Always 'message' for a Message.
      */
@@ -894,14 +894,14 @@ export declare const MessageSchema: z.ZodObject<{
     parts: ({
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "file";
         metadata?: Record<string, unknown> | null | undefined;
@@ -916,24 +916,24 @@ export declare const MessageSchema: z.ZodObject<{
     })[];
     messageId: string;
     metadata?: Record<string, unknown> | null | undefined;
-    extensions?: string[] | undefined;
-    referenceTaskIds?: string[] | undefined;
-    taskId?: string | undefined;
-    contextId?: string | undefined;
+    extensions?: string[] | null | undefined;
+    referenceTaskIds?: string[] | null | undefined;
+    taskId?: string | null | undefined;
+    contextId?: string | null | undefined;
 }, {
     role: "user" | "agent";
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
     parts: ({
         file: {
             bytes: string;
-            name?: string | undefined;
-            mimeType?: string | undefined;
-            uri?: undefined;
+            name?: string | null | undefined;
+            mimeType?: string | null | undefined;
+            uri?: null | undefined;
         } | {
             uri: string;
-            name?: string | undefined;
-            bytes?: undefined;
-            mimeType?: string | undefined;
+            name?: string | null | undefined;
+            bytes?: null | undefined;
+            mimeType?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         metadata?: Record<string, unknown> | null | undefined;
@@ -948,9 +948,9 @@ export declare const MessageSchema: z.ZodObject<{
     })[];
     messageId: string;
     metadata?: Record<string, unknown> | null | undefined;
-    extensions?: string[] | undefined;
-    referenceTaskIds?: string[] | undefined;
-    taskId?: string | undefined;
-    contextId?: string | undefined;
+    extensions?: string[] | null | undefined;
+    referenceTaskIds?: string[] | null | undefined;
+    taskId?: string | null | undefined;
+    contextId?: string | null | undefined;
 }>;
 export type Message = z.infer<typeof MessageSchema>;

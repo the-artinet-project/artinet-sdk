@@ -153,7 +153,7 @@ export function createCommandChannel<TCommand extends Command = Command>(
 export function createContext<
   TCommand extends Command = Command,
   TState extends State = State,
-  TUpdate extends Update = Update,
+  TUpdate extends Update = Update
 >(
   request: TCommand,
   service: A2AServiceInterface<TCommand, TState, TUpdate>,

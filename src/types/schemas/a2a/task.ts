@@ -51,7 +51,7 @@ export type TaskIdParams = z.infer<typeof TaskIdParamsSchema>;
  * Parameters used for querying task-related information by ID.
  */
 export const TaskQueryParamsSchema = TaskIdParamsSchema.extend({
-  historyLength: z.number().optional(),
+  historyLength: z.number().optional().nullable(),
 });
 export type TaskQueryParams = z.infer<typeof TaskQueryParamsSchema>;
 
@@ -60,8 +60,8 @@ export type TaskQueryParams = z.infer<typeof TaskQueryParamsSchema>;
  */
 export const TaskStatusSchema = z.object({
   state: TaskStateSchema,
-  message: MessageSchema.optional(),
-  timestamp: z.string().datetime().optional(),
+  message: MessageSchema.optional().nullable(),
+  timestamp: z.string().datetime().optional().nullable(),
 });
 export type TaskStatus = z.infer<typeof TaskStatusSchema>;
 
@@ -72,8 +72,8 @@ export const TaskSchema = z.object({
   id: z.string(),
   contextId: z.string(),
   status: TaskStatusSchema,
-  history: z.array(MessageSchema).optional(),
-  artifacts: z.array(ArtifactSchema).optional(),
+  history: z.array(MessageSchema).optional().nullable(),
+  artifacts: z.array(ArtifactSchema).optional().nullable(),
   metadata: z.record(z.string(), z.unknown()).optional().nullable(),
   kind: KindSchema.refine((kind) => kind === "task"),
 });
@@ -100,8 +100,8 @@ export const TaskArtifactUpdateEventSchema = z.object({
   contextId: z.string(),
   kind: KindSchema.refine((kind) => kind === "artifact-update"),
   artifact: ArtifactSchema,
-  append: z.boolean().optional(),
-  lastChunk: z.boolean().optional(),
+  append: z.boolean().optional().nullable(),
+  lastChunk: z.boolean().optional().nullable(),
   metadata: z.record(z.string(), z.unknown()).optional().nullable(),
 });
 export type TaskArtifactUpdateEvent = z.infer<

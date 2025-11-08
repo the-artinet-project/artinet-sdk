@@ -8,7 +8,7 @@ import { z } from "zod";
  */
 export declare const ErrorCodeParseError = -32700;
 export declare const JSONParseErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32700>;
     message: z.ZodDefault<z.ZodString>;
@@ -27,7 +27,7 @@ export type JSONParseError = z.infer<typeof JSONParseErrorSchema>;
  */
 export declare const ErrorCodeInvalidRequest = -32600;
 export declare const InvalidRequestErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32600>;
     message: z.ZodDefault<z.ZodString>;
@@ -46,7 +46,7 @@ export type InvalidRequestError = z.infer<typeof InvalidRequestErrorSchema>;
  */
 export declare const ErrorCodeMethodNotFound = -32601;
 export declare const MethodNotFoundErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32601>;
     message: z.ZodDefault<z.ZodString>;
@@ -65,7 +65,7 @@ export type MethodNotFoundError = z.infer<typeof MethodNotFoundErrorSchema>;
  */
 export declare const ErrorCodeInvalidParams = -32602;
 export declare const InvalidParamsErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32602>;
     message: z.ZodDefault<z.ZodString>;
@@ -84,7 +84,7 @@ export type InvalidParamsError = z.infer<typeof InvalidParamsErrorSchema>;
  */
 export declare const ErrorCodeInternalError = -32603;
 export declare const InternalErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32603>;
     message: z.ZodDefault<z.ZodString>;
@@ -103,7 +103,7 @@ export type InternalError = z.infer<typeof InternalErrorSchema>;
  */
 export declare const ErrorCodeTaskNotFound = -32001;
 export declare const TaskNotFoundErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32001>;
     message: z.ZodDefault<z.ZodString>;
@@ -122,7 +122,7 @@ export type TaskNotFoundError = z.infer<typeof TaskNotFoundErrorSchema>;
  */
 export declare const ErrorCodeTaskNotCancelable = -32002;
 export declare const TaskNotCancelableErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32002>;
     message: z.ZodDefault<z.ZodString>;
@@ -141,7 +141,7 @@ export type TaskNotCancelableError = z.infer<typeof TaskNotCancelableErrorSchema
  */
 export declare const ErrorCodePushNotificationNotSupported = -32003;
 export declare const PushNotificationNotSupportedErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32003>;
     message: z.ZodDefault<z.ZodString>;
@@ -160,7 +160,7 @@ export type PushNotificationNotSupportedError = z.infer<typeof PushNotificationN
  */
 export declare const ErrorCodeUnsupportedOperation = -32004;
 export declare const UnsupportedOperationErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32004>;
     message: z.ZodDefault<z.ZodString>;
@@ -179,7 +179,7 @@ export type UnsupportedOperationError = z.infer<typeof UnsupportedOperationError
  */
 export declare const ErrorCodeContentTypeNotSupported = -32005;
 export declare const ContentTypeNotSupportedErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32005>;
     message: z.ZodDefault<z.ZodString>;
@@ -198,7 +198,7 @@ export type ContentTypeNotSupportedError = z.infer<typeof ContentTypeNotSupporte
  */
 export declare const ErrorCodeInvalidAgentResponse = -32006;
 export declare const InvalidAgentResponseErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32006>;
     message: z.ZodDefault<z.ZodString>;
@@ -217,7 +217,7 @@ export type InvalidAgentResponseError = z.infer<typeof InvalidAgentResponseError
  */
 export declare const ErrorCodeAuthenticatedExtendedCardNotConfigured = -32007;
 export declare const AuthenticatedExtendedCardNotConfiguredErrorSchema: z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32007>;
     message: z.ZodDefault<z.ZodString>;
@@ -237,7 +237,7 @@ export type AuthenticatedExtendedCardNotConfiguredError = z.infer<typeof Authent
 export declare const KnownErrorCodeSchema: z.ZodUnion<[z.ZodLiteral<-32700>, z.ZodLiteral<-32600>, z.ZodLiteral<-32601>, z.ZodLiteral<-32602>, z.ZodLiteral<-32603>, z.ZodLiteral<-32001>, z.ZodLiteral<-32002>, z.ZodLiteral<-32003>, z.ZodLiteral<-32004>, z.ZodLiteral<-32005>, z.ZodLiteral<-32006>, z.ZodLiteral<-32007>]>;
 export type KnownErrorCode = z.infer<typeof KnownErrorCodeSchema>;
 export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32700>;
     message: z.ZodDefault<z.ZodString>;
@@ -250,7 +250,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32600>;
     message: z.ZodDefault<z.ZodString>;
@@ -263,7 +263,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32601>;
     message: z.ZodDefault<z.ZodString>;
@@ -276,7 +276,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32602>;
     message: z.ZodDefault<z.ZodString>;
@@ -289,7 +289,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32603>;
     message: z.ZodDefault<z.ZodString>;
@@ -302,7 +302,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32001>;
     message: z.ZodDefault<z.ZodString>;
@@ -315,7 +315,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32002>;
     message: z.ZodDefault<z.ZodString>;
@@ -328,7 +328,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32003>;
     message: z.ZodDefault<z.ZodString>;
@@ -341,7 +341,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32004>;
     message: z.ZodDefault<z.ZodString>;
@@ -354,7 +354,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32005>;
     message: z.ZodDefault<z.ZodString>;
@@ -367,7 +367,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32006>;
     message: z.ZodDefault<z.ZodString>;
@@ -380,7 +380,7 @@ export declare const A2AErrorSchema: z.ZodUnion<[z.ZodObject<{
     data?: unknown;
     message?: string | undefined;
 }>, z.ZodObject<{
-    data: z.ZodOptional<z.ZodUnknown>;
+    data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
 } & {
     code: z.ZodLiteral<-32007>;
     message: z.ZodDefault<z.ZodString>;

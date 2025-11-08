@@ -13,14 +13,14 @@ export declare function getTask(input: TaskQueryParams, params: Omit<MethodParam
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -35,12 +35,12 @@ export declare function getTask(input: TaskQueryParams, params: Omit<MethodParam
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        } | undefined;
-        timestamp?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        } | null | undefined;
+        timestamp?: string | null | undefined;
     };
     kind: "task";
     contextId: string;
@@ -51,14 +51,14 @@ export declare function getTask(input: TaskQueryParams, params: Omit<MethodParam
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -73,24 +73,24 @@ export declare function getTask(input: TaskQueryParams, params: Omit<MethodParam
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
-    }[] | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
+    }[] | null | undefined;
     artifacts?: {
         artifactId: string;
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -103,10 +103,10 @@ export declare function getTask(input: TaskQueryParams, params: Omit<MethodParam
             kind: "data";
             metadata?: Record<string, unknown> | null | undefined;
         })[];
-        name?: string | undefined;
+        name?: string | null | undefined;
         metadata?: Record<string, unknown> | null | undefined;
-        description?: string | undefined;
-        extension?: string[] | undefined;
-    }[] | undefined;
+        description?: string | null | undefined;
+        extension?: string[] | null | undefined;
+    }[] | null | undefined;
 }>;
 export type GetTaskMethod = typeof getTask;

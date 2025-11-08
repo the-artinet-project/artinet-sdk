@@ -45,8 +45,8 @@ export async function loadState(
   taskStore: TaskStore,
   message: Message,
   metadata?: Record<string, unknown> | null,
-  taskId?: string,
-  contextId?: string
+  taskId?: string | null,
+  contextId?: string | null
 ): Promise<TaskAndHistory> {
   if (taskId) {
     const existingData: TaskAndHistory | null = await taskStore.load(taskId);

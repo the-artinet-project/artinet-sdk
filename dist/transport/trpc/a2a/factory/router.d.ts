@@ -10,14 +10,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -32,26 +32,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
     meta: object;
     errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -68,13 +68,13 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
             capabilities: {
                 extensions?: {
                     uri: string;
-                    required?: boolean | undefined;
-                    description?: string | undefined;
+                    required?: boolean | null | undefined;
+                    description?: string | null | undefined;
                     params?: Record<string, unknown> | null | undefined;
-                }[] | undefined;
-                streaming?: boolean | undefined;
-                pushNotifications?: boolean | undefined;
-                stateTransitionHistory?: boolean | undefined;
+                }[] | null | undefined;
+                streaming?: boolean | null | undefined;
+                pushNotifications?: boolean | null | undefined;
+                stateTransitionHistory?: boolean | null | undefined;
             };
             defaultInputModes: string[];
             defaultOutputModes: string[];
@@ -83,33 +83,33 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 id: string;
                 description: string;
                 tags: string[];
-                examples?: string[] | undefined;
-                inputModes?: string[] | undefined;
-                outputModes?: string[] | undefined;
-                security?: Record<string, string[]>[] | undefined;
+                examples?: string[] | null | undefined;
+                inputModes?: string[] | null | undefined;
+                outputModes?: string[] | null | undefined;
+                security?: Record<string, string[]>[] | null | undefined;
             }[];
-            security?: Record<string, string[]>[] | undefined;
-            preferredTransport?: string | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
+            preferredTransport?: string | null | undefined;
             additionalInterfaces?: {
                 url: string;
                 transport: string;
-            }[] | undefined;
-            iconUrl?: string | undefined;
+            }[] | null | undefined;
+            iconUrl?: string | null | undefined;
             provider?: {
                 url: string;
                 organization: string;
-            } | undefined;
-            documentationUrl?: string | undefined;
+            } | null | undefined;
+            documentationUrl?: string | null | undefined;
             securitySchemes?: Record<string, {
                 name: string;
                 type: "apiKey";
                 in: "header" | "query" | "cookie";
-                description?: string | undefined;
+                description?: string | null | undefined;
             } | {
                 type: "http";
                 scheme: string;
-                description?: string | undefined;
-                bearerFormat?: string | undefined;
+                description?: string | null | undefined;
+                bearerFormat?: string | null | undefined;
             } | {
                 type: "oauth2";
                 flows: {
@@ -117,40 +117,40 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         authorizationUrl: string;
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     clientCredentials?: {
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     implicit?: {
                         authorizationUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     password?: {
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                 };
-                description?: string | undefined;
-                oauth2MetadataUrl?: string | undefined;
+                description?: string | null | undefined;
+                oauth2MetadataUrl?: string | null | undefined;
             } | {
                 type: "openIdConnect";
                 openIdConnectUrl: string;
-                description?: string | undefined;
+                description?: string | null | undefined;
             } | {
                 type: "mutualTLS";
-                description?: string | undefined;
+                description?: string | null | undefined;
             }> | null | undefined;
-            supportsAuthenticatedExtendedCard?: boolean | undefined;
+            supportsAuthenticatedExtendedCard?: boolean | null | undefined;
             signatures?: {
                 protected: string;
                 signature: string;
                 header?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
+            }[] | null | undefined;
         };
         meta: object;
     }>;
@@ -162,14 +162,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -184,26 +184,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             };
             metadata?: Record<string, unknown> | null | undefined;
             configuration?: {
-                historyLength?: number | undefined;
+                historyLength?: number | null | undefined;
                 pushNotificationConfig?: {
                     url: string;
-                    id?: string | undefined;
-                    token?: string | undefined;
+                    id?: string | null | undefined;
+                    token?: string | null | undefined;
                     authentication?: {
                         schemes: string[];
-                        credentials?: string | undefined;
-                    } | undefined;
-                } | undefined;
-                acceptedOutputModes?: string[] | undefined;
-                blocking?: boolean | undefined;
-            } | undefined;
+                        credentials?: string | null | undefined;
+                    } | null | undefined;
+                } | null | undefined;
+                acceptedOutputModes?: string[] | null | undefined;
+                blocking?: boolean | null | undefined;
+            } | null | undefined;
         }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
         meta: object;
         errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -217,14 +217,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -239,26 +239,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             };
             output: {
                 role: "user" | "agent";
@@ -266,14 +266,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -288,10 +288,10 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -302,14 +302,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -324,12 +324,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -340,14 +340,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -362,24 +362,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -392,11 +392,11 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -408,14 +408,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -430,26 +430,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             };
             output: AsyncIterable<{
                 role: "user" | "agent";
@@ -457,14 +457,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -479,10 +479,10 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -493,14 +493,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -515,12 +515,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -531,14 +531,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -553,24 +553,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -583,11 +583,11 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             } | {
                 status: {
                     state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -597,14 +597,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -619,12 +619,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "status-update";
                 taskId: string;
@@ -640,14 +640,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -660,14 +660,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
-                append?: boolean | undefined;
-                lastChunk?: boolean | undefined;
+                append?: boolean | null | undefined;
+                lastChunk?: boolean | null | undefined;
             }, void, unknown>;
             meta: object;
         }>;
@@ -680,14 +680,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -702,26 +702,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             };
             metadata?: Record<string, unknown> | null | undefined;
             configuration?: {
-                historyLength?: number | undefined;
+                historyLength?: number | null | undefined;
                 pushNotificationConfig?: {
                     url: string;
-                    id?: string | undefined;
-                    token?: string | undefined;
+                    id?: string | null | undefined;
+                    token?: string | null | undefined;
                     authentication?: {
                         schemes: string[];
-                        credentials?: string | undefined;
-                    } | undefined;
-                } | undefined;
-                acceptedOutputModes?: string[] | undefined;
-                blocking?: boolean | undefined;
-            } | undefined;
+                        credentials?: string | null | undefined;
+                    } | null | undefined;
+                } | null | undefined;
+                acceptedOutputModes?: string[] | null | undefined;
+                blocking?: boolean | null | undefined;
+            } | null | undefined;
         }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
         meta: object;
         errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -738,14 +738,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -760,10 +760,10 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -774,14 +774,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -796,12 +796,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -812,14 +812,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -834,24 +834,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -864,11 +864,11 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             } | {
                 status: {
                     state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -878,14 +878,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -900,12 +900,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "status-update";
                 taskId: string;
@@ -921,14 +921,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -941,14 +941,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
-                append?: boolean | undefined;
-                lastChunk?: boolean | undefined;
+                append?: boolean | null | undefined;
+                lastChunk?: boolean | null | undefined;
             }, void, unknown>;
             meta: object;
         }>;
@@ -967,14 +967,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -989,12 +989,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -1005,14 +1005,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1027,24 +1027,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1057,11 +1057,11 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -1080,14 +1080,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -1102,12 +1102,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -1118,14 +1118,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1140,24 +1140,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1170,11 +1170,11 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -1186,14 +1186,14 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1208,26 +1208,26 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
             meta: object;
             errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -1238,24 +1238,24 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 output: {
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 meta: object;
@@ -1267,18 +1267,18 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                 } | {
                     id: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    pushNotificationConfigId?: string | undefined;
+                    pushNotificationConfigId?: string | null | undefined;
                 };
                 output: {
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 meta: object;
@@ -1292,12 +1292,12 @@ export declare const createA2ARouter: () => import("@trpc/server").TRPCBuiltRout
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 }[];
                 meta: object;
@@ -1323,14 +1323,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1345,26 +1345,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
     meta: object;
     errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -1381,13 +1381,13 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
             capabilities: {
                 extensions?: {
                     uri: string;
-                    required?: boolean | undefined;
-                    description?: string | undefined;
+                    required?: boolean | null | undefined;
+                    description?: string | null | undefined;
                     params?: Record<string, unknown> | null | undefined;
-                }[] | undefined;
-                streaming?: boolean | undefined;
-                pushNotifications?: boolean | undefined;
-                stateTransitionHistory?: boolean | undefined;
+                }[] | null | undefined;
+                streaming?: boolean | null | undefined;
+                pushNotifications?: boolean | null | undefined;
+                stateTransitionHistory?: boolean | null | undefined;
             };
             defaultInputModes: string[];
             defaultOutputModes: string[];
@@ -1396,33 +1396,33 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 id: string;
                 description: string;
                 tags: string[];
-                examples?: string[] | undefined;
-                inputModes?: string[] | undefined;
-                outputModes?: string[] | undefined;
-                security?: Record<string, string[]>[] | undefined;
+                examples?: string[] | null | undefined;
+                inputModes?: string[] | null | undefined;
+                outputModes?: string[] | null | undefined;
+                security?: Record<string, string[]>[] | null | undefined;
             }[];
-            security?: Record<string, string[]>[] | undefined;
-            preferredTransport?: string | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
+            preferredTransport?: string | null | undefined;
             additionalInterfaces?: {
                 url: string;
                 transport: string;
-            }[] | undefined;
-            iconUrl?: string | undefined;
+            }[] | null | undefined;
+            iconUrl?: string | null | undefined;
             provider?: {
                 url: string;
                 organization: string;
-            } | undefined;
-            documentationUrl?: string | undefined;
+            } | null | undefined;
+            documentationUrl?: string | null | undefined;
             securitySchemes?: Record<string, {
                 name: string;
                 type: "apiKey";
                 in: "header" | "query" | "cookie";
-                description?: string | undefined;
+                description?: string | null | undefined;
             } | {
                 type: "http";
                 scheme: string;
-                description?: string | undefined;
-                bearerFormat?: string | undefined;
+                description?: string | null | undefined;
+                bearerFormat?: string | null | undefined;
             } | {
                 type: "oauth2";
                 flows: {
@@ -1430,40 +1430,40 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         authorizationUrl: string;
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     clientCredentials?: {
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     implicit?: {
                         authorizationUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                     password?: {
                         tokenUrl: string;
                         scopes: Record<string, string>;
-                        refreshUrl?: string | undefined;
-                    } | undefined;
+                        refreshUrl?: string | null | undefined;
+                    } | null | undefined;
                 };
-                description?: string | undefined;
-                oauth2MetadataUrl?: string | undefined;
+                description?: string | null | undefined;
+                oauth2MetadataUrl?: string | null | undefined;
             } | {
                 type: "openIdConnect";
                 openIdConnectUrl: string;
-                description?: string | undefined;
+                description?: string | null | undefined;
             } | {
                 type: "mutualTLS";
-                description?: string | undefined;
+                description?: string | null | undefined;
             }> | null | undefined;
-            supportsAuthenticatedExtendedCard?: boolean | undefined;
+            supportsAuthenticatedExtendedCard?: boolean | null | undefined;
             signatures?: {
                 protected: string;
                 signature: string;
                 header?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
+            }[] | null | undefined;
         };
         meta: object;
     }>;
@@ -1475,14 +1475,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1497,26 +1497,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             };
             metadata?: Record<string, unknown> | null | undefined;
             configuration?: {
-                historyLength?: number | undefined;
+                historyLength?: number | null | undefined;
                 pushNotificationConfig?: {
                     url: string;
-                    id?: string | undefined;
-                    token?: string | undefined;
+                    id?: string | null | undefined;
+                    token?: string | null | undefined;
                     authentication?: {
                         schemes: string[];
-                        credentials?: string | undefined;
-                    } | undefined;
-                } | undefined;
-                acceptedOutputModes?: string[] | undefined;
-                blocking?: boolean | undefined;
-            } | undefined;
+                        credentials?: string | null | undefined;
+                    } | null | undefined;
+                } | null | undefined;
+                acceptedOutputModes?: string[] | null | undefined;
+                blocking?: boolean | null | undefined;
+            } | null | undefined;
         }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
         meta: object;
         errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -1530,14 +1530,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1552,26 +1552,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             };
             output: {
                 role: "user" | "agent";
@@ -1579,14 +1579,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1601,10 +1601,10 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -1615,14 +1615,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -1637,12 +1637,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -1653,14 +1653,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1675,24 +1675,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1705,11 +1705,11 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -1721,14 +1721,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1743,26 +1743,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             };
             output: AsyncIterable<{
                 role: "user" | "agent";
@@ -1770,14 +1770,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1792,10 +1792,10 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -1806,14 +1806,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -1828,12 +1828,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -1844,14 +1844,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1866,24 +1866,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1896,11 +1896,11 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             } | {
                 status: {
                     state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -1910,14 +1910,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -1932,12 +1932,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "status-update";
                 taskId: string;
@@ -1953,14 +1953,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -1973,14 +1973,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
-                append?: boolean | undefined;
-                lastChunk?: boolean | undefined;
+                append?: boolean | null | undefined;
+                lastChunk?: boolean | null | undefined;
             }, void, unknown>;
             meta: object;
         }>;
@@ -1993,14 +1993,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2015,26 +2015,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             };
             metadata?: Record<string, unknown> | null | undefined;
             configuration?: {
-                historyLength?: number | undefined;
+                historyLength?: number | null | undefined;
                 pushNotificationConfig?: {
                     url: string;
-                    id?: string | undefined;
-                    token?: string | undefined;
+                    id?: string | null | undefined;
+                    token?: string | null | undefined;
                     authentication?: {
                         schemes: string[];
-                        credentials?: string | undefined;
-                    } | undefined;
-                } | undefined;
-                acceptedOutputModes?: string[] | undefined;
-                blocking?: boolean | undefined;
-            } | undefined;
+                        credentials?: string | null | undefined;
+                    } | null | undefined;
+                } | null | undefined;
+                acceptedOutputModes?: string[] | null | undefined;
+                blocking?: boolean | null | undefined;
+            } | null | undefined;
         }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
         meta: object;
         errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -2051,14 +2051,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2073,10 +2073,10 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             } | {
                 id: string;
                 status: {
@@ -2087,14 +2087,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -2109,12 +2109,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -2125,14 +2125,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2147,24 +2147,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2177,11 +2177,11 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             } | {
                 status: {
                     state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -2191,14 +2191,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -2213,12 +2213,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "status-update";
                 taskId: string;
@@ -2234,14 +2234,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2254,14 +2254,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
-                append?: boolean | undefined;
-                lastChunk?: boolean | undefined;
+                append?: boolean | null | undefined;
+                lastChunk?: boolean | null | undefined;
             }, void, unknown>;
             meta: object;
         }>;
@@ -2280,14 +2280,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -2302,12 +2302,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -2318,14 +2318,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2340,24 +2340,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2370,11 +2370,11 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -2393,14 +2393,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         parts: ({
                             file: {
                                 bytes: string;
-                                name?: string | undefined;
-                                mimeType?: string | undefined;
-                                uri?: undefined;
+                                name?: string | null | undefined;
+                                mimeType?: string | null | undefined;
+                                uri?: null | undefined;
                             } | {
                                 uri: string;
-                                name?: string | undefined;
-                                bytes?: undefined;
-                                mimeType?: string | undefined;
+                                name?: string | null | undefined;
+                                bytes?: null | undefined;
+                                mimeType?: string | null | undefined;
                             };
                             kind: "file";
                             metadata?: Record<string, unknown> | null | undefined;
@@ -2415,12 +2415,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         })[];
                         messageId: string;
                         metadata?: Record<string, unknown> | null | undefined;
-                        extensions?: string[] | undefined;
-                        referenceTaskIds?: string[] | undefined;
-                        taskId?: string | undefined;
-                        contextId?: string | undefined;
-                    } | undefined;
-                    timestamp?: string | undefined;
+                        extensions?: string[] | null | undefined;
+                        referenceTaskIds?: string[] | null | undefined;
+                        taskId?: string | null | undefined;
+                        contextId?: string | null | undefined;
+                    } | null | undefined;
+                    timestamp?: string | null | undefined;
                 };
                 kind: "task";
                 contextId: string;
@@ -2431,14 +2431,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2453,24 +2453,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
-                }[] | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
+                }[] | null | undefined;
                 artifacts?: {
                     artifactId: string;
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2483,11 +2483,11 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                         kind: "data";
                         metadata?: Record<string, unknown> | null | undefined;
                     })[];
-                    name?: string | undefined;
+                    name?: string | null | undefined;
                     metadata?: Record<string, unknown> | null | undefined;
-                    description?: string | undefined;
-                    extension?: string[] | undefined;
-                }[] | undefined;
+                    description?: string | null | undefined;
+                    extension?: string[] | null | undefined;
+                }[] | null | undefined;
             };
             meta: object;
         }>;
@@ -2499,14 +2499,14 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     parts: ({
                         file: {
                             bytes: string;
-                            name?: string | undefined;
-                            mimeType?: string | undefined;
-                            uri?: undefined;
+                            name?: string | null | undefined;
+                            mimeType?: string | null | undefined;
+                            uri?: null | undefined;
                         } | {
                             uri: string;
-                            name?: string | undefined;
-                            bytes?: undefined;
-                            mimeType?: string | undefined;
+                            name?: string | null | undefined;
+                            bytes?: null | undefined;
+                            mimeType?: string | null | undefined;
                         };
                         kind: "file";
                         metadata?: Record<string, unknown> | null | undefined;
@@ -2521,26 +2521,26 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     })[];
                     messageId: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    extensions?: string[] | undefined;
-                    referenceTaskIds?: string[] | undefined;
-                    taskId?: string | undefined;
-                    contextId?: string | undefined;
+                    extensions?: string[] | null | undefined;
+                    referenceTaskIds?: string[] | null | undefined;
+                    taskId?: string | null | undefined;
+                    contextId?: string | null | undefined;
                 };
                 metadata?: Record<string, unknown> | null | undefined;
                 configuration?: {
-                    historyLength?: number | undefined;
+                    historyLength?: number | null | undefined;
                     pushNotificationConfig?: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
-                    } | undefined;
-                    acceptedOutputModes?: string[] | undefined;
-                    blocking?: boolean | undefined;
-                } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
+                    } | null | undefined;
+                    acceptedOutputModes?: string[] | null | undefined;
+                    blocking?: boolean | null | undefined;
+                } | null | undefined;
             }, import("../../../../index.js").TaskAndHistory, import("../../../../index.js").UpdateEvent>;
             meta: object;
             errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -2551,24 +2551,24 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 output: {
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 meta: object;
@@ -2580,18 +2580,18 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                 } | {
                     id: string;
                     metadata?: Record<string, unknown> | null | undefined;
-                    pushNotificationConfigId?: string | undefined;
+                    pushNotificationConfigId?: string | null | undefined;
                 };
                 output: {
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 };
                 meta: object;
@@ -2605,12 +2605,12 @@ export declare const createAgentRouter: () => import("@trpc/server").TRPCBuiltRo
                     taskId: string;
                     pushNotificationConfig: {
                         url: string;
-                        id?: string | undefined;
-                        token?: string | undefined;
+                        id?: string | null | undefined;
+                        token?: string | null | undefined;
                         authentication?: {
                             schemes: string[];
-                            credentials?: string | undefined;
-                        } | undefined;
+                            credentials?: string | null | undefined;
+                        } | null | undefined;
                     };
                 }[];
                 meta: object;

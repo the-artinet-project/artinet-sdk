@@ -12,7 +12,7 @@ export const GetTaskPushNotificationConfigParamSchema = TaskIdParamsSchema.exten
     /**
      * @optional The ID of the push notification configuration to retrieve.
      */
-    pushNotificationConfigId: z.string().optional(),
+    pushNotificationConfigId: z.string().optional().nullable(),
 });
 export const GetTaskPushNotificationConfigParamsSchema = z.union([
     GetTaskPushNotificationConfigParamSchema,
@@ -45,7 +45,7 @@ export const PushNotificationAuthenticationInfoSchema = z
     /**
      * @optional Optional credentials required by the push notification endpoint.
      */
-    credentials: z.string().optional(),
+    credentials: z.string().optional().nullable(),
 })
     .describe("Defines authentication details for a push notification endpoint.");
 /**
@@ -60,6 +60,7 @@ export const PushNotificationConfigSchema = z
     id: z
         .string()
         .optional()
+        .nullable()
         .describe("A unique ID for the push notification configuration, created by the server to support multiple notification callbacks."),
     /**
      * @required The callback URL where the agent should send push notifications.
@@ -74,11 +75,14 @@ export const PushNotificationConfigSchema = z
     token: z
         .string()
         .optional()
+        .nullable()
         .describe("A unique token for this task or session to validate incoming push notifications."),
     /**
      * @optional Authentication details for the agent to use when calling the notification URL.
      */
-    authentication: PushNotificationAuthenticationInfoSchema.optional().describe("Authentication details for the agent to use when calling the notification URL."),
+    authentication: PushNotificationAuthenticationInfoSchema.optional()
+        .nullable()
+        .describe("Authentication details for the agent to use when calling the notification URL."),
 })
     .describe("Defines the configuration for setting up push notifications for task updates.");
 /**

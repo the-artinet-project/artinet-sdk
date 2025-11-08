@@ -20,20 +20,20 @@ export declare const SecuritySchemeBaseSchema: z.ZodObject<{
     /**
      * @optional Description of this security scheme.
      */
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>;
 export type SecuritySchemeBase = z.infer<typeof SecuritySchemeBaseSchema>;
 /**
  * @description Defines a security scheme using an API key.
  */
 export declare const APIKeySecuritySchemeSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     in: z.ZodEnum<["query", "header", "cookie"]>;
@@ -42,33 +42,33 @@ export declare const APIKeySecuritySchemeSchema: z.ZodObject<{
     name: string;
     type: "apiKey";
     in: "header" | "query" | "cookie";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     name: string;
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     in: "header" | "query" | "cookie";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>;
 export type APIKeySecurityScheme = z.infer<typeof APIKeySecuritySchemeSchema>;
 /**
  * @description HTTP Authentication security scheme.
  */
 export declare const HTTPAuthSecuritySchemeSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "http", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     scheme: z.ZodString;
-    bearerFormat: z.ZodOptional<z.ZodString>;
+    bearerFormat: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     type: "http";
     scheme: string;
-    description?: string | undefined;
-    bearerFormat?: string | undefined;
+    description?: string | null | undefined;
+    bearerFormat?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     scheme: string;
-    description?: string | undefined;
-    bearerFormat?: string | undefined;
+    description?: string | null | undefined;
+    bearerFormat?: string | null | undefined;
 }>;
 export type HTTPAuthSecurityScheme = z.infer<typeof HTTPAuthSecuritySchemeSchema>;
 /**
@@ -89,7 +89,7 @@ export declare const AuthorizationCodeOAuthFlowSchema: z.ZodObject<{
      * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
      * standard requires the use of TLS.
      */
-    refreshUrl: z.ZodOptional<z.ZodString>;
+    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
      * description for it. The map MAY be empty.
@@ -99,12 +99,12 @@ export declare const AuthorizationCodeOAuthFlowSchema: z.ZodObject<{
     authorizationUrl: string;
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }, {
     authorizationUrl: string;
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }>;
 export type AuthorizationCodeOAuthFlow = z.infer<typeof AuthorizationCodeOAuthFlowSchema>;
 /**
@@ -120,7 +120,7 @@ export declare const ClientCredentialsOAuthFlowSchema: z.ZodObject<{
      * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
      * standard requires the use of TLS.
      */
-    refreshUrl: z.ZodOptional<z.ZodString>;
+    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
      * description for it. The map MAY be empty.
@@ -129,11 +129,11 @@ export declare const ClientCredentialsOAuthFlowSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }, {
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }>;
 export type ClientCredentialsOAuthFlow = z.infer<typeof ClientCredentialsOAuthFlowSchema>;
 /**
@@ -149,7 +149,7 @@ export declare const ImplicitOAuthFlowSchema: z.ZodObject<{
      * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
      * standard requires the use of TLS.
      */
-    refreshUrl: z.ZodOptional<z.ZodString>;
+    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
      * description for it. The map MAY be empty.
@@ -158,11 +158,11 @@ export declare const ImplicitOAuthFlowSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     authorizationUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }, {
     authorizationUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }>;
 export type ImplicitOAuthFlow = z.infer<typeof ImplicitOAuthFlowSchema>;
 /**
@@ -178,7 +178,7 @@ export declare const PasswordOAuthFlowSchema: z.ZodObject<{
      * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
      * standard requires the use of TLS.
      */
-    refreshUrl: z.ZodOptional<z.ZodString>;
+    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
      * description for it. The map MAY be empty.
@@ -187,11 +187,11 @@ export declare const PasswordOAuthFlowSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }, {
     tokenUrl: string;
     scopes: Record<string, string>;
-    refreshUrl?: string | undefined;
+    refreshUrl?: string | null | undefined;
 }>;
 export type PasswordOAuthFlow = z.infer<typeof PasswordOAuthFlowSchema>;
 /**
@@ -201,7 +201,7 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
     /**
      * @optional Configuration for the OAuth Authorization Code flow. Previously called accessCode in OpenAPI 2.0.
      */
-    authorizationCode: z.ZodOptional<z.ZodObject<{
+    authorizationCode: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         /**
          * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS
@@ -216,7 +216,7 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
          * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS.
          */
-        refreshUrl: z.ZodOptional<z.ZodString>;
+        refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
          * description for it. The map MAY be empty.
@@ -226,17 +226,17 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
         authorizationUrl: string;
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
+        refreshUrl?: string | null | undefined;
     }, {
         authorizationUrl: string;
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    }>>;
+        refreshUrl?: string | null | undefined;
+    }>>>;
     /**
      * @optional Configuration for the OAuth Client Credentials flow. Previously called application in OpenAPI 2.0
      */
-    clientCredentials: z.ZodOptional<z.ZodObject<{
+    clientCredentials: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         /**
          * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
          * requires the use of TLS.
@@ -246,7 +246,7 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
          * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS.
          */
-        refreshUrl: z.ZodOptional<z.ZodString>;
+        refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
          * description for it. The map MAY be empty.
@@ -255,16 +255,16 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
+        refreshUrl?: string | null | undefined;
     }, {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    }>>;
+        refreshUrl?: string | null | undefined;
+    }>>>;
     /**
      * @optional Configuration for the OAuth Implicit flow
      */
-    implicit: z.ZodOptional<z.ZodObject<{
+    implicit: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         /**
          * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS
@@ -274,7 +274,7 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
          * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS.
          */
-        refreshUrl: z.ZodOptional<z.ZodString>;
+        refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
          * description for it. The map MAY be empty.
@@ -283,16 +283,16 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         authorizationUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
+        refreshUrl?: string | null | undefined;
     }, {
         authorizationUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    }>>;
+        refreshUrl?: string | null | undefined;
+    }>>>;
     /**
      * @optional Configuration for the OAuth Resource Owner Password flow
      */
-    password: z.ZodOptional<z.ZodObject<{
+    password: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         /**
          * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
          * requires the use of TLS.
@@ -302,7 +302,7 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
          * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
          * standard requires the use of TLS.
          */
-        refreshUrl: z.ZodOptional<z.ZodString>;
+        refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
          * description for it. The map MAY be empty.
@@ -311,70 +311,70 @@ export declare const OAuthFlowsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
+        refreshUrl?: string | null | undefined;
     }, {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    }>>;
+        refreshUrl?: string | null | undefined;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     authorizationCode?: {
         authorizationUrl: string;
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     clientCredentials?: {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     implicit?: {
         authorizationUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     password?: {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
 }, {
     authorizationCode?: {
         authorizationUrl: string;
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     clientCredentials?: {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     implicit?: {
         authorizationUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
     password?: {
         tokenUrl: string;
         scopes: Record<string, string>;
-        refreshUrl?: string | undefined;
-    } | undefined;
+        refreshUrl?: string | null | undefined;
+    } | null | undefined;
 }>;
 export type OAuthFlows = z.infer<typeof OAuthFlowsSchema>;
 /**
  * @description OAuth2 security scheme configuration.
  */
 export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "oauth2", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     flows: z.ZodObject<{
         /**
          * @optional Configuration for the OAuth Authorization Code flow. Previously called accessCode in OpenAPI 2.0.
          */
-        authorizationCode: z.ZodOptional<z.ZodObject<{
+        authorizationCode: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS
@@ -389,7 +389,7 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -399,17 +399,17 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Client Credentials flow. Previously called application in OpenAPI 2.0
          */
-        clientCredentials: z.ZodOptional<z.ZodObject<{
+        clientCredentials: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
              * requires the use of TLS.
@@ -419,7 +419,7 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -428,16 +428,16 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Implicit flow
          */
-        implicit: z.ZodOptional<z.ZodObject<{
+        implicit: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS
@@ -447,7 +447,7 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -456,16 +456,16 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Resource Owner Password flow
          */
-        password: z.ZodOptional<z.ZodObject<{
+        password: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
              * requires the use of TLS.
@@ -475,7 +475,7 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -484,58 +484,58 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
     }, "strip", z.ZodTypeAny, {
         authorizationCode?: {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     }, {
         authorizationCode?: {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     }>;
-    oauth2MetadataUrl: z.ZodOptional<z.ZodString>;
+    oauth2MetadataUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     type: "oauth2";
     flows: {
@@ -543,26 +543,26 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     };
-    description?: string | undefined;
-    oauth2MetadataUrl?: string | undefined;
+    description?: string | null | undefined;
+    oauth2MetadataUrl?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     flows: {
@@ -570,63 +570,63 @@ export declare const OAuth2SecuritySchemeSchema: z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     };
-    description?: string | undefined;
-    oauth2MetadataUrl?: string | undefined;
+    description?: string | null | undefined;
+    oauth2MetadataUrl?: string | null | undefined;
 }>;
 export type OAuth2SecurityScheme = z.infer<typeof OAuth2SecuritySchemeSchema>;
 /**
  * @description OpenID Connect security scheme.
  */
 export declare const OpenIdConnectSecuritySchemeSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "openIdConnect", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     openIdConnectUrl: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     type: "openIdConnect";
     openIdConnectUrl: string;
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     openIdConnectUrl: string;
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>;
 export type OpenIdConnectSecurityScheme = z.infer<typeof OpenIdConnectSecuritySchemeSchema>;
 /**
  * @description Mutual TLS (mTLS) security scheme.
  */
 export declare const MutualTLSSecuritySchemeSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "mutualTLS", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
 }, "strip", z.ZodTypeAny, {
     type: "mutualTLS";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>;
 export type MutualTLSSecurityScheme = z.infer<typeof MutualTLSSecuritySchemeSchema>;
 export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     in: z.ZodEnum<["query", "header", "cookie"]>;
@@ -635,37 +635,37 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
     name: string;
     type: "apiKey";
     in: "header" | "query" | "cookie";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     name: string;
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     in: "header" | "query" | "cookie";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>, z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "http", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     scheme: z.ZodString;
-    bearerFormat: z.ZodOptional<z.ZodString>;
+    bearerFormat: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     type: "http";
     scheme: string;
-    description?: string | undefined;
-    bearerFormat?: string | undefined;
+    description?: string | null | undefined;
+    bearerFormat?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     scheme: string;
-    description?: string | undefined;
-    bearerFormat?: string | undefined;
+    description?: string | null | undefined;
+    bearerFormat?: string | null | undefined;
 }>, z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "oauth2", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     flows: z.ZodObject<{
         /**
          * @optional Configuration for the OAuth Authorization Code flow. Previously called accessCode in OpenAPI 2.0.
          */
-        authorizationCode: z.ZodOptional<z.ZodObject<{
+        authorizationCode: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS
@@ -680,7 +680,7 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -690,17 +690,17 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Client Credentials flow. Previously called application in OpenAPI 2.0
          */
-        clientCredentials: z.ZodOptional<z.ZodObject<{
+        clientCredentials: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
              * requires the use of TLS.
@@ -710,7 +710,7 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -719,16 +719,16 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Implicit flow
          */
-        implicit: z.ZodOptional<z.ZodObject<{
+        implicit: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The authorization URL to be used for this flow. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS
@@ -738,7 +738,7 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -747,16 +747,16 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
         /**
          * @optional Configuration for the OAuth Resource Owner Password flow
          */
-        password: z.ZodOptional<z.ZodObject<{
+        password: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required The token URL to be used for this flow. This MUST be in the form of a URL. The OAuth2 standard
              * requires the use of TLS.
@@ -766,7 +766,7 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
              * @optional The URL to be used for obtaining refresh tokens. This MUST be in the form of a URL. The OAuth2
              * standard requires the use of TLS.
              */
-            refreshUrl: z.ZodOptional<z.ZodString>;
+            refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The available scopes for the OAuth2 security scheme. A map between the scope name and a short
              * description for it. The map MAY be empty.
@@ -775,58 +775,58 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
+            refreshUrl?: string | null | undefined;
         }, {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        }>>;
+            refreshUrl?: string | null | undefined;
+        }>>>;
     }, "strip", z.ZodTypeAny, {
         authorizationCode?: {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     }, {
         authorizationCode?: {
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     }>;
-    oauth2MetadataUrl: z.ZodOptional<z.ZodString>;
+    oauth2MetadataUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     type: "oauth2";
     flows: {
@@ -834,26 +834,26 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     };
-    description?: string | undefined;
-    oauth2MetadataUrl?: string | undefined;
+    description?: string | null | undefined;
+    oauth2MetadataUrl?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     flows: {
@@ -861,48 +861,48 @@ export declare const SecuritySchemeSchema: z.ZodUnion<[z.ZodObject<{
             authorizationUrl: string;
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         clientCredentials?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         implicit?: {
             authorizationUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
         password?: {
             tokenUrl: string;
             scopes: Record<string, string>;
-            refreshUrl?: string | undefined;
-        } | undefined;
+            refreshUrl?: string | null | undefined;
+        } | null | undefined;
     };
-    description?: string | undefined;
-    oauth2MetadataUrl?: string | undefined;
+    description?: string | null | undefined;
+    oauth2MetadataUrl?: string | null | undefined;
 }>, z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "openIdConnect", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
     openIdConnectUrl: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     type: "openIdConnect";
     openIdConnectUrl: string;
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
     openIdConnectUrl: string;
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>, z.ZodObject<{
-    description: z.ZodOptional<z.ZodString>;
+    description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 } & {
     type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "mutualTLS", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
 }, "strip", z.ZodTypeAny, {
     type: "mutualTLS";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }, {
     type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-    description?: string | undefined;
+    description?: string | null | undefined;
 }>]>;
 export type SecurityScheme = z.infer<typeof SecuritySchemeSchema>;

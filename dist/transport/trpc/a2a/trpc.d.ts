@@ -20,14 +20,14 @@ export declare const router: import("@trpc/server").TRPCRouterBuilder<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -42,26 +42,26 @@ export declare const router: import("@trpc/server").TRPCRouterBuilder<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, import("../../../types/index.js").TaskAndHistory, import("../../../types/index.js").UpdateEvent>;
     meta: object;
     errorShape: import("@trpc/server").TRPCDefaultErrorShape;
@@ -74,14 +74,14 @@ export declare const publicProcedure: import("@trpc/server").TRPCProcedureBuilde
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -96,26 +96,26 @@ export declare const publicProcedure: import("@trpc/server").TRPCProcedureBuilde
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     };
     metadata?: Record<string, unknown> | null | undefined;
     configuration?: {
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
         pushNotificationConfig?: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
-        } | undefined;
-        acceptedOutputModes?: string[] | undefined;
-        blocking?: boolean | undefined;
-    } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        acceptedOutputModes?: string[] | null | undefined;
+        blocking?: boolean | null | undefined;
+    } | null | undefined;
 }, import("../../../types/index.js").TaskAndHistory, import("../../../types/index.js").UpdateEvent>, object, object, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, false>;
 export declare const createA2AEnviroment: (opts: any) => any;
 export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A2AExecutionEnvironment<{
@@ -125,14 +125,14 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -147,26 +147,26 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     };
     metadata?: Record<string, unknown> | null | undefined;
     configuration?: {
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
         pushNotificationConfig?: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
-        } | undefined;
-        acceptedOutputModes?: string[] | undefined;
-        blocking?: boolean | undefined;
-    } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
+        } | null | undefined;
+        acceptedOutputModes?: string[] | null | undefined;
+        blocking?: boolean | null | undefined;
+    } | null | undefined;
 }, import("../../../types/index.js").TaskAndHistory, import("../../../types/index.js").UpdateEvent>, object, {
     engine: import("../../../types/index.js").ExecutionEngine<{
         message: {
@@ -175,14 +175,14 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -197,26 +197,26 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, import("../../../types/index.js").TaskAndHistory, import("../../../types/index.js").UpdateEvent> | undefined;
     service: A2AServiceInterface<{
         message: {
@@ -225,14 +225,14 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -247,25 +247,25 @@ export declare const A2AProcedure: import("@trpc/server").TRPCProcedureBuilder<A
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, import("../../../types/index.js").TaskAndHistory, import("../../../types/index.js").UpdateEvent>;
 }, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, false>;

@@ -35,15 +35,15 @@ export class MessageSendConfigurationBuilder {
     };
     constructor(configuration = {}) {
         this.configuration.acceptedOutputModes =
-            configuration.acceptedOutputModes ??
+            configuration?.acceptedOutputModes ??
                 this.configuration.acceptedOutputModes;
         this.configuration.historyLength =
-            configuration.historyLength ?? this.configuration.historyLength;
+            configuration?.historyLength ?? this.configuration.historyLength;
         this.configuration.pushNotificationConfig =
-            configuration.pushNotificationConfig ??
+            configuration?.pushNotificationConfig ??
                 this.configuration.pushNotificationConfig;
         this.configuration.blocking =
-            configuration.blocking ?? this.configuration.blocking;
+            configuration?.blocking ?? this.configuration.blocking;
     }
     valueOf() {
         return this.configuration;

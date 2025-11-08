@@ -33,63 +33,63 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -108,11 +108,11 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -120,14 +120,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -142,24 +142,24 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -174,73 +174,73 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }>;
-        configuration: z.ZodOptional<z.ZodObject<{
-            acceptedOutputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            historyLength: z.ZodOptional<z.ZodNumber>;
-            pushNotificationConfig: z.ZodOptional<z.ZodObject<{
-                id: z.ZodOptional<z.ZodString>;
+        configuration: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+            acceptedOutputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            historyLength: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
+            pushNotificationConfig: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+                id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 url: z.ZodString;
-                token: z.ZodOptional<z.ZodString>;
-                authentication: z.ZodOptional<z.ZodObject<{
+                token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     schemes: z.ZodArray<z.ZodString, "many">;
-                    credentials: z.ZodOptional<z.ZodString>;
+                    credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 }, "strip", z.ZodTypeAny, {
                     schemes: string[];
-                    credentials?: string | undefined;
+                    credentials?: string | null | undefined;
                 }, {
                     schemes: string[];
-                    credentials?: string | undefined;
-                }>>;
+                    credentials?: string | null | undefined;
+                }>>>;
             }, "strip", z.ZodTypeAny, {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
             }, {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            }>>;
-            blocking: z.ZodOptional<z.ZodBoolean>;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            }>>>;
+            blocking: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
         }, {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        }>>;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        }>>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         message: {
@@ -249,14 +249,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -271,26 +271,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, {
         message: {
             role: "user" | "agent";
@@ -298,14 +298,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -320,26 +320,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
@@ -351,14 +351,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -373,26 +373,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -405,14 +405,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -427,26 +427,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     };
     jsonrpc: "2.0";
 }>, z.ZodObject<{
@@ -475,63 +475,63 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -550,11 +550,11 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -562,14 +562,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -584,24 +584,24 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -616,73 +616,73 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }>;
-        configuration: z.ZodOptional<z.ZodObject<{
-            acceptedOutputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            historyLength: z.ZodOptional<z.ZodNumber>;
-            pushNotificationConfig: z.ZodOptional<z.ZodObject<{
-                id: z.ZodOptional<z.ZodString>;
+        configuration: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+            acceptedOutputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            historyLength: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
+            pushNotificationConfig: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+                id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 url: z.ZodString;
-                token: z.ZodOptional<z.ZodString>;
-                authentication: z.ZodOptional<z.ZodObject<{
+                token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     schemes: z.ZodArray<z.ZodString, "many">;
-                    credentials: z.ZodOptional<z.ZodString>;
+                    credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 }, "strip", z.ZodTypeAny, {
                     schemes: string[];
-                    credentials?: string | undefined;
+                    credentials?: string | null | undefined;
                 }, {
                     schemes: string[];
-                    credentials?: string | undefined;
-                }>>;
+                    credentials?: string | null | undefined;
+                }>>>;
             }, "strip", z.ZodTypeAny, {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
             }, {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            }>>;
-            blocking: z.ZodOptional<z.ZodBoolean>;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            }>>>;
+            blocking: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
         }, "strip", z.ZodTypeAny, {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
         }, {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        }>>;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        }>>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         message: {
@@ -691,14 +691,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -713,26 +713,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }, {
         message: {
             role: "user" | "agent";
@@ -740,14 +740,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -762,26 +762,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
@@ -793,14 +793,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -815,26 +815,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -847,14 +847,14 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -869,26 +869,26 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
-            historyLength?: number | undefined;
+            historyLength?: number | null | undefined;
             pushNotificationConfig?: {
                 url: string;
-                id?: string | undefined;
-                token?: string | undefined;
+                id?: string | null | undefined;
+                token?: string | null | undefined;
                 authentication?: {
                     schemes: string[];
-                    credentials?: string | undefined;
-                } | undefined;
-            } | undefined;
-            acceptedOutputModes?: string[] | undefined;
-            blocking?: boolean | undefined;
-        } | undefined;
+                    credentials?: string | null | undefined;
+                } | null | undefined;
+            } | null | undefined;
+            acceptedOutputModes?: string[] | null | undefined;
+            blocking?: boolean | null | undefined;
+        } | null | undefined;
     };
     jsonrpc: "2.0";
 }>, z.ZodObject<{
@@ -931,15 +931,15 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
         id: z.ZodString;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
-        historyLength: z.ZodOptional<z.ZodNumber>;
+        historyLength: z.ZodNullable<z.ZodOptional<z.ZodNumber>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
     }, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
@@ -947,7 +947,7 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
     params: {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -956,7 +956,7 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
     params: {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        historyLength?: number | undefined;
+        historyLength?: number | null | undefined;
     };
     jsonrpc: "2.0";
 }>, z.ZodObject<{
@@ -998,57 +998,57 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
     params: z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -1058,12 +1058,12 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
     jsonrpc: "2.0";
@@ -1074,12 +1074,12 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
     jsonrpc: "2.0";
@@ -1092,15 +1092,15 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
         id: z.ZodString;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
-        pushNotificationConfigId: z.ZodOptional<z.ZodString>;
+        pushNotificationConfigId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     }, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -1120,7 +1120,7 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
     } | {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -1132,7 +1132,7 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
     } | {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     };
     jsonrpc: "2.0";
 }>, z.ZodObject<{
@@ -1227,8 +1227,8 @@ export declare const A2ARequestSchema: z.ZodUnion<[z.ZodObject<{
  */
 export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
@@ -1250,63 +1250,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 bytes: z.ZodString;
-                uri: z.ZodOptional<z.ZodNever>;
+                uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }>, z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 uri: z.ZodString;
-                bytes: z.ZodOptional<z.ZodNever>;
+                bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }>]>;
         }, "strip", z.ZodTypeAny, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -1325,11 +1325,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-        extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+        referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         messageId: z.ZodString;
-        taskId: z.ZodOptional<z.ZodString>;
-        contextId: z.ZodOptional<z.ZodString>;
+        taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         role: "user" | "agent";
@@ -1337,14 +1337,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -1359,24 +1359,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }, {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -1391,16 +1391,16 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -1420,63 +1420,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1495,11 +1495,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -1507,14 +1507,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1529,24 +1529,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1561,12 +1561,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -1575,14 +1575,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1597,12 +1597,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -1611,14 +1611,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1633,14 +1633,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -1660,63 +1660,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1735,11 +1735,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -1747,14 +1747,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1769,24 +1769,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1801,15 +1801,15 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -1828,63 +1828,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1903,20 +1903,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1929,23 +1929,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -1958,11 +1958,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -1975,14 +1975,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -1997,12 +1997,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -2013,14 +2013,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2035,24 +2035,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2065,11 +2065,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -2080,14 +2080,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2102,12 +2102,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -2118,14 +2118,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2140,24 +2140,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2170,11 +2170,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -2184,14 +2184,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -2206,10 +2206,10 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -2220,14 +2220,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2242,12 +2242,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -2258,14 +2258,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2280,24 +2280,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2310,14 +2310,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -2326,14 +2326,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -2348,10 +2348,10 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -2362,14 +2362,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2384,12 +2384,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -2400,14 +2400,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2422,24 +2422,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -2452,23 +2452,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -2485,8 +2485,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -2494,12 +2494,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
@@ -2521,63 +2521,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 bytes: z.ZodString;
-                uri: z.ZodOptional<z.ZodNever>;
+                uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }>, z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 uri: z.ZodString;
-                bytes: z.ZodOptional<z.ZodNever>;
+                bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }>]>;
         }, "strip", z.ZodTypeAny, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -2596,11 +2596,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-        extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+        referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         messageId: z.ZodString;
-        taskId: z.ZodOptional<z.ZodString>;
-        contextId: z.ZodOptional<z.ZodString>;
+        taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         role: "user" | "agent";
@@ -2608,14 +2608,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -2630,24 +2630,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }, {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -2662,16 +2662,16 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -2691,63 +2691,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2766,11 +2766,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -2778,14 +2778,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2800,24 +2800,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2832,12 +2832,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -2846,14 +2846,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2868,12 +2868,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -2882,14 +2882,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -2904,14 +2904,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -2931,63 +2931,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3006,11 +3006,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -3018,14 +3018,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3040,24 +3040,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3072,15 +3072,15 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -3099,63 +3099,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3174,20 +3174,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3200,23 +3200,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3229,11 +3229,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -3246,14 +3246,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3268,12 +3268,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -3284,14 +3284,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3306,24 +3306,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3336,11 +3336,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -3351,14 +3351,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3373,12 +3373,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -3389,14 +3389,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3411,24 +3411,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3441,18 +3441,18 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>, z.ZodObject<{
         taskId: z.ZodString;
         contextId: z.ZodString;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "status-update", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -3472,63 +3472,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3547,11 +3547,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -3559,14 +3559,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3581,24 +3581,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3613,12 +3613,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -3627,14 +3627,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3649,12 +3649,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -3663,14 +3663,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3685,12 +3685,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
         final: z.ZodBoolean;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -3703,14 +3703,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3725,12 +3725,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "status-update";
         taskId: string;
@@ -3746,14 +3746,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -3768,12 +3768,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -3786,8 +3786,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "artifact-update", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         artifact: z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -3806,63 +3806,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3881,20 +3881,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3907,23 +3907,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3936,13 +3936,13 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }>;
-        append: z.ZodOptional<z.ZodBoolean>;
-        lastChunk: z.ZodOptional<z.ZodBoolean>;
+        append: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+        lastChunk: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         kind: "artifact-update";
@@ -3953,14 +3953,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -3973,14 +3973,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     }, {
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -3990,14 +3990,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4010,14 +4010,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -4027,14 +4027,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -4049,10 +4049,10 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -4063,14 +4063,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4085,12 +4085,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -4101,14 +4101,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4123,24 +4123,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4153,11 +4153,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     } | {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -4167,14 +4167,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4189,12 +4189,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "status-update";
         taskId: string;
@@ -4210,14 +4210,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4230,17 +4230,17 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -4249,14 +4249,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -4271,10 +4271,10 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -4285,14 +4285,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4307,12 +4307,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -4323,14 +4323,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4345,24 +4345,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4375,11 +4375,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     } | {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -4389,14 +4389,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4411,12 +4411,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -4432,14 +4432,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4452,26 +4452,26 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -4488,8 +4488,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -4497,19 +4497,19 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -4529,63 +4529,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4604,11 +4604,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -4616,14 +4616,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4638,24 +4638,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4670,12 +4670,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -4684,14 +4684,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4706,12 +4706,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -4720,14 +4720,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -4742,14 +4742,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -4769,63 +4769,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4844,11 +4844,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -4856,14 +4856,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4878,24 +4878,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -4910,15 +4910,15 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -4937,63 +4937,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5012,20 +5012,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5038,23 +5038,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5067,11 +5067,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -5084,14 +5084,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5106,12 +5106,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -5122,14 +5122,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5144,24 +5144,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5174,11 +5174,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -5189,14 +5189,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5211,12 +5211,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -5227,14 +5227,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5249,24 +5249,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5279,11 +5279,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -5297,14 +5297,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5319,12 +5319,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -5335,14 +5335,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5357,24 +5357,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5387,14 +5387,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -5407,14 +5407,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5429,12 +5429,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -5445,14 +5445,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5467,24 +5467,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5497,23 +5497,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -5530,8 +5530,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -5539,19 +5539,19 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -5571,63 +5571,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5646,11 +5646,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -5658,14 +5658,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5680,24 +5680,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5712,12 +5712,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -5726,14 +5726,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5748,12 +5748,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -5762,14 +5762,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -5784,14 +5784,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -5811,63 +5811,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5886,11 +5886,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -5898,14 +5898,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5920,24 +5920,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -5952,15 +5952,15 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -5979,63 +5979,63 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6054,20 +6054,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6080,23 +6080,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6109,11 +6109,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -6126,14 +6126,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -6148,12 +6148,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -6164,14 +6164,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6186,24 +6186,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6216,11 +6216,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -6231,14 +6231,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -6253,12 +6253,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -6269,14 +6269,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6291,24 +6291,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6321,11 +6321,11 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -6339,14 +6339,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -6361,12 +6361,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -6377,14 +6377,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6399,24 +6399,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6429,14 +6429,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -6449,14 +6449,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -6471,12 +6471,12 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -6487,14 +6487,14 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6509,24 +6509,24 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -6539,23 +6539,23 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -6572,8 +6572,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -6581,67 +6581,67 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -6650,41 +6650,41 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -6701,8 +6701,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -6710,67 +6710,67 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -6779,41 +6779,41 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -6830,8 +6830,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -6839,67 +6839,67 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodArray<z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
@@ -6908,41 +6908,41 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -6959,8 +6959,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -6968,33 +6968,33 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodNull;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -7011,8 +7011,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -7020,20 +7020,20 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         protocolVersion: z.ZodDefault<z.ZodString>;
         name: z.ZodString;
         description: z.ZodString;
         url: z.ZodString;
-        preferredTransport: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>>;
-        additionalInterfaces: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        preferredTransport: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>>>;
+        additionalInterfaces: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             url: z.ZodString;
             transport: z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>;
         }, "strip", z.ZodTypeAny, {
@@ -7042,9 +7042,9 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         }, {
             url: string;
             transport: string;
-        }>, "many">>;
-        iconUrl: z.ZodOptional<z.ZodString>;
-        provider: z.ZodOptional<z.ZodObject<{
+        }>, "many">>>;
+        iconUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        provider: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             organization: z.ZodString;
             url: z.ZodString;
         }, "strip", z.ZodTypeAny, {
@@ -7053,52 +7053,52 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         }, {
             url: string;
             organization: string;
-        }>>;
+        }>>>;
         version: z.ZodString;
-        documentationUrl: z.ZodOptional<z.ZodString>;
+        documentationUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         capabilities: z.ZodObject<{
-            streaming: z.ZodOptional<z.ZodBoolean>;
-            pushNotifications: z.ZodOptional<z.ZodBoolean>;
-            stateTransitionHistory: z.ZodOptional<z.ZodBoolean>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            streaming: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            pushNotifications: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            stateTransitionHistory: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
                 uri: z.ZodString;
-                description: z.ZodOptional<z.ZodString>;
-                required: z.ZodOptional<z.ZodBoolean>;
+                description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                required: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
                 params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
             }, {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }>, "many">>;
+            }>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         }, {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         }>;
         securitySchemes: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             in: z.ZodEnum<["query", "header", "cookie"]>;
@@ -7107,134 +7107,134 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "http", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             scheme: z.ZodString;
-            bearerFormat: z.ZodOptional<z.ZodString>;
+            bearerFormat: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "oauth2", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             flows: z.ZodObject<{
-                authorizationCode: z.ZodOptional<z.ZodObject<{
+                authorizationCode: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     authorizationUrl: z.ZodString;
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                clientCredentials: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                clientCredentials: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                implicit: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                implicit: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     authorizationUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                password: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                password: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
+                    refreshUrl?: string | null | undefined;
+                }>>>;
             }, "strip", z.ZodTypeAny, {
                 authorizationCode?: {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             }, {
                 authorizationCode?: {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             }>;
-            oauth2MetadataUrl: z.ZodOptional<z.ZodString>;
+            oauth2MetadataUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             type: "oauth2";
             flows: {
@@ -7242,26 +7242,26 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -7269,51 +7269,51 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "openIdConnect", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             openIdConnectUrl: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "mutualTLS", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
         }, "strip", z.ZodTypeAny, {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>]>>>>;
-        security: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>;
+        security: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>>;
         defaultInputModes: z.ZodArray<z.ZodString, "many">;
         defaultOutputModes: z.ZodArray<z.ZodString, "many">;
         skills: z.ZodArray<z.ZodObject<{
@@ -7321,31 +7321,31 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             name: z.ZodString;
             description: z.ZodString;
             tags: z.ZodArray<z.ZodString, "many">;
-            examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            inputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            outputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            security: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>;
+            examples: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            inputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            outputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            security: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             name: string;
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }, {
             name: string;
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }>, "many">;
-        supportsAuthenticatedExtendedCard: z.ZodOptional<z.ZodBoolean>;
-        signatures: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        supportsAuthenticatedExtendedCard: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+        signatures: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             protected: z.ZodString;
             signature: z.ZodString;
             header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -7357,7 +7357,7 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }>, "many">>;
+        }>, "many">>>;
     }, "strip", z.ZodTypeAny, {
         name: string;
         url: string;
@@ -7367,13 +7367,13 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -7382,33 +7382,33 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
-        preferredTransport?: string | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "oauth2";
             flows: {
@@ -7416,40 +7416,40 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     }, {
         name: string;
         url: string;
@@ -7458,13 +7458,13 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -7473,34 +7473,34 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
         protocolVersion?: string | undefined;
-        preferredTransport?: string | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -7508,40 +7508,40 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -7554,13 +7554,13 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -7569,33 +7569,33 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
-        preferredTransport?: string | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "oauth2";
             flows: {
@@ -7603,43 +7603,43 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -7650,13 +7650,13 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -7665,34 +7665,34 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
         protocolVersion?: string | undefined;
-        preferredTransport?: string | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -7700,52 +7700,52 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -7762,8 +7762,8 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -7771,16 +7771,16 @@ export declare const A2AResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>]>;
 /**
  * @description Represents a JSON-RPC response object.
  */
 export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
@@ -7802,63 +7802,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 bytes: z.ZodString;
-                uri: z.ZodOptional<z.ZodNever>;
+                uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }>, z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 uri: z.ZodString;
-                bytes: z.ZodOptional<z.ZodNever>;
+                bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }>]>;
         }, "strip", z.ZodTypeAny, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -7877,11 +7877,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-        extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+        referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         messageId: z.ZodString;
-        taskId: z.ZodOptional<z.ZodString>;
-        contextId: z.ZodOptional<z.ZodString>;
+        taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         role: "user" | "agent";
@@ -7889,14 +7889,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -7911,24 +7911,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }, {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -7943,16 +7943,16 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -7972,63 +7972,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8047,11 +8047,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -8059,14 +8059,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8081,24 +8081,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8113,12 +8113,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -8127,14 +8127,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8149,12 +8149,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -8163,14 +8163,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8185,14 +8185,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -8212,63 +8212,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8287,11 +8287,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -8299,14 +8299,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8321,24 +8321,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8353,15 +8353,15 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -8380,63 +8380,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8455,20 +8455,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8481,23 +8481,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8510,11 +8510,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -8527,14 +8527,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8549,12 +8549,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -8565,14 +8565,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8587,24 +8587,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8617,11 +8617,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -8632,14 +8632,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8654,12 +8654,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -8670,14 +8670,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8692,24 +8692,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8722,11 +8722,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -8736,14 +8736,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -8758,10 +8758,10 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -8772,14 +8772,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8794,12 +8794,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -8810,14 +8810,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8832,24 +8832,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8862,14 +8862,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -8878,14 +8878,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -8900,10 +8900,10 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -8914,14 +8914,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -8936,12 +8936,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -8952,14 +8952,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -8974,24 +8974,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9004,23 +9004,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -9037,8 +9037,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -9046,12 +9046,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
@@ -9073,63 +9073,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 bytes: z.ZodString;
-                uri: z.ZodOptional<z.ZodNever>;
+                uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }, {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             }>, z.ZodObject<{
-                name: z.ZodOptional<z.ZodString>;
-                mimeType: z.ZodOptional<z.ZodString>;
+                name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             } & {
                 uri: z.ZodString;
-                bytes: z.ZodOptional<z.ZodNever>;
+                bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }, {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             }>]>;
         }, "strip", z.ZodTypeAny, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -9148,11 +9148,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-        extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+        referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         messageId: z.ZodString;
-        taskId: z.ZodOptional<z.ZodString>;
-        contextId: z.ZodOptional<z.ZodString>;
+        taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         role: "user" | "agent";
@@ -9160,14 +9160,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -9182,24 +9182,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }, {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -9214,16 +9214,16 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -9243,63 +9243,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9318,11 +9318,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -9330,14 +9330,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9352,24 +9352,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9384,12 +9384,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -9398,14 +9398,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9420,12 +9420,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -9434,14 +9434,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9456,14 +9456,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -9483,63 +9483,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9558,11 +9558,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -9570,14 +9570,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9592,24 +9592,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9624,15 +9624,15 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -9651,63 +9651,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9726,20 +9726,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9752,23 +9752,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9781,11 +9781,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -9798,14 +9798,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9820,12 +9820,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -9836,14 +9836,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9858,24 +9858,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9888,11 +9888,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -9903,14 +9903,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -9925,12 +9925,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -9941,14 +9941,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9963,24 +9963,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -9993,18 +9993,18 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>, z.ZodObject<{
         taskId: z.ZodString;
         contextId: z.ZodString;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "status-update", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -10024,63 +10024,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10099,11 +10099,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -10111,14 +10111,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10133,24 +10133,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10165,12 +10165,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -10179,14 +10179,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10201,12 +10201,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -10215,14 +10215,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10237,12 +10237,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
         final: z.ZodBoolean;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -10255,14 +10255,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10277,12 +10277,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "status-update";
         taskId: string;
@@ -10298,14 +10298,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10320,12 +10320,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -10338,8 +10338,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "artifact-update", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         artifact: z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -10358,63 +10358,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10433,20 +10433,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10459,23 +10459,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10488,13 +10488,13 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }>;
-        append: z.ZodOptional<z.ZodBoolean>;
-        lastChunk: z.ZodOptional<z.ZodBoolean>;
+        append: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+        lastChunk: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         kind: "artifact-update";
@@ -10505,14 +10505,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10525,14 +10525,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     }, {
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -10542,14 +10542,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10562,14 +10562,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -10579,14 +10579,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "file";
             metadata?: Record<string, unknown> | null | undefined;
@@ -10601,10 +10601,10 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -10615,14 +10615,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10637,12 +10637,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -10653,14 +10653,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10675,24 +10675,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10705,11 +10705,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     } | {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -10719,14 +10719,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10741,12 +10741,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "status-update";
         taskId: string;
@@ -10762,14 +10762,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10782,17 +10782,17 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -10801,14 +10801,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         parts: ({
             file: {
                 bytes: string;
-                name?: string | undefined;
-                mimeType?: string | undefined;
-                uri?: undefined;
+                name?: string | null | undefined;
+                mimeType?: string | null | undefined;
+                uri?: null | undefined;
             } | {
                 uri: string;
-                name?: string | undefined;
-                bytes?: undefined;
-                mimeType?: string | undefined;
+                name?: string | null | undefined;
+                bytes?: null | undefined;
+                mimeType?: string | null | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             metadata?: Record<string, unknown> | null | undefined;
@@ -10823,10 +10823,10 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         })[];
         messageId: string;
         metadata?: Record<string, unknown> | null | undefined;
-        extensions?: string[] | undefined;
-        referenceTaskIds?: string[] | undefined;
-        taskId?: string | undefined;
-        contextId?: string | undefined;
+        extensions?: string[] | null | undefined;
+        referenceTaskIds?: string[] | null | undefined;
+        taskId?: string | null | undefined;
+        contextId?: string | null | undefined;
     } | {
         id: string;
         status: {
@@ -10837,14 +10837,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10859,12 +10859,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -10875,14 +10875,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10897,24 +10897,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -10927,11 +10927,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     } | {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -10941,14 +10941,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -10963,12 +10963,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -10984,14 +10984,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11004,26 +11004,26 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         };
         metadata?: Record<string, unknown> | null | undefined;
-        append?: boolean | undefined;
-        lastChunk?: boolean | undefined;
+        append?: boolean | null | undefined;
+        lastChunk?: boolean | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -11040,8 +11040,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -11049,19 +11049,19 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -11081,63 +11081,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11156,11 +11156,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -11168,14 +11168,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11190,24 +11190,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11222,12 +11222,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -11236,14 +11236,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11258,12 +11258,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -11272,14 +11272,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11294,14 +11294,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -11321,63 +11321,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11396,11 +11396,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -11408,14 +11408,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11430,24 +11430,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11462,15 +11462,15 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -11489,63 +11489,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11564,20 +11564,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11590,23 +11590,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11619,11 +11619,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -11636,14 +11636,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11658,12 +11658,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -11674,14 +11674,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11696,24 +11696,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11726,11 +11726,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -11741,14 +11741,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11763,12 +11763,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -11779,14 +11779,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11801,24 +11801,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11831,11 +11831,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -11849,14 +11849,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11871,12 +11871,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -11887,14 +11887,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11909,24 +11909,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -11939,14 +11939,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -11959,14 +11959,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -11981,12 +11981,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -11997,14 +11997,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12019,24 +12019,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12049,23 +12049,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -12082,8 +12082,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -12091,19 +12091,19 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         id: z.ZodString;
         contextId: z.ZodString;
         status: z.ZodObject<{
             state: z.ZodEnum<["submitted", "working", "input-required", "completed", "canceled", "failed", "rejected", "auth-required", "unknown"]>;
-            message: z.ZodOptional<z.ZodObject<{
+            message: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -12123,63 +12123,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         bytes: z.ZodString;
-                        uri: z.ZodOptional<z.ZodNever>;
+                        uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }, {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     }>, z.ZodObject<{
-                        name: z.ZodOptional<z.ZodString>;
-                        mimeType: z.ZodOptional<z.ZodString>;
+                        name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                        mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     } & {
                         uri: z.ZodString;
-                        bytes: z.ZodOptional<z.ZodNever>;
+                        bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                     }, "strip", z.ZodTypeAny, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }, {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     }>]>;
                 }, "strip", z.ZodTypeAny, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12198,11 +12198,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-                extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-                referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+                referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
                 messageId: z.ZodString;
-                taskId: z.ZodOptional<z.ZodString>;
-                contextId: z.ZodOptional<z.ZodString>;
+                taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             }, "strip", z.ZodTypeAny, {
                 role: "user" | "agent";
@@ -12210,14 +12210,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12232,24 +12232,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
             }, {
                 role: "user" | "agent";
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12264,12 +12264,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            }>>;
-            timestamp: z.ZodOptional<z.ZodString>;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            }>>>;
+            timestamp: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -12278,14 +12278,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12300,12 +12300,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }, {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
             message?: {
@@ -12314,14 +12314,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12336,14 +12336,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         }>;
-        history: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        history: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -12363,63 +12363,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12438,11 +12438,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            referenceTaskIds: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
             messageId: z.ZodString;
-            taskId: z.ZodOptional<z.ZodString>;
-            contextId: z.ZodOptional<z.ZodString>;
+            taskId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            contextId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "message", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         }, "strip", z.ZodTypeAny, {
             role: "user" | "agent";
@@ -12450,14 +12450,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12472,24 +12472,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
         }, {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12504,15 +12504,15 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }>, "many">>;
-        artifacts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }>, "many">>>;
+        artifacts: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             artifactId: z.ZodString;
-            name: z.ZodOptional<z.ZodString>;
-            description: z.ZodOptional<z.ZodString>;
+            name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
                 metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
@@ -12531,63 +12531,63 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     bytes: z.ZodString;
-                    uri: z.ZodOptional<z.ZodNever>;
+                    uri: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }, {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 }>, z.ZodObject<{
-                    name: z.ZodOptional<z.ZodString>;
-                    mimeType: z.ZodOptional<z.ZodString>;
+                    name: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                    mimeType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                 } & {
                     uri: z.ZodString;
-                    bytes: z.ZodOptional<z.ZodNever>;
+                    bytes: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
                 }, "strip", z.ZodTypeAny, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }, {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 }>]>;
             }, "strip", z.ZodTypeAny, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12606,20 +12606,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
             metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-            extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            extension: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12632,23 +12632,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
         }, {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12661,11 +12661,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }>, "many">>;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }>, "many">>>;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
@@ -12678,14 +12678,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12700,12 +12700,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -12716,14 +12716,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12738,24 +12738,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12768,11 +12768,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }, {
         id: string;
         status: {
@@ -12783,14 +12783,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12805,12 +12805,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -12821,14 +12821,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12843,24 +12843,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12873,11 +12873,11 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -12891,14 +12891,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "file";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -12913,12 +12913,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "task";
         contextId: string;
@@ -12929,14 +12929,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12951,24 +12951,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "file";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -12981,14 +12981,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -13001,14 +13001,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 parts: ({
                     file: {
                         bytes: string;
-                        name?: string | undefined;
-                        mimeType?: string | undefined;
-                        uri?: undefined;
+                        name?: string | null | undefined;
+                        mimeType?: string | null | undefined;
+                        uri?: null | undefined;
                     } | {
                         uri: string;
-                        name?: string | undefined;
-                        bytes?: undefined;
-                        mimeType?: string | undefined;
+                        name?: string | null | undefined;
+                        bytes?: null | undefined;
+                        mimeType?: string | null | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                     metadata?: Record<string, unknown> | null | undefined;
@@ -13023,12 +13023,12 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 })[];
                 messageId: string;
                 metadata?: Record<string, unknown> | null | undefined;
-                extensions?: string[] | undefined;
-                referenceTaskIds?: string[] | undefined;
-                taskId?: string | undefined;
-                contextId?: string | undefined;
-            } | undefined;
-            timestamp?: string | undefined;
+                extensions?: string[] | null | undefined;
+                referenceTaskIds?: string[] | null | undefined;
+                taskId?: string | null | undefined;
+                contextId?: string | null | undefined;
+            } | null | undefined;
+            timestamp?: string | null | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
@@ -13039,14 +13039,14 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -13061,24 +13061,24 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             })[];
             messageId: string;
             metadata?: Record<string, unknown> | null | undefined;
-            extensions?: string[] | undefined;
-            referenceTaskIds?: string[] | undefined;
-            taskId?: string | undefined;
-            contextId?: string | undefined;
-        }[] | undefined;
+            extensions?: string[] | null | undefined;
+            referenceTaskIds?: string[] | null | undefined;
+            taskId?: string | null | undefined;
+            contextId?: string | null | undefined;
+        }[] | null | undefined;
         artifacts?: {
             artifactId: string;
             parts: ({
                 file: {
                     bytes: string;
-                    name?: string | undefined;
-                    mimeType?: string | undefined;
-                    uri?: undefined;
+                    name?: string | null | undefined;
+                    mimeType?: string | null | undefined;
+                    uri?: null | undefined;
                 } | {
                     uri: string;
-                    name?: string | undefined;
-                    bytes?: undefined;
-                    mimeType?: string | undefined;
+                    name?: string | null | undefined;
+                    bytes?: null | undefined;
+                    mimeType?: string | null | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
@@ -13091,23 +13091,23 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
                 metadata?: Record<string, unknown> | null | undefined;
             })[];
-            name?: string | undefined;
+            name?: string | null | undefined;
             metadata?: Record<string, unknown> | null | undefined;
-            description?: string | undefined;
-            extension?: string[] | undefined;
-        }[] | undefined;
+            description?: string | null | undefined;
+            extension?: string[] | null | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -13124,8 +13124,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -13133,67 +13133,67 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -13202,41 +13202,41 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -13253,8 +13253,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -13262,67 +13262,67 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -13331,41 +13331,41 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -13382,8 +13382,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -13391,67 +13391,67 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodArray<z.ZodObject<{
         taskId: z.ZodString;
         pushNotificationConfig: z.ZodObject<{
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             url: z.ZodString;
-            token: z.ZodOptional<z.ZodString>;
-            authentication: z.ZodOptional<z.ZodObject<{
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 schemes: z.ZodArray<z.ZodString, "many">;
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
@@ -13460,41 +13460,41 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -13511,8 +13511,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -13520,33 +13520,33 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodNull;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -13563,8 +13563,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -13572,20 +13572,20 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>, z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         protocolVersion: z.ZodDefault<z.ZodString>;
         name: z.ZodString;
         description: z.ZodString;
         url: z.ZodString;
-        preferredTransport: z.ZodOptional<z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>>;
-        additionalInterfaces: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        preferredTransport: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>>>;
+        additionalInterfaces: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             url: z.ZodString;
             transport: z.ZodUnion<[z.ZodEnum<["JSONRPC", "GRPC", "HTTP+JSON"]>, z.ZodString]>;
         }, "strip", z.ZodTypeAny, {
@@ -13594,9 +13594,9 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         }, {
             url: string;
             transport: string;
-        }>, "many">>;
-        iconUrl: z.ZodOptional<z.ZodString>;
-        provider: z.ZodOptional<z.ZodObject<{
+        }>, "many">>>;
+        iconUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+        provider: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             organization: z.ZodString;
             url: z.ZodString;
         }, "strip", z.ZodTypeAny, {
@@ -13605,52 +13605,52 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         }, {
             url: string;
             organization: string;
-        }>>;
+        }>>>;
         version: z.ZodString;
-        documentationUrl: z.ZodOptional<z.ZodString>;
+        documentationUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         capabilities: z.ZodObject<{
-            streaming: z.ZodOptional<z.ZodBoolean>;
-            pushNotifications: z.ZodOptional<z.ZodBoolean>;
-            stateTransitionHistory: z.ZodOptional<z.ZodBoolean>;
-            extensions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            streaming: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            pushNotifications: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            stateTransitionHistory: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+            extensions: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
                 uri: z.ZodString;
-                description: z.ZodOptional<z.ZodString>;
-                required: z.ZodOptional<z.ZodBoolean>;
+                description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
+                required: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
                 params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
             }, {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }>, "many">>;
+            }>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         }, {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         }>;
         securitySchemes: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             in: z.ZodEnum<["query", "header", "cookie"]>;
@@ -13659,134 +13659,134 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "http", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             scheme: z.ZodString;
-            bearerFormat: z.ZodOptional<z.ZodString>;
+            bearerFormat: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "oauth2", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             flows: z.ZodObject<{
-                authorizationCode: z.ZodOptional<z.ZodObject<{
+                authorizationCode: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     authorizationUrl: z.ZodString;
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                clientCredentials: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                clientCredentials: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                implicit: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                implicit: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     authorizationUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
-                password: z.ZodOptional<z.ZodObject<{
+                    refreshUrl?: string | null | undefined;
+                }>>>;
+                password: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                     tokenUrl: z.ZodString;
-                    refreshUrl: z.ZodOptional<z.ZodString>;
+                    refreshUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
                     scopes: z.ZodRecord<z.ZodString, z.ZodString>;
                 }, "strip", z.ZodTypeAny, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
+                    refreshUrl?: string | null | undefined;
                 }, {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                }>>;
+                    refreshUrl?: string | null | undefined;
+                }>>>;
             }, "strip", z.ZodTypeAny, {
                 authorizationCode?: {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             }, {
                 authorizationCode?: {
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             }>;
-            oauth2MetadataUrl: z.ZodOptional<z.ZodString>;
+            oauth2MetadataUrl: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             type: "oauth2";
             flows: {
@@ -13794,26 +13794,26 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -13821,51 +13821,51 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "openIdConnect", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
             openIdConnectUrl: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>, z.ZodObject<{
-            description: z.ZodOptional<z.ZodString>;
+            description: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "mutualTLS", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
         }, "strip", z.ZodTypeAny, {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }>]>>>>;
-        security: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>;
+        security: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>>;
         defaultInputModes: z.ZodArray<z.ZodString, "many">;
         defaultOutputModes: z.ZodArray<z.ZodString, "many">;
         skills: z.ZodArray<z.ZodObject<{
@@ -13873,31 +13873,31 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             name: z.ZodString;
             description: z.ZodString;
             tags: z.ZodArray<z.ZodString, "many">;
-            examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            inputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            outputModes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            security: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>;
+            examples: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            inputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            outputModes: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
+            security: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>, "many">>>;
         }, "strip", z.ZodTypeAny, {
             name: string;
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }, {
             name: string;
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }>, "many">;
-        supportsAuthenticatedExtendedCard: z.ZodOptional<z.ZodBoolean>;
-        signatures: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        supportsAuthenticatedExtendedCard: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+        signatures: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodObject<{
             protected: z.ZodString;
             signature: z.ZodString;
             header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -13909,7 +13909,7 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }>, "many">>;
+        }>, "many">>>;
     }, "strip", z.ZodTypeAny, {
         name: string;
         url: string;
@@ -13919,13 +13919,13 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -13934,33 +13934,33 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
-        preferredTransport?: string | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "oauth2";
             flows: {
@@ -13968,40 +13968,40 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     }, {
         name: string;
         url: string;
@@ -14010,13 +14010,13 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -14025,34 +14025,34 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
         protocolVersion?: string | undefined;
-        preferredTransport?: string | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -14060,40 +14060,40 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
@@ -14106,13 +14106,13 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -14121,33 +14121,33 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
-        preferredTransport?: string | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "http";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "oauth2";
             flows: {
@@ -14155,43 +14155,43 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "mutualTLS";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
@@ -14202,13 +14202,13 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         capabilities: {
             extensions?: {
                 uri: string;
-                required?: boolean | undefined;
-                description?: string | undefined;
+                required?: boolean | null | undefined;
+                description?: string | null | undefined;
                 params?: Record<string, unknown> | null | undefined;
-            }[] | undefined;
-            streaming?: boolean | undefined;
-            pushNotifications?: boolean | undefined;
-            stateTransitionHistory?: boolean | undefined;
+            }[] | null | undefined;
+            streaming?: boolean | null | undefined;
+            pushNotifications?: boolean | null | undefined;
+            stateTransitionHistory?: boolean | null | undefined;
         };
         defaultInputModes: string[];
         defaultOutputModes: string[];
@@ -14217,34 +14217,34 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
             id: string;
             description: string;
             tags: string[];
-            examples?: string[] | undefined;
-            inputModes?: string[] | undefined;
-            outputModes?: string[] | undefined;
-            security?: Record<string, string[]>[] | undefined;
+            examples?: string[] | null | undefined;
+            inputModes?: string[] | null | undefined;
+            outputModes?: string[] | null | undefined;
+            security?: Record<string, string[]>[] | null | undefined;
         }[];
-        security?: Record<string, string[]>[] | undefined;
+        security?: Record<string, string[]>[] | null | undefined;
         protocolVersion?: string | undefined;
-        preferredTransport?: string | undefined;
+        preferredTransport?: string | null | undefined;
         additionalInterfaces?: {
             url: string;
             transport: string;
-        }[] | undefined;
-        iconUrl?: string | undefined;
+        }[] | null | undefined;
+        iconUrl?: string | null | undefined;
         provider?: {
             url: string;
             organization: string;
-        } | undefined;
-        documentationUrl?: string | undefined;
+        } | null | undefined;
+        documentationUrl?: string | null | undefined;
         securitySchemes?: Record<string, {
             name: string;
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             in: "header" | "query" | "cookie";
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             scheme: string;
-            description?: string | undefined;
-            bearerFormat?: string | undefined;
+            description?: string | null | undefined;
+            bearerFormat?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             flows: {
@@ -14252,52 +14252,52 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
                     authorizationUrl: string;
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 clientCredentials?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 implicit?: {
                     authorizationUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
                 password?: {
                     tokenUrl: string;
                     scopes: Record<string, string>;
-                    refreshUrl?: string | undefined;
-                } | undefined;
+                    refreshUrl?: string | null | undefined;
+                } | null | undefined;
             };
-            description?: string | undefined;
-            oauth2MetadataUrl?: string | undefined;
+            description?: string | null | undefined;
+            oauth2MetadataUrl?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             openIdConnectUrl: string;
-            description?: string | undefined;
+            description?: string | null | undefined;
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
-            description?: string | undefined;
+            description?: string | null | undefined;
         }> | null | undefined;
-        supportsAuthenticatedExtendedCard?: boolean | undefined;
+        supportsAuthenticatedExtendedCard?: boolean | null | undefined;
         signatures?: {
             protected: string;
             signature: string;
             header?: Record<string, unknown> | null | undefined;
-        }[] | undefined;
+        }[] | null | undefined;
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -14314,8 +14314,8 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -14323,40 +14323,40 @@ export declare const JSONRPCResponseSchema: z.ZodUnion<[z.ZodUnion<[z.ZodUnion<[
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>]>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodAny;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
     result?: any;
 }, {
     jsonrpc: "2.0";
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
     result?: any;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    result: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     error: z.ZodAny;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
     error?: any;
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     jsonrpc: "2.0";
     error?: any;
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>;
 export type JSONRPCResponse = z.infer<typeof JSONRPCResponseSchema>;
 export type A2ARequest = z.infer<typeof A2ARequestSchema>;

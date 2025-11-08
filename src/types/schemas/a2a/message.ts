@@ -28,6 +28,7 @@ export const MessageSendConfigurationSchema = z
     acceptedOutputModes: z
       .array(z.string())
       .optional()
+      .nullable()
       .describe(
         "A list of output MIME types the client is prepared to accept in the response."
       ),
@@ -37,21 +38,25 @@ export const MessageSendConfigurationSchema = z
     historyLength: z
       .number()
       .optional()
+      .nullable()
       .describe(
         "The number of most recent messages from the task's history to retrieve in the response."
       ),
     /**
      * @optional Configuration for the agent to send push notifications for updates after the initial response.
      */
-    pushNotificationConfig: PushNotificationConfigSchema.optional().describe(
-      "Configuration for the agent to send push notifications for updates after the initial response."
-    ),
+    pushNotificationConfig: PushNotificationConfigSchema.optional()
+      .nullable()
+      .describe(
+        "Configuration for the agent to send push notifications for updates after the initial response."
+      ),
     /**
      * @optional If true, the client will wait for the task to complete. The server may reject this if the task is long-running.
      */
     blocking: z
       .boolean()
       .optional()
+      .nullable()
       .describe(
         "If true, the client will wait for the task to complete. The server may reject this if the task is long-running."
       ),
@@ -78,9 +83,9 @@ export const MessageSendParamsSchema = z
     /**
      * @optional Configuration options for the message send request.
      */
-    configuration: MessageSendConfigurationSchema.optional().describe(
-      "Configuration options for the message send request."
-    ),
+    configuration: MessageSendConfigurationSchema.optional()
+      .nullable()
+      .describe("Configuration options for the message send request."),
     /**
      * @optional Additional metadata to be included with the message.
      */

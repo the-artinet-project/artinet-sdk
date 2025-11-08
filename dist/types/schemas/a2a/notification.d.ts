@@ -13,15 +13,15 @@ export declare const GetTaskPushNotificationConfigParamSchema: z.ZodObject<{
     /**
      * @optional The ID of the push notification configuration to retrieve.
      */
-    pushNotificationConfigId: z.ZodOptional<z.ZodString>;
+    pushNotificationConfigId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     metadata?: Record<string, unknown> | null | undefined;
-    pushNotificationConfigId?: string | undefined;
+    pushNotificationConfigId?: string | null | undefined;
 }, {
     id: string;
     metadata?: Record<string, unknown> | null | undefined;
-    pushNotificationConfigId?: string | undefined;
+    pushNotificationConfigId?: string | null | undefined;
 }>;
 export type GetTaskPushNotificationConfigParam = z.infer<typeof GetTaskPushNotificationConfigParamSchema>;
 export declare const GetTaskPushNotificationConfigParamsSchema: z.ZodUnion<[z.ZodObject<{
@@ -31,15 +31,15 @@ export declare const GetTaskPushNotificationConfigParamsSchema: z.ZodUnion<[z.Zo
     /**
      * @optional The ID of the push notification configuration to retrieve.
      */
-    pushNotificationConfigId: z.ZodOptional<z.ZodString>;
+    pushNotificationConfigId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     metadata?: Record<string, unknown> | null | undefined;
-    pushNotificationConfigId?: string | undefined;
+    pushNotificationConfigId?: string | null | undefined;
 }, {
     id: string;
     metadata?: Record<string, unknown> | null | undefined;
-    pushNotificationConfigId?: string | undefined;
+    pushNotificationConfigId?: string | null | undefined;
 }>, z.ZodObject<{
     id: z.ZodString;
     metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -97,13 +97,13 @@ export declare const PushNotificationAuthenticationInfoSchema: z.ZodObject<{
     /**
      * @optional Optional credentials required by the push notification endpoint.
      */
-    credentials: z.ZodOptional<z.ZodString>;
+    credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     schemes: string[];
-    credentials?: string | undefined;
+    credentials?: string | null | undefined;
 }, {
     schemes: string[];
-    credentials?: string | undefined;
+    credentials?: string | null | undefined;
 }>;
 export type PushNotificationAuthenticationInfo = z.infer<typeof PushNotificationAuthenticationInfoSchema>;
 /**
@@ -114,7 +114,7 @@ export declare const PushNotificationConfigSchema: z.ZodObject<{
      * @optional A unique ID for the push notification configuration, created by the server
      * to support multiple notification callbacks.
      */
-    id: z.ZodOptional<z.ZodString>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @required The callback URL where the agent should send push notifications.
      */
@@ -122,11 +122,11 @@ export declare const PushNotificationConfigSchema: z.ZodObject<{
     /**
      * @optional A unique token for this task or session to validate incoming push notifications.
      */
-    token: z.ZodOptional<z.ZodString>;
+    token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     /**
      * @optional Authentication details for the agent to use when calling the notification URL.
      */
-    authentication: z.ZodOptional<z.ZodObject<{
+    authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
         /**
          * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
          */
@@ -134,30 +134,30 @@ export declare const PushNotificationConfigSchema: z.ZodObject<{
         /**
          * @optional Optional credentials required by the push notification endpoint.
          */
-        credentials: z.ZodOptional<z.ZodString>;
+        credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         schemes: string[];
-        credentials?: string | undefined;
+        credentials?: string | null | undefined;
     }, {
         schemes: string[];
-        credentials?: string | undefined;
-    }>>;
+        credentials?: string | null | undefined;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     url: string;
-    id?: string | undefined;
-    token?: string | undefined;
+    id?: string | null | undefined;
+    token?: string | null | undefined;
     authentication?: {
         schemes: string[];
-        credentials?: string | undefined;
-    } | undefined;
+        credentials?: string | null | undefined;
+    } | null | undefined;
 }, {
     url: string;
-    id?: string | undefined;
-    token?: string | undefined;
+    id?: string | null | undefined;
+    token?: string | null | undefined;
     authentication?: {
         schemes: string[];
-        credentials?: string | undefined;
-    } | undefined;
+        credentials?: string | null | undefined;
+    } | null | undefined;
 }>;
 export type PushNotificationConfig = z.infer<typeof PushNotificationConfigSchema>;
 /**
@@ -176,7 +176,7 @@ export declare const TaskPushNotificationConfigSchema: z.ZodObject<{
          * @optional A unique ID for the push notification configuration, created by the server
          * to support multiple notification callbacks.
          */
-        id: z.ZodOptional<z.ZodString>;
+        id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The callback URL where the agent should send push notifications.
          */
@@ -184,11 +184,11 @@ export declare const TaskPushNotificationConfigSchema: z.ZodObject<{
         /**
          * @optional A unique token for this task or session to validate incoming push notifications.
          */
-        token: z.ZodOptional<z.ZodString>;
+        token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional Authentication details for the agent to use when calling the notification URL.
          */
-        authentication: z.ZodOptional<z.ZodObject<{
+        authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
              */
@@ -196,52 +196,52 @@ export declare const TaskPushNotificationConfigSchema: z.ZodObject<{
             /**
              * @optional Optional credentials required by the push notification endpoint.
              */
-            credentials: z.ZodOptional<z.ZodString>;
+            credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             schemes: string[];
-            credentials?: string | undefined;
+            credentials?: string | null | undefined;
         }, {
             schemes: string[];
-            credentials?: string | undefined;
-        }>>;
+            credentials?: string | null | undefined;
+        }>>>;
     }, "strip", z.ZodTypeAny, {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     }, {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     taskId: string;
     pushNotificationConfig: {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     };
 }, {
     taskId: string;
     pushNotificationConfig: {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     };
 }>;
 export type TaskPushNotificationConfig = z.infer<typeof TaskPushNotificationConfigSchema>;
@@ -266,7 +266,7 @@ export declare const SetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -274,11 +274,11 @@ export declare const SetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -286,52 +286,52 @@ export declare const SetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -341,12 +341,12 @@ export declare const SetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
     jsonrpc: "2.0";
@@ -357,12 +357,12 @@ export declare const SetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
     jsonrpc: "2.0";
@@ -373,8 +373,8 @@ export type SetTaskPushNotificationConfigRequest = z.infer<typeof SetTaskPushNot
  */
 export declare const SetTaskPushNotificationConfigSuccessResponseSchema: z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         /**
@@ -389,7 +389,7 @@ export declare const SetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -397,11 +397,11 @@ export declare const SetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -409,52 +409,52 @@ export declare const SetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -463,32 +463,32 @@ export declare const SetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>;
 export type SetTaskPushNotificationConfigSuccessResponse = z.infer<typeof SetTaskPushNotificationConfigSuccessResponseSchema>;
 /**
@@ -496,8 +496,8 @@ export type SetTaskPushNotificationConfigSuccessResponse = z.infer<typeof SetTas
  */
 export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         /**
@@ -512,7 +512,7 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -520,11 +520,11 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -532,52 +532,52 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -586,41 +586,41 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -637,8 +637,8 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -646,8 +646,8 @@ export declare const SetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>;
 export type SetTaskPushNotificationConfigResponse = z.infer<typeof SetTaskPushNotificationConfigResponseSchema>;
 /**
@@ -665,15 +665,15 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
         /**
          * @optional The ID of the push notification configuration to retrieve.
          */
-        pushNotificationConfigId: z.ZodOptional<z.ZodString>;
+        pushNotificationConfigId: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     }, {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
@@ -693,7 +693,7 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     } | {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -705,7 +705,7 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     } | {
         id: string;
         metadata?: Record<string, unknown> | null | undefined;
-        pushNotificationConfigId?: string | undefined;
+        pushNotificationConfigId?: string | null | undefined;
     };
     jsonrpc: "2.0";
 }>;
@@ -715,8 +715,8 @@ export type GetTaskPushNotificationConfigRequest = z.infer<typeof GetTaskPushNot
  */
 export declare const GetTaskPushNotificationConfigSuccessResponseSchema: z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         /**
@@ -731,7 +731,7 @@ export declare const GetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -739,11 +739,11 @@ export declare const GetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -751,52 +751,52 @@ export declare const GetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -805,32 +805,32 @@ export declare const GetTaskPushNotificationConfigSuccessResponseSchema: z.ZodOb
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>;
 export type GetTaskPushNotificationConfigSuccessResponse = z.infer<typeof GetTaskPushNotificationConfigSuccessResponseSchema>;
 /**
@@ -838,8 +838,8 @@ export type GetTaskPushNotificationConfigSuccessResponse = z.infer<typeof GetTas
  */
 export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodObject<{
         /**
@@ -854,7 +854,7 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -862,11 +862,11 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -874,52 +874,52 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -928,41 +928,41 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     };
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -979,8 +979,8 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -988,8 +988,8 @@ export declare const GetTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>;
 export type GetTaskPushNotificationConfigResponse = z.infer<typeof GetTaskPushNotificationConfigResponseSchema>;
 /**
@@ -1041,7 +1041,7 @@ export declare const ListTaskPushNotificationConfigResultSchema: z.ZodArray<z.Zo
          * @optional A unique ID for the push notification configuration, created by the server
          * to support multiple notification callbacks.
          */
-        id: z.ZodOptional<z.ZodString>;
+        id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @required The callback URL where the agent should send push notifications.
          */
@@ -1049,11 +1049,11 @@ export declare const ListTaskPushNotificationConfigResultSchema: z.ZodArray<z.Zo
         /**
          * @optional A unique token for this task or session to validate incoming push notifications.
          */
-        token: z.ZodOptional<z.ZodString>;
+        token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         /**
          * @optional Authentication details for the agent to use when calling the notification URL.
          */
-        authentication: z.ZodOptional<z.ZodObject<{
+        authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
             /**
              * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
              */
@@ -1061,52 +1061,52 @@ export declare const ListTaskPushNotificationConfigResultSchema: z.ZodArray<z.Zo
             /**
              * @optional Optional credentials required by the push notification endpoint.
              */
-            credentials: z.ZodOptional<z.ZodString>;
+            credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
         }, "strip", z.ZodTypeAny, {
             schemes: string[];
-            credentials?: string | undefined;
+            credentials?: string | null | undefined;
         }, {
             schemes: string[];
-            credentials?: string | undefined;
-        }>>;
+            credentials?: string | null | undefined;
+        }>>>;
     }, "strip", z.ZodTypeAny, {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     }, {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     taskId: string;
     pushNotificationConfig: {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     };
 }, {
     taskId: string;
     pushNotificationConfig: {
         url: string;
-        id?: string | undefined;
-        token?: string | undefined;
+        id?: string | null | undefined;
+        token?: string | null | undefined;
         authentication?: {
             schemes: string[];
-            credentials?: string | undefined;
-        } | undefined;
+            credentials?: string | null | undefined;
+        } | null | undefined;
     };
 }>, "many">;
 export type ListTaskPushNotificationConfigResult = z.infer<typeof ListTaskPushNotificationConfigResultSchema>;
@@ -1115,8 +1115,8 @@ export type ListTaskPushNotificationConfigResult = z.infer<typeof ListTaskPushNo
  */
 export declare const ListTaskPushNotificationConfigSuccessResponseSchema: z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodArray<z.ZodObject<{
         /**
@@ -1131,7 +1131,7 @@ export declare const ListTaskPushNotificationConfigSuccessResponseSchema: z.ZodO
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -1139,11 +1139,11 @@ export declare const ListTaskPushNotificationConfigSuccessResponseSchema: z.ZodO
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -1151,52 +1151,52 @@ export declare const ListTaskPushNotificationConfigSuccessResponseSchema: z.ZodO
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
@@ -1205,32 +1205,32 @@ export declare const ListTaskPushNotificationConfigSuccessResponseSchema: z.ZodO
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>;
 export type ListTaskPushNotificationConfigSuccessResponse = z.infer<typeof ListTaskPushNotificationConfigSuccessResponseSchema>;
 /**
@@ -1238,8 +1238,8 @@ export type ListTaskPushNotificationConfigSuccessResponse = z.infer<typeof ListT
  */
 export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodArray<z.ZodObject<{
         /**
@@ -1254,7 +1254,7 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
              * @optional A unique ID for the push notification configuration, created by the server
              * to support multiple notification callbacks.
              */
-            id: z.ZodOptional<z.ZodString>;
+            id: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @required The callback URL where the agent should send push notifications.
              */
@@ -1262,11 +1262,11 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
             /**
              * @optional A unique token for this task or session to validate incoming push notifications.
              */
-            token: z.ZodOptional<z.ZodString>;
+            token: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             /**
              * @optional Authentication details for the agent to use when calling the notification URL.
              */
-            authentication: z.ZodOptional<z.ZodObject<{
+            authentication: z.ZodNullable<z.ZodOptional<z.ZodObject<{
                 /**
                  * @required A list of supported authentication schemes (e.g., 'Basic', 'Bearer').
                  */
@@ -1274,52 +1274,52 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
                 /**
                  * @optional Optional credentials required by the push notification endpoint.
                  */
-                credentials: z.ZodOptional<z.ZodString>;
+                credentials: z.ZodNullable<z.ZodOptional<z.ZodString>>;
             }, "strip", z.ZodTypeAny, {
                 schemes: string[];
-                credentials?: string | undefined;
+                credentials?: string | null | undefined;
             }, {
                 schemes: string[];
-                credentials?: string | undefined;
-            }>>;
+                credentials?: string | null | undefined;
+            }>>>;
         }, "strip", z.ZodTypeAny, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }, {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         }>;
     }, "strip", z.ZodTypeAny, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }, {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
@@ -1328,41 +1328,41 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: {
         taskId: string;
         pushNotificationConfig: {
             url: string;
-            id?: string | undefined;
-            token?: string | undefined;
+            id?: string | null | undefined;
+            token?: string | null | undefined;
             authentication?: {
                 schemes: string[];
-                credentials?: string | undefined;
-            } | undefined;
+                credentials?: string | null | undefined;
+            } | null | undefined;
         };
     }[];
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -1379,8 +1379,8 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -1388,8 +1388,8 @@ export declare const ListTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>;
 export type ListTaskPushNotificationConfigResponse = z.infer<typeof ListTaskPushNotificationConfigResponseSchema>;
 /**
@@ -1442,20 +1442,20 @@ export type DeleteTaskPushNotificationConfigRequest = z.infer<typeof DeleteTaskP
  */
 export declare const DeleteTaskPushNotificationConfigSuccessResponseSchema: z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodNull;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>;
 export type DeleteTaskPushNotificationConfigSuccessResponse = z.infer<typeof DeleteTaskPushNotificationConfigSuccessResponseSchema>;
 /**
@@ -1463,29 +1463,29 @@ export type DeleteTaskPushNotificationConfigSuccessResponse = z.infer<typeof Del
  */
 export declare const DeleteTaskPushNotificationConfigResponseSchema: z.ZodUnion<[z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
-    error: z.ZodOptional<z.ZodNever>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
+    error: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
 } & {
     result: z.ZodNull;
 }, "strip", z.ZodTypeAny, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }, {
     jsonrpc: "2.0";
     result: null;
-    error?: undefined;
-    id?: string | number | undefined;
+    error?: null | undefined;
+    id?: string | number | null | undefined;
 }>, z.ZodObject<{
     jsonrpc: z.ZodLiteral<"2.0">;
-    id: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    id: z.ZodNullable<z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>>;
 } & {
-    result: z.ZodOptional<z.ZodNever>;
+    result: z.ZodNullable<z.ZodOptional<z.ZodNever>>;
     error: z.ZodObject<{
         code: z.ZodNumber;
         message: z.ZodString;
-        data: z.ZodOptional<z.ZodUnknown>;
+        data: z.ZodNullable<z.ZodOptional<z.ZodUnknown>>;
     }, "strip", z.ZodTypeAny, {
         code: number;
         message: string;
@@ -1502,8 +1502,8 @@ export declare const DeleteTaskPushNotificationConfigResponseSchema: z.ZodUnion<
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }, {
     error: {
         code: number;
@@ -1511,7 +1511,7 @@ export declare const DeleteTaskPushNotificationConfigResponseSchema: z.ZodUnion<
         data?: unknown;
     };
     jsonrpc: "2.0";
-    id?: string | number | undefined;
-    result?: undefined;
+    id?: string | number | null | undefined;
+    result?: null | undefined;
 }>]>;
 export type DeleteTaskPushNotificationConfigResponse = z.infer<typeof DeleteTaskPushNotificationConfigResponseSchema>;

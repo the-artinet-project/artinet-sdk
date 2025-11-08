@@ -6,7 +6,7 @@ import { createContext } from "../factory/context.js";
 export async function sendMessage(input, params) {
     const { service, engine, contextManager, signal } = params;
     const contextId = input.message.contextId;
-    const context = createContext(input, service, contextManager, signal, contextId, service.eventOverrides);
+    const context = createContext(input, service, contextManager, signal, contextId ?? undefined, service.eventOverrides);
     context.events.on("complete", () => {
         contextManager.deleteContext(context.events.contextId);
     });

@@ -11,4 +11,4 @@ import { Message, TaskAndHistory, TaskStore } from "../../../types/index.js";
  * @param metadata Optional metadata
  * @returns The task and history
  */
-export declare function loadState(taskStore: TaskStore, message: Message, metadata?: Record<string, unknown> | null, taskId?: string, contextId?: string): Promise<TaskAndHistory>;
+export declare function loadState(taskStore: TaskStore, message: Message, metadata?: Record<string, unknown> | null, taskId?: string | null, contextId?: string | null): Promise<TaskAndHistory>;

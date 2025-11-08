@@ -24,6 +24,7 @@ export const JSONRPCMessageSchema = z
     id: z
         .union([z.string(), z.number()])
         .optional()
+        .nullable()
         .describe("An identifier established by the Client that MUST contain a String, Number. Responses must have the same ID as the request they relate to. Notifications (requests without an expected response) should omit the ID."),
 })
     .describe("Base interface for all JSON-RPC messages (Requests and Responses).");
@@ -85,6 +86,7 @@ export const JSONRPCErrorSchema = z
     data: z
         .unknown()
         .optional()
+        .nullable()
         .describe("A Primitive or Structured value that contains additional information about the error."),
 })
     .describe("Represents a JSON-RPC 2.0 Error object, included in an error response.");
@@ -106,6 +108,7 @@ export const JSONRPCSuccessResponseSchema = JSONRPCMessageSchema.extend({
     error: z
         .never()
         .optional()
+        .nullable()
         .describe("Optional 'never' helps enforce exclusivity"),
 }).describe("Represents a JSON-RPC 2.0 Success Response object.");
 /**
@@ -119,6 +122,7 @@ export const JSONRPCErrorResponseSchema = JSONRPCMessageSchema.extend({
     result: z
         .never()
         .optional()
+        .nullable()
         .describe("Optional 'never' helps enforce exclusivity"),
     /**
      * @required The result object on failure

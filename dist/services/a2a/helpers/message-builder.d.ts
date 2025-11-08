@@ -6,7 +6,7 @@ export declare class MessageBuilder {
 }
 export declare class MessageSendConfigurationBuilder {
     configuration: MessageSendConfiguration;
-    constructor(configuration?: Partial<MessageSendConfiguration>);
+    constructor(configuration?: Partial<MessageSendConfiguration> | null);
     valueOf(): MessageSendConfiguration;
 }
 export declare const createMessageSendParams: (messageSendParams: Partial<MessageSendParams> | string) => MessageSendParams;
