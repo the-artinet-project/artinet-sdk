@@ -1,1 +1,0 @@
-{"version":3,"file":"engine.d.ts","sourceRoot":"","sources":["../../../../../../src/types/interfaces/services/a2a/engine.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,EAAE,eAAe,EAAE,MAAM,4BAA4B,CAAC;AAC7D,OAAO,EAAE,OAAO,EAAE,KAAK,EAAE,MAAM,EAAE,MAAM,cAAc,CAAC;AAEtD,MAAM,MAAM,SAAS,GAAG,eAAe,CAAC,OAAO,EAAE,KAAK,EAAE,MAAM,CAAC,CAAC"}

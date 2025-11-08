@@ -1,1 +1,0 @@
-{"version":3,"file":"cancel-task.d.ts","sourceRoot":"","sources":["../../../../../src/services/a2a/methods/cancel-task.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,EAEL,YAAY,EACZ,IAAI,EAKJ,YAAY,EACb,gCAAyB;AAO1B,wBAAsB,UAAU,CAC9B,KAAK,EAAE,YAAY,EACnB,MAAM,EAAE,IAAI,CAAC,YAAY,EAAE,QAAQ,GAAG,QAAQ,CAAC,GAC9C,OAAO,CAAC,IAAI,CAAC,CAqDf;AAED,MAAM,MAAM,gBAAgB,GAAG,OAAO,UAAU,CAAC"}
