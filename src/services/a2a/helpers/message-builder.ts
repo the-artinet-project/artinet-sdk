@@ -40,17 +40,17 @@ export class MessageSendConfigurationBuilder {
     pushNotificationConfig: undefined,
     blocking: undefined,
   };
-  constructor(configuration: Partial<MessageSendConfiguration> = {}) {
+  constructor(configuration: Partial<MessageSendConfiguration> | null = {}) {
     this.configuration.acceptedOutputModes =
-      configuration.acceptedOutputModes ??
+      configuration?.acceptedOutputModes ??
       this.configuration.acceptedOutputModes;
     this.configuration.historyLength =
-      configuration.historyLength ?? this.configuration.historyLength;
+      configuration?.historyLength ?? this.configuration.historyLength;
     this.configuration.pushNotificationConfig =
-      configuration.pushNotificationConfig ??
+      configuration?.pushNotificationConfig ??
       this.configuration.pushNotificationConfig;
     this.configuration.blocking =
-      configuration.blocking ?? this.configuration.blocking;
+      configuration?.blocking ?? this.configuration.blocking;
   }
   valueOf(): MessageSendConfiguration {
     return this.configuration;

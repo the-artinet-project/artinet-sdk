@@ -53,6 +53,7 @@ const MOCK_AGENT_CARD: AgentCard = {
 
 const MOCK_TASK: Task = {
   id: "test-task-123",
+  contextId: "test-context-id",
   kind: "task",
   status: {
     state: "completed" as TaskState,

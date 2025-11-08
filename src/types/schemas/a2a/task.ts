@@ -41,6 +41,7 @@ export const TaskIdParamsSchema = z
     metadata: z
       .record(z.string(), z.unknown())
       .optional()
+      .nullable()
       .describe("Additional metadata to include in the request."),
   })
   .describe("Defines the parameters for a request to get a task.");
@@ -50,7 +51,7 @@ export type TaskIdParams = z.infer<typeof TaskIdParamsSchema>;
  * Parameters used for querying task-related information by ID.
  */
 export const TaskQueryParamsSchema = TaskIdParamsSchema.extend({
-  historyLength: z.number().optional(),
+  historyLength: z.number().optional().nullable(),
 });
 export type TaskQueryParams = z.infer<typeof TaskQueryParamsSchema>;
 
@@ -59,8 +60,8 @@ export type TaskQueryParams = z.infer<typeof TaskQueryParamsSchema>;
  */
 export const TaskStatusSchema = z.object({
   state: TaskStateSchema,
-  message: MessageSchema.optional(),
-  timestamp: z.string().datetime().optional(),
+  message: MessageSchema.optional().nullable(),
+  timestamp: z.string().datetime().optional().nullable(),
 });
 export type TaskStatus = z.infer<typeof TaskStatusSchema>;
 
@@ -71,9 +72,9 @@ export const TaskSchema = z.object({
   id: z.string(),
   contextId: z.string(),
   status: TaskStatusSchema,
-  history: z.array(MessageSchema).optional(),
-  artifacts: z.array(ArtifactSchema).optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  history: z.array(MessageSchema).optional().nullable(),
+  artifacts: z.array(ArtifactSchema).optional().nullable(),
+  metadata: z.record(z.string(), z.unknown()).optional().nullable(),
   kind: KindSchema.refine((kind) => kind === "task"),
 });
 export type Task = z.infer<typeof TaskSchema>;
@@ -87,7 +88,7 @@ export const TaskStatusUpdateEventSchema = z.object({
   kind: KindSchema.refine((kind) => kind === "status-update"),
   status: TaskStatusSchema,
   final: z.boolean(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional().nullable(),
 });
 export type TaskStatusUpdateEvent = z.infer<typeof TaskStatusUpdateEventSchema>;
 
@@ -99,9 +100,9 @@ export const TaskArtifactUpdateEventSchema = z.object({
   contextId: z.string(),
   kind: KindSchema.refine((kind) => kind === "artifact-update"),
   artifact: ArtifactSchema,
-  append: z.boolean().optional(),
-  lastChunk: z.boolean().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  append: z.boolean().optional().nullable(),
+  lastChunk: z.boolean().optional().nullable(),
+  metadata: z.record(z.string(), z.unknown()).optional().nullable(),
 });
 export type TaskArtifactUpdateEvent = z.infer<
   typeof TaskArtifactUpdateEventSchema

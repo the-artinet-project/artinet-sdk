@@ -18,14 +18,14 @@ export async function* streamMessage(
   params: MethodParams
 ) {
   const { service, engine, contextManager, signal } = params;
-  let contextId: string | undefined = input.message.contextId;
+  let contextId: string | null | undefined = input.message.contextId;
   const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
     createContext(
       input,
       service,
       contextManager,
       signal,
-      contextId,
+      contextId ?? undefined,
       service.eventOverrides
     );
 

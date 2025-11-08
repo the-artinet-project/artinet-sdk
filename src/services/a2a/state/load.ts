@@ -44,9 +44,9 @@ async function getReferences(
 export async function loadState(
   taskStore: TaskStore,
   message: Message,
-  metadata?: Record<string, unknown>,
-  taskId?: string,
-  contextId?: string
+  metadata?: Record<string, unknown> | null,
+  taskId?: string | null,
+  contextId?: string | null
 ): Promise<TaskAndHistory> {
   if (taskId) {
     const existingData: TaskAndHistory | null = await taskStore.load(taskId);
