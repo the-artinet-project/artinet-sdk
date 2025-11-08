@@ -20,24 +20,24 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -60,7 +60,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
     resubscribe: import("@trpc/server").TRPCSubscriptionProcedure<{
         input: {
             id: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         };
         output: AsyncIterable<{
             role: "user" | "agent";
@@ -78,18 +78,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -114,18 +114,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                             mimeType?: string | undefined;
                         };
                         kind: "file";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         text: string;
                         kind: "text";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         data: Record<string, unknown>;
                         kind: "data";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     })[];
                     messageId: string;
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                     extensions?: string[] | undefined;
                     referenceTaskIds?: string[] | undefined;
                     taskId?: string | undefined;
@@ -135,7 +135,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             kind: "task";
             contextId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             history?: {
                 role: "user" | "agent";
                 kind: "message";
@@ -152,18 +152,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -184,18 +184,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 name?: string | undefined;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 description?: string | undefined;
                 extension?: string[] | undefined;
             }[] | undefined;
@@ -218,18 +218,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                             mimeType?: string | undefined;
                         };
                         kind: "file";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         text: string;
                         kind: "text";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         data: Record<string, unknown>;
                         kind: "data";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     })[];
                     messageId: string;
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                     extensions?: string[] | undefined;
                     referenceTaskIds?: string[] | undefined;
                     taskId?: string | undefined;
@@ -241,7 +241,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
             taskId: string;
             contextId: string;
             final: boolean;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             kind: "artifact-update";
             taskId: string;
@@ -261,22 +261,22 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 name?: string | undefined;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 description?: string | undefined;
                 extension?: string[] | undefined;
             };
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             append?: boolean | undefined;
             lastChunk?: boolean | undefined;
         }, void, unknown>;
@@ -285,7 +285,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
     get: import("@trpc/server").TRPCQueryProcedure<{
         input: {
             id: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         };
         output: {
             id: string;
@@ -307,18 +307,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                             mimeType?: string | undefined;
                         };
                         kind: "file";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         text: string;
                         kind: "text";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         data: Record<string, unknown>;
                         kind: "data";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     })[];
                     messageId: string;
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                     extensions?: string[] | undefined;
                     referenceTaskIds?: string[] | undefined;
                     taskId?: string | undefined;
@@ -328,7 +328,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             kind: "task";
             contextId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             history?: {
                 role: "user" | "agent";
                 kind: "message";
@@ -345,18 +345,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -377,18 +377,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 name?: string | undefined;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 description?: string | undefined;
                 extension?: string[] | undefined;
             }[] | undefined;
@@ -398,7 +398,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
     cancel: import("@trpc/server").TRPCMutationProcedure<{
         input: {
             id: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         };
         output: {
             id: string;
@@ -420,18 +420,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                             mimeType?: string | undefined;
                         };
                         kind: "file";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         text: string;
                         kind: "text";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     } | {
                         data: Record<string, unknown>;
                         kind: "data";
-                        metadata?: Record<string, unknown> | undefined;
+                        metadata?: Record<string, unknown> | null | undefined;
                     })[];
                     messageId: string;
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                     extensions?: string[] | undefined;
                     referenceTaskIds?: string[] | undefined;
                     taskId?: string | undefined;
@@ -441,7 +441,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             kind: "task";
             contextId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             history?: {
                 role: "user" | "agent";
                 kind: "message";
@@ -458,18 +458,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -490,18 +490,18 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 name?: string | undefined;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 description?: string | undefined;
                 extension?: string[] | undefined;
             }[] | undefined;
@@ -526,24 +526,24 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
                 contextId?: string | undefined;
             };
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             configuration?: {
                 historyLength?: number | undefined;
                 pushNotificationConfig?: {
@@ -593,10 +593,10 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
         get: import("@trpc/server").TRPCQueryProcedure<{
             input: {
                 id: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 id: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 pushNotificationConfigId?: string | undefined;
             };
             output: {
@@ -616,7 +616,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
         list: import("@trpc/server").TRPCQueryProcedure<{
             input: {
                 id: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             };
             output: {
                 taskId: string;
@@ -636,7 +636,7 @@ export declare const taskRouter: import("@trpc/server").TRPCBuiltRouter<{
             input: {
                 id: string;
                 pushNotificationConfigId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             };
             output: null;
             meta: object;

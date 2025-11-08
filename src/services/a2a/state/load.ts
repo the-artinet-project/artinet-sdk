@@ -44,7 +44,7 @@ async function getReferences(
 export async function loadState(
   taskStore: TaskStore,
   message: Message,
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, unknown> | null,
   taskId?: string,
   contextId?: string
 ): Promise<TaskAndHistory> {

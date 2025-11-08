@@ -42,17 +42,17 @@ export declare const AgentExtensionSchema: z.ZodObject<{
     /**
      * @optional Optional configuration for the extension.
      */
-    params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     uri: string;
     required?: boolean | undefined;
     description?: string | undefined;
-    params?: Record<string, unknown> | undefined;
+    params?: Record<string, unknown> | null | undefined;
 }, {
     uri: string;
     required?: boolean | undefined;
     description?: string | undefined;
-    params?: Record<string, unknown> | undefined;
+    params?: Record<string, unknown> | null | undefined;
 }>;
 export type AgentExtension = z.infer<typeof AgentExtensionSchema>;
 /**
@@ -90,24 +90,24 @@ export declare const AgentCapabilitiesSchema: z.ZodObject<{
         /**
          * @optional Optional configuration for the extension.
          */
-        params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         uri: string;
         required?: boolean | undefined;
         description?: string | undefined;
-        params?: Record<string, unknown> | undefined;
+        params?: Record<string, unknown> | null | undefined;
     }, {
         uri: string;
         required?: boolean | undefined;
         description?: string | undefined;
-        params?: Record<string, unknown> | undefined;
+        params?: Record<string, unknown> | null | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
     extensions?: {
         uri: string;
         required?: boolean | undefined;
         description?: string | undefined;
-        params?: Record<string, unknown> | undefined;
+        params?: Record<string, unknown> | null | undefined;
     }[] | undefined;
     streaming?: boolean | undefined;
     pushNotifications?: boolean | undefined;
@@ -117,7 +117,7 @@ export declare const AgentCapabilitiesSchema: z.ZodObject<{
         uri: string;
         required?: boolean | undefined;
         description?: string | undefined;
-        params?: Record<string, unknown> | undefined;
+        params?: Record<string, unknown> | null | undefined;
     }[] | undefined;
     streaming?: boolean | undefined;
     pushNotifications?: boolean | undefined;
@@ -195,15 +195,15 @@ export declare const AgentCardSignatureSchema: z.ZodObject<{
     /**
      * @optional The unprotected JWS header values.
      */
-    header: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     protected: string;
     signature: string;
-    header?: Record<string, unknown> | undefined;
+    header?: Record<string, unknown> | null | undefined;
 }, {
     protected: string;
     signature: string;
-    header?: Record<string, unknown> | undefined;
+    header?: Record<string, unknown> | null | undefined;
 }>;
 export type AgentCardSignature = z.infer<typeof AgentCardSignatureSchema>;
 /**
@@ -310,24 +310,24 @@ export declare const AgentCardSchema: z.ZodObject<{
             /**
              * @optional Optional configuration for the extension.
              */
-            params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         }, "strip", z.ZodTypeAny, {
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }, {
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         extensions?: {
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }[] | undefined;
         streaming?: boolean | undefined;
         pushNotifications?: boolean | undefined;
@@ -337,7 +337,7 @@ export declare const AgentCardSchema: z.ZodObject<{
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }[] | undefined;
         streaming?: boolean | undefined;
         pushNotifications?: boolean | undefined;
@@ -347,7 +347,7 @@ export declare const AgentCardSchema: z.ZodObject<{
      * @optional Security scheme details used for authenticating with this agent.
      * Maps scheme names to their configurations.
      */
-    securitySchemes: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
+    securitySchemes: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
     } & {
         type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
@@ -562,7 +562,7 @@ export declare const AgentCardSchema: z.ZodObject<{
     }, {
         type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
         description?: string | undefined;
-    }>]>>>;
+    }>]>>>>;
     /**
      * @optional Security requirements for contacting the agent.
      * Array of security requirement objects, where each object maps scheme names to scope arrays.
@@ -650,15 +650,15 @@ export declare const AgentCardSchema: z.ZodObject<{
         /**
          * @optional The unprotected JWS header values.
          */
-        header: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         protected: string;
         signature: string;
-        header?: Record<string, unknown> | undefined;
+        header?: Record<string, unknown> | null | undefined;
     }, {
         protected: string;
         signature: string;
-        header?: Record<string, unknown> | undefined;
+        header?: Record<string, unknown> | null | undefined;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
     name: string;
@@ -671,7 +671,7 @@ export declare const AgentCardSchema: z.ZodObject<{
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }[] | undefined;
         streaming?: boolean | undefined;
         pushNotifications?: boolean | undefined;
@@ -745,12 +745,12 @@ export declare const AgentCardSchema: z.ZodObject<{
     } | {
         type: "mutualTLS";
         description?: string | undefined;
-    }> | undefined;
+    }> | null | undefined;
     supportsAuthenticatedExtendedCard?: boolean | undefined;
     signatures?: {
         protected: string;
         signature: string;
-        header?: Record<string, unknown> | undefined;
+        header?: Record<string, unknown> | null | undefined;
     }[] | undefined;
 }, {
     name: string;
@@ -762,7 +762,7 @@ export declare const AgentCardSchema: z.ZodObject<{
             uri: string;
             required?: boolean | undefined;
             description?: string | undefined;
-            params?: Record<string, unknown> | undefined;
+            params?: Record<string, unknown> | null | undefined;
         }[] | undefined;
         streaming?: boolean | undefined;
         pushNotifications?: boolean | undefined;
@@ -837,12 +837,12 @@ export declare const AgentCardSchema: z.ZodObject<{
     } | {
         type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
         description?: string | undefined;
-    }> | undefined;
+    }> | null | undefined;
     supportsAuthenticatedExtendedCard?: boolean | undefined;
     signatures?: {
         protected: string;
         signature: string;
-        header?: Record<string, unknown> | undefined;
+        header?: Record<string, unknown> | null | undefined;
     }[] | undefined;
 }>;
 export type AgentCard = z.infer<typeof AgentCardSchema>;
@@ -975,24 +975,24 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 /**
                  * @optional Optional configuration for the extension.
                  */
-                params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }, {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
             extensions?: {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1002,7 +1002,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1012,7 +1012,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
          * @optional Security scheme details used for authenticating with this agent.
          * Maps scheme names to their configurations.
          */
-        securitySchemes: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
+        securitySchemes: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
             description: z.ZodOptional<z.ZodString>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
@@ -1227,7 +1227,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }>]>>>;
+        }>]>>>>;
         /**
          * @optional Security requirements for contacting the agent.
          * Array of security requirement objects, where each object maps scheme names to scope arrays.
@@ -1315,15 +1315,15 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
             /**
              * @optional The unprotected JWS header values.
              */
-            header: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         }, "strip", z.ZodTypeAny, {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }, {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         name: string;
@@ -1336,7 +1336,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1410,12 +1410,12 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
         } | {
             type: "mutualTLS";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     }, {
         name: string;
@@ -1427,7 +1427,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1502,12 +1502,12 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -1523,7 +1523,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1597,12 +1597,12 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
         } | {
             type: "mutualTLS";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     };
     error?: undefined;
@@ -1619,7 +1619,7 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1694,12 +1694,12 @@ export declare const GetAuthenticatedExtendedCardSuccessResponseSchema: z.ZodObj
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     };
     error?: undefined;
@@ -1814,24 +1814,24 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 /**
                  * @optional Optional configuration for the extension.
                  */
-                params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             }, "strip", z.ZodTypeAny, {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }, {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
             extensions?: {
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1841,7 +1841,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -1851,7 +1851,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
          * @optional Security scheme details used for authenticating with this agent.
          * Maps scheme names to their configurations.
          */
-        securitySchemes: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
+        securitySchemes: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodObject<{
             description: z.ZodOptional<z.ZodString>;
         } & {
             type: z.ZodEffects<z.ZodEnum<["apiKey", "http", "mutualTLS", "oauth2", "openIdConnect"]>, "apiKey", "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect">;
@@ -2066,7 +2066,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
         }, {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }>]>>>;
+        }>]>>>>;
         /**
          * @optional Security requirements for contacting the agent.
          * Array of security requirement objects, where each object maps scheme names to scope arrays.
@@ -2154,15 +2154,15 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
             /**
              * @optional The unprotected JWS header values.
              */
-            header: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            header: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         }, "strip", z.ZodTypeAny, {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }, {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         name: string;
@@ -2175,7 +2175,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -2249,12 +2249,12 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
         } | {
             type: "mutualTLS";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     }, {
         name: string;
@@ -2266,7 +2266,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -2341,12 +2341,12 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -2362,7 +2362,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -2436,12 +2436,12 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
         } | {
             type: "mutualTLS";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     };
     error?: undefined;
@@ -2458,7 +2458,7 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -2533,12 +2533,12 @@ export declare const GetAuthenticatedExtendedCardResponseSchema: z.ZodUnion<[z.Z
         } | {
             type: "apiKey" | "http" | "mutualTLS" | "oauth2" | "openIdConnect";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     };
     error?: undefined;

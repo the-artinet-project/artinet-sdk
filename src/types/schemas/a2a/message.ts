@@ -87,6 +87,7 @@ export const MessageSendParamsSchema = z
     metadata: z
       .record(z.string(), z.unknown())
       .optional()
+      .nullable()
       .describe("Additional metadata to be included with the message."),
   })
   .describe(

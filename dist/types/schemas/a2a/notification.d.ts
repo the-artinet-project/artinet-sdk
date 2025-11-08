@@ -8,7 +8,7 @@ import { z } from "zod";
  */
 export declare const GetTaskPushNotificationConfigParamSchema: z.ZodObject<{
     id: z.ZodString;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @optional The ID of the push notification configuration to retrieve.
@@ -16,17 +16,17 @@ export declare const GetTaskPushNotificationConfigParamSchema: z.ZodObject<{
     pushNotificationConfigId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     pushNotificationConfigId?: string | undefined;
 }, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     pushNotificationConfigId?: string | undefined;
 }>;
 export type GetTaskPushNotificationConfigParam = z.infer<typeof GetTaskPushNotificationConfigParamSchema>;
 export declare const GetTaskPushNotificationConfigParamsSchema: z.ZodUnion<[z.ZodObject<{
     id: z.ZodString;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @optional The ID of the push notification configuration to retrieve.
@@ -34,21 +34,21 @@ export declare const GetTaskPushNotificationConfigParamsSchema: z.ZodUnion<[z.Zo
     pushNotificationConfigId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     pushNotificationConfigId?: string | undefined;
 }, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     pushNotificationConfigId?: string | undefined;
 }>, z.ZodObject<{
     id: z.ZodString;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>]>;
 export type GetTaskPushNotificationConfigParams = z.infer<typeof GetTaskPushNotificationConfigParamsSchema>;
 /**
@@ -56,13 +56,13 @@ export type GetTaskPushNotificationConfigParams = z.infer<typeof GetTaskPushNoti
  */
 export declare const ListTaskPushNotificationConfigsParamsSchema: z.ZodObject<{
     id: z.ZodString;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     id: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type ListTaskPushNotificationConfigsParams = z.infer<typeof ListTaskPushNotificationConfigsParamsSchema>;
 /**
@@ -70,7 +70,7 @@ export type ListTaskPushNotificationConfigsParams = z.infer<typeof ListTaskPushN
  */
 export declare const DeleteTaskPushNotificationConfigParamsSchema: z.ZodObject<{
     id: z.ZodString;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The ID of the push notification configuration to delete.
@@ -79,11 +79,11 @@ export declare const DeleteTaskPushNotificationConfigParamsSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     pushNotificationConfigId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     id: string;
     pushNotificationConfigId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type DeleteTaskPushNotificationConfigParams = z.infer<typeof DeleteTaskPushNotificationConfigParamsSchema>;
 /**
@@ -660,7 +660,7 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     method: z.ZodLiteral<"tasks/pushNotificationConfig/get">;
     params: z.ZodUnion<[z.ZodObject<{
         id: z.ZodString;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @optional The ID of the push notification configuration to retrieve.
@@ -668,31 +668,31 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
         pushNotificationConfigId: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         pushNotificationConfigId?: string | undefined;
     }, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         pushNotificationConfigId?: string | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>]>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
     method: "tasks/pushNotificationConfig/get";
     params: {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         pushNotificationConfigId?: string | undefined;
     };
     jsonrpc: "2.0";
@@ -701,10 +701,10 @@ export declare const GetTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     method: "tasks/pushNotificationConfig/get";
     params: {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         pushNotificationConfigId?: string | undefined;
     };
     jsonrpc: "2.0";
@@ -1002,20 +1002,20 @@ export declare const ListTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     method: z.ZodLiteral<"tasks/pushNotificationConfig/list">;
     params: z.ZodObject<{
         id: z.ZodString;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
     method: "tasks/pushNotificationConfig/list";
     params: {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -1023,7 +1023,7 @@ export declare const ListTaskPushNotificationConfigRequestSchema: z.ZodObject<{
     method: "tasks/pushNotificationConfig/list";
     params: {
         id: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     };
     jsonrpc: "2.0";
 }>;
@@ -1402,7 +1402,7 @@ export declare const DeleteTaskPushNotificationConfigRequestSchema: z.ZodObject<
     method: z.ZodLiteral<"tasks/pushNotificationConfig/delete">;
     params: z.ZodObject<{
         id: z.ZodString;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The ID of the push notification configuration to delete.
@@ -1411,11 +1411,11 @@ export declare const DeleteTaskPushNotificationConfigRequestSchema: z.ZodObject<
     }, "strip", z.ZodTypeAny, {
         id: string;
         pushNotificationConfigId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         id: string;
         pushNotificationConfigId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
@@ -1423,7 +1423,7 @@ export declare const DeleteTaskPushNotificationConfigRequestSchema: z.ZodObject<
     params: {
         id: string;
         pushNotificationConfigId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     };
     jsonrpc: "2.0";
 }, {
@@ -1432,7 +1432,7 @@ export declare const DeleteTaskPushNotificationConfigRequestSchema: z.ZodObject<
     params: {
         id: string;
         pushNotificationConfigId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     };
     jsonrpc: "2.0";
 }>;

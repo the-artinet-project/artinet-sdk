@@ -42,18 +42,18 @@ export declare class A2AService implements A2AServiceInterface {
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -63,7 +63,7 @@ export declare class A2AService implements A2AServiceInterface {
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -80,18 +80,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -112,18 +112,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -148,18 +148,18 @@ export declare class A2AService implements A2AServiceInterface {
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -169,7 +169,7 @@ export declare class A2AService implements A2AServiceInterface {
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -186,18 +186,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -218,18 +218,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -250,18 +250,18 @@ export declare class A2AService implements A2AServiceInterface {
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -286,18 +286,18 @@ export declare class A2AService implements A2AServiceInterface {
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -307,7 +307,7 @@ export declare class A2AService implements A2AServiceInterface {
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -324,18 +324,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -356,18 +356,18 @@ export declare class A2AService implements A2AServiceInterface {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;

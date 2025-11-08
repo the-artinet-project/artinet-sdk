@@ -92,20 +92,20 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
     message: z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -154,7 +154,7 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -168,22 +168,22 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -206,18 +206,18 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -238,18 +238,18 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -335,7 +335,7 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
     /**
      * @optional Additional metadata to be included with the message.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     message: {
         role: "user" | "agent";
@@ -353,24 +353,24 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
         contextId?: string | undefined;
     };
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     configuration?: {
         historyLength?: number | undefined;
         pushNotificationConfig?: {
@@ -402,24 +402,24 @@ export declare const MessageSendParamsSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
         contextId?: string | undefined;
     };
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     configuration?: {
         historyLength?: number | undefined;
         pushNotificationConfig?: {
@@ -451,20 +451,20 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
         message: z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -513,7 +513,7 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -527,22 +527,22 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -565,18 +565,18 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -597,18 +597,18 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -694,7 +694,7 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
         /**
          * @optional Additional metadata to be included with the message.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         message: {
             role: "user" | "agent";
@@ -712,24 +712,24 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -761,24 +761,24 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -814,24 +814,24 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -868,24 +868,24 @@ export declare const SendMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -910,20 +910,20 @@ export type SendMessageRequest = z.infer<typeof SendMessageRequestSchema>;
 export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
     role: z.ZodEnum<["user", "agent"]>;
     parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         text: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         file: z.ZodUnion<[z.ZodObject<{
@@ -972,7 +972,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
@@ -986,22 +986,22 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
     }, "strip", z.ZodTypeAny, {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>]>, "many">;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     messageId: z.ZodString;
@@ -1024,18 +1024,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;
@@ -1056,18 +1056,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;
@@ -1080,20 +1080,20 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
         message: z.ZodOptional<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -1142,7 +1142,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -1156,22 +1156,22 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -1194,18 +1194,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1226,18 +1226,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1262,18 +1262,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1298,18 +1298,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1320,20 +1320,20 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
     history: z.ZodOptional<z.ZodArray<z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -1382,7 +1382,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -1396,22 +1396,22 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -1434,18 +1434,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -1466,18 +1466,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -1488,20 +1488,20 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
         name: z.ZodOptional<z.ZodString>;
         description: z.ZodOptional<z.ZodString>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -1550,7 +1550,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -1564,22 +1564,22 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         artifactId: string;
@@ -1596,18 +1596,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }, {
@@ -1625,22 +1625,22 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }>, "many">>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
 }, "strip", z.ZodTypeAny, {
     id: string;
@@ -1662,18 +1662,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1683,7 +1683,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
     };
     kind: "task";
     contextId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     history?: {
         role: "user" | "agent";
         kind: "message";
@@ -1700,18 +1700,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -1732,18 +1732,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }[] | undefined;
@@ -1767,18 +1767,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -1788,7 +1788,7 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
     contextId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     history?: {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -1805,18 +1805,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -1837,18 +1837,18 @@ export declare const SendMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }[] | undefined;
@@ -1865,20 +1865,20 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -1927,7 +1927,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -1941,22 +1941,22 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -1979,18 +1979,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -2011,18 +2011,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -2035,20 +2035,20 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -2097,7 +2097,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -2111,22 +2111,22 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -2149,18 +2149,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2181,18 +2181,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2217,18 +2217,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2253,18 +2253,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2275,20 +2275,20 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
         history: z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -2337,7 +2337,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -2351,22 +2351,22 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -2389,18 +2389,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -2421,18 +2421,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -2443,20 +2443,20 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -2505,7 +2505,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -2519,22 +2519,22 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -2551,18 +2551,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -2580,22 +2580,22 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>, "many">>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         id: string;
@@ -2617,18 +2617,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2638,7 +2638,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -2655,18 +2655,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -2687,18 +2687,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -2722,18 +2722,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2743,7 +2743,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -2760,18 +2760,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -2792,18 +2792,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -2826,18 +2826,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -2862,18 +2862,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -2883,7 +2883,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -2900,18 +2900,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -2932,18 +2932,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -2968,18 +2968,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -3004,18 +3004,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3025,7 +3025,7 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -3042,18 +3042,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -3074,18 +3074,18 @@ export declare const SendMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -3105,20 +3105,20 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -3167,7 +3167,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -3181,22 +3181,22 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -3219,18 +3219,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -3251,18 +3251,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -3275,20 +3275,20 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -3337,7 +3337,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -3351,22 +3351,22 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -3389,18 +3389,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3421,18 +3421,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3457,18 +3457,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3493,18 +3493,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3515,20 +3515,20 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
         history: z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -3577,7 +3577,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -3591,22 +3591,22 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -3629,18 +3629,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -3661,18 +3661,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -3683,20 +3683,20 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -3745,7 +3745,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -3759,22 +3759,22 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -3791,18 +3791,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -3820,22 +3820,22 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>, "many">>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         id: string;
@@ -3857,18 +3857,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3878,7 +3878,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -3895,18 +3895,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -3927,18 +3927,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -3962,18 +3962,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -3983,7 +3983,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -4000,18 +4000,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -4032,18 +4032,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -4066,18 +4066,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -4102,18 +4102,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -4123,7 +4123,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -4140,18 +4140,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -4172,18 +4172,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -4208,18 +4208,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -4244,18 +4244,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -4265,7 +4265,7 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -4282,18 +4282,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -4314,18 +4314,18 @@ export declare const SendMessageResponseSchema: z.ZodUnion<[z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -4385,20 +4385,20 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
         message: z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -4447,7 +4447,7 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -4461,22 +4461,22 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -4499,18 +4499,18 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -4531,18 +4531,18 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -4628,7 +4628,7 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
         /**
          * @optional Additional metadata to be included with the message.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         message: {
             role: "user" | "agent";
@@ -4646,24 +4646,24 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -4695,24 +4695,24 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -4748,24 +4748,24 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -4802,24 +4802,24 @@ export declare const SendStreamingMessageRequestSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {
@@ -4844,20 +4844,20 @@ export type SendStreamingMessageRequest = z.infer<typeof SendStreamingMessageReq
 export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodObject<{
     role: z.ZodEnum<["user", "agent"]>;
     parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         text: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         file: z.ZodUnion<[z.ZodObject<{
@@ -4906,7 +4906,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
@@ -4920,22 +4920,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
         data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
     }, "strip", z.ZodTypeAny, {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>]>, "many">;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     messageId: z.ZodString;
@@ -4958,18 +4958,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;
@@ -4990,18 +4990,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;
@@ -5014,20 +5014,20 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
         message: z.ZodOptional<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -5076,7 +5076,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -5090,22 +5090,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -5128,18 +5128,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5160,18 +5160,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5196,18 +5196,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5232,18 +5232,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5254,20 +5254,20 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
     history: z.ZodOptional<z.ZodArray<z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -5316,7 +5316,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -5330,22 +5330,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -5368,18 +5368,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -5400,18 +5400,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -5422,20 +5422,20 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
         name: z.ZodOptional<z.ZodString>;
         description: z.ZodOptional<z.ZodString>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -5484,7 +5484,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -5498,22 +5498,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         artifactId: string;
@@ -5530,18 +5530,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }, {
@@ -5559,22 +5559,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }>, "many">>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
 }, "strip", z.ZodTypeAny, {
     id: string;
@@ -5596,18 +5596,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5617,7 +5617,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
     };
     kind: "task";
     contextId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     history?: {
         role: "user" | "agent";
         kind: "message";
@@ -5634,18 +5634,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -5666,18 +5666,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }[] | undefined;
@@ -5701,18 +5701,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5722,7 +5722,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
     contextId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     history?: {
         role: "user" | "agent";
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -5739,18 +5739,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -5771,18 +5771,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }[] | undefined;
@@ -5795,20 +5795,20 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
         message: z.ZodOptional<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -5857,7 +5857,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -5871,22 +5871,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -5909,18 +5909,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5941,18 +5941,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -5977,18 +5977,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6013,18 +6013,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6033,7 +6033,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
         timestamp?: string | undefined;
     }>;
     final: z.ZodBoolean;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     status: {
         state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -6053,18 +6053,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6076,7 +6076,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
     taskId: string;
     contextId: string;
     final: boolean;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     status: {
         state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -6096,18 +6096,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6119,7 +6119,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
     taskId: string;
     contextId: string;
     final: boolean;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>, z.ZodObject<{
     taskId: z.ZodString;
     contextId: z.ZodString;
@@ -6129,20 +6129,20 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
         name: z.ZodOptional<z.ZodString>;
         description: z.ZodOptional<z.ZodString>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -6191,7 +6191,7 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -6205,22 +6205,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         artifactId: string;
@@ -6237,18 +6237,18 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }, {
@@ -6266,24 +6266,24 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     }>;
     append: z.ZodOptional<z.ZodBoolean>;
     lastChunk: z.ZodOptional<z.ZodBoolean>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     kind: "artifact-update";
     taskId: string;
@@ -6303,22 +6303,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     };
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     append?: boolean | undefined;
     lastChunk?: boolean | undefined;
 }, {
@@ -6340,22 +6340,22 @@ export declare const SendStreamingMessageSuccessResultSchema: z.ZodUnion<[z.ZodO
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         name?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         description?: string | undefined;
         extension?: string[] | undefined;
     };
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     append?: boolean | undefined;
     lastChunk?: boolean | undefined;
 }>]>;
@@ -6372,20 +6372,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -6434,7 +6434,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -6448,22 +6448,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -6486,18 +6486,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -6518,18 +6518,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -6542,20 +6542,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -6604,7 +6604,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -6618,22 +6618,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -6656,18 +6656,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -6688,18 +6688,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -6724,18 +6724,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -6760,18 +6760,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -6782,20 +6782,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         history: z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -6844,7 +6844,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -6858,22 +6858,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -6896,18 +6896,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6928,18 +6928,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -6950,20 +6950,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -7012,7 +7012,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -7026,22 +7026,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -7058,18 +7058,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -7087,22 +7087,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>, "many">>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         id: string;
@@ -7124,18 +7124,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7145,7 +7145,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -7162,18 +7162,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -7194,18 +7194,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -7229,18 +7229,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7250,7 +7250,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -7267,18 +7267,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -7299,18 +7299,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -7323,20 +7323,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -7385,7 +7385,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -7399,22 +7399,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -7437,18 +7437,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7469,18 +7469,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7505,18 +7505,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7541,18 +7541,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7561,7 +7561,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
             timestamp?: string | undefined;
         }>;
         final: z.ZodBoolean;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -7581,18 +7581,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7604,7 +7604,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -7624,18 +7624,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7647,7 +7647,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         taskId: z.ZodString;
         contextId: z.ZodString;
@@ -7657,20 +7657,20 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -7719,7 +7719,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -7733,22 +7733,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -7765,18 +7765,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -7794,24 +7794,24 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>;
         append: z.ZodOptional<z.ZodBoolean>;
         lastChunk: z.ZodOptional<z.ZodBoolean>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         kind: "artifact-update";
         taskId: string;
@@ -7831,22 +7831,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     }, {
@@ -7868,22 +7868,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     }>]>;
@@ -7905,18 +7905,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -7941,18 +7941,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -7962,7 +7962,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -7979,18 +7979,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -8011,18 +8011,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -8045,18 +8045,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8068,7 +8068,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         kind: "artifact-update";
         taskId: string;
@@ -8088,22 +8088,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     };
@@ -8127,18 +8127,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -8163,18 +8163,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8184,7 +8184,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -8201,18 +8201,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -8233,18 +8233,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -8267,18 +8267,18 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8290,7 +8290,7 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -8310,22 +8310,22 @@ export declare const SendStreamingMessageSuccessResponseSchema: z.ZodObject<{
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     };
@@ -8344,20 +8344,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
     result: z.ZodUnion<[z.ZodObject<{
         role: z.ZodEnum<["user", "agent"]>;
         parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             text: z.ZodString;
         }, "strip", z.ZodTypeAny, {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             file: z.ZodUnion<[z.ZodObject<{
@@ -8406,7 +8406,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             file: {
                 bytes: string;
@@ -8420,22 +8420,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>, z.ZodObject<{
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         } & {
             kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
             data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }, {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         }>]>, "many">;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         messageId: z.ZodString;
@@ -8458,18 +8458,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -8490,18 +8490,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -8514,20 +8514,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -8576,7 +8576,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -8590,22 +8590,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -8628,18 +8628,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8660,18 +8660,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8696,18 +8696,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8732,18 +8732,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -8754,20 +8754,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         history: z.ZodOptional<z.ZodArray<z.ZodObject<{
             role: z.ZodEnum<["user", "agent"]>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -8816,7 +8816,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -8830,22 +8830,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             messageId: z.ZodString;
@@ -8868,18 +8868,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -8900,18 +8900,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -8922,20 +8922,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -8984,7 +8984,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -8998,22 +8998,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -9030,18 +9030,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -9059,22 +9059,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>, "many">>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
         kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "task", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
     }, "strip", z.ZodTypeAny, {
         id: string;
@@ -9096,18 +9096,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9117,7 +9117,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -9134,18 +9134,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -9166,18 +9166,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -9201,18 +9201,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9222,7 +9222,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -9239,18 +9239,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -9271,18 +9271,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -9295,20 +9295,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
             message: z.ZodOptional<z.ZodObject<{
                 role: z.ZodEnum<["user", "agent"]>;
                 parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     text: z.ZodString;
                 }, "strip", z.ZodTypeAny, {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     file: z.ZodUnion<[z.ZodObject<{
@@ -9357,7 +9357,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     file: {
                         bytes: string;
@@ -9371,22 +9371,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>, z.ZodObject<{
-                    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 } & {
                     kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                     data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
                 }, "strip", z.ZodTypeAny, {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }, {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 }>]>, "many">;
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
                 extensions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 referenceTaskIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
                 messageId: z.ZodString;
@@ -9409,18 +9409,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9441,18 +9441,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9477,18 +9477,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9513,18 +9513,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9533,7 +9533,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
             timestamp?: string | undefined;
         }>;
         final: z.ZodBoolean;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -9553,18 +9553,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9576,7 +9576,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         status: {
             state: "failed" | "unknown" | "completed" | "canceled" | "rejected" | "submitted" | "working" | "input-required" | "auth-required";
@@ -9596,18 +9596,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9619,7 +9619,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         taskId: z.ZodString;
         contextId: z.ZodString;
@@ -9629,20 +9629,20 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
             name: z.ZodOptional<z.ZodString>;
             description: z.ZodOptional<z.ZodString>;
             parts: z.ZodArray<z.ZodUnion<[z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "text", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 text: z.ZodString;
             }, "strip", z.ZodTypeAny, {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "file", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 file: z.ZodUnion<[z.ZodObject<{
@@ -9691,7 +9691,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 file: {
                     bytes: string;
@@ -9705,22 +9705,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>, z.ZodObject<{
-                metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             } & {
                 kind: z.ZodEffects<z.ZodEnum<["artifact-update", "data", "file", "message", "status-update", "task", "text"]>, "data", "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task">;
                 data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }, {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             }>]>, "many">;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
             extension: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             artifactId: string;
@@ -9737,18 +9737,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }, {
@@ -9766,24 +9766,24 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }>;
         append: z.ZodOptional<z.ZodBoolean>;
         lastChunk: z.ZodOptional<z.ZodBoolean>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     }, "strip", z.ZodTypeAny, {
         kind: "artifact-update";
         taskId: string;
@@ -9803,22 +9803,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     }, {
@@ -9840,22 +9840,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     }>]>;
@@ -9877,18 +9877,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "file";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "text";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -9913,18 +9913,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -9934,7 +9934,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         };
         kind: "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "message";
@@ -9951,18 +9951,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -9983,18 +9983,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -10017,18 +10017,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "file";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "text";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -10040,7 +10040,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         kind: "artifact-update";
         taskId: string;
@@ -10060,22 +10060,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     };
@@ -10099,18 +10099,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                 mimeType?: string | undefined;
             };
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             text: string;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         } | {
             data: Record<string, unknown>;
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
         })[];
         messageId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         extensions?: string[] | undefined;
         referenceTaskIds?: string[] | undefined;
         taskId?: string | undefined;
@@ -10135,18 +10135,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -10156,7 +10156,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         contextId: string;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         history?: {
             role: "user" | "agent";
             kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
@@ -10173,18 +10173,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
@@ -10205,18 +10205,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         }[] | undefined;
@@ -10239,18 +10239,18 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                         mimeType?: string | undefined;
                     };
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     text: string;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 } | {
                     data: Record<string, unknown>;
                     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                    metadata?: Record<string, unknown> | undefined;
+                    metadata?: Record<string, unknown> | null | undefined;
                 })[];
                 messageId: string;
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
                 extensions?: string[] | undefined;
                 referenceTaskIds?: string[] | undefined;
                 taskId?: string | undefined;
@@ -10262,7 +10262,7 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
         taskId: string;
         contextId: string;
         final: boolean;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
         taskId: string;
@@ -10282,22 +10282,22 @@ export declare const SendStreamingMessageResponseSchema: z.ZodUnion<[z.ZodObject
                     mimeType?: string | undefined;
                 };
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             name?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             description?: string | undefined;
             extension?: string[] | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         append?: boolean | undefined;
         lastChunk?: boolean | undefined;
     };

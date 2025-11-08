@@ -64,6 +64,7 @@ export const JSONRPCRequestSchema = JSONRPCMessageSchema.extend({
   params: z
     .record(z.string(), z.unknown())
     .optional()
+    .nullable()
     .describe(
       "A Structured value that holds the parameter values to be used during the invocation of the method."
     ),

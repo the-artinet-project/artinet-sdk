@@ -33,24 +33,24 @@ export declare function createAgentServer(params: ServerParams & {
                     mimeType?: string | undefined;
                 };
                 kind: "file";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 text: string;
                 kind: "text";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             } | {
                 data: Record<string, unknown>;
                 kind: "data";
-                metadata?: Record<string, unknown> | undefined;
+                metadata?: Record<string, unknown> | null | undefined;
             })[];
             messageId: string;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: Record<string, unknown> | null | undefined;
             extensions?: string[] | undefined;
             referenceTaskIds?: string[] | undefined;
             taskId?: string | undefined;
             contextId?: string | undefined;
         };
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
         configuration?: {
             historyLength?: number | undefined;
             pushNotificationConfig?: {

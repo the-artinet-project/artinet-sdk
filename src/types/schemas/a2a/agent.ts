@@ -67,6 +67,7 @@ export const AgentExtensionSchema = z
     params: z
       .record(z.string(), z.unknown())
       .optional()
+      .nullable()
       .describe("Optional configuration for the extension."),
   })
   .describe("A declaration of an extension supported by an Agent.");
@@ -208,6 +209,7 @@ export const AgentCardSignatureSchema = z
     header: z
       .record(z.string(), z.unknown())
       .optional()
+      .nullable()
       .describe("The unprotected JWS header values."),
   })
   .describe("A JWS signature of an AgentCard.");
@@ -312,6 +314,7 @@ export const AgentCardSchema = z
     securitySchemes: z
       .record(z.string(), SecuritySchemeSchema)
       .optional()
+      .nullable()
       .describe(
         "Security scheme details used for authenticating with this agent. Maps scheme names to their configurations."
       ),

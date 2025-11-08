@@ -15,6 +15,7 @@ export const PartBaseSchema = z
     metadata: z
         .record(z.string(), z.unknown())
         .optional()
+        .nullable()
         .describe("Optional metadata associated with this part."),
 })
     .describe("Defines base properties common to all message or artifact parts.");
@@ -160,6 +161,7 @@ export const ArtifactSchema = z
     metadata: z
         .record(z.string(), z.unknown())
         .optional()
+        .nullable()
         .describe("Optional metadata for extensions. The key is an extension-specific identifier."),
     /**
      * @optional The URIs of extensions that are relevant to this artifact.
@@ -198,6 +200,7 @@ export const MessageSchema = z
     metadata: z
         .record(z.string(), z.unknown())
         .optional()
+        .nullable()
         .describe("Optional metadata for extensions. The key is an extension-specific identifier."),
     /**
      * @optional The URIs of extensions that are relevant to this message.

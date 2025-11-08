@@ -59,6 +59,7 @@ export const MessageSendParamsSchema = z
     metadata: z
         .record(z.string(), z.unknown())
         .optional()
+        .nullable()
         .describe("Additional metadata to be included with the message."),
 })
     .describe("Defines the parameters for a request to send a message to an agent. This can be used to create a new task, continue an existing one, or restart a task.");

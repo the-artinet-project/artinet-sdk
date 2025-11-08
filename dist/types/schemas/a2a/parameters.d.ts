@@ -10,11 +10,11 @@ export declare const PartBaseSchema: z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type PartBase = z.infer<typeof PartBaseSchema>;
 /**
@@ -172,7 +172,7 @@ export declare const FilePartSchema: z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this part, used as a discriminator. Always 'file'.
@@ -251,7 +251,7 @@ export declare const FilePartSchema: z.ZodObject<{
         mimeType?: string | undefined;
     };
     kind: "file";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     file: {
         bytes: string;
@@ -265,7 +265,7 @@ export declare const FilePartSchema: z.ZodObject<{
         mimeType?: string | undefined;
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type FilePart = z.infer<typeof FilePartSchema>;
 /**
@@ -275,7 +275,7 @@ export declare const TextPartSchema: z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this object, used as a discriminator. Always 'text' for a TextPart.
@@ -288,11 +288,11 @@ export declare const TextPartSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     text: string;
     kind: "text";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     text: string;
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type TextPart = z.infer<typeof TextPartSchema>;
 /**
@@ -302,7 +302,7 @@ export declare const DataPartSchema: z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this object, used as a discriminator. Always 'data' for a DataPart.
@@ -315,11 +315,11 @@ export declare const DataPartSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: Record<string, unknown>;
     kind: "data";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     data: Record<string, unknown>;
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>;
 export type DataPart = z.infer<typeof DataPartSchema>;
 /**
@@ -330,7 +330,7 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this object, used as a discriminator. Always 'text' for a TextPart.
@@ -343,16 +343,16 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     text: string;
     kind: "text";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     text: string;
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>, z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this part, used as a discriminator. Always 'file'.
@@ -431,7 +431,7 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
         mimeType?: string | undefined;
     };
     kind: "file";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     file: {
         bytes: string;
@@ -445,12 +445,12 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
         mimeType?: string | undefined;
     };
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>, z.ZodObject<{
     /**
      * @optional Optional metadata associated with this part.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 } & {
     /**
      * @required The type of this object, used as a discriminator. Always 'data' for a DataPart.
@@ -463,11 +463,11 @@ export declare const PartSchema: z.ZodUnion<[z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: Record<string, unknown>;
     kind: "data";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }, {
     data: Record<string, unknown>;
     kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
 }>]>;
 export type Part = z.infer<typeof PartSchema>;
 /**
@@ -493,7 +493,7 @@ export declare const ArtifactSchema: z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this object, used as a discriminator. Always 'text' for a TextPart.
@@ -506,16 +506,16 @@ export declare const ArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this part, used as a discriminator. Always 'file'.
@@ -594,7 +594,7 @@ export declare const ArtifactSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
@@ -608,12 +608,12 @@ export declare const ArtifactSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this object, used as a discriminator. Always 'data' for a DataPart.
@@ -626,16 +626,16 @@ export declare const ArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>]>, "many">;
     /**
      * @optional Optional metadata for extensions. The key is an extension-specific identifier.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     /**
      * @optional The URIs of extensions that are relevant to this artifact.
      */
@@ -655,18 +655,18 @@ export declare const ArtifactSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     name?: string | undefined;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     description?: string | undefined;
     extension?: string[] | undefined;
 }, {
@@ -684,18 +684,18 @@ export declare const ArtifactSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     name?: string | undefined;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     description?: string | undefined;
     extension?: string[] | undefined;
 }>;
@@ -721,7 +721,7 @@ export declare const MessageSchema: z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this object, used as a discriminator. Always 'text' for a TextPart.
@@ -734,16 +734,16 @@ export declare const MessageSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this part, used as a discriminator. Always 'file'.
@@ -822,7 +822,7 @@ export declare const MessageSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         file: {
             bytes: string;
@@ -836,12 +836,12 @@ export declare const MessageSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>, z.ZodObject<{
         /**
          * @optional Optional metadata associated with this part.
          */
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     } & {
         /**
          * @required The type of this object, used as a discriminator. Always 'data' for a DataPart.
@@ -854,16 +854,16 @@ export declare const MessageSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }, {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     }>]>, "many">;
     /**
      * @optional Optional metadata for extensions. The key is an extension-specific identifier.
      */
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     /**
      * @optional The URIs of extensions that are relevant to this message.
      */
@@ -904,18 +904,18 @@ export declare const MessageSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "file";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "text";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;
@@ -936,18 +936,18 @@ export declare const MessageSchema: z.ZodObject<{
             mimeType?: string | undefined;
         };
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         text: string;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     } | {
         data: Record<string, unknown>;
         kind: "data" | "message" | "file" | "text" | "artifact-update" | "status-update" | "task";
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: Record<string, unknown> | null | undefined;
     })[];
     messageId: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: Record<string, unknown> | null | undefined;
     extensions?: string[] | undefined;
     referenceTaskIds?: string[] | undefined;
     taskId?: string | undefined;

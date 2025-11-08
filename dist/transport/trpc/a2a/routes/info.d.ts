@@ -15,7 +15,7 @@ export declare const agentInfoRoute: import("@trpc/server").TRPCQueryProcedure<{
                 uri: string;
                 required?: boolean | undefined;
                 description?: string | undefined;
-                params?: Record<string, unknown> | undefined;
+                params?: Record<string, unknown> | null | undefined;
             }[] | undefined;
             streaming?: boolean | undefined;
             pushNotifications?: boolean | undefined;
@@ -89,12 +89,12 @@ export declare const agentInfoRoute: import("@trpc/server").TRPCQueryProcedure<{
         } | {
             type: "mutualTLS";
             description?: string | undefined;
-        }> | undefined;
+        }> | null | undefined;
         supportsAuthenticatedExtendedCard?: boolean | undefined;
         signatures?: {
             protected: string;
             signature: string;
-            header?: Record<string, unknown> | undefined;
+            header?: Record<string, unknown> | null | undefined;
         }[] | undefined;
     };
     meta: object;

@@ -35,17 +35,17 @@ export declare const JSONRPCRequestSchema: z.ZodObject<{
 } & {
     id: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
     method: z.ZodString;
-    params: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    params: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
 }, "strip", z.ZodTypeAny, {
     id: string | number;
     method: string;
     jsonrpc: "2.0";
-    params?: Record<string, unknown> | undefined;
+    params?: Record<string, unknown> | null | undefined;
 }, {
     id: string | number;
     method: string;
     jsonrpc: "2.0";
-    params?: Record<string, unknown> | undefined;
+    params?: Record<string, unknown> | null | undefined;
 }>;
 export type JSONRPCRequest = z.infer<typeof JSONRPCRequestSchema>;
 /**
