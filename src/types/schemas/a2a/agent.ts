@@ -143,7 +143,6 @@ export const AgentSkillSchema = z
      */
     tags: z
       .array(z.string())
-      .optional()
       .describe("List of tags associated with the skill for categorization."),
 
     /**

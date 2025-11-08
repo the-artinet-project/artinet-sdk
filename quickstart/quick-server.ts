@@ -25,7 +25,17 @@ const { app } = createAgentServer({
         name: "QuickStart Agent",
         url: "http://localhost:4000/a2a",
         version: "0.1.0",
-        capabilities: { streaming: true },
+        capabilities: {
+          streaming: true,
+          extensions: [
+            {
+              uri: "artinet:symphony",
+              params: {
+                teams: ["development", "documentation"],
+              },
+            },
+          ],
+        },
         skills: [
           {
             id: "echo",
@@ -45,5 +55,5 @@ const { app } = createAgentServer({
 });
 
 app.listen(4000, () => {
-  logger.info("A2A Server running on http://localhost:4000/a2a");
+  logger.info("QuickAgent running on http://localhost:4000/a2a");
 });
