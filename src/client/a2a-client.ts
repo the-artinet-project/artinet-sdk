@@ -48,10 +48,20 @@ export class A2AClient implements Client {
   private cachedAgentCard: AgentCard | null = null;
   private customHeaders: Record<string, string> = {};
   private fallbackPath: string;
+  private agentUrl: URL;
   /**
    * Creates a new A2AClient instance.
    * @param baseUrl The base URL for the A2A server.
    * @param headers Optional custom headers to include in all requests.
+   * @param fallbackPath Optional fallback path to use if the agent card is not found at the base URL.
+   * @example
+   * const client = new A2AClient("http://localhost:4000/a2a");
+   * const card = await client.agentCard();
+   * console.log(card);
+   * @example
+   * const client = new A2AClient("http://localhost:4000/a2a", {}, "/agent-card");
+   * const card = await client.agentCard();
+   * console.log(card);
    */
   constructor(
     baseUrl: URL | string,
@@ -61,6 +71,7 @@ export class A2AClient implements Client {
     this.baseUrl = typeof baseUrl === "string" ? new URL(baseUrl) : baseUrl;
     this.customHeaders = headers;
     this.fallbackPath = fallbackPath ?? "/agent-card";
+    this.agentUrl = this.baseUrl;
   }
 
   /**
@@ -90,7 +101,6 @@ export class A2AClient implements Client {
         }
 
         this.cachedAgentCard = card as AgentCard;
-        return this.cachedAgentCard;
       } catch (error) {
         const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
         const fallbackCard: AgentCard = await executeGetRequest<AgentCard>(
@@ -107,8 +117,6 @@ export class A2AClient implements Client {
           throw new Error("No fallback agent card found");
         }
         this.cachedAgentCard = fallbackCard;
-
-        return this.cachedAgentCard;
       }
     } catch (error) {
       logError(
@@ -123,6 +131,8 @@ export class A2AClient implements Client {
         }`
       );
     }
+    this.agentUrl = new URL(this.cachedAgentCard.url, this.baseUrl);
+    return this.cachedAgentCard;
   }
 
   /**
@@ -143,7 +153,7 @@ export class A2AClient implements Client {
     params: MessageSendParams | string
   ): Promise<Message | Task | null> {
     return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
-      this.baseUrl,
+      this.agentUrl,
       "message/send",
       createMessageSendParams(params),
       this.customHeaders
@@ -172,7 +182,7 @@ export class A2AClient implements Client {
       SendStreamingMessageRequest,
       SendStreamingMessageResponse
     >(
-      this.baseUrl,
+      this.agentUrl,
       "message/stream",
       createMessageSendParams(params),
       this.customHeaders
@@ -196,7 +206,7 @@ export class A2AClient implements Client {
    */
   async getTask(params: TaskQueryParams): Promise<Task | null> {
     return await executeJsonRpcRequest<GetTaskRequest, GetTaskResponse>(
-      this.baseUrl,
+      this.agentUrl,
       "tasks/get",
       params,
       this.customHeaders
@@ -210,7 +220,7 @@ export class A2AClient implements Client {
    */
   async cancelTask(params: TaskIdParams): Promise<Task | null> {
     return await executeJsonRpcRequest<CancelTaskRequest, CancelTaskResponse>(
-      this.baseUrl,
+      this.agentUrl,
       "tasks/cancel",
       params,
       this.customHeaders
@@ -229,7 +239,7 @@ export class A2AClient implements Client {
       SetTaskPushNotificationConfigRequest,
       SetTaskPushNotificationConfigResponse
     >(
-      this.baseUrl,
+      this.agentUrl,
       "tasks/pushNotificationConfig/set",
       params,
       this.customHeaders
@@ -248,7 +258,7 @@ export class A2AClient implements Client {
       GetTaskPushNotificationConfigRequest,
       GetTaskPushNotificationConfigResponse
     >(
-      this.baseUrl,
+      this.agentUrl,
       "tasks/pushNotificationConfig/get",
       params,
       this.customHeaders
@@ -264,7 +274,7 @@ export class A2AClient implements Client {
     return executeStreamEvents<
       TaskResubscriptionRequest,
       SendStreamingMessageResponse
-    >(this.baseUrl, "tasks/resubscribe", params, this.customHeaders);
+    >(this.agentUrl, "tasks/resubscribe", params, this.customHeaders);
   }
 
   /**

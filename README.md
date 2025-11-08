@@ -66,8 +66,9 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 - AgentBuilder now prefers the contextId & taskId from the calling context.
 - In a future release the following packages will be set as peer dependancies to reduce the size of the build: `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
 - The `history` object from `TaskAndHistory` is deprecated and no longer being updated. Use `Task.history` instead.
-- The A2AClient now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
-- The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent)
+- The `A2AClient` now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
+- The `A2AClient` now uses uses the `AgentCard`.url if an `AgentCard` has been successfully retrieved, else it will default to the `baseUrl`.
+- The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
 
 ## Installation
 
