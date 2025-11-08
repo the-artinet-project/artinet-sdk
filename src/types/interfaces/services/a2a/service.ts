@@ -166,7 +166,7 @@ export interface MethodOptions {
   /**
    * Custom task retrieval implementation.
    *
-   * @param input - Task identification parameters
+   * @param input - Task query parameters
    * @param params - Method execution parameters (without engine, contextManager, signal)
    * @returns Promise resolving to the requested task
    */
