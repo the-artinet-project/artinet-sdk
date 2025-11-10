@@ -40,7 +40,7 @@ import {
 import { createAgent } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 import { getContent } from "../helpers/content.js";
-
+import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
 /**
  * Type alias for text-based workflow steps.
  *
@@ -206,11 +206,11 @@ export class EngineBuilder<
   private steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = [];
 
   /**
-   * Private constructor to enforce factory method usage.
+   * Protected constructor to enforce factory method usage.
    *
    * @param steps - Initial steps array
    */
-  private constructor(
+  protected constructor(
     //@typescript-eslint/no-explicit-any
     steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = []
   ) {
@@ -449,23 +449,27 @@ const partToMessagePart = (
     }
     case "file": {
       const filePart: FilePart["file"] = part as FilePart["file"];
-      return filePart.uri
-        ? {
-            kind: "file",
-            file: {
-              uri: filePart.uri,
-              name: filePart.name,
-              mimeType: filePart.mimeType,
-            },
-          }
-        : {
-            kind: "file",
-            file: {
-              bytes: filePart.bytes ?? "",
-              name: filePart.name,
-              mimeType: filePart.mimeType,
-            },
-          };
+      if (filePart.uri) {
+        return {
+          kind: "file",
+          file: {
+            uri: filePart.uri,
+            name: filePart.name,
+            mimeType: filePart.mimeType,
+          },
+        };
+      }
+      if (!filePart.bytes) {
+        throw new Error("File bytes are required when uri is not provided");
+      }
+      return {
+        kind: "file",
+        file: {
+          bytes: filePart.bytes,
+          name: filePart.name,
+          mimeType: filePart.mimeType,
+        },
+      };
     }
     case "data": {
       return { kind: "data", data: part as DataPart["data"] };
@@ -507,22 +511,16 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       args: [],
     };
 
-    const contextId = context.contextId ?? context.command.message.contextId;
-    const taskId = context.State().task.id ?? context.command.message.taskId;
+    const contextId = context.contextId;
+    const taskId = context.State().task.id;
 
     if (!contextId || !taskId) {
       throw new Error("Context ID and task ID are required");
     }
-    const taskStarted: TaskStatusUpdateEvent = {
-      taskId: taskId,
-      contextId: contextId,
-      kind: "status-update",
-      status: {
-        state: TaskState.submitted,
-        timestamp: new Date().toISOString(),
-      },
-      final: false,
-    };
+    const taskStarted: TaskStatusUpdateEvent = SUBMITTED_UPDATE(
+      taskId,
+      contextId
+    );
     yield taskStarted;
     const finalMessage: Message = {
       taskId: taskId,
@@ -537,63 +535,45 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       let parts: Part[] = [];
       if (Array.isArray(ret)) {
         parts = ret.map((part) => partToMessagePart(step.kind, part));
-        const taskStatusUpdate: TaskStatusUpdateEvent = {
-          taskId: taskId,
-          contextId: contextId,
-          kind: "status-update",
-          status: {
-            state: TaskState.working,
-            timestamp: new Date().toISOString(),
-            message: {
-              messageId: uuidv4(),
-              kind: "message",
-              role: "agent",
-              parts: parts,
-            },
-          },
-          final: false,
-        };
+        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+          taskId,
+          contextId,
+          {
+            messageId: uuidv4(),
+            kind: "message",
+            role: "agent",
+            parts: parts,
+          }
+        );
         yield taskStatusUpdate;
-      } else if (typeof ret === "object") {
+      } else if (ret !== null && typeof ret === "object") {
         parts = Array.isArray(ret.parts)
           ? ret.parts.map((part) => partToMessagePart(step.kind, part))
           : [partToMessagePart(step.kind, ret.parts)];
-        const taskStatusUpdate: TaskStatusUpdateEvent = {
-          taskId: taskId,
-          contextId: contextId,
-          kind: "status-update",
-          status: {
-            state: TaskState.working,
-            timestamp: new Date().toISOString(),
-            message: {
-              messageId: uuidv4(),
-              kind: "message",
-              role: "agent",
-              parts: parts,
-            },
-          },
-          final: false,
-        };
+        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+          taskId,
+          contextId,
+          {
+            messageId: uuidv4(),
+            kind: "message",
+            role: "agent",
+            parts: parts,
+          }
+        );
         yield taskStatusUpdate;
         stepArgs.args = (ret as StepOutputWithForwardArgs<any, any>).args;
       } else {
         parts = [partToMessagePart(step.kind, ret)];
-        const taskStatusUpdate: TaskStatusUpdateEvent = {
-          taskId: taskId,
-          contextId: contextId,
-          kind: "status-update",
-          status: {
-            state: TaskState.working,
-            timestamp: new Date().toISOString(),
-            message: {
-              messageId: uuidv4(),
-              kind: "message",
-              role: "agent",
-              parts: parts,
-            },
-          },
-          final: false,
-        };
+        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+          taskId,
+          contextId,
+          {
+            messageId: uuidv4(),
+            kind: "message",
+            role: "agent",
+            parts: parts,
+          }
+        );
         yield taskStatusUpdate;
       }
       finalMessage.parts.push(...parts);
