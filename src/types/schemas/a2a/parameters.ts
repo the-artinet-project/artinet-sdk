@@ -17,7 +17,6 @@ export const PartBaseSchema = z
     metadata: z
       .record(z.string(), z.unknown())
       .optional()
-      .nullable()
       .describe("Optional metadata associated with this part."),
   })
   .describe("Defines base properties common to all message or artifact parts.");
@@ -35,7 +34,6 @@ export const FileBaseSchema = z
     name: z
       .string()
       .optional()
-      .nullable()
       .describe("An optional name for the file (e.g., 'document.pdf')."),
     /**
      * @optional The MIME type of the file (e.g., "application/pdf").
@@ -43,7 +41,6 @@ export const FileBaseSchema = z
     mimeType: z
       .string()
       .optional()
-      .nullable()
       .describe("The MIME type of the file (e.g., 'application/pdf')."),
   })
   .describe("Defines base properties for a file.");
@@ -61,7 +58,7 @@ export const FileWithBytesSchema = FileBaseSchema.extend({
   /**
    * @optional The `uri` property must be absent when `bytes` is present.
    */
-  uri: z.never().optional().nullable().describe("The URI of the file."),
+  uri: z.never().optional().describe("The URI of the file."),
 }).describe(
   "Represents a file with its content provided directly as a base64-encoded string."
 );
@@ -82,7 +79,6 @@ export const FileWithUriSchema = FileBaseSchema.extend({
   bytes: z
     .never()
     .optional()
-    .nullable()
     .describe("The base64-encoded content of the file."),
 }).describe("Represents a file with its content located at a specific URI.");
 export type FileWithUri = z.infer<typeof FileWithUriSchema>;
@@ -187,7 +183,6 @@ export const ArtifactSchema = z
     name: z
       .string()
       .optional()
-      .nullable()
       .describe("A human-readable name for the artifact."),
     /**
      * @optional A human-readable description of the artifact.
@@ -195,7 +190,6 @@ export const ArtifactSchema = z
     description: z
       .string()
       .optional()
-      .nullable()
       .describe("A human-readable description of the artifact."),
     /**
      * @optional An array of content parts that make up the artifact.
@@ -209,7 +203,6 @@ export const ArtifactSchema = z
     metadata: z
       .record(z.string(), z.unknown())
       .optional()
-      .nullable()
       .describe(
         "Optional metadata for extensions. The key is an extension-specific identifier."
       ),
@@ -219,7 +212,6 @@ export const ArtifactSchema = z
     extension: z
       .array(z.string())
       .optional()
-      .nullable()
       .describe("The URIs of extensions that are relevant to this artifact."),
   })
   .describe(
@@ -264,7 +256,6 @@ export const MessageSchema = z
     metadata: z
       .record(z.string(), z.unknown())
       .optional()
-      .nullable()
       .describe(
         "Optional metadata for extensions. The key is an extension-specific identifier."
       ),
@@ -274,7 +265,6 @@ export const MessageSchema = z
     extensions: z
       .array(z.string())
       .optional()
-      .nullable()
       .describe("The URIs of extensions that are relevant to this message."),
     /**
      * @optional A list of other task IDs that this message references for additional context.
@@ -282,7 +272,6 @@ export const MessageSchema = z
     referenceTaskIds: z
       .array(z.string())
       .optional()
-      .nullable()
       .describe(
         "A list of other task IDs that this message references for additional context."
       ),
@@ -300,7 +289,6 @@ export const MessageSchema = z
     taskId: z
       .string()
       .optional()
-      .nullable()
       .describe(
         "The identifier of the task this message is part of. Can be omitted for the first message of a new task."
       ),
@@ -310,7 +298,6 @@ export const MessageSchema = z
     contextId: z
       .string()
       .optional()
-      .nullable()
       .describe(
         "The context identifier for this message, used to group related interactions."
       ),

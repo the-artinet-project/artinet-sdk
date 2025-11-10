@@ -71,9 +71,10 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
 - The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
 - In `Task` the `contextId` field is now required (inline with the A2A spec).
 - In `AgentSkill` the `tag` field is now required (inline with the A2A spec).
-- Optional fields in Agent2Agent Zod schemas are now nullable for better interoperability.
+- ~~Optional fields in Agent2Agent Zod schemas are now nullable for better interoperability.~~ **Nullable Schemas have been reverted.**
 - The `EngineBuilder` constructor is now protected and open for extension.
 - `AgentBuilder` will now throw an error if it recieves an invalid `FilePart`.
+- `createAgent`/`createService` can now take a single string (i.e. agentName) as valid value for the AgentCard and will populate the rest of the required fields with placeholder values (see `src/services/a2a/helpers/agentcard-builder.ts` for reference).
 
 ## Installation
 
@@ -114,21 +115,13 @@ const { app, agent } = createAgentServer({
     return `You said: ${userInput}`;
   })
   .createAgent({
-    agentCard: {
-      name: "QuickStart Agent",
-      description: "A simple agent that echoes the user's message",
-      url: "http://localhost:4000/a2a",
-      version: "0.1.0",
-      capabilities: { streaming: true },
-      skills: [{ id: "echo", name: "Echo Skill" }],
-      ...
-    },
+    agentCard: "QuickStart Agent",
   }),
   basePath: "/a2a"
 });
 
-app.listen(4000, () => {
-  console.log("A2A Server running at http://localhost:4000/a2a");
+app.listen(3000, () => {
+  console.log("A2A Server running at http://localhost:3000/a2a");
 });
 ```
 
@@ -138,7 +131,7 @@ app.listen(4000, () => {
 import { A2AClient, TaskStatusUpdateEvent } from "@artinet/sdk";
 
 async function runClient() {
-  const client = new A2AClient("http://localhost:4000/a2a");
+  const client = new A2AClient("http://localhost:3000/a2a");
 
   const stream = client.sendStreamingMessage("Hello World!");
 
@@ -271,13 +264,7 @@ const { app, agent } = createAgentServer({
       return `Task completed. Status: ${status}`;
     }) //A final Task is returned to the caller which contains all of the emitted parts.
     .createAgent({
-      agentCard: {
-        name: "Multi-Step Agent",
-        url: "http://localhost:3000/a2a",
-        version: "1.0.0",
-        capabilities: { streaming: true },
-        skills: [{ id: "multi-processor", name: "Multi-Step Processor" }],
-      },
+      agentCard: "Multi-Step Agent",
     }),
   basePath: "/a2a",
 });
@@ -382,13 +369,7 @@ const agent = createAgent({
       ...
     });
   },
-  agentCard: {
-    name: "Event-Monitored Agent",
-    url: "http://localhost:3000/a2a",
-    version: "1.0.0",
-    capabilities: { streaming: true },
-    skills: [{ id: "monitor", name: "Monitored Agent" }],
-  },
+  agentCard: "Event-Monitored Agent",
   contexts: customContextManager,
   tasks: new TaskManager(),
   eventOverrides: { //for even greater control create your own Event Handlers
@@ -602,13 +583,7 @@ const mcpAgent = createMCPAgent({
   },
   agent: createAgent({
     engine: myAgentEngine,
-    agentCard: {
-      name: "My Agent",
-      url: "http://localhost:3000/a2a",
-      version: "1.0.0",
-      capabilities: { streaming: true },
-      skills: [{ id: "helper", name: "Helper Agent" }],
-    },
+    agentCard: "MCP Agent",
   }),
   agentCardUri: "agent://card", //customize the URI for your AgentCard
 });

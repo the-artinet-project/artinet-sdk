@@ -36,6 +36,9 @@ import {
 import { UpdateEvent, Command, State, Update } from "./context.js";
 import { A2AEngine } from "./engine.js";
 
+export type AgentCardParams =
+  | (Partial<AgentCard> & Required<Pick<AgentCard, "name">>)
+  | string;
 /**
  * Configuration parameters for creating A2A service instances.
  *
@@ -68,7 +71,7 @@ import { A2AEngine } from "./engine.js";
  */
 export interface FactoryParams {
   /** Agent identity and capabilities information */
-  agentCard: AgentCard;
+  agentCard: AgentCardParams;
   /** Execution engine for processing A2A commands */
   engine: A2AEngine;
   /** Optional context manager for execution state management */

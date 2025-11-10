@@ -12,10 +12,10 @@ import {
   TaskManager,
 } from "../managers/index.js";
 import { createMethods } from "./method.js";
-
+import { createAgentCard } from "../helpers/agentcard-builder.js";
 export function createService(params: FactoryParams) {
   return new A2AService(
-    params.agentCard,
+    createAgentCard(params.agentCard),
     params.engine,
     params.contexts ?? new ContextManager<Command, State, Update>(),
     params.connections ?? new ConnectionManager(),
