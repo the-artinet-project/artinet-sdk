@@ -188,6 +188,7 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      contextId: "456",
       State: () => ({
         task: {
           id: "789",
@@ -245,6 +246,7 @@ describe("Agent Builder Tests", () => {
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
     for await (const result of executionWrapper({
+      contextId: "456",
       command: {
         kind: "message",
         message: {
@@ -291,6 +293,7 @@ describe("Agent Builder Tests", () => {
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
     for await (const result of executionWrapper({
+      contextId: "456",
       command: {
         kind: "message",
         message: {
@@ -327,6 +330,7 @@ describe("Agent Builder Tests", () => {
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
     for await (const result of executionWrapper({
+      contextId: "456",
       command: {
         kind: "message",
         message: {
