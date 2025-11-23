@@ -645,7 +645,7 @@ const result = await client.callTool({
 
 ## **Migration Changes**
 
-\*since v0.5.8
+\*_since v0.5.8_
 
 - Pino has been removed and replaced with console for better portability and is set to silent by default.
 - The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
