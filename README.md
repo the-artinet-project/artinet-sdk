@@ -8,25 +8,43 @@
 
 # artinet-sdk
 
-Give your AI agent the power to communicate with any other agent, no matter the framework.
+Create Agents that communicate across framework.
 
 The artinet-sdk is a TypeScript library that adds a standardized, interoperable communication layer to your agents.
 
 ## Features
 
-- **Easy To Use:** The AgentBuilder lets you quickly create an Agent2Agent API, while handling all of the communication complexity.
-- **No Vendor Lock-In:** Create agents that can communicate with other agents across frameworks and ecosystems with just a few lines of code.
+- **Hassle Free:** Use the AgentBuilder to quickly setup an AgentServer.
+- **No Vendor Lock-In:** Let your agents communicate with other agents across frameworks and ecosystems.
 - **Flexible Design:** Everything you need to build collaborative agents while remaining modular enough for advanced configuration.
 
 ## Quick Start
 
-Use the [`create-agent`](https://www.npmjs.com/package/@artinet/create-agent) command:
+**Use the [`create-agent`](https://www.npmjs.com/package/@artinet/create-agent) command:**
 
 ```bash
 npx @artinet/create-agent@latest
 ```
-
 It has [serveral template projects](https://github.com/the-artinet-project/create-agent/tree/main/templates) that you can use to jump right into agent building.
+
+**Or use [`easy-a2a`](https://github.com/the-artinet-project/easy-a2a):**
+
+```typescript
+const agent = a2a({
+  baseURL: "https://your-api.com/api/v1",
+  apiKey: "your-api-key",
+})
+  .ai("You are a helpful assistant.")
+  .createAgent({
+    agentCard: "MyAgent",
+  });
+```
+
+To build agents backed by OpenAI API compatible endpoints.
+
+```bash
+npm install easy-a2a
+```
 
 ## Table of Contents
 
