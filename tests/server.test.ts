@@ -158,6 +158,8 @@ describe("A2AServer", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "test-message-id",
             taskId: "test-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Hello, world!" }],
@@ -325,7 +327,6 @@ describe("A2AServer", () => {
       const response = await trackRequest(
         request(app).post("/").send(unknownMethodRequest)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32601);

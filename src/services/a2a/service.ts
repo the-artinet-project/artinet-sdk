@@ -22,9 +22,13 @@ import {
   EventManagerOptions,
   MethodParams,
   TaskQueryParams,
+  MessageSendParamsSchema,
+  TaskQueryParamsSchema,
+  TaskIdParamsSchema,
 } from "~/types/index.js";
 import { coreExecute } from "~/services/core/execution/execute.js";
 import { createMessageSendParams } from "./helpers/message-builder.js";
+import { validateSchema } from "../../utils/common/schema-validation.js";
 
 export class A2AService implements A2AServiceInterface {
   readonly agentCard: AgentCard;
@@ -37,6 +41,7 @@ export class A2AService implements A2AServiceInterface {
   readonly eventOverrides:
     | EventManagerOptions<Command, State, Update>
     | undefined;
+  private enforceParamValidation: boolean = false;
 
   constructor(
     agentCard: AgentCard,
@@ -46,7 +51,8 @@ export class A2AService implements A2AServiceInterface {
     cancellations: CancellationManagerInterface,
     tasks: TaskManagerInterface<TaskAndHistory>,
     methods: MethodOptions,
-    eventOverrides?: EventManagerOptions<Command, State, Update>
+    eventOverrides?: EventManagerOptions<Command, State, Update>,
+    enforceParamValidation: boolean = false
   ) {
     this.engine = engine;
     this.agentCard = agentCard;
@@ -56,6 +62,7 @@ export class A2AService implements A2AServiceInterface {
     this.tasks = tasks;
     this.methods = methods;
     this.eventOverrides = eventOverrides;
+    this.enforceParamValidation = enforceParamValidation;
   }
 
   async execute(
@@ -102,52 +109,77 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async getTask(input: TaskQueryParams) {
-    return await this.methods.getTask(input, { service: this });
+    return await this.methods.getTask(
+      this.enforceParamValidation
+        ? await validateSchema(TaskQueryParamsSchema, input)
+        : input,
+      { service: this }
+    );
   }
 
   async cancelTask(input: TaskIdParams) {
-    return await this.methods.cancelTask(input, {
-      service: this,
-      contextManager: this.contexts,
-    });
+    return await this.methods.cancelTask(
+      this.enforceParamValidation
+        ? await validateSchema(TaskIdParamsSchema, input)
+        : input,
+      {
+        service: this,
+        contextManager: this.contexts,
+      }
+    );
   }
 
   async sendMessage(
     message: MessageSendParams | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    return await this.methods.sendMessage(createMessageSendParams(message), {
-      ...params, //we may include additional params in the future that may not need to be handled by the service
-      service: this,
-      engine: params?.engine ?? this.engine,
-      contextManager: this.contexts,
-      signal: params?.signal ?? new AbortController().signal,
-    });
+    return await this.methods.sendMessage(
+      this.enforceParamValidation
+        ? await validateSchema(MessageSendParamsSchema, message)
+        : createMessageSendParams(message),
+      {
+        ...params, //we may include additional params in the future that may not need to be handled by the service
+        service: this,
+        engine: params?.engine ?? this.engine,
+        contextManager: this.contexts,
+        signal: params?.signal ?? new AbortController().signal,
+      }
+    );
   }
 
   async *streamMessage(
     message: MessageSendParams | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    yield* this.methods.streamMessage(createMessageSendParams(message), {
-      ...params,
-      service: this,
-      engine: params?.engine ?? this.engine,
-      contextManager: this.contexts,
-      signal: params?.signal ?? new AbortController().signal,
-    });
+    yield* this.methods.streamMessage(
+      this.enforceParamValidation
+        ? await validateSchema(MessageSendParamsSchema, message)
+        : createMessageSendParams(message),
+      {
+        ...params,
+        service: this,
+        engine: params?.engine ?? this.engine,
+        contextManager: this.contexts,
+        signal: params?.signal ?? new AbortController().signal,
+      }
+    );
   }
 
   async *resubscribe(
     input: TaskIdParams,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
-    yield* this.methods.resubscribe(input, {
-      ...params,
-      service: this,
-      engine: params?.engine ?? this.engine,
-      contextManager: this.contexts,
-      signal: params?.signal ?? new AbortController().signal,
-    });
+    yield* this.methods.resubscribe(
+      this.enforceParamValidation
+        ? await validateSchema(TaskIdParamsSchema, input)
+        : input,
+      {
+        ...params,
+        service: this,
+        engine: params?.engine ?? this.engine,
+        contextManager: this.contexts,
+        signal: params?.signal ?? new AbortController().signal,
+      }
+    );
   }
 }

@@ -11,7 +11,9 @@ import {
   UpdateEvent,
   CoreContext,
   MethodParams,
+  Task,
 } from "~/types/index.js";
+import { getLatestHistory } from "../helpers/index.js";
 
 export async function sendMessage(
   input: MessageSendParams,
@@ -35,9 +37,25 @@ export async function sendMessage(
   context.events.on("error", () => {
     context.events.onComplete();
   });
+  if (input.configuration?.blocking === false) {
+    const result: SendMessageSuccessResult = await Promise.race([
+      service.execute(engine, context).then(() => {
+        const state = context.events.getState();
+        return state.task ?? state;
+      }),
+      new Promise<SendMessageSuccessResult>((resolve) => {
+        context.events.on("start", (_, state: TaskAndHistory) => {
+          resolve(state.task ?? state);
+        });
+      }),
+    ]);
+    return result;
+  }
   await service.execute(engine, context);
   const state: TaskAndHistory = context.events.getState();
-  return state.task ?? state;
+  const task: Task = state.task ?? state;
+  task.history = getLatestHistory(task, input.configuration?.historyLength);
+  return task;
 }
 
 export type SendMessageMethod = typeof sendMessage;

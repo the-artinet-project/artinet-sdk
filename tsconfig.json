@@ -41,6 +41,8 @@
     "dist",
     "tests",
     "examples",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    ".external",
+    "src/browser.ts"
   ]
 }

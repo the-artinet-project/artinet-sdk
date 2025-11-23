@@ -4,8 +4,12 @@
  */
 
 import express from "express";
-import { INVALID_REQUEST } from "~/utils/index.js";
-import { Agent, FactoryParams as CreateAgentParams } from "~/types/index.js";
+import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
+import {
+  Agent,
+  AgentCard,
+  FactoryParams as CreateAgentParams,
+} from "~/types/index.js";
 import { createAgent } from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
@@ -15,6 +19,33 @@ export interface ServerParams {
   app?: express.Express;
   corsOptions?: CorsOptions;
   basePath?: string;
+  /* Your agentCard must have supportsAuthenticatedExtendedCard set to true */
+  extendedAgentCard?: AgentCard;
+}
+
+function rpcParser(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  express.json()(req, res, (err) => {
+    if (err) {
+      if (
+        err instanceof SyntaxError &&
+        "status" in err &&
+        err.status === 400 &&
+        "body" in err
+      ) {
+        return next(
+          PARSE_ERROR({
+            data: err.message,
+          })
+        );
+      }
+      return next(err);
+    }
+    next();
+  });
 }
 
 function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
@@ -65,10 +96,19 @@ export function createAgentServer(
   } = params;
 
   const agentInstance = ensureAgent(agent);
-
-  app.use(express.json());
   app.use(cors(params.corsOptions));
-  app.get(agentCardPath, (_, res) => {
+  if (agentCardPath !== "/.well-known/agent-card.json") {
+    // mount at the root for compliance with RFC8615 standard
+    app.use("/.well-known/agent-card.json", (_, res) => {
+      res.json(agentInstance.agentCard);
+    });
+  }
+  app.use(agentCardPath, (_, res) => {
+    // mount at the custom path
+    res.json(agentInstance.agentCard);
+  });
+  // mount at the old agent card path for backwards compatibility
+  app.use("/.well-known/agent.json", (_, res) => {
     res.json(agentInstance.agentCard);
   });
   /**
@@ -79,7 +119,7 @@ export function createAgentServer(
   //a standard express middleware to handle json-rpc requests
   app.post(
     basePath,
-    express.json(),
+    rpcParser,
     async (
       req: express.Request,
       res: express.Response,
@@ -87,7 +127,13 @@ export function createAgentServer(
     ) => {
       const { jsonrpc } = req.body;
       if (jsonrpc === "2.0") {
-        return await jsonRPCMiddleware(agentInstance, req, res, next);
+        return await jsonRPCMiddleware(
+          agentInstance,
+          req,
+          res,
+          next,
+          params.extendedAgentCard
+        );
       }
       next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));
     }
@@ -107,7 +153,7 @@ export function createAgentServer(
         },
       })
     );
-   * we could also just use trpc directly or any other transport layer
+   * we could also use trpc directly or any other transport layer
    */
   return { app, agent: agentInstance };
 }

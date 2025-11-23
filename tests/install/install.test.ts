@@ -84,7 +84,11 @@ describe("NPM Package Installation", () => {
 
   test("should have all required export files", async () => {
     // Check export files exist
-    const exportFiles = ["dist/index.js", "dist/types/index.d.ts"];
+    const exportFiles = [
+      "dist/index.js",
+      "dist/types/index.d.ts",
+      "dist/browser/browser.js",
+    ];
 
     for (const file of exportFiles) {
       const filePath = path.join(sdkPath, file);
@@ -134,4 +138,25 @@ try {
     expect(result.success).toBe(true);
     expect(result.createAgent).toBe(true);
   }, 30000);
+  test("browser bundle resolves correctly via package exports", async () => {
+    // Create a test file that imports from the package
+    const testFile = `
+      import { A2AClient } from '@artinet/sdk';
+      console.log('Import successful:', typeof A2AClient);
+    `;
+
+    await fs.writeFile(
+      path.join(testProjectDir, "test-browser-import.js"),
+      testFile
+    );
+
+    // Test that it doesn't throw (basic import test)
+    const { stdout, stderr } = await execAsync(
+      "node --conditions=browser test-browser-import.js",
+      { cwd: testProjectDir }
+    );
+
+    expect(stderr).toBe("");
+    expect(stdout).toContain("Import successful");
+  });
 });

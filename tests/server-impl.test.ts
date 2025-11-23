@@ -174,7 +174,11 @@ describe("Server Implementation Tests", () => {
     };
 
     server = createAgentServer({
-      agent: { engine: serverImplTestHandler, agentCard: customCard },
+      agent: {
+        engine: serverImplTestHandler,
+        agentCard: customCard,
+        enforceParamValidation: true,
+      },
       agentCardPath: "/.well-known/agent-card.json",
       corsOptions: {
         origin: ["http://localhost:3000"],
@@ -216,7 +220,9 @@ describe("Server Implementation Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
             taskId: "test-task-1",
+            messageId: "test-message-id-1",
             role: "user",
             parts: [{ kind: "text", text: "Basic test" }],
           },
@@ -269,6 +275,8 @@ describe("Server Implementation Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "internal-error-message-id-1",
             taskId: "internal-error-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This will throw-internal error" }],
@@ -373,6 +381,8 @@ describe("Server Implementation Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "history-message-id-1",
             taskId: "history-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Task for history test" }],
@@ -410,6 +420,8 @@ describe("Server Implementation Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "session-message-id-1",
             taskId: "session-task-1",
             contextId: "test-session-123",
             role: "user",
@@ -435,6 +447,8 @@ describe("Server Implementation Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "metadata-message-id-1",
             taskId: "metadata-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Task with metadata" }],

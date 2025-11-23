@@ -88,7 +88,6 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
       {
         title: "Agent Card",
         description: AgentCardSchema.description,
-        outputSchema: AgentCardSchema.shape,
         mimeType: "application/json",
       },
       async (uri) => {

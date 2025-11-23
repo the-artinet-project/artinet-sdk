@@ -22,7 +22,8 @@ export function createService(params: FactoryParams) {
     params.cancellations ?? new CancellationManager(),
     params.tasks ?? new TaskManager(),
     createMethods(params.methods),
-    params.events
+    params.events,
+    params.enforceParamValidation ?? false
   );
 }
 export const createAgent = createService;

@@ -16,6 +16,7 @@ export class AgentCardBuilder {
       defaultInputModes: agentCard.defaultInputModes ?? [],
       defaultOutputModes: agentCard.defaultOutputModes ?? [],
       skills: agentCard.skills ?? [],
+      preferredTransport: agentCard.preferredTransport ?? "JSONRPC",
     };
   }
   valueOf(): AgentCard {

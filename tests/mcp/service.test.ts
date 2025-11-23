@@ -283,6 +283,7 @@ describe("MCP Agent Tests", () => {
       description: "A2A Protocol Test Agent",
       defaultInputModes: ["text"],
       defaultOutputModes: ["text"],
+      preferredTransport: "JSONRPC",
       capabilities: {
         streaming: true,
         pushNotifications: true,

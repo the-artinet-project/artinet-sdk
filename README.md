@@ -41,6 +41,7 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
   - [Usage](#usage)
     - [Client](#client)
       - [Basic Client Usage](#basic-client-usage)
+      - [Browser Usage](#browser-usage)
       - [Streaming Updates](#streaming-updates)
       - [Authentication](#authentication)
     - [Server](#server)
@@ -51,30 +52,10 @@ It has [serveral template projects](https://github.com/the-artinet-project/creat
       - [Persistent Storage](#persistent-storage)
       - [Advanced Server Customization](#advanced-server-customization)
       - [Cross Protocol Support](#cross-protocol-support)
+  - [**Migration Changes**](#migration-changes)
   - [Contributing](#contributing)
   - [License](#license)
   - [Acknowledgements](#acknowledgements)
-
-**Breaking Changes since v0.5.8**
-
-- Pino has been removed and replaced with console for better portability and is set to silent by default.
-- The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
-- Agent Registration, Bundling and Deployment utils have been removed (email us: humans@artinet.io for support).
-- `@artinet/metadata-validator` has been removed due to build issues.
-- getTask now correctly takes TaskQueryParams as an argument vs TaskIdParams in accordance with the A2A spec.
-- AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
-- AgentBuilder now prefers the contextId & taskId from the calling context.
-- In a future release the following packages will be set as peer dependancies to reduce the size of the build: `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
-- The `history` object from `TaskAndHistory` is deprecated and no longer being updated. Use `Task.history` instead.
-- The `A2AClient` now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
-- The `A2AClient` now uses uses the `AgentCard`.url if an `AgentCard` has been successfully retrieved, else it will default to the `baseUrl`.
-- The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
-- In `Task` the `contextId` field is now required (inline with the A2A spec).
-- In `AgentSkill` the `tag` field is now required (inline with the A2A spec).
-- ~~Optional fields in Agent2Agent Zod schemas are now nullable for better interoperability.~~ **Nullable Schemas have been reverted.**
-- The `EngineBuilder` constructor is now protected and open for extension.
-- `AgentBuilder` will now throw an error if it recieves an invalid `FilePart`.
-- `createAgent`/`createService` can now take a single string (i.e. agentName) as valid value for the AgentCard and will populate the rest of the required fields with placeholder values (see `src/services/a2a/helpers/agentcard-builder.ts` for reference).
 
 ## Installation
 
@@ -168,6 +149,43 @@ const client = new A2AClient("https://your-a2a-server.com/a2a");
 
 const task: Task = await client.sendMessage("What is the capital of France?");
 ```
+
+#### Browser Usage
+
+_Experimental_
+
+The Client can be used directly in browsers. You'll need to load the required external dependencies: `zod`, `uuid`, and `eventsource-parser`.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required external dependencies -->
+    <script type="importmap">
+      {
+        "imports": {
+          "zod": "https://esm.sh/zod@3.23.8",
+          "uuid": "https://esm.sh/uuid@11.1.0",
+          "eventsource-parser": "https://esm.sh/eventsource-parser@3.0.1"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      const { A2AClient } = await import("@artinet/sdk");
+      const client = new A2AClient("http://localhost:4000/a2a");
+
+      const stream = await client.sendStreamingMessage("Hello!");
+      for await (const update of stream) {
+        console.log(update);
+      }
+    </script>
+  </body>
+</html>
+```
+
+> **Note:** Uses [esm.sh](https://esm.sh) as a CDN. See [`examples/browser-example.html`](examples/browser-example.html) for a complete example.
 
 #### Streaming Updates
 
@@ -624,6 +642,45 @@ const result = await client.callTool({
 - `agent://card`: Retrieve the AgentCard
 - `send-streaming-message`, `task-resubscribe` & `push-notifications` etc are currently not supported by default.
 - Leverage the A2A Zod Schemas to manually implement your own tools.
+
+## **Migration Changes**
+
+\*since v0.5.8
+
+- Pino has been removed and replaced with console for better portability and is set to silent by default.
+- The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
+- Agent Registration, Bundling and Deployment utils have been removed (email us: humans@artinet.io for support).
+- `@artinet/metadata-validator` has been removed due to build issues.
+- getTask now correctly takes TaskQueryParams as an argument vs TaskIdParams in accordance with the A2A spec.
+- AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
+- AgentBuilder now prefers the contextId & taskId from the calling context.
+- In a future release the following packages will be set as peer dependancies to reduce the size of the build: `@modelcontextprotocol/sdk`, `@trpc/server`, `cors`, `express`
+- The `history` object from `TaskAndHistory` is deprecated and no longer being updated. Use `Task.history` instead.
+- The `A2AClient` now checks `/.well-known/agent-card.json` as a opposed to `/.well-known/agent.json` in-line with the A2A spec.
+- The `A2AClient` now uses uses the `AgentCard`.url if an `AgentCard` has been successfully retrieved, else it will default to the `baseUrl`.
+- The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
+- In `Task` the `contextId` field is now required (inline with the A2A spec).
+- In `AgentSkill` the `tag` field is now required (inline with the A2A spec).
+- ~~Optional fields in Agent2Agent Zod schemas are now nullable for better interoperability.~~ **Nullable Schemas have been reverted.**
+- The `EngineBuilder` constructor is now protected and open for extension.
+- `AgentBuilder` will now throw an error if it recieves an invalid `FilePart`.
+- `createAgent`/`createService` can now take a single string (i.e. agentName) as valid value for the AgentCard and will populate the rest of the required fields with placeholder values (see `src/services/a2a/helpers/agentcard-builder.ts` for reference).
+- `createAgentServer` no longer adds `express.json()` to the root of the express server and now uses the utility function `rpcParser` only on the agents `basePath` and has stricter JSON-RPC validation measures.
+- `A2AClient` now exposes `mergePath` making it easier to access `AgentCards` that are not exposed at the root.
+- `AgentBuilder` now checks for cancellations after each step.
+- `createAgent` exposes the `enforceParamValidation` flag which triggers stricter enforcement of `A2ASchemas` (This will be enabled by default in a future release).
+- `AgentCardBuilder` now sets the `preferredTransport` field to the default (`JSONRPC`) if none is provided (inline with the A2A spec).
+- The default `sendMessage` implementation now supports the `MessageSendConfiguration`.`blocking` toggle.
+- The default `sendMessage` and `getTask` implementations now support the `MessageSendConfiguration`.`historyLength` parameter.
+- The Express Server now provides support for `AuthenticatedExtendedCard`.
+
+> **Note:** The Official A2A Javascript SDK is now more stable. So over the course of future releases @artinet/sdk will be merging in utilities directly from `@a2a-js/sdk` as a peer-dependancy.
+
+> This will **NOT** change the core architecture or design of @artinet/sdk, but it will make integration with the emerging Agent2Agent ecosystem easier while allowing us to focus on the adoption of additional communication protocols. We aim to complete this migration by v0.6 which will be our first LTS release.
+
+> This will **NOT** require the modification of existing `AgentEngine`'s, the current architecture was designed with this shift in mind and is the reason behind our use of loosely typed Interfaces, MPSC & SPMC queues vs EventBus and the design of the `CoreExecute` contract (onStart, onUpdate, onError, onCancel & onComplete).
+
+> This will mean that the more concrete implementations in `src/services/a2a` will become more generic implementations in `src/services/core`.
 
 ## Contributing
 

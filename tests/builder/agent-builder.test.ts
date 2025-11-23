@@ -188,6 +188,7 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      isCancelled: () => false,
       contextId: "456",
       State: () => ({
         task: {
@@ -256,6 +257,7 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      isCancelled: () => false,
       State: () => ({
         task: {
           id: "789",
@@ -303,6 +305,7 @@ describe("Agent Builder Tests", () => {
           message: "hello there",
         },
       },
+      isCancelled: () => false,
       State: () => ({
         task: {
           id: "789",
@@ -340,6 +343,7 @@ describe("Agent Builder Tests", () => {
           parts: [{ kind: "text", text: "hello world" }],
         },
       },
+      isCancelled: () => false,
       State: () => ({
         task: {
           id: "789",
@@ -383,6 +387,7 @@ describe("Agent Builder Tests", () => {
         taskId: "789",
         message: "hello there",
       },
+      isCancelled: () => false,
       State: () => ({
         task: {
           id: "789",

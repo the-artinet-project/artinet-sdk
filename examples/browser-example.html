@@ -1,0 +1,64 @@
+<!-- Browser Example: This example demonstrates how to use the Artinet SDK in a
+browser. It shows how to create a client, get the agent card, and send a
+message. It also shows how to handle streaming updates. -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Browser Example</title>
+    <!-- Required Importmap for the Artinet SDK -->
+    <script type="importmap">
+      {
+        "imports": {
+          "zod": "https://esm.sh/zod@3.23.8",
+          "uuid": "https://esm.sh/uuid@11.1.0",
+          "eventsource-parser": "https://esm.sh/eventsource-parser@3.0.1"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Browser Example</h1>
+    <div id="output">Loading...</div>
+    <script type="module">
+      const output = document.getElementById("output");
+      output.innerHTML = '<p style="color: blue">⏳ Starting Client...</p>';
+      try {
+        const { A2AClient } = await import("@artinet/sdk");
+        //ensure you have a server running at http://localhost:4000/a2a
+        const client = new A2AClient(
+          "http://localhost:4000/a2a",
+          {},
+          "/agent-card"
+        );
+
+        const agentCard = await client.agentCard();
+        output.innerHTML = `<p style="color: green">✓ Agent Card: ${JSON.stringify(
+          agentCard,
+          null,
+          2
+        )}</p>`;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const msg = await client.sendStreamingMessage({
+          message: {
+            messageId: "test-message-id",
+            kind: "message",
+            role: "user",
+            parts: [{ kind: "text", text: "Hello, how are you?" }],
+          },
+        });
+        for await (const update of msg) {
+          output.innerHTML = `<p style="color: green">✓ Update: ${JSON.stringify(
+            update,
+            null,
+            2
+          )}</p>`;
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      } catch (error) {
+        output.innerHTML = `<p style="color: red">✗ Error: ${error.message}</p>`;
+        console.error(error);
+      }
+    </script>
+  </body>
+</html>

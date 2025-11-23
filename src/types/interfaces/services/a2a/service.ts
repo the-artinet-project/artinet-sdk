@@ -86,6 +86,8 @@ export interface FactoryParams {
   methods?: Partial<MethodOptions>;
   /** Optional event manager configuration overrides */
   events?: EventManagerOptions<Command, State, Update>;
+  /** Enforce parameter validation */
+  enforceParamValidation?: boolean;
 }
 
 /**
@@ -129,6 +131,8 @@ export interface MethodParams {
   contextManager: ContextManagerInterface<Command, State, Update>;
   /** Abort signal for cancellation handling */
   signal: AbortSignal;
+  /** Enforce input validation */
+  enforceValidation?: boolean;
 }
 
 /**
