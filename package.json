@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.17",
+  "version": "0.5.18",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -50,13 +50,9 @@
     "artinet",
     "ai",
     "agent",
-    "sdk",
     "artificial intelligence",
-    "ai agent",
-    "multi-agent",
-    "multi-agent system",
-    "orchestration",
-    "swarms"
+    "mcp",
+    "modelcontextprotocol"
   ],
   "author": "artinet",
   "license": "Apache-2.0",
