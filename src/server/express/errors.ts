@@ -17,7 +17,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _) => {
   if (res.headersSent) {
     headersSent = true;
   }
-  logError("errorHandler", JSON.stringify(err), err);
+  logError("errorHandler", JSON.stringify(err, null, 2), err);
   let reqId = null;
   try {
     if (req.body && typeof req.body === "object" && "id" in req.body) {

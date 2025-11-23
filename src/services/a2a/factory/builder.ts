@@ -522,6 +522,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       contextId
     );
     yield taskStarted;
+    let finalState: TaskState = TaskState.completed;
     const finalMessage: Message = {
       taskId: taskId,
       contextId: contextId,
@@ -531,6 +532,10 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       parts: [],
     };
     for (const step of stepsList) {
+      if (context.isCancelled()) {
+        finalState = TaskState.canceled;
+        break;
+      }
       const ret = await step.step({ ...stepArgs });
       let parts: Part[] = [];
       if (Array.isArray(ret)) {
@@ -583,7 +588,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       id: taskId,
       contextId: contextId,
       status: {
-        state: TaskState.completed,
+        state: finalState,
         timestamp: new Date().toISOString(),
         message: finalMessage,
       },

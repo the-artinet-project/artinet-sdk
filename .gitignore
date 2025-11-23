@@ -3,3 +3,5 @@ dist
 data
 coverage
 .github
+.external
+

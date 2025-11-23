@@ -28,6 +28,8 @@ import {
   TaskState,
   TaskStatusUpdateEvent,
   JSONParseError,
+  AuthenticatedExtendedCardNotConfiguredError,
+  ErrorCodeAuthenticatedExtendedCardNotConfigured,
 } from "~/types/index.js";
 
 export class SystemError<T extends JSONRPCError> extends Error {
@@ -84,6 +86,17 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
   new SystemError<T>(
     "Push Notifications is not supported",
     ErrorCodePushNotificationNotSupported,
+    data
+  );
+
+export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
+  T extends AuthenticatedExtendedCardNotConfiguredError
+>(
+  data: T["data"]
+) =>
+  new SystemError<T>(
+    "Authenticated Extended Card is not configured",
+    ErrorCodeAuthenticatedExtendedCardNotConfigured,
     data
   );
 

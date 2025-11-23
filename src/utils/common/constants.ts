@@ -4,7 +4,7 @@
  */
 
 import { TaskState, TaskStatusUpdateEvent, Message } from "~/types/index.js";
-import { getCurrentTimestamp } from "../index.js";
+import { getCurrentTimestamp } from "./utils.js";
 //todo: protocol specific so move to a2a folder
 
 export const STATUS_UPDATE = (

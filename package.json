@@ -8,6 +8,11 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "import": "./dist/browser/browser.js",
+        "default": "./dist/browser/browser.js"
+      },
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
@@ -28,15 +33,16 @@
   "scripts": {
     "prepare": "ts-patch install -s",
     "build": "tsc --project tsconfig.json",
+    "build:browser": "tsc --project tsconfig.browser.json",
+    "build:all": "npm run build && npm run build:browser",
     "clean": "rimraf dist",
-    "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build",
+    "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build:all",
     "lint": "eslint src --ext .ts",
-    "prepublishOnly": "npm run clean && npm run build && npm run lint && npm test",
+    "prepublishOnly": "npm run rebuild && npm run lint && npm test",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "dev:quickstart": "tsx watch quickstart/quick-server.ts",
-    "dev-pack": "rimraf dist node_modules/ && npm i && npm run build && npm pack"
+    "dev:quickstart": "tsx watch quickstart/quick-server.ts"
   },
   "keywords": [
     "agent2agent",
@@ -63,7 +69,7 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.20.1",
+    "@modelcontextprotocol/sdk": "^1.20.1",
     "@trpc/server": "^11.4.3",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",

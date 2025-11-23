@@ -238,7 +238,6 @@ const protocolEngine: AgentEngine = async function* (
     },
   };
 };
-
 describe("A2A Protocol Specification Tests", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
@@ -271,6 +270,7 @@ describe("A2A Protocol Specification Tests", () => {
             },
           ],
         },
+        enforceParamValidation: true,
       },
     });
     app = agentServer.app;
@@ -328,6 +328,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "fail-task-1",
           message: {
+            kind: "message",
+            messageId: "fail-message-id-1",
             taskId: "fail-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This will fail" }],
@@ -353,6 +355,8 @@ describe("A2A Protocol Specification Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "input-required-message-id-1",
             taskId: "input-required-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This needs input-required" }],
@@ -379,6 +383,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "working-task-1",
           message: {
+            kind: "message",
+            messageId: "working-message-id-1",
             taskId: "working-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This is working-only" }],
@@ -405,6 +411,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "multi-part-task-1",
           message: {
+            kind: "message",
+            messageId: "multi-part-message-id-1",
             taskId: "multi-part-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This is multi-part" }],
@@ -453,6 +461,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "retrieve-task-1",
           message: {
+            kind: "message",
+            messageId: "retrieve-message-id-1",
             taskId: "retrieve-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Task to be retrieved" }],
@@ -505,6 +515,8 @@ describe("A2A Protocol Specification Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "cancel-message-id-1",
             taskId: "cancel-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This is working-only" }],
@@ -557,9 +569,14 @@ describe("A2A Protocol Specification Tests", () => {
         method: "message/send",
         params: {
           message: {
+            kind: "message",
+            messageId: "completed-message-id-1",
             taskId: "completed-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Task to be completed" }],
+          },
+          configuration: {
+            blocking: false,
           },
         },
       };
@@ -595,6 +612,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "push-task-1",
           message: {
+            kind: "message",
+            messageId: "push-create-message-id-1",
             role: "user",
             parts: [{ kind: "text", text: "Task for push notifications" }],
           },
@@ -636,6 +655,8 @@ describe("A2A Protocol Specification Tests", () => {
         params: {
           id: "push-get-task-1",
           message: {
+            kind: "message",
+            messageId: "push-get-message-id-1",
             role: "user",
             parts: [{ type: "text", text: "Task for push notifications" }],
           },

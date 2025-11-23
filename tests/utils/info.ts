@@ -6,6 +6,7 @@ export const MOCK_AGENT_CARD: AgentCard = {
   description: "A test agent for unit tests",
   url: "https://test-agent.example.com/api",
   version: "1.0.0",
+  preferredTransport: "JSONRPC",
   capabilities: {
     streaming: true,
     pushNotifications: true,

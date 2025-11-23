@@ -25,19 +25,19 @@ import type {
   Message,
   SendStreamingMessageResponse,
   UpdateEvent,
-} from "../types/index.js";
+} from "~/types/index.js";
 
 import {
   executeJsonRpcRequest,
   executeGetRequest,
-  executeStreamEvents,
-} from "../transport/index.js";
+} from "~/transport/rpc/rpc-client.js";
+import { executeStreamEvents } from "~/transport/streaming/event-stream.js";
 
-import { INTERNAL_ERROR } from "../utils/index.js";
-import { logError } from "../utils/logging/index.js";
+import { INTERNAL_ERROR } from "~/utils/common/errors.js";
+import { logError } from "~/utils/logging/log.js";
 
-import type { Client } from "../types/interfaces/client.js";
-import { createMessageSendParams } from "../services/a2a/helpers/message-builder.js";
+import type { Client } from "~/types/interfaces/client.js";
+import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
@@ -49,6 +49,7 @@ export class A2AClient implements Client {
   private customHeaders: Record<string, string> = {};
   private fallbackPath: string;
   private agentUrl: URL;
+  private mergePath: boolean;
   /**
    * Creates a new A2AClient instance.
    * @param baseUrl The base URL for the A2A server.
@@ -66,12 +67,14 @@ export class A2AClient implements Client {
   constructor(
     baseUrl: URL | string,
     headers: Record<string, string> = {},
-    fallbackPath?: string
+    fallbackPath?: string,
+    mergePath: boolean = false
   ) {
     this.baseUrl = typeof baseUrl === "string" ? new URL(baseUrl) : baseUrl;
     this.customHeaders = headers;
     this.fallbackPath = fallbackPath ?? "/agent-card";
     this.agentUrl = this.baseUrl;
+    this.mergePath = mergePath;
   }
 
   /**
@@ -86,6 +89,9 @@ export class A2AClient implements Client {
 
     // Standard location for agent cards
     const wellKnownUrl = new URL("/.well-known/agent-card.json", this.baseUrl);
+    if (this.mergePath) {
+      wellKnownUrl.pathname = this.baseUrl.pathname + wellKnownUrl.pathname;
+    }
     try {
       try {
         if (!URL.canParse(wellKnownUrl)) {
@@ -103,6 +109,9 @@ export class A2AClient implements Client {
         this.cachedAgentCard = card as AgentCard;
       } catch (error) {
         const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
+        if (this.mergePath) {
+          fallbackUrl.pathname = this.baseUrl.pathname + fallbackUrl.pathname;
+        }
         const fallbackCard: AgentCard = await executeGetRequest<AgentCard>(
           fallbackUrl,
           this.customHeaders,

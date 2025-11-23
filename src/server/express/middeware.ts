@@ -4,12 +4,13 @@
  */
 
 import { NextFunction, Request, Response } from "express";
-import { A2AServiceInterface } from "~/types/index.js";
+import { A2AServiceInterface, AgentCard } from "~/types/index.js";
 import {
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   INVALID_REQUEST,
   INVALID_PARAMS,
   METHOD_NOT_FOUND,
+  AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED,
 } from "~/utils/index.js";
 import { logError } from "~/utils/logging/index.js";
 
@@ -24,10 +25,14 @@ const isValidMethod = (method: string) => {
 };
 
 const checkParams = (params: unknown, method: string) => {
-  if (
-    !params ||
-    (typeof params === "object" && Object.keys(params).length === 0)
-  ) {
+  if (!params || (typeof params !== "object" && !Array.isArray(params))) {
+    throw INVALID_PARAMS({
+      data: {
+        message: "Invalid params",
+        method,
+      },
+    });
+  } else if (typeof params === "object" && Object.keys(params).length === 0) {
     throw INVALID_PARAMS({
       data: {
         message: "No params provided",
@@ -41,11 +46,14 @@ export async function jsonRPCMiddleware(
   service: A2AServiceInterface,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  extendedAgentCard?: AgentCard
 ): Promise<void> {
   const { method, params, id, jsonrpc } = req.body;
-  // Validate JSON-RPC format
-  if (jsonrpc !== "2.0" || !id) {
+  if (
+    jsonrpc !== "2.0" ||
+    (id && typeof id !== "string" && typeof id !== "number" && id !== null)
+  ) {
     res.json({
       jsonrpc: "2.0",
       id: id || null,
@@ -125,6 +133,22 @@ export async function jsonRPCMiddleware(
             method,
           },
         });
+      }
+
+      case "agent/getAuthenticatedExtendedCard": {
+        if (
+          !extendedAgentCard ||
+          service.agentCard.supportsAuthenticatedExtendedCard !== true
+        ) {
+          throw AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED({
+            data: {
+              message: "Authenticated Extended Card is not configured",
+              method,
+            },
+          });
+        }
+        result = extendedAgentCard;
+        break;
       }
 
       default:

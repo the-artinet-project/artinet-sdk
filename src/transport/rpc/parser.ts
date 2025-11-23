@@ -8,8 +8,8 @@ import {
   JSONRPCResponse,
   JSONRPCErrorSchema,
 } from "~/types/index.js";
-import { SystemError, PARSE_ERROR } from "~/utils/index.js";
-import { logError } from "~/utils/logging/index.js";
+import { SystemError, PARSE_ERROR } from "~/utils/common/errors.js";
+import { logError } from "~/utils/logging/log.js";
 
 /**
  * Parses a JSON-RPC response string and validates its structure.
