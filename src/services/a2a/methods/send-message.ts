@@ -5,31 +5,27 @@
 
 import { createContext } from "../factory/context.js";
 import {
-  MessageSendParams,
   SendMessageSuccessResult,
-  TaskAndHistory,
-  UpdateEvent,
-  CoreContext,
   MethodParams,
   Task,
+  A2A,
 } from "~/types/index.js";
 import { getLatestHistory } from "../helpers/index.js";
 
 export async function sendMessage(
-  input: MessageSendParams,
+  input: A2A["command"],
   params: MethodParams
 ): Promise<SendMessageSuccessResult> {
   const { service, engine, contextManager, signal } = params;
   const contextId: string | null | undefined = input.message.contextId;
-  const context: CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent> =
-    createContext(
-      input,
-      service,
-      contextManager,
-      signal,
-      contextId ?? undefined,
-      service.eventOverrides
-    );
+  const context: A2A["context"] = createContext(
+    input,
+    service,
+    contextManager,
+    signal,
+    contextId ?? undefined,
+    service.eventOverrides
+  );
 
   context.events.on("complete", () => {
     contextManager.deleteContext(context.events.contextId);
@@ -44,7 +40,7 @@ export async function sendMessage(
         return state.task ?? state;
       }),
       new Promise<SendMessageSuccessResult>((resolve) => {
-        context.events.on("start", (_, state: TaskAndHistory) => {
+        context.events.on("start", (_, state: A2A["state"]) => {
           resolve(state.task ?? state);
         });
       }),
@@ -52,7 +48,7 @@ export async function sendMessage(
     return result;
   }
   await service.execute(engine, context);
-  const state: TaskAndHistory = context.events.getState();
+  const state: A2A["state"] = context.events.getState();
   const task: Task = state.task ?? state;
   task.history = getLatestHistory(task, input.configuration?.historyLength);
   return task;

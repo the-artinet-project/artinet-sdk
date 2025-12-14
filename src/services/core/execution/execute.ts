@@ -3,23 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  ExecutionEngine,
-  CoreState,
-  CoreUpdate,
-  CoreContext,
-  CoreCommand,
-} from "~/types/index.js";
+import { ExecutionEngine, Core } from "~/types/index.js";
 
 export const coreExecute = async <
-  TCommand extends CoreCommand = CoreCommand,
-  TUpdate extends CoreUpdate = CoreUpdate,
-  TState extends CoreState = CoreState,
-  TContext extends CoreContext<TCommand, TState, TUpdate> = CoreContext<
+  TCommand extends Core["command"] = Core["command"],
+  TUpdate extends Core["update"] = Core["update"],
+  TState extends Core["state"] = Core["state"],
+  TContext extends Core<TCommand, TState, TUpdate>["context"] = Core<
     TCommand,
     TState,
     TUpdate
-  >,
+  >["context"]
 >(
   engine: ExecutionEngine<TCommand, TState, TUpdate>,
   context: TContext

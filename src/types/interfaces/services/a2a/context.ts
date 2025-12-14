@@ -25,7 +25,7 @@ import {
   MessageSendParams,
 } from "~/types/schemas/a2a/index.js";
 import { CoreCommand, CoreState, CoreUpdate } from "../core/context/types.js";
-import { CoreContext } from "../core/context/context.js";
+import { CoreContext, Core } from "../core/context/context.js";
 import { TaskAndHistory } from "./legacy.js";
 
 /**
@@ -76,7 +76,7 @@ export type UpdateEvent =
  * @since 0.5.6
  */
 export type Command<
-  TParams extends NonNullable<A2ARequest["params"]> = MessageSendParams,
+  TParams extends NonNullable<A2ARequest["params"]> = MessageSendParams
 > = CoreCommand<TParams>;
 
 /**
@@ -183,5 +183,11 @@ export type Update<TUpdate extends UpdateEvent = UpdateEvent> =
 export type Context<
   TCommand extends Command = Command<MessageSendParams>,
   TState extends State = State,
-  TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>,
+  TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>
 > = CoreContext<TCommand, TState, TUpdate>;
+
+export interface A2A<
+  TCommand extends Command = Command<MessageSendParams>,
+  TState extends State = State,
+  TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>
+> extends Core<TCommand, TState, TUpdate> {}

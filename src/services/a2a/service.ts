@@ -12,13 +12,8 @@ import {
   CancellationManagerInterface,
   TaskManagerInterface,
   MethodOptions,
-  TaskAndHistory,
   TaskIdParams,
-  MessageSendParams,
-  Command,
-  State,
-  Update,
-  CoreContext,
+  A2A,
   EventManagerOptions,
   MethodParams,
   TaskQueryParams,
@@ -35,23 +30,35 @@ export class A2AService implements A2AServiceInterface {
   private engine: A2AEngine;
   private connections: ConnectionManagerInterface;
   private cancellations: CancellationManagerInterface;
-  private tasks: TaskManagerInterface<TaskAndHistory>;
-  private contexts: ContextManagerInterface<Command, State, Update>;
+  private tasks: TaskManagerInterface<A2A["state"]>;
+  private contexts: ContextManagerInterface<
+    A2A["command"],
+    A2A["state"],
+    A2A["update"]
+  >;
   private methods: MethodOptions;
   readonly eventOverrides:
-    | EventManagerOptions<Command, State, Update>
+    | EventManagerOptions<A2A["command"], A2A["state"], A2A["update"]>
     | undefined;
   private enforceParamValidation: boolean = false;
 
   constructor(
     agentCard: AgentCard,
     engine: A2AEngine,
-    contexts: ContextManagerInterface<Command, State, Update>,
+    contexts: ContextManagerInterface<
+      A2A["command"],
+      A2A["state"],
+      A2A["update"]
+    >,
     connections: ConnectionManagerInterface,
     cancellations: CancellationManagerInterface,
-    tasks: TaskManagerInterface<TaskAndHistory>,
+    tasks: TaskManagerInterface<A2A["state"]>,
     methods: MethodOptions,
-    eventOverrides?: EventManagerOptions<Command, State, Update>,
+    eventOverrides?: EventManagerOptions<
+      A2A["command"],
+      A2A["state"],
+      A2A["update"]
+    >,
     enforceParamValidation: boolean = false
   ) {
     this.engine = engine;
@@ -65,10 +72,7 @@ export class A2AService implements A2AServiceInterface {
     this.enforceParamValidation = enforceParamValidation;
   }
 
-  async execute(
-    engine: A2AEngine,
-    context: CoreContext<Command, State, Update>
-  ): Promise<void> {
+  async execute(engine: A2AEngine, context: A2A["context"]): Promise<void> {
     await coreExecute(engine ?? this.engine, context);
   }
 
@@ -100,11 +104,11 @@ export class A2AService implements A2AServiceInterface {
     this.cancellations.removeCancellation(id);
   }
 
-  async getState(id: string): Promise<TaskAndHistory | undefined> {
+  async getState(id: string): Promise<A2A["state"] | undefined> {
     return await this.tasks.getState(id);
   }
 
-  async setState(id: string, data: TaskAndHistory): Promise<void> {
+  async setState(id: string, data: A2A["state"]): Promise<void> {
     await this.tasks.setState(id, data);
   }
 
@@ -130,7 +134,7 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async sendMessage(
-    message: MessageSendParams | string,
+    message: A2A["command"] | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
     return await this.methods.sendMessage(
@@ -148,7 +152,7 @@ export class A2AService implements A2AServiceInterface {
   }
 
   async *streamMessage(
-    message: MessageSendParams | string,
+    message: A2A["command"] | string,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) {
     yield* this.methods.streamMessage(

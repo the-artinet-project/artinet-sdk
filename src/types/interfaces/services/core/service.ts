@@ -16,12 +16,7 @@
  * @author The Artinet Project
  */
 
-import {
-  CoreContext,
-  CoreCommand,
-  CoreState,
-  CoreUpdate,
-} from "./context/index.js";
+import { Core } from "./context/index.js";
 import { ExecutionEngine } from "./execution/index.js";
 
 /**
@@ -40,9 +35,9 @@ import { ExecutionEngine } from "./execution/index.js";
  * @since 0.5.6
  */
 export interface ServiceInterface<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > {
   /**
    * Executes a command using the provided execution engine and context.
@@ -104,7 +99,7 @@ export interface ServiceInterface<
    */
   execute: (
     engine: ExecutionEngine<TCommand, TState, TUpdate>,
-    context: CoreContext<TCommand, TState, TUpdate>
+    context: Core<TCommand, TState, TUpdate>["context"]
   ) => Promise<void>;
 
   /**

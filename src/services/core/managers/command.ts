@@ -4,14 +4,14 @@
  */
 
 import {
-  CoreCommand,
+  Core,
   CommandChannelInterface,
   CommandChannelProxyInterface,
   CommandChannelMap,
 } from "~/types/index.js";
 import { EventEmitter } from "events";
 
-export class CommandChannel<TCommand extends CoreCommand = CoreCommand>
+export class CommandChannel<TCommand extends Core["command"] = Core["command"]>
   extends EventEmitter<CommandChannelMap<TCommand>>
   implements CommandChannelInterface<TCommand>
 {
@@ -101,7 +101,7 @@ export class CommandChannel<TCommand extends CoreCommand = CoreCommand>
     return Promise.resolve({ value, done: true });
   }
 
-  static create<TCommand extends CoreCommand = CoreCommand>(
+  static create<TCommand extends Core["command"] = Core["command"]>(
     command: TCommand
   ): CommandChannelProxyInterface<TCommand> {
     const instance = new CommandChannel<TCommand>(command);

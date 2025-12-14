@@ -7,17 +7,14 @@ import { EventEmitter } from "events";
 import {
   EventManagerInterface,
   EventManagerOptions,
-  CoreCommand,
-  CoreState,
-  CoreUpdate,
-  CoreContext,
+  Core,
   EventManagerMap,
 } from "~/types/index.js";
 
 export class EventManager<
-    TCommand extends CoreCommand = CoreCommand,
-    TState extends CoreState = CoreState,
-    TUpdate extends CoreUpdate = CoreUpdate,
+    TCommand extends Core["command"] = Core["command"],
+    TState extends Core["state"] = Core["state"],
+    TUpdate extends Core["update"] = Core["update"]
   >
   extends EventEmitter<EventManagerMap<TCommand, TState, TUpdate>>
   implements EventManagerInterface<TCommand, TState, TUpdate>
@@ -36,7 +33,7 @@ export class EventManager<
   }
 
   onStart = async (
-    context: CoreContext<TCommand, TState, TUpdate>
+    context: Core<TCommand, TState, TUpdate>["context"]
   ): Promise<TState> => {
     if (this.options.onStart) {
       this.currentState = await this.options.onStart(context);

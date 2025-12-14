@@ -17,15 +17,13 @@
  */
 
 import {
-  Command,
   ReceiveCommandProxyInterface,
-  State,
-  Update,
   Context,
   A2AServiceInterface,
   ContextManagerInterface,
   EventManagerOptions,
   EventManagerInterface,
+  A2A,
 } from "~/types/index.js";
 import { createEventManager } from "./event.js";
 import { v4 as uuidv4 } from "uuid";
@@ -58,9 +56,9 @@ import { CommandChannel } from "../../core/managers/command.js";
  * @public
  * @since 0.5.6
  */
-export function createCommandChannel<TCommand extends Command = Command>(
-  request: TCommand
-): ReceiveCommandProxyInterface<TCommand> {
+export function createCommandChannel<
+  TCommand extends A2A["command"] = A2A["command"]
+>(request: TCommand): ReceiveCommandProxyInterface<TCommand> {
   return CommandChannel.create<TCommand>(request);
 }
 
@@ -151,9 +149,9 @@ export function createCommandChannel<TCommand extends Command = Command>(
  * @since 0.5.6
  */
 export function createContext<
-  TCommand extends Command = Command,
-  TState extends State = State,
-  TUpdate extends Update = Update,
+  TCommand extends A2A["command"] = A2A["command"],
+  TState extends A2A["state"] = A2A["state"],
+  TUpdate extends A2A["update"] = A2A["update"]
 >(
   request: TCommand,
   service: A2AServiceInterface<TCommand, TState, TUpdate>,

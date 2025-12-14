@@ -6,26 +6,23 @@
 import {
   StreamManagerInterface,
   ExecutionEngine,
-  CoreContext,
   ServiceInterface,
-  CoreCommand,
-  CoreState,
-  CoreUpdate,
+  Core,
 } from "~/types/index.js";
 import { coreExecute } from "../execution/execute.js";
 
 export class StreamManager<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > implements StreamManagerInterface<TCommand, TState, TUpdate>
 {
   private contextId: string | null = null;
   private completed: boolean = false;
   private updates: TUpdate[] = [];
-  private executionContext: CoreContext<TCommand, TState, TUpdate> | null =
+  private executionContext: Core<TCommand, TState, TUpdate>["context"] | null =
     null;
-  constructor(executionContext?: CoreContext<TCommand, TState, TUpdate>) {
+  constructor(executionContext?: Core<TCommand, TState, TUpdate>["context"]) {
     if (executionContext) {
       this.executionContext = executionContext;
       this.contextId = executionContext.events.contextId;
@@ -58,7 +55,7 @@ export class StreamManager<
     return this.executionContext;
   }
   setExecutionContext(
-    executionContext: CoreContext<TCommand, TState, TUpdate>
+    executionContext: Core<TCommand, TState, TUpdate>["context"]
   ) {
     this.executionContext = executionContext;
     this.contextId = executionContext.events.contextId;
