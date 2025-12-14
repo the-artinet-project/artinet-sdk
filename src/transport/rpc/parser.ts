@@ -20,22 +20,24 @@ import { logError } from "~/utils/logging/log.js";
  * @returns The parsed and validated response object
  * @throws A2AError if the response contains an error or is invalid
  */
-export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
+export function parseResponse<Res extends JSONRPCResponse | JSONRPCError>(
+  data: string
+): Res {
   if (!data) {
     throw PARSE_ERROR("Invalid response data");
   }
 
   try {
     const parsed = JSON.parse(data) as Res; //todo: leverage safe parse
-    if (parsed.error) {
-      const parsedError = JSONRPCErrorSchema.safeParse(parsed.error);
+    if ((parsed as JSONRPCError).error) {
+      const parsedError = JSONRPCErrorSchema.safeParse(parsed);
       if (!parsedError.success) {
         throw PARSE_ERROR(parsedError.error);
       }
       throw new SystemError<JSONRPCError>(
-        parsedError.data.message,
-        parsedError.data.code,
-        parsedError.data.data
+        parsedError.data.error.message,
+        parsedError.data.error.code,
+        parsedError.data.error.data
       );
     }
 
@@ -47,7 +49,7 @@ export function parseResponse<Res extends JSONRPCResponse>(data: string): Res {
       throw PARSE_ERROR("invalid jsonrpc");
     }
 
-    if (parsed.result === undefined) {
+    if ((parsed as JSONRPCResponse).result === undefined) {
       throw PARSE_ERROR("result is undefined");
     }
 

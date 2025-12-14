@@ -34,10 +34,14 @@ import {
 
 export class SystemError<T extends JSONRPCError> extends Error {
   message: string;
-  code: T["code"];
-  data: T["data"];
+  code: T["error"]["code"];
+  data: T["error"]["data"];
 
-  constructor(message: string, code: T["code"], data: T["data"]) {
+  constructor(
+    message: string,
+    code: T["error"]["code"],
+    data: T["error"]["data"]
+  ) {
     super(message);
     // this.name = "RpcError";
     this.message = message;
@@ -46,11 +50,12 @@ export class SystemError<T extends JSONRPCError> extends Error {
   }
 }
 // Factory methods for common errors
-export const PARSE_ERROR = <T extends JSONParseError>(data: T["data"]) =>
-  new SystemError<T>("Invalid JSON payload", ErrorCodeParseError, data);
+export const PARSE_ERROR = <T extends JSONParseError>(
+  data: T["error"]["data"]
+) => new SystemError<T>("Invalid JSON payload", ErrorCodeParseError, data);
 
 export const INVALID_REQUEST = <T extends InvalidRequestError>(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Request payload validation error",
@@ -59,20 +64,23 @@ export const INVALID_REQUEST = <T extends InvalidRequestError>(
   );
 
 export const METHOD_NOT_FOUND = <T extends MethodNotFoundError>(
-  data: T["data"]
+  data: T["error"]["data"]
 ) => new SystemError<T>("Method not found", ErrorCodeMethodNotFound, data);
 
-export const INVALID_PARAMS = <T extends InvalidParamsError>(data: T["data"]) =>
-  new SystemError<T>("Invalid parameters", ErrorCodeInvalidParams, data);
+export const INVALID_PARAMS = <T extends InvalidParamsError>(
+  data: T["error"]["data"]
+) => new SystemError<T>("Invalid parameters", ErrorCodeInvalidParams, data);
 
-export const INTERNAL_ERROR = <T extends InternalError>(data: T["data"]) =>
-  new SystemError<T>("Internal error", ErrorCodeInternalError, data);
+export const INTERNAL_ERROR = <T extends InternalError>(
+  data: T["error"]["data"]
+) => new SystemError<T>("Internal error", ErrorCodeInternalError, data);
 
-export const TASK_NOT_FOUND = <T extends TaskNotFoundError>(data: T["data"]) =>
-  new SystemError<T>("Task not found", ErrorCodeTaskNotFound, data);
+export const TASK_NOT_FOUND = <T extends TaskNotFoundError>(
+  data: T["error"]["data"]
+) => new SystemError<T>("Task not found", ErrorCodeTaskNotFound, data);
 
 export const TASK_NOT_CANCELABLE = <T extends TaskNotCancelableError>(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Task cannot be canceled",
@@ -81,7 +89,7 @@ export const TASK_NOT_CANCELABLE = <T extends TaskNotCancelableError>(
   );
 
 export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Push Notifications is not supported",
@@ -92,7 +100,7 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2AError>(
 export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
   T extends AuthenticatedExtendedCardNotConfiguredError
 >(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Authenticated Extended Card is not configured",
@@ -100,7 +108,9 @@ export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
     data
   );
 
-export const UNSUPPORTED_OPERATION = <T extends A2AError>(data: T["data"]) =>
+export const UNSUPPORTED_OPERATION = <T extends A2AError>(
+  data: T["error"]["data"]
+) =>
   new SystemError<T>(
     "This operation is not supported",
     ErrorCodeUnsupportedOperation,
@@ -110,7 +120,7 @@ export const UNSUPPORTED_OPERATION = <T extends A2AError>(data: T["data"]) =>
 export const CONTENT_TYPE_NOT_SUPPORTED = <
   T extends ContentTypeNotSupportedError
 >(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Content type not supported",
@@ -119,7 +129,7 @@ export const CONTENT_TYPE_NOT_SUPPORTED = <
   );
 
 export const INVALID_AGENT_RESPONSE = <T extends InvalidAgentResponseError>(
-  data: T["data"]
+  data: T["error"]["data"]
 ) =>
   new SystemError<T>(
     "Invalid agent response",

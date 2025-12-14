@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TaskManagerInterface, TaskAndHistory } from "~/types/index.js";
+import { TaskManagerInterface, A2A } from "~/types/index.js";
 
-export class TaskManager<TaskType extends TaskAndHistory>
+export class TaskManager<TaskType extends A2A["state"] = A2A["state"]>
   implements TaskManagerInterface<TaskType>
 {
   private states: Map<string, TaskType> = new Map();

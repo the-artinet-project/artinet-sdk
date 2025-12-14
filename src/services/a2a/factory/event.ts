@@ -19,17 +19,14 @@
 
 import { EventManager } from "~/services/core/managers/event.js";
 import {
-  Command,
-  State,
-  Update,
   A2AServiceInterface,
   EventManagerOptions,
   TaskStore,
   TaskStatusUpdateEvent,
   TaskState,
   Message,
-  Context,
   Task,
+  A2A,
 } from "~/types/index.js";
 import {
   INTERNAL_ERROR,
@@ -80,9 +77,9 @@ import { v4 as uuidv4 } from "uuid";
  * @since 0.5.6
  */
 export function createEventManager<
-  TCommand extends Command = Command,
-  TState extends State = State,
-  TUpdate extends Update = Update
+  TCommand extends A2A["command"] = A2A["command"],
+  TState extends A2A["state"] = A2A["state"],
+  TUpdate extends A2A["update"] = A2A["update"]
 >(
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
   id?: string,
@@ -115,7 +112,7 @@ export function createEventManager<
   // Configure A2A-specific event handling options
   const options: EventManagerOptions<TCommand, TState, TUpdate> = {
     onStart: async (
-      context: Context<TCommand, TState, TUpdate>
+      context: A2A<TCommand, TState, TUpdate>["context"]
     ): Promise<TState> => {
       const request = context.command;
 

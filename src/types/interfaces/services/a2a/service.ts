@@ -32,7 +32,7 @@ import {
   Task,
   TaskIdParams,
   TaskQueryParams,
-} from "~/types/schemas/a2a/index.js";
+} from "@artinet/types";
 import { UpdateEvent, Command, State, Update } from "./context.js";
 import { A2AEngine } from "./engine.js";
 

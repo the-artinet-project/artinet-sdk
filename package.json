@@ -65,6 +65,7 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
+    "@artinet/types": "^0.0.9",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
