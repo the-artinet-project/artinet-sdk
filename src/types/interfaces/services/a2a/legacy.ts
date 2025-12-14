@@ -7,7 +7,7 @@ import {
   type Task,
   type Message,
   type MessageSendConfiguration,
-} from "~/types/schemas/a2a/index.js";
+} from "@artinet/types";
 import { A2AEngine } from "./engine.js";
 
 /**

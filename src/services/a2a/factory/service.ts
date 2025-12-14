@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FactoryParams, Command, State, Update } from "~/types/index.js";
+import { FactoryParams, A2A } from "~/types/index.js";
 import { A2AService } from "../service.js";
 import {
   ContextManager,
@@ -17,7 +17,8 @@ export function createService(params: FactoryParams) {
   return new A2AService(
     createAgentCard(params.agentCard),
     params.engine,
-    params.contexts ?? new ContextManager<Command, State, Update>(),
+    params.contexts ??
+      new ContextManager<A2A["command"], A2A["state"], A2A["update"]>(),
     params.connections ?? new ConnectionManager(),
     params.cancellations ?? new CancellationManager(),
     params.tasks ?? new TaskManager(),

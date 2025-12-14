@@ -7,13 +7,11 @@ import {
   TaskPushNotificationConfig,
   TaskIdParams,
   Task,
-} from "../schemas/a2a/index.js";
-import type {
   AgentCard,
   TaskQueryParams,
   MessageSendParams,
   Message,
-} from "../schemas/a2a/index.js";
+} from "@artinet/types";
 import { UpdateEvent } from "./services/a2a/index.js";
 //todo: merge with a2a-js client
 /**

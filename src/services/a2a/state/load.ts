@@ -4,13 +4,7 @@
  */
 
 import { getCurrentTimestamp, logError } from "~/utils/index.js";
-import {
-  Task,
-  Message,
-  TaskState,
-  TaskAndHistory,
-  TaskStore,
-} from "~/types/index.js";
+import { Task, Message, TaskState, TaskStore, A2A } from "~/types/index.js";
 import { v4 as uuidv4 } from "uuid";
 
 async function getReferences(
@@ -18,7 +12,7 @@ async function getReferences(
   taskStore: TaskStore
 ): Promise<Task[]> {
   try {
-    const references: (TaskAndHistory | null)[] = await Promise.all(
+    const references: (A2A["state"] | null)[] = await Promise.all(
       referenceTaskIds.map((referenceTaskId) => {
         return taskStore.load(referenceTaskId);
       })
@@ -47,9 +41,9 @@ export async function loadState(
   metadata?: Record<string, unknown> | null,
   taskId?: string | null,
   contextId?: string | null
-): Promise<TaskAndHistory> {
+): Promise<A2A["state"]> {
   if (taskId) {
-    const existingData: TaskAndHistory | null = await taskStore.load(taskId);
+    const existingData: A2A["state"] | null = await taskStore.load(taskId);
     if (existingData) {
       return {
         ...existingData,

@@ -3,9 +3,10 @@ import {
   configureLogger,
   createAgentServer,
   AgentBuilder,
+  MessageSendParams,
 } from "@artinet/sdk";
-
-configureLogger({ level: "info" });
+console.log("Quick server starting");
+configureLogger({ level: "silent" });
 
 // Configure and start the server
 const { app } = createAgentServer({
@@ -14,12 +15,33 @@ const { app } = createAgentServer({
       logger.info(`Server received: ${userInput}`);
       return "Thinking...";
     })
-    .text(async ({ content: userInput }) => {
+    .text(async ({ command, content: userInput, context }) => {
+      if (command?.message?.messageId?.includes("mapping-test")) {
+        console.log(
+          "command",
+          JSON.stringify(command as MessageSendParams, null, 2)
+        );
+        console.log("Mapping test message received");
+        let counter = 0;
+        while (true) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          counter++;
+          if (counter > 30) {
+            break;
+          }
+          if (context.isCancelled()) {
+            console.log("Mapping test message cancelled");
+            break;
+          }
+        }
+        console.log("Mapping test message completed:", context.isCancelled());
+      }
       // Simulate work
       await new Promise((resolve) => setTimeout(resolve, 500));
       return `You said: ${userInput}`;
     })
     .createAgent({
+      enforceParamValidation: true,
       agentCard: {
         protocolVersion: "0.3.0",
         name: "QuickStart Agent",
@@ -36,6 +58,8 @@ const { app } = createAgentServer({
             },
           ],
         },
+        preferredTransport: "JSONRPC",
+        supportsAuthenticatedExtendedCard: false,
         skills: [
           {
             id: "echo",
@@ -51,9 +75,8 @@ const { app } = createAgentServer({
         defaultOutputModes: ["text"],
       },
     }),
+  agentCardPath: "/.well-known/agent-card.json",
   basePath: "/a2a",
 });
 
-app.listen(4000, () => {
-  logger.info("QuickAgent running on http://localhost:4000/a2a");
-});
+app.listen(4000);

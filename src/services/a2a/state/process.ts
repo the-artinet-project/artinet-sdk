@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TaskAndHistory, TaskStore } from "~/types/index.js";
+import { A2A, TaskStore } from "~/types/index.js";
 import { updateState, UpdateProps } from "./update/update.js";
 
 export async function processUpdate(
   taskStore: TaskStore,
   updateProps: UpdateProps
-): Promise<TaskAndHistory> {
+): Promise<A2A["state"]> {
   if (!(await updateState(updateProps))) {
     console.error("processUpdate: Invalid update", updateProps);
     throw new Error("processUpdate: Invalid update");

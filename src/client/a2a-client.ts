@@ -6,6 +6,7 @@
 import type {
   AgentCard,
   SendMessageRequest,
+  SendMessageSuccessResponse,
   GetTaskRequest,
   CancelTaskRequest,
   SetTaskPushNotificationConfigRequest,
@@ -14,17 +15,16 @@ import type {
   TaskQueryParams,
   TaskIdParams,
   TaskPushNotificationConfig,
-  SendMessageResponse,
-  GetTaskResponse,
-  CancelTaskResponse,
-  SetTaskPushNotificationConfigResponse,
-  GetTaskPushNotificationConfigResponse,
   Task,
   SendStreamingMessageRequest,
   TaskResubscriptionRequest,
   Message,
-  SendStreamingMessageResponse,
   UpdateEvent,
+  SendStreamingMessageSuccessResponse,
+  GetTaskSuccessResponse,
+  CancelTaskSuccessResponse,
+  SetTaskPushNotificationConfigSuccessResponse,
+  GetTaskPushNotificationConfigSuccessResponse,
 } from "~/types/index.js";
 
 import {
@@ -161,7 +161,10 @@ export class A2AClient implements Client {
   async sendMessage(
     params: MessageSendParams | string
   ): Promise<Message | Task | null> {
-    return await executeJsonRpcRequest<SendMessageRequest, SendMessageResponse>(
+    return await executeJsonRpcRequest<
+      SendMessageRequest,
+      SendMessageSuccessResponse
+    >(
       this.agentUrl,
       "message/send",
       createMessageSendParams(params),
@@ -189,7 +192,7 @@ export class A2AClient implements Client {
   ): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
       SendStreamingMessageRequest,
-      SendStreamingMessageResponse
+      SendStreamingMessageSuccessResponse
     >(
       this.agentUrl,
       "message/stream",
@@ -214,7 +217,7 @@ export class A2AClient implements Client {
    * @returns A promise resolving to the Task object or null.
    */
   async getTask(params: TaskQueryParams): Promise<Task | null> {
-    return await executeJsonRpcRequest<GetTaskRequest, GetTaskResponse>(
+    return await executeJsonRpcRequest<GetTaskRequest, GetTaskSuccessResponse>(
       this.agentUrl,
       "tasks/get",
       params,
@@ -228,12 +231,10 @@ export class A2AClient implements Client {
    * @returns A promise resolving to the updated Task object (usually canceled state) or null.
    */
   async cancelTask(params: TaskIdParams): Promise<Task | null> {
-    return await executeJsonRpcRequest<CancelTaskRequest, CancelTaskResponse>(
-      this.agentUrl,
-      "tasks/cancel",
-      params,
-      this.customHeaders
-    );
+    return await executeJsonRpcRequest<
+      CancelTaskRequest,
+      CancelTaskSuccessResponse
+    >(this.agentUrl, "tasks/cancel", params, this.customHeaders);
   }
 
   /**
@@ -246,7 +247,7 @@ export class A2AClient implements Client {
   ): Promise<TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
       SetTaskPushNotificationConfigRequest,
-      SetTaskPushNotificationConfigResponse
+      SetTaskPushNotificationConfigSuccessResponse
     >(
       this.agentUrl,
       "tasks/pushNotificationConfig/set",
@@ -265,7 +266,7 @@ export class A2AClient implements Client {
   ): Promise<TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
       GetTaskPushNotificationConfigRequest,
-      GetTaskPushNotificationConfigResponse
+      GetTaskPushNotificationConfigSuccessResponse
     >(
       this.agentUrl,
       "tasks/pushNotificationConfig/get",
@@ -282,7 +283,7 @@ export class A2AClient implements Client {
   resubscribeTask(params: TaskQueryParams): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
       TaskResubscriptionRequest,
-      SendStreamingMessageResponse
+      SendStreamingMessageSuccessResponse
     >(this.agentUrl, "tasks/resubscribe", params, this.customHeaders);
   }
 

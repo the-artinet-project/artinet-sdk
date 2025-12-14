@@ -23,7 +23,7 @@ import {
   type Message,
   A2ARequest,
   MessageSendParams,
-} from "~/types/schemas/a2a/index.js";
+} from "@artinet/types";
 import { CoreCommand, CoreState, CoreUpdate } from "../core/context/types.js";
 import { CoreContext, Core } from "../core/context/context.js";
 import { TaskAndHistory } from "./legacy.js";

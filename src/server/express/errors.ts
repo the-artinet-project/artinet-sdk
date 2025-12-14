@@ -27,7 +27,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _) => {
     logError("A2AServer", "Error extracting request ID", e);
   }
 
-  let jsonRpcError: JSONRPCError;
+  let jsonRpcError: JSONRPCError["error"];
   if (err instanceof SystemError) {
     jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {

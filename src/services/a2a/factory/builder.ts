@@ -21,11 +21,9 @@ import {
   Step,
   StepOutput,
   StepOutputWithForwardArgs,
-  MessageSendParams,
   TextPart,
   DataPart,
   FilePart,
-  Context,
   TaskStatusUpdateEvent,
   TaskState,
   AgentEngine,
@@ -36,6 +34,7 @@ import {
   Command,
   Message,
   Part,
+  A2A,
 } from "~/types/index.js";
 import { createAgent } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
@@ -67,7 +66,7 @@ import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
  * @since 0.5.6
  */
 export type textStep<
-  TCommand extends MessageSendParams = MessageSendParams,
+  TCommand extends A2A["command"] = A2A["command"],
   TPart extends TextPart["text"] = TextPart["text"],
   TInboundArgs extends readonly unknown[] = [],
   TForwardArgs extends readonly unknown[] = [],
@@ -107,7 +106,7 @@ export type textStep<
  * @since 0.5.6
  */
 export type fileStep<
-  TCommand extends MessageSendParams = MessageSendParams,
+  TCommand extends A2A["command"] = A2A["command"],
   TPart extends FilePart["file"] = FilePart["file"],
   TInboundArgs extends readonly unknown[] = [],
   TForwardArgs extends readonly unknown[] = [],
@@ -147,7 +146,7 @@ export type fileStep<
  * @since 0.5.6
  */
 export type dataStep<
-  TCommand extends MessageSendParams = MessageSendParams,
+  TCommand extends A2A["command"] = A2A["command"],
   TPart extends DataPart["data"] = DataPart["data"],
   TInboundArgs extends readonly unknown[] = [],
   TForwardArgs extends readonly unknown[] = [],
@@ -198,7 +197,7 @@ type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
  * @since 0.5.6
  */
 export class EngineBuilder<
-  TCommand extends MessageSendParams = MessageSendParams,
+  TCommand extends A2A["command"] = A2A["command"],
   TInboundArgs extends readonly unknown[] = []
 > implements StepBuilder<TCommand, TInboundArgs>
 {
@@ -230,7 +229,7 @@ export class EngineBuilder<
    * ```
    */
   public static create<
-    TCommand extends MessageSendParams = MessageSendParams,
+    TCommand extends A2A["command"] = A2A["command"],
     TInboundArgs extends readonly unknown[] = []
   >() {
     return new EngineBuilder<TCommand, TInboundArgs>();
@@ -437,7 +436,7 @@ export class EngineBuilder<
  * @public
  * @since 0.5.6
  */
-export const AgentBuilder = () => EngineBuilder.create<MessageSendParams>();
+export const AgentBuilder = () => EngineBuilder.create<A2A["command"]>();
 
 const partToMessagePart = (
   kind: "text" | "file" | "data",
@@ -502,7 +501,7 @@ const partToMessagePart = (
  * @since 0.5.6
  */
 export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
-  return async function* (context: Context) {
+  return async function* (context: A2A["context"]) {
     const content = getContent(context.command.message);
     const stepArgs: StepParams = {
       command: context.command,

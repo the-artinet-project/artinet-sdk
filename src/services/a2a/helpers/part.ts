@@ -2,13 +2,7 @@
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
  */
-import {
-  Part,
-  TextPart,
-  FilePart,
-  DataPart,
-  Message,
-} from "~/types/schemas/a2a/index.js";
+import { Part, TextPart, FilePart, DataPart, Message } from "@artinet/types";
 /**
  * Extracts and aggregates the text, file, and data contents from an array of Part objects.
  *
