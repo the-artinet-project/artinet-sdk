@@ -71,7 +71,7 @@ export type StepWithKind<
   step: Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
   kind: TKind;
 };
-
+//todo: Delete? Should we just use mutable context instead?
 export type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A>
   ? A
   : [];

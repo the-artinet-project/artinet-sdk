@@ -15,7 +15,7 @@ import type {
   Message,
 } from "../schemas/a2a/index.js";
 import { UpdateEvent } from "./services/a2a/index.js";
-
+//todo: merge with a2a-js client
 /**
  * @interface Client
  * @description Defines the standard contract for an A2A (Agent-to-Agent) client implementation.

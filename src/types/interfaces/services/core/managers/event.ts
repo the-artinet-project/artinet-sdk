@@ -55,10 +55,11 @@ import {
  * @public
  * @since 0.5.6
  */
+//todo merge with EventManagerInterface
 export interface EventManagerOptions<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TUpdate extends CoreUpdate = CoreUpdate
 > {
   /**
    * Called when execution starts for a new context.
@@ -212,7 +213,7 @@ export interface EventManagerOptions<
 export interface EventManagerMap<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TUpdate extends CoreUpdate = CoreUpdate
 > {
   /** Emitted when execution starts - [command, initialState] */
   start: [TCommand, TState];
@@ -265,7 +266,7 @@ export interface EventManagerMap<
 export interface EventManagerInterface<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TUpdate extends CoreUpdate = CoreUpdate
 > extends EventEmitter<EventManagerMap<TCommand, TState, TUpdate>> {
   /**
    * Unique identifier for this execution context.

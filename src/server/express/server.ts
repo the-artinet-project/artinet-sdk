@@ -23,7 +23,7 @@ export interface ServerParams {
   extendedAgentCard?: AgentCard;
 }
 
-function rpcParser(
+export function rpcParser(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction

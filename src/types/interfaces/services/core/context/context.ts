@@ -103,7 +103,7 @@ import { ReceiveCommandProxyInterface } from "./command.js";
 export interface CoreContext<
   TCommand extends CoreCommand = CoreCommand,
   TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TUpdate extends CoreUpdate = CoreUpdate
 > {
   /**
    * Unique identifier for this execution context.
@@ -216,4 +216,18 @@ export interface CoreContext<
    * ```
    */
   readonly State: () => TState;
+}
+
+export interface Core<
+  TCommand extends CoreCommand = CoreCommand,
+  TState extends CoreState = CoreState,
+  TUpdate extends CoreUpdate = CoreUpdate
+> {
+  /**
+   * The context for the core execution.
+   */
+  context: CoreContext<TCommand, TState, TUpdate>;
+  command: TCommand;
+  state: TState;
+  update: TUpdate;
 }
