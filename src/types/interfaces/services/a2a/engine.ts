@@ -4,6 +4,9 @@
  */
 
 import { ExecutionEngine } from "../core/execution/index.js";
-import { Command, State, Update } from "./context.js";
-
-export type A2AEngine = ExecutionEngine<Command, State, Update>;
+import { A2A } from "~/types/index.js";
+export type A2AEngine = ExecutionEngine<
+  A2A["command"],
+  A2A["state"],
+  A2A["update"]
+>;

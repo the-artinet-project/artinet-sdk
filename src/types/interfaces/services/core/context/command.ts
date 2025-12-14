@@ -3,23 +3,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CoreCommand } from "./types.js";
 import { EventEmitter } from "events";
-
-export interface CommandChannelMap<TCommand extends CoreCommand = CoreCommand> {
+import { Core } from "./context.js";
+export interface CommandChannelMap<
+  TCommand extends Core["command"] = Core["command"]
+> {
   send: [TCommand]; //may change to recieved
   close: [];
 }
 
 export interface SendCommandInterface<
-  TCommand extends CoreCommand = CoreCommand,
+  TCommand extends Core["command"] = Core["command"]
 > {
   isOpen: boolean;
   send(command: TCommand): void;
 }
 
 export interface ReceiveCommandInterface<
-  TCommand extends CoreCommand = CoreCommand,
+  TCommand extends Core["command"] = Core["command"]
 > extends AsyncIterable<TCommand, TCommand, TCommand | undefined>,
     EventEmitter<CommandChannelMap<TCommand>> {
   command: TCommand;
@@ -30,14 +31,14 @@ export interface ReceiveCommandInterface<
 }
 
 export type ReceiveCommandProxyInterface<
-  TCommand extends CoreCommand = CoreCommand,
+  TCommand extends Core["command"] = Core["command"]
 > = ReceiveCommandInterface<TCommand> & TCommand;
 
 export interface CommandChannelInterface<
-  TCommand extends CoreCommand = CoreCommand,
+  TCommand extends Core["command"] = Core["command"]
 > extends ReceiveCommandInterface<TCommand>,
     SendCommandInterface<TCommand> {}
 
 export type CommandChannelProxyInterface<
-  TCommand extends CoreCommand = CoreCommand,
+  TCommand extends Core["command"] = Core["command"]
 > = CommandChannelInterface<TCommand> & TCommand;

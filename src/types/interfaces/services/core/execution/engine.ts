@@ -16,12 +16,7 @@
  * @author The Artinet Project
  */
 
-import {
-  CoreCommand,
-  CoreContext,
-  CoreState,
-  CoreUpdate,
-} from "../context/index.js";
+import { Core } from "../context/index.js";
 
 /**
  * Core execution engine function signature.
@@ -112,9 +107,9 @@ import {
  * @since 0.5.6
  */
 export type ExecutionEngine<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > = (
-  context: CoreContext<TCommand, TState, TUpdate>
+  context: Core<TCommand, TState, TUpdate>["context"]
 ) => AsyncGenerator<TUpdate, void, unknown>;

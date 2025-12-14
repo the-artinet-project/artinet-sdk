@@ -17,12 +17,7 @@
  */
 
 import { EventEmitter } from "events";
-import {
-  CoreCommand,
-  CoreState,
-  CoreUpdate,
-  CoreContext,
-} from "../context/index.js";
+import { Core } from "../context/index.js";
 
 /**
  * Configuration options for EventManager lifecycle callbacks.
@@ -57,9 +52,9 @@ import {
  */
 //todo merge with EventManagerInterface
 export interface EventManagerOptions<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > {
   /**
    * Called when execution starts for a new context.
@@ -83,7 +78,7 @@ export interface EventManagerOptions<
    * ```
    */
   readonly onStart?: (
-    context: CoreContext<TCommand, TState, TUpdate>
+    context: Core<TCommand, TState, TUpdate>["context"]
   ) => Promise<TState>;
 
   /**
@@ -211,9 +206,9 @@ export interface EventManagerOptions<
  * @since 0.5.6
  */
 export interface EventManagerMap<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > {
   /** Emitted when execution starts - [command, initialState] */
   start: [TCommand, TState];
@@ -264,9 +259,9 @@ export interface EventManagerMap<
  * @since 0.5.6
  */
 export interface EventManagerInterface<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > extends EventEmitter<EventManagerMap<TCommand, TState, TUpdate>> {
   /**
    * Unique identifier for this execution context.
@@ -285,7 +280,7 @@ export interface EventManagerInterface<
    * @returns Promise resolving to initial state
    */
   readonly onStart?: (
-    context: CoreContext<TCommand, TState, TUpdate>
+    context: Core<TCommand, TState, TUpdate>["context"]
   ) => Promise<TState>;
 
   /**

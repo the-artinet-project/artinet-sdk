@@ -3,25 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  Context,
-  Command,
-  TextPart,
-  DataPart,
-  FilePart,
-} from "~/types/index.js";
+import { A2A, Context, TextPart, DataPart, FilePart } from "~/types/index.js";
 
 /**
  * Restricting to command for now, but could be extended to other types of commands in the future.
  * When we shift to CoreCommand, move this into core.
  */
-export interface StepArgs<TCommand extends Command = Command> {
+export interface StepArgs<TCommand extends A2A["command"] = A2A["command"]> {
   command: TCommand;
   context: Context;
 }
 
 export type StepParams<
-  TCommand extends Command = Command,
+  TCommand extends A2A["command"] = A2A["command"],
   TInboundArgs extends readonly unknown[] = []
 > = StepArgs<TCommand> & Partial<{ content: string; args: TInboundArgs }>;
 
@@ -39,7 +33,7 @@ export type StepOutputWithForwardArgs<
 };
 
 export type Step<
-  TCommand extends Command = Command,
+  TCommand extends A2A["command"] = A2A["command"],
   TPart extends
     | DataPart["data"]
     | FilePart["file"]
@@ -54,7 +48,7 @@ export type Step<
 > = (params: StepParams<TCommand, TInboundArgs>) => Promise<TOutput> | TOutput;
 
 export type StepWithKind<
-  TCommand extends Command = Command,
+  TCommand extends A2A["command"] = A2A["command"],
   TPart extends
     | DataPart["data"]
     | FilePart["file"]
@@ -77,7 +71,7 @@ export type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A>
   : [];
 
 export interface StepBuilder<
-  TCommand extends Command = Command,
+  TCommand extends A2A["command"] = A2A["command"],
   TInboundArgs extends readonly unknown[] = []
 > {
   /**

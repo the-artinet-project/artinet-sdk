@@ -4,13 +4,10 @@
  */
 
 import {
-  CoreContext,
   TaskIdParams,
   Task,
   TaskState,
-  MessageSendParams,
-  TaskAndHistory,
-  UpdateEvent,
+  A2A,
   MethodParams,
 } from "~/types/index.js";
 import {
@@ -24,7 +21,7 @@ export async function cancelTask(
   params: Omit<MethodParams, "engine" | "signal">
 ): Promise<Task> {
   const { service, contextManager } = params;
-  const originalState: TaskAndHistory | undefined = await service.getState(
+  const originalState: A2A["state"] | undefined = await service.getState(
     input.id
   );
   const task: Task | undefined = originalState?.task;
@@ -47,9 +44,9 @@ export async function cancelTask(
     },
   };
 
-  const context:
-    | CoreContext<MessageSendParams, TaskAndHistory, UpdateEvent>
-    | undefined = contextManager.getContext(task.contextId ?? input.id);
+  const context: A2A["context"] | undefined = contextManager.getContext(
+    task.contextId ?? input.id
+  );
 
   if (!context) {
     service.setState(input.id, {

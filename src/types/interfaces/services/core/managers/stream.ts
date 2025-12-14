@@ -16,8 +16,7 @@
  * @author The Artinet Project
  */
 
-import { CoreCommand, CoreState, CoreUpdate } from "~/types/index.js";
-import { CoreContext } from "../context/index.js";
+import { Core } from "~/types/index.js";
 import { ExecutionEngine } from "../execution/index.js";
 import { ServiceInterface } from "../service.js";
 
@@ -63,9 +62,9 @@ import { ServiceInterface } from "../service.js";
  * @since 0.5.6
  */
 export interface StreamManagerInterface<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > {
   /**
    * Gets the unique identifier for the execution context.
@@ -176,7 +175,7 @@ export interface StreamManagerInterface<
    * const currentState = context.State();
    * ```
    */
-  getExecutionContext(): CoreContext<TCommand, TState, TUpdate>;
+  getExecutionContext(): Core<TCommand, TState, TUpdate>["context"];
 
   /**
    * Sets or updates the execution context.
@@ -193,7 +192,7 @@ export interface StreamManagerInterface<
    * ```
    */
   setExecutionContext(
-    executionContext: CoreContext<TCommand, TState, TUpdate>
+    executionContext: Core<TCommand, TState, TUpdate>["context"]
   ): void;
 
   /**

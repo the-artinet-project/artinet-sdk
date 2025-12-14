@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  CoreCommand,
-  CoreState,
-  CoreContext,
-  CoreUpdate,
-} from "../context/index.js";
+import { Core } from "../context/index.js";
 
 /**
  * @description The context manager interface.
@@ -18,16 +13,16 @@ import {
  * ex. forking/merging contexts, forwarding contexts to other services, nesting contexts, etc.
  */
 export interface ContextManagerInterface<
-  TCommand extends CoreCommand = CoreCommand,
-  TState extends CoreState = CoreState,
-  TUpdate extends CoreUpdate = CoreUpdate,
+  TCommand extends Core["command"] = Core["command"],
+  TState extends Core["state"] = Core["state"],
+  TUpdate extends Core["update"] = Core["update"]
 > {
   getContext: (
     id: string
-  ) => CoreContext<TCommand, TState, TUpdate> | undefined;
+  ) => Core<TCommand, TState, TUpdate>["context"] | undefined;
   setContext: (
     id: string,
-    context: CoreContext<TCommand, TState, TUpdate>
+    context: Core<TCommand, TState, TUpdate>["context"]
   ) => void;
   deleteContext: (id: string) => void;
 }
