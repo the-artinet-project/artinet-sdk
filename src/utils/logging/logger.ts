@@ -4,6 +4,7 @@
  */
 
 /**
+ * @deprecated
  * A lightweight cross-platform logger instance
  */
 export const logger = console;
@@ -18,6 +19,7 @@ export let level:
 
 /**
  * Configures the logger with the specified options
+ * @deprecated Use configure() instead
  * @param options - Logger configuration options
  */
 export function configureLogger(options: {

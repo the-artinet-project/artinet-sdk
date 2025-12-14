@@ -6,6 +6,7 @@
 import { logger, level } from "./logger.js";
 
 /**
+ * @deprecated
  * Logger utility for server operations
  * @param context The context of the log (e.g., "A2AServer", "TaskStore")
  * @param message The message to log
@@ -20,13 +21,19 @@ export function logDebug(
   if (data !== undefined) {
     logData.data = data;
   }
-  if (level === "silent" || level === "warning" || level === "error" || level === "info") {
+  if (
+    level === "silent" ||
+    level === "warning" ||
+    level === "error" ||
+    level === "info"
+  ) {
     return;
   }
   logger.debug(logData, message);
 }
 
 /**
+ * @deprecated
  * Logger utility for server errors
  * @param context The context of the log (e.g., "A2AServer", "TaskStore")
  * @param message The message to log
@@ -53,6 +60,7 @@ export function logError(
 }
 
 /**
+ * @deprecated
  * Logger utility for server warnings
  * @param context The context of the log (e.g., "A2AServer", "TaskStore")
  * @param message The message to log
@@ -74,6 +82,7 @@ export function logWarn(
 }
 
 /**
+ * @deprecated
  * Logger utility for server information
  * @param context The context of the log (e.g., "A2AServer", "TaskStore")
  * @param message The message to log
@@ -88,11 +97,7 @@ export function logInfo(
   if (data !== undefined) {
     logData.data = data;
   }
-  if (
-    level === "error" ||
-    level === "warning" ||
-    level === "silent"
-  ) {
+  if (level === "error" || level === "warning" || level === "silent") {
     return;
   }
   logger.info(logData, message);
