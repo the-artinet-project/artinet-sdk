@@ -34,6 +34,13 @@ import { ExecutionEngine } from "./execution/index.js";
  * @public
  * @since 0.5.6
  */
+export interface ServiceInterfaceV2<
+  Params extends object = object
+> {
+  execute: (params: Params) => Promise<void>;
+  stop: () => Promise<void>;
+}
+
 export interface ServiceInterface<
   TCommand extends Core["command"] = Core["command"],
   TState extends Core["state"] = Core["state"],

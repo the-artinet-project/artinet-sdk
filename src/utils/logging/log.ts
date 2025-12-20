@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { logger, level } from "./logger.js";
+import { logger } from "../../config/index.js";
 
+const level = logger.getLevel?.() ?? "info";
 /**
  * @deprecated
  * Logger utility for server operations
@@ -23,13 +24,13 @@ export function logDebug(
   }
   if (
     level === "silent" ||
-    level === "warning" ||
+    level === "warn" ||
     level === "error" ||
     level === "info"
   ) {
     return;
   }
-  logger.debug(logData, message);
+  logger.debug(message, logData);
 }
 
 /**
@@ -56,7 +57,7 @@ export function logError(
   if (level === "silent") {
     return;
   }
-  logger.error(logData, message);
+  logger.error(message, logData);
 }
 
 /**
@@ -78,7 +79,7 @@ export function logWarn(
   if (level === "silent" || level === "error") {
     return;
   }
-  logger.warn(logData, message);
+  logger.warn(message, logData);
 }
 
 /**
@@ -97,8 +98,8 @@ export function logInfo(
   if (data !== undefined) {
     logData.data = data;
   }
-  if (level === "error" || level === "warning" || level === "silent") {
+  if (level === "error" || level === "warn" || level === "silent") {
     return;
   }
-  logger.info(logData, message);
+  logger.info(message, logData);
 }

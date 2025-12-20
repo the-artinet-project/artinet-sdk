@@ -12,7 +12,7 @@ import {
   EventSourceMessage,
   ParseError,
 } from "eventsource-parser";
-import type { JSONRPCResponse, A2ARequest } from "~/types/index.js";
+import { A2A, MCP } from "~/types/index.js";
 import { sendJsonRpcRequest } from "../rpc/rpc-client.js";
 import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
 
@@ -23,7 +23,7 @@ import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
  * @param response The fetch Response object containing the event stream
  * @returns An async generator yielding the specified type of task events from StreamingResponse
  */
-export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
+export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
   response: Response
 ): AsyncGenerator<NonNullable<StreamRes["result"]>> {
   if (!response.ok || !response.body) {
@@ -112,8 +112,8 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
  * @returns An AsyncIterable yielding events from the stream
  */
 export async function* executeStreamEvents<
-  Req extends A2ARequest,
-  StreamRes extends JSONRPCResponse,
+  Req extends A2A.A2ARequest,
+  StreamRes extends MCP.JSONRPCResponse
 >(
   baseUrl: URL,
   method: Req["method"],

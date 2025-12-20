@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Artifact } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
 export function updateByIndex(
   append: boolean,
-  artifacts: Artifact[],
+  artifacts: A2A.Artifact[],
   index: number,
-  artifactUpdate: Artifact
-): { artifacts: Artifact[]; replaced: boolean } {
+  artifactUpdate: A2A.Artifact
+): { artifacts: A2A.Artifact[]; replaced: boolean } {
   if (append) {
-    const existingArtifact: Artifact = artifacts[index];
+    const existingArtifact: A2A.Artifact = artifacts[index];
     existingArtifact.parts.push(...artifactUpdate.parts);
 
     if (artifactUpdate.metadata) {
@@ -39,15 +39,15 @@ export function updateByIndex(
 
 export function processArtifactUpdate(
   append: boolean,
-  artifacts: Artifact[],
-  artifactUpdate: Artifact
-): Artifact[] {
+  artifacts: A2A.Artifact[],
+  artifactUpdate: A2A.Artifact
+): A2A.Artifact[] {
   const existingIndex = artifacts.findIndex(
     (a) => a.artifactId === artifactUpdate.artifactId
   );
 
   let replaced: boolean = false;
-  let newArtifacts: Artifact[] = artifacts;
+  let newArtifacts: A2A.Artifact[] = artifacts;
 
   if (existingIndex !== -1) {
     ({ artifacts: newArtifacts, replaced } = updateByIndex(

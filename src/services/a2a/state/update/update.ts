@@ -3,18 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  TaskContext,
-  Message,
-  Task,
-  TaskArtifactUpdateEvent,
-  TaskStatusUpdateEvent,
-  UpdateEvent,
-  TaskAndHistory,
-} from "~/types/index.js";
+import { TaskContext, UpdateEvent, TaskAndHistory } from "~/types/index.js";
 import { getCurrentTimestamp } from "~/utils/index.js";
 import { logError } from "~/utils/logging/index.js";
 import { processArtifactUpdate } from "./artifact.js";
+import { A2A } from "~/types/index.js";
+import { v2 } from "~/types/interfaces/services/v2/index.js";
 export enum UpdateKind {
   Message = "message",
   Task = "task",
@@ -28,22 +22,21 @@ export interface UpdateProps<T extends UpdateEvent = UpdateEvent> {
   update: T;
 }
 
-type UpdateFunction<T extends UpdateEvent> = (
+type Updater<T extends UpdateEvent> = (
   props: UpdateProps<T>
 ) => Promise<boolean>;
 
-const isMessageInHistory = (task: Task, message: Message) => {
+const isMessageInHistory = (task: A2A.Task, message: A2A.Message) => {
   return task.history?.find((msg) => msg.messageId === message.messageId);
 };
 
-const updateHistory = (current: TaskAndHistory, updateMessage: Message) => {
+const updateHistory = (current: TaskAndHistory, updateMessage: A2A.Message) => {
   if (!isMessageInHistory(current.task, updateMessage)) {
-    // current.history = [...(current.history ?? []), updateMessage]; deprecating history
     current.task.history = [...(current.task.history ?? []), updateMessage];
   }
 };
 
-export const updateMessage: UpdateFunction<Message> = async (props) => {
+export const updateMessage: Updater<A2A.Message> = async (props) => {
   const { context, update } = props;
   if (!update || update.kind !== UpdateKind.Message) {
     logError("updateMessage", "Invalid update", update);
@@ -53,7 +46,7 @@ export const updateMessage: UpdateFunction<Message> = async (props) => {
   return true;
 };
 
-export const updateTask: UpdateFunction<Task> = async (props) => {
+export const updateTask: Updater<A2A.Task> = async (props) => {
   const { context, current, update } = props;
   if (!update || update.kind !== UpdateKind.Task) {
     logError("updateTask", "Invalid update kind", update);
@@ -74,8 +67,8 @@ export const updateTask: UpdateFunction<Task> = async (props) => {
   return true;
 };
 
-export const updateTaskStatusUpdate: UpdateFunction<
-  TaskStatusUpdateEvent
+export const updateTaskStatusUpdate: Updater<
+  A2A.TaskStatusUpdateEvent
 > = async (props) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.StatusUpdate) {
@@ -94,8 +87,8 @@ export const updateTaskStatusUpdate: UpdateFunction<
   return false;
 };
 
-export const updateTaskArtifactUpdate: UpdateFunction<
-  TaskArtifactUpdateEvent
+export const updateTaskArtifactUpdate: Updater<
+  A2A.TaskArtifactUpdateEvent
 > = async (props) => {
   const { current, update } = props;
   if (!update || update.kind !== UpdateKind.ArtifactUpdate) {
@@ -114,7 +107,7 @@ export const updateTaskArtifactUpdate: UpdateFunction<
   return true;
 };
 
-export const updateState: UpdateFunction<UpdateEvent> = async (
+export const updateState: Updater<UpdateEvent> = async (
   props
 ): Promise<boolean> => {
   const { context, current, update } = props;
@@ -138,25 +131,25 @@ export const updateState: UpdateFunction<UpdateEvent> = async (
       return updateMessage({
         context,
         current,
-        update: update as Message,
+        update: update as A2A.Message,
       });
     case UpdateKind.Task:
       return updateTask({
         context,
         current,
-        update: update as Task,
+        update: update as A2A.Task,
       });
     case UpdateKind.StatusUpdate:
       return updateTaskStatusUpdate({
         context,
         current,
-        update: update as TaskStatusUpdateEvent,
+        update: update as A2A.TaskStatusUpdateEvent,
       });
     case UpdateKind.ArtifactUpdate:
       return updateTaskArtifactUpdate({
         context,
         current,
-        update: update as TaskArtifactUpdateEvent,
+        update: update as A2A.TaskArtifactUpdateEvent,
       });
     default:
       return false;

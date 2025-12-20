@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { A2A, Core, ContextManagerInterface } from "~/types/index.js";
+import { A2ARuntime, Core, ContextManagerInterface } from "~/types/index.js";
 //todo move to core
 export class ContextManager<
-  TCommand extends A2A["command"] = A2A["command"],
-  TState extends A2A["state"] = A2A["state"],
-  TUpdate extends A2A["update"] = A2A["update"]
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
+  TState extends A2ARuntime["state"] = A2ARuntime["state"],
+  TUpdate extends A2ARuntime["update"] = A2ARuntime["update"]
 > implements ContextManagerInterface<TCommand, TState, TUpdate>
 {
   private contexts: Map<string, Core<TCommand, TState, TUpdate>["context"]> =

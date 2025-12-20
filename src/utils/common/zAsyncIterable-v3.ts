@@ -1,7 +1,7 @@
 import type { TrackedEnvelope } from "@trpc/server";
 import { isTrackedEnvelope, tracked } from "@trpc/server";
-import { z } from "zod";
-
+import { z } from "zod/v3";
+//!Maintain for backwards compatibility
 // v3 version of: https://trpc.io/docs/server/subscriptions#output-validation
 
 function isAsyncIterable<TValue, TReturn = unknown>(
@@ -22,7 +22,7 @@ export function zAsyncIterable<
   TYieldOut,
   TReturnIn = void,
   TReturnOut = void,
-  Tracked extends boolean = false,
+  Tracked extends boolean = false
 >(opts: {
   /**
    * Validate the value yielded by the async generator

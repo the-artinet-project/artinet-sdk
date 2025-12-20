@@ -4,7 +4,7 @@
  */
 
 import { NextFunction, Request, Response } from "express";
-import { A2AServiceInterface, AgentCard } from "~/types/index.js";
+import { A2AServiceInterface, A2A } from "~/types/index.js";
 import {
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   INVALID_REQUEST,
@@ -47,7 +47,7 @@ export async function jsonRPCMiddleware(
   req: Request,
   res: Response,
   next: NextFunction,
-  extendedAgentCard?: AgentCard
+  extendedAgentCard?: A2A.AgentCard
 ): Promise<void> {
   const { method, params, id, jsonrpc } = req.body;
   if (

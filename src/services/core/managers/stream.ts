@@ -10,7 +10,8 @@ import {
   Core,
 } from "~/types/index.js";
 import { coreExecute } from "../execution/execute.js";
-
+import { sleep } from "~/utils/common/utils.js";
+const STREAM_INTERVAL = 10;
 export class StreamManager<
   TCommand extends Core["command"] = Core["command"],
   TState extends Core["state"] = Core["state"],
@@ -60,6 +61,7 @@ export class StreamManager<
     this.executionContext = executionContext;
     this.contextId = executionContext.events.contextId;
   }
+  //TODO: use Params & make service mandatory for streamManager impls
   async *stream(
     engine: ExecutionEngine<TCommand, TState, TUpdate>,
     service?: ServiceInterface<TCommand, TState, TUpdate>
@@ -90,7 +92,7 @@ export class StreamManager<
       if (this.getUpdates().length > 0) {
         yield this.getUpdates().shift()!;
       }
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      await sleep(STREAM_INTERVAL);
     }
 
     await executePromise;

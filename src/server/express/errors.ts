@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { JSONRPCError } from "~/types/index.js";
+import { MCP } from "~/types/index.js";
 import { SystemError, INTERNAL_ERROR } from "~/utils/index.js";
 import { logError } from "~/utils/logging/index.js";
 import { type ErrorRequestHandler } from "express";
@@ -27,7 +27,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _) => {
     logError("A2AServer", "Error extracting request ID", e);
   }
 
-  let jsonRpcError: JSONRPCError["error"];
+  let jsonRpcError: MCP.JSONRPCError["error"];
   if (err instanceof SystemError) {
     jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {

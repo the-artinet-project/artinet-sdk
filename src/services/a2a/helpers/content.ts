@@ -3,13 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  Message,
-  Task,
-  TaskArtifactUpdateEvent,
-  TaskStatusUpdateEvent,
-  UpdateEvent,
-} from "~/types/index.js";
+import { A2A, UpdateEvent } from "~/types/index.js";
 import { getParts } from "./part.js";
 
 /**
@@ -19,10 +13,10 @@ import { getParts } from "./part.js";
  */
 export function getContent(input: UpdateEvent): string | undefined {
   const parts = getParts(
-    (input as Message)?.parts ??
-      (input as Task)?.status?.message?.parts ??
-      (input as TaskStatusUpdateEvent)?.status?.message?.parts ??
-      (input as TaskArtifactUpdateEvent)?.artifact?.parts ??
+    (input as A2A.Message)?.parts ??
+      (input as A2A.Task)?.status?.message?.parts ??
+      (input as A2A.TaskStatusUpdateEvent)?.status?.message?.parts ??
+      (input as A2A.TaskArtifactUpdateEvent)?.artifact?.parts ??
       []
   );
   return (

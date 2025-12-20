@@ -10,3 +10,21 @@
 export function getCurrentTimestamp(): string {
   return new Date().toISOString();
 }
+
+/**
+ * Sleeps for a given number of milliseconds.
+ * @param ms - The number of milliseconds to sleep.
+ * @returns A promise that resolves when the sleep is complete.
+ *
+ * @example
+ * ```typescript
+ * await sleep(1000);
+ * ```
+ */
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function formatJson(json: object): string {
+  return JSON.stringify(json, null, 2);
+}

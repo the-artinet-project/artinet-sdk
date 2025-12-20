@@ -25,19 +25,12 @@ import {
   TaskManagerInterface,
   EventManagerOptions,
 } from "../core/index.js";
-import {
-  AgentCard,
-  MessageSendParams,
-  SendMessageSuccessResult,
-  Task,
-  TaskIdParams,
-  TaskQueryParams,
-} from "@artinet/types";
-import { UpdateEvent, Command, State, Update } from "./context.js";
+import { A2A } from "@artinet/types";
+import { UpdateEvent, A2ARuntime } from "./context.js";
 import { A2AEngine } from "./engine.js";
 
 export type AgentCardParams =
-  | (Partial<AgentCard> & Required<Pick<AgentCard, "name">>)
+  | (Partial<A2A.AgentCard> & Required<Pick<A2A.AgentCard, "name">>)
   | string;
 /**
  * Configuration parameters for creating A2A service instances.
@@ -75,17 +68,25 @@ export interface FactoryParams {
   /** Execution engine for processing A2A commands */
   engine: A2AEngine;
   /** Optional context manager for execution state management */
-  contexts?: ContextManagerInterface<Command, State, Update>;
+  contexts?: ContextManagerInterface<
+    A2ARuntime["command"],
+    A2ARuntime["state"],
+    A2ARuntime["update"]
+  >;
   /** Optional connection manager for agent connections */
   connections?: ConnectionManagerInterface;
   /** Optional cancellation manager for handling operation cancellations */
   cancellations?: CancellationManagerInterface;
   /** Optional task manager for task lifecycle management */
-  tasks?: TaskManagerInterface<State>;
+  tasks?: TaskManagerInterface<A2ARuntime["state"]>;
   /** Optional custom method implementations */
   methods?: Partial<MethodOptions>;
   /** Optional event manager configuration overrides */
-  events?: EventManagerOptions<Command, State, Update>;
+  events?: EventManagerOptions<
+    A2ARuntime["command"],
+    A2ARuntime["state"],
+    A2ARuntime["update"]
+  >;
   /** Enforce parameter validation */
   enforceParamValidation?: boolean;
 }
@@ -124,11 +125,19 @@ export interface FactoryParams {
  */
 export interface MethodParams {
   /** The A2A service instance */
-  service: A2AServiceInterface<Command, State, Update>;
+  service: A2AServiceInterface<
+    A2ARuntime["command"],
+    A2ARuntime["state"],
+    A2ARuntime["update"]
+  >;
   /** The execution engine for processing */
   engine: A2AEngine;
   /** Context manager for execution state */
-  contextManager: ContextManagerInterface<Command, State, Update>;
+  contextManager: ContextManagerInterface<
+    A2ARuntime["command"],
+    A2ARuntime["state"],
+    A2ARuntime["update"]
+  >;
   /** Abort signal for cancellation handling */
   signal: AbortSignal;
   /** Enforce input validation */
@@ -178,9 +187,9 @@ export interface MethodOptions {
    * @returns Promise resolving to the requested task
    */
   getTask: (
-    input: TaskQueryParams,
+    input: A2A.TaskQueryParams,
     params: Omit<MethodParams, "engine" | "contextManager" | "signal">
-  ) => Promise<Task>;
+  ) => Promise<A2A.Task>;
 
   /**
    * Task cancellation.
@@ -190,9 +199,9 @@ export interface MethodOptions {
    * @returns Promise resolving to the cancelled task
    */
   cancelTask: (
-    input: TaskIdParams,
+    input: A2A.TaskIdParams,
     params: Omit<MethodParams, "engine" | "signal">
-  ) => Promise<Task>;
+  ) => Promise<A2A.Task>;
 
   /**
    * Message sending.
@@ -202,9 +211,9 @@ export interface MethodOptions {
    * @returns Promise resolving to send operation result
    */
   sendMessage: (
-    message: MessageSendParams,
+    message: A2A.MessageSendParams,
     params: MethodParams
-  ) => Promise<SendMessageSuccessResult>;
+  ) => Promise<A2A.SendMessageSuccessResult>;
 
   /**
    * Streaming messages.
@@ -214,7 +223,7 @@ export interface MethodOptions {
    * @returns AsyncGenerator yielding update events
    */
   streamMessage: (
-    message: MessageSendParams,
+    message: A2A.MessageSendParams,
     params: MethodParams
   ) => AsyncGenerator<UpdateEvent>;
 
@@ -226,7 +235,7 @@ export interface MethodOptions {
    * @returns AsyncGenerator yielding update events
    */
   resubscribe: (
-    input: TaskIdParams,
+    input: A2A.TaskIdParams,
     params: MethodParams
   ) => AsyncGenerator<UpdateEvent>;
 }
@@ -265,6 +274,7 @@ export interface MethodOptions {
  * @public
  * @since 0.5.6
  */
+//TODO: Merge with Handler from a2a-js
 export interface MethodsInterface {
   /**
    * Retrieves a task by its ID.
@@ -272,7 +282,7 @@ export interface MethodsInterface {
    * @param input - Task identification parameters
    * @returns Promise resolving to the requested task
    */
-  getTask: (input: TaskQueryParams) => Promise<Task>;
+  getTask: (input: A2A.TaskQueryParams) => Promise<A2A.Task>;
 
   /**
    * Cancels a task by its ID.
@@ -280,7 +290,7 @@ export interface MethodsInterface {
    * @param input - Task identification parameters
    * @returns Promise resolving to the cancelled task
    */
-  cancelTask: (input: TaskIdParams) => Promise<Task>;
+  cancelTask: (input: A2A.TaskIdParams) => Promise<A2A.Task>;
 
   /**
    * Sends a message to another agent.
@@ -290,9 +300,9 @@ export interface MethodsInterface {
    * @returns Promise resolving to send operation result
    */
   sendMessage: (
-    message: MessageSendParams,
+    message: A2A.MessageSendParams,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
-  ) => Promise<SendMessageSuccessResult>;
+  ) => Promise<A2A.SendMessageSuccessResult>;
 
   /**
    * Sends a message with streaming updates.
@@ -302,7 +312,7 @@ export interface MethodsInterface {
    * @returns AsyncGenerator yielding update events
    */
   streamMessage: (
-    message: MessageSendParams,
+    message: A2A.MessageSendParams,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) => AsyncGenerator<UpdateEvent>;
 
@@ -314,7 +324,7 @@ export interface MethodsInterface {
    * @returns AsyncGenerator yielding update events
    */
   resubscribe: (
-    input: TaskIdParams,
+    input: A2A.TaskIdParams,
     params?: Partial<Omit<MethodParams, "service" | "contextManager">>
   ) => AsyncGenerator<UpdateEvent>;
 }
@@ -360,9 +370,9 @@ export interface MethodsInterface {
  * @since 0.5.6
  */
 export interface A2AServiceInterface<
-  TCommand extends Command = Command,
-  TState extends State = State,
-  TUpdate extends Update = Update
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
+  TState extends A2ARuntime["state"] = A2ARuntime["state"],
+  TUpdate extends A2ARuntime["update"] = A2ARuntime["update"]
 > extends ServiceInterface<TCommand, TState, TUpdate>,
     MethodsInterface {
   /**
@@ -374,14 +384,14 @@ export interface A2AServiceInterface<
   readonly eventOverrides:
     | EventManagerOptions<TCommand, TState, TUpdate>
     | undefined;
-
+  //TODO: make async to align with client
   /**
    * Agent identity and capabilities information.
    *
    * This card identifies the agent and describes its capabilities,
    * which is used for agent discovery and capability matching.
    */
-  agentCard: AgentCard;
+  agentCard: A2A.AgentCard;
 
   /**
    * Adds a connection to the active connections registry.

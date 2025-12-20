@@ -5,14 +5,10 @@
 
 import { router, A2AProcedure } from "../../trpc.js";
 import { INVALID_PARAMS, zAsyncIterable } from "~/utils/index.js";
-import {
-  MessageSendParamsSchema,
-  SendMessageSuccessResultSchema,
-  SendStreamingMessageSuccessResultSchema,
-} from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
-const sendMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
-  .output(SendMessageSuccessResultSchema)
+const sendMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
+  .output(A2A.SendMessageSuccessResultSchema)
   .mutation(async (opts) => {
     const { input } = opts;
     if (!input) {
@@ -24,10 +20,10 @@ const sendMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
     });
   });
 
-const streamMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
+const streamMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
   .output(
     zAsyncIterable({
-      yield: SendStreamingMessageSuccessResultSchema,
+      yield: A2A.SendStreamingMessageSuccessResultSchema,
     })
   )
   .subscription(async function* (opts) {

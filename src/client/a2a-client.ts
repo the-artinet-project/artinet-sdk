@@ -3,29 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {
-  AgentCard,
-  SendMessageRequest,
-  SendMessageSuccessResponse,
-  GetTaskRequest,
-  CancelTaskRequest,
-  SetTaskPushNotificationConfigRequest,
-  GetTaskPushNotificationConfigRequest,
-  MessageSendParams,
-  TaskQueryParams,
-  TaskIdParams,
-  TaskPushNotificationConfig,
-  Task,
-  SendStreamingMessageRequest,
-  TaskResubscriptionRequest,
-  Message,
-  UpdateEvent,
-  SendStreamingMessageSuccessResponse,
-  GetTaskSuccessResponse,
-  CancelTaskSuccessResponse,
-  SetTaskPushNotificationConfigSuccessResponse,
-  GetTaskPushNotificationConfigSuccessResponse,
-} from "~/types/index.js";
+import { A2A, UpdateEvent } from "~/types/index.js";
 
 import {
   executeJsonRpcRequest,
@@ -45,7 +23,7 @@ import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.
  */
 export class A2AClient implements Client {
   private baseUrl: URL;
-  private cachedAgentCard: AgentCard | null = null;
+  private cachedAgentCard: A2A.AgentCard | null = null;
   private customHeaders: Record<string, string> = {};
   private fallbackPath: string;
   private agentUrl: URL;
@@ -82,7 +60,7 @@ export class A2AClient implements Client {
    * Caches the result after the first successful fetch.
    * @returns A promise resolving to the AgentCard.
    */
-  async agentCard(): Promise<AgentCard> {
+  async agentCard(): Promise<A2A.AgentCard> {
     if (this.cachedAgentCard) {
       return this.cachedAgentCard;
     }
@@ -97,7 +75,7 @@ export class A2AClient implements Client {
         if (!URL.canParse(wellKnownUrl)) {
           throw new Error("Invalid well-known URL");
         }
-        const card: AgentCard = await executeGetRequest<AgentCard>(
+        const card: A2A.AgentCard = await executeGetRequest<A2A.AgentCard>(
           wellKnownUrl,
           this.customHeaders,
           "agent card (well-known)"
@@ -106,17 +84,18 @@ export class A2AClient implements Client {
           throw new Error("No agent card found");
         }
 
-        this.cachedAgentCard = card as AgentCard;
+        this.cachedAgentCard = card as A2A.AgentCard;
       } catch (error) {
         const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
         if (this.mergePath) {
           fallbackUrl.pathname = this.baseUrl.pathname + fallbackUrl.pathname;
         }
-        const fallbackCard: AgentCard = await executeGetRequest<AgentCard>(
-          fallbackUrl,
-          this.customHeaders,
-          "agent card (fallback)"
-        );
+        const fallbackCard: A2A.AgentCard =
+          await executeGetRequest<A2A.AgentCard>(
+            fallbackUrl,
+            this.customHeaders,
+            "agent card (fallback)"
+          );
 
         if (
           !fallbackCard.name ||
@@ -148,7 +127,7 @@ export class A2AClient implements Client {
    * Refreshes the cached AgentCard by fetching it again from the server.
    * @returns A promise resolving to the updated AgentCard.
    */
-  async refreshAgentCard(): Promise<AgentCard> {
+  async refreshAgentCard(): Promise<A2A.AgentCard> {
     this.cachedAgentCard = null;
     return this.agentCard();
   }
@@ -159,11 +138,11 @@ export class A2AClient implements Client {
    * @returns A promise resolving to Message/Task response from the agent server or null.
    */
   async sendMessage(
-    params: MessageSendParams | string
-  ): Promise<Message | Task | null> {
+    params: A2A.MessageSendParams | string
+  ): Promise<A2A.Message | A2A.Task | null> {
     return await executeJsonRpcRequest<
-      SendMessageRequest,
-      SendMessageSuccessResponse
+      A2A.SendMessageRequest,
+      A2A.SendMessageSuccessResponse
     >(
       this.agentUrl,
       "message/send",
@@ -178,7 +157,9 @@ export class A2AClient implements Client {
    * @param params The parameters for the message/send method.
    * @returns A promise resolving to the Task object or null.
    */
-  async sendTask(params: MessageSendParams): Promise<Message | Task | null> {
+  async sendTask(
+    params: A2A.MessageSendParams
+  ): Promise<A2A.Message | A2A.Task | null> {
     return await this.sendMessage(params);
   }
 
@@ -188,11 +169,11 @@ export class A2AClient implements Client {
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent/TaskArtifactUpdateEvent/Task/Message payloads.
    */
   sendStreamingMessage(
-    params: MessageSendParams | string
+    params: A2A.MessageSendParams | string
   ): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
-      SendStreamingMessageRequest,
-      SendStreamingMessageSuccessResponse
+      A2A.SendStreamingMessageRequest,
+      A2A.SendStreamingMessageSuccessResponse
     >(
       this.agentUrl,
       "message/stream",
@@ -207,7 +188,7 @@ export class A2AClient implements Client {
    * @param params Task parameters for the request
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  sendTaskSubscribe(params: MessageSendParams): AsyncIterable<UpdateEvent> {
+  sendTaskSubscribe(params: A2A.MessageSendParams): AsyncIterable<UpdateEvent> {
     return this.sendStreamingMessage(params);
   }
 
@@ -216,13 +197,11 @@ export class A2AClient implements Client {
    * @param params The parameters for the tasks/get method.
    * @returns A promise resolving to the Task object or null.
    */
-  async getTask(params: TaskQueryParams): Promise<Task | null> {
-    return await executeJsonRpcRequest<GetTaskRequest, GetTaskSuccessResponse>(
-      this.agentUrl,
-      "tasks/get",
-      params,
-      this.customHeaders
-    );
+  async getTask(params: A2A.TaskQueryParams): Promise<A2A.Task | null> {
+    return await executeJsonRpcRequest<
+      A2A.GetTaskRequest,
+      A2A.GetTaskSuccessResponse
+    >(this.agentUrl, "tasks/get", params, this.customHeaders);
   }
 
   /**
@@ -230,10 +209,10 @@ export class A2AClient implements Client {
    * @param params The parameters for the tasks/cancel method.
    * @returns A promise resolving to the updated Task object (usually canceled state) or null.
    */
-  async cancelTask(params: TaskIdParams): Promise<Task | null> {
+  async cancelTask(params: A2A.TaskIdParams): Promise<A2A.Task | null> {
     return await executeJsonRpcRequest<
-      CancelTaskRequest,
-      CancelTaskSuccessResponse
+      A2A.CancelTaskRequest,
+      A2A.CancelTaskSuccessResponse
     >(this.agentUrl, "tasks/cancel", params, this.customHeaders);
   }
 
@@ -243,11 +222,11 @@ export class A2AClient implements Client {
    * @returns A promise resolving to the confirmed TaskPushNotificationConfig or null.
    */
   async setTaskPushNotification(
-    params: TaskPushNotificationConfig
-  ): Promise<TaskPushNotificationConfig | null> {
+    params: A2A.TaskPushNotificationConfig
+  ): Promise<A2A.TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
-      SetTaskPushNotificationConfigRequest,
-      SetTaskPushNotificationConfigSuccessResponse
+      A2A.SetTaskPushNotificationConfigRequest,
+      A2A.SetTaskPushNotificationConfigSuccessResponse
     >(
       this.agentUrl,
       "tasks/pushNotificationConfig/set",
@@ -262,11 +241,11 @@ export class A2AClient implements Client {
    * @returns A promise resolving to the TaskPushNotificationConfig or null.
    */
   async getTaskPushNotification(
-    params: TaskIdParams
-  ): Promise<TaskPushNotificationConfig | null> {
+    params: A2A.TaskIdParams
+  ): Promise<A2A.TaskPushNotificationConfig | null> {
     return await executeJsonRpcRequest<
-      GetTaskPushNotificationConfigRequest,
-      GetTaskPushNotificationConfigSuccessResponse
+      A2A.GetTaskPushNotificationConfigRequest,
+      A2A.GetTaskPushNotificationConfigSuccessResponse
     >(
       this.agentUrl,
       "tasks/pushNotificationConfig/get",
@@ -280,10 +259,10 @@ export class A2AClient implements Client {
    * @param params Parameters identifying the task to resubscribe to
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  resubscribeTask(params: TaskQueryParams): AsyncIterable<UpdateEvent> {
+  resubscribeTask(params: A2A.TaskQueryParams): AsyncIterable<UpdateEvent> {
     return executeStreamEvents<
-      TaskResubscriptionRequest,
-      SendStreamingMessageSuccessResponse
+      A2A.TaskResubscriptionRequest,
+      A2A.SendStreamingMessageSuccessResponse
     >(this.agentUrl, "tasks/resubscribe", params, this.customHeaders);
   }
 

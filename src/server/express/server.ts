@@ -7,7 +7,7 @@ import express from "express";
 import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
 import {
   Agent,
-  AgentCard,
+  A2A,
   FactoryParams as CreateAgentParams,
 } from "~/types/index.js";
 import { createAgent } from "~/services/index.js";
@@ -20,7 +20,10 @@ export interface ServerParams {
   corsOptions?: CorsOptions;
   basePath?: string;
   /* Your agentCard must have supportsAuthenticatedExtendedCard set to true */
-  extendedAgentCard?: AgentCard;
+  extendedAgentCard?: A2A.AgentCard;
+  agent: Agent | CreateAgentParams;
+  agentCardPath?: string;
+  register?: boolean;
 }
 
 export function rpcParser(
@@ -81,24 +84,19 @@ function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
   throw new Error("invalid agent or params");
 }
 
-export function createAgentServer(
-  params: ServerParams & {
-    agent: Agent | CreateAgentParams;
-    agentCardPath?: string;
-    register?: boolean;
-  }
-) {
-  const {
-    app = express(),
-    basePath = "/",
-    agentCardPath = "/.well-known/agent-card.json",
-    agent,
-  } = params;
-
+export function createAgentServer({
+  app = express(),
+  basePath = "/",
+  agentCardPath = "/.well-known/agent-card.json",
+  agent,
+  corsOptions,
+  extendedAgentCard,
+}: ServerParams) {
   const agentInstance = ensureAgent(agent);
-  app.use(cors(params.corsOptions));
+  app.use(cors(corsOptions));
   if (agentCardPath !== "/.well-known/agent-card.json") {
     // mount at the root for compliance with RFC8615 standard
+    // todo: align with emerging multi-agent standards
     app.use("/.well-known/agent-card.json", (_, res) => {
       res.json(agentInstance.agentCard);
     });
@@ -132,7 +130,7 @@ export function createAgentServer(
           req,
           res,
           next,
-          params.extendedAgentCard
+          extendedAgentCard
         );
       }
       next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));

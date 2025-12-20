@@ -3,16 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getCurrentTimestamp, logError } from "~/utils/index.js";
-import { Task, Message, TaskState, TaskStore, A2A } from "~/types/index.js";
+import {
+  getCurrentTimestamp,
+  logError,
+  validateSchema,
+} from "~/utils/index.js";
+import { A2A, TaskStore, A2ARuntime } from "~/types/index.js";
 import { v4 as uuidv4 } from "uuid";
 
 async function getReferences(
   referenceTaskIds: string[],
   taskStore: TaskStore
-): Promise<Task[]> {
+): Promise<A2A.Task[]> {
   try {
-    const references: (A2A["state"] | null)[] = await Promise.all(
+    const references: (A2ARuntime["state"] | null)[] = await Promise.all(
       referenceTaskIds.map((referenceTaskId) => {
         return taskStore.load(referenceTaskId);
       })
@@ -22,6 +26,33 @@ async function getReferences(
       .map((reference) => reference?.task);
   } catch (error) {
     logError("getReferences", "failed to load references", error, {
+      referenceTaskIds,
+    });
+    return [];
+  }
+}
+import { v2 } from "~/types/interfaces/services/v2/index.js";
+import { logger } from "~/config/index.js";
+async function getReferencesV2(
+  referenceTaskIds: string[],
+  tasks: v2.a2a.Tasks
+): Promise<A2A.Task[]> {
+  try {
+    const references: (A2A.Task | undefined)[] = await Promise.all(
+      referenceTaskIds.map((referenceTaskId) => {
+        return tasks.get(referenceTaskId).catch((error) => {
+          logger.error("getReferencesV2", "failed to load reference", error, {
+            referenceTaskId,
+          });
+          return undefined;
+        });
+      })
+    );
+    return references
+      .filter((reference) => reference !== undefined)
+      .map((reference) => reference);
+  } catch (error) {
+    logger.error("getReferencesV2", "failed to load references", error, {
       referenceTaskIds,
     });
     return [];
@@ -37,13 +68,15 @@ async function getReferences(
  */
 export async function loadState(
   taskStore: TaskStore,
-  message: Message,
+  message: A2A.Message,
   metadata?: Record<string, unknown> | null,
   taskId?: string | null,
   contextId?: string | null
-): Promise<A2A["state"]> {
+): Promise<A2ARuntime["state"]> {
   if (taskId) {
-    const existingData: A2A["state"] | null = await taskStore.load(taskId);
+    const existingData: A2ARuntime["state"] | null = await taskStore.load(
+      taskId
+    );
     if (existingData) {
       return {
         ...existingData,
@@ -65,12 +98,12 @@ export async function loadState(
   }
 
   const timestamp = getCurrentTimestamp();
-  const newTask: Task = {
+  const newTask: A2A.Task = {
     id: taskId ?? uuidv4(),
     contextId: contextId ?? uuidv4(),
     kind: "task",
     status: {
-      state: TaskState.submitted,
+      state: A2A.TaskState.submitted,
       timestamp,
     },
     metadata: {

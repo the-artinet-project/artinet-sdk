@@ -23,9 +23,9 @@ import {
   ContextManagerInterface,
   EventManagerOptions,
   EventManagerInterface,
-  A2A,
+  A2ARuntime,
 } from "~/types/index.js";
-import { createEventManager } from "./event.js";
+import { createEventManager, createStateMachine } from "./event.js";
 import { v4 as uuidv4 } from "uuid";
 import { CommandChannel } from "../../core/managers/command.js";
 
@@ -57,7 +57,7 @@ import { CommandChannel } from "../../core/managers/command.js";
  * @since 0.5.6
  */
 export function createCommandChannel<
-  TCommand extends A2A["command"] = A2A["command"]
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"]
 >(request: TCommand): ReceiveCommandProxyInterface<TCommand> {
   return CommandChannel.create<TCommand>(request);
 }
@@ -148,10 +148,11 @@ export function createCommandChannel<
  * @public
  * @since 0.5.6
  */
+//TODO: The ContextManager should create the context and return it rather than needing to pass in a context manager
 export function createContext<
-  TCommand extends A2A["command"] = A2A["command"],
-  TState extends A2A["state"] = A2A["state"],
-  TUpdate extends A2A["update"] = A2A["update"]
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
+  TState extends A2ARuntime["state"] = A2ARuntime["state"],
+  TUpdate extends A2ARuntime["update"] = A2ARuntime["update"]
 >(
   request: TCommand,
   service: A2AServiceInterface<TCommand, TState, TUpdate>,
@@ -185,8 +186,69 @@ export function createContext<
     )),
     signal: abortSignal,
     isCancelled: () => abortSignal?.aborted || service.isCancelled(contextId),
+    //todo: Now that the new context getState is async we no longer need to leverage the event manager to get the current state
+
     State: () => newEventManager.getState(),
   };
   contextManager.setContext(contextId, context);
+  return context;
+}
+
+import { v2 } from "~/types/interfaces/services/v2/index.js";
+import { A2A } from "~/types/index.js";
+import { StateMachine } from "~/services/core/v2/publisher.js";
+
+export function createBaseContext({
+  contextId = uuidv4(),
+  service,
+  task,
+  overrides,
+  abortSignal = new AbortController().signal,
+}: {
+  contextId: string;
+  service: v2.a2a.A2AServiceInterface;
+  task?: A2A.Task;
+  overrides?: Partial<Omit<v2.a2a.EventConsumer, "contextId">>;
+  abortSignal?: AbortSignal;
+}): v2.a2a.BaseContext {
+  const context: v2.a2a.BaseContext = {
+    contextId: contextId,
+    service: service,
+    publisher: createStateMachine({ contextId, service, task, overrides }),
+    isCancelled: async () =>
+      (await service.cancellations.has(contextId)) || abortSignal.aborted,
+    abortSignal: abortSignal,
+    getState: async (args?: string) => {
+      if (!args || !task) {
+        throw new Error("Task not found");
+      }
+      return args ? await service.tasks.get(args) : task;
+    },
+  };
+  return context;
+}
+
+export function createContextV2({
+  baseContext,
+  taskId,
+  messenger,
+  extensions,
+  references,
+}: {
+  baseContext: v2.a2a.BaseContext;
+  taskId: string;
+  messenger: v2.a2a.MessageConsumerProxy;
+  extensions?: A2A.AgentExtension[];
+  references?: A2A.Task[];
+}): v2.a2a.Context {
+  const context: v2.a2a.Context = {
+    ...baseContext,
+    taskId: taskId,
+    userMessage: messenger.message,
+    messages: messenger,
+    getTask: async () => (baseContext.publisher as StateMachine).currentTask,
+    extensions: extensions,
+    references: references,
+  };
   return context;
 }
