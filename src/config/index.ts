@@ -173,12 +173,15 @@ export function getTracer(): Tracer {
 }
 
 export const logger = {
-  debug: (msg: string, ...args: unknown[]) => getLogger().debug(msg, ...args),
-  info: (msg: string, ...args: unknown[]) => getLogger().info(msg, ...args),
-  warn: (msg: string, ...args: unknown[]) => getLogger().warn(msg, ...args),
-  error: (msg: string, ...args: unknown[]) => getLogger().error(msg, ...args),
+  debug: (msg: string, ...args: unknown[]) =>
+    getLogger()?.debug?.(msg, ...args),
+  info: (msg: string, ...args: unknown[]) => getLogger()?.info?.(msg, ...args),
+  warn: (msg: string, ...args: unknown[]) => getLogger()?.warn?.(msg, ...args),
+  error: (msg: string, ...args: unknown[]) =>
+    getLogger()?.error?.(msg, ...args),
   setLevel: (level: "debug" | "info" | "warn" | "error") =>
-    getLogger().setLevel?.(level),
-  getLevel: () => getLogger().getLevel?.(),
-  child: (context: Record<string, unknown>) => getLogger().child?.(context),
+    getLogger()?.setLevel?.(level),
+  getLevel: () => getLogger()?.getLevel?.(),
+  child: (context: Record<string, unknown>) =>
+    getLogger()?.child?.(context) ?? noopLogger,
 };

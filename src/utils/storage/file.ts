@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  TaskAndHistory,
-  TaskManagerInterface,
-  Task,
-  Message,
-} from "~/types/index.js";
+import { TaskAndHistory, TaskManagerInterface, A2A } from "~/types/index.js";
 import { logError, logDebug } from "../logging/log.js";
 import fs from "fs/promises";
 import path from "path";
@@ -107,7 +102,7 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    */
   private isHistoryFileContent(
     content: unknown
-  ): content is { messageHistory: Message[] } {
+  ): content is { messageHistory: A2A.Message[] } {
     return (
       content !== undefined &&
       typeof content === "object" &&
@@ -129,7 +124,7 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
     const historyFilePath = this.getHistoryFilePath(taskId);
 
     // Read task file first - if it doesn't exist, the task doesn't exist.
-    const task = await this.readJsonFile<Task>(taskFilePath).catch(
+    const task = await this.readJsonFile<A2A.Task>(taskFilePath).catch(
       () => undefined
     );
     if (!task) {
@@ -137,7 +132,7 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
     }
 
     // Task exists, now try to read history. It might not exist yet.
-    let history: Message[] = [];
+    let history: A2A.Message[] = [];
     try {
       const historyContent = await this.readJsonFile<unknown>(
         historyFilePath

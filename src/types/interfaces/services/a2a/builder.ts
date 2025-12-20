@@ -3,41 +3,48 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { A2A, Context, TextPart, DataPart, FilePart } from "~/types/index.js";
-
+import { A2ARuntime, Context, A2A } from "~/types/index.js";
 /**
  * Restricting to command for now, but could be extended to other types of commands in the future.
  * When we shift to CoreCommand, move this into core.
  */
-export interface StepArgs<TCommand extends A2A["command"] = A2A["command"]> {
+export interface StepArgs<
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"]
+> {
   command: TCommand;
   context: Context;
 }
 
 export type StepParams<
-  TCommand extends A2A["command"] = A2A["command"],
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
   TInboundArgs extends readonly unknown[] = []
 > = StepArgs<TCommand> & Partial<{ content: string; args: TInboundArgs }>;
 
 export type StepOutput<
-  TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"]
+  TPart extends
+    | A2A.DataPart["data"]
+    | A2A.FilePart["file"]
+    | A2A.TextPart["text"]
 > = {
   parts: Array<TPart> | TPart;
 };
 
 export type StepOutputWithForwardArgs<
-  TPart extends DataPart["data"] | FilePart["file"] | TextPart["text"],
+  TPart extends
+    | A2A.DataPart["data"]
+    | A2A.FilePart["file"]
+    | A2A.TextPart["text"],
   TForwardArgs extends readonly unknown[] = []
 > = StepOutput<TPart> & {
   args: TForwardArgs;
 };
 
 export type Step<
-  TCommand extends A2A["command"] = A2A["command"],
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
   TPart extends
-    | DataPart["data"]
-    | FilePart["file"]
-    | TextPart["text"] = TextPart["text"],
+    | A2A.DataPart["data"]
+    | A2A.FilePart["file"]
+    | A2A.TextPart["text"] = A2A.TextPart["text"],
   TInboundArgs extends readonly unknown[] = [],
   TForwardArgs extends readonly unknown[] = [],
   TOutput extends
@@ -48,11 +55,11 @@ export type Step<
 > = (params: StepParams<TCommand, TInboundArgs>) => Promise<TOutput> | TOutput;
 
 export type StepWithKind<
-  TCommand extends A2A["command"] = A2A["command"],
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
   TPart extends
-    | DataPart["data"]
-    | FilePart["file"]
-    | TextPart["text"] = TextPart["text"],
+    | A2A.DataPart["data"]
+    | A2A.FilePart["file"]
+    | A2A.TextPart["text"] = A2A.TextPart["text"],
   TInboundArgs extends readonly unknown[] = [],
   TForwardArgs extends readonly unknown[] = [],
   TOutput extends
@@ -71,7 +78,7 @@ export type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A>
   : [];
 
 export interface StepBuilder<
-  TCommand extends A2A["command"] = A2A["command"],
+  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
   TInboundArgs extends readonly unknown[] = []
 > {
   /**
@@ -81,9 +88,9 @@ export interface StepBuilder<
    */
   addStep<
     TPart extends
-      | DataPart["data"]
-      | FilePart["file"]
-      | TextPart["text"] = TextPart["text"],
+      | A2A.DataPart["data"]
+      | A2A.FilePart["file"]
+      | A2A.TextPart["text"] = A2A.TextPart["text"],
     TForwardArgs extends readonly unknown[] = [],
     TOutput extends
       | StepOutput<TPart>

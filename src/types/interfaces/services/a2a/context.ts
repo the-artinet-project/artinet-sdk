@@ -16,20 +16,13 @@
  * @author The Artinet Project
  */
 
-import {
-  type TaskStatusUpdateEvent,
-  type TaskArtifactUpdateEvent,
-  type Task,
-  type Message,
-  A2ARequest,
-  MessageSendParams,
-} from "@artinet/types";
+import { A2A } from "@artinet/types";
 import { CoreCommand, CoreState, CoreUpdate } from "../core/context/types.js";
 import { CoreContext, Core } from "../core/context/context.js";
 import { TaskAndHistory } from "./legacy.js";
 
 /**
- * Represents the possible types of updates that can be yielded by a TaskHandler.
+ * Represents the possible types of updates that can be yielded by an A2AEngine.
  *
  * This union type encompasses all event types that can be emitted during A2A
  * task processing, providing a type-safe way to handle different update scenarios.
@@ -40,10 +33,10 @@ import { TaskAndHistory } from "./legacy.js";
  * @since 0.5.6
  */
 export type UpdateEvent =
-  | Message
-  | Task
-  | TaskStatusUpdateEvent
-  | TaskArtifactUpdateEvent;
+  | A2A.Message
+  | A2A.Task
+  | A2A.TaskStatusUpdateEvent
+  | A2A.TaskArtifactUpdateEvent;
 
 /**
  * A2A Command type that extends CoreCommand with A2A-specific parameter constraints.
@@ -51,7 +44,7 @@ export type UpdateEvent =
  * This generic type provides type-safe command handling for A2A operations,
  * ensuring that command parameters conform to the expected A2A request structure.
  *
- * @template TParams - The parameter type for the command, must extend A2ARequest params
+ * @template TParams - The parameter type for the command, must extend A2A.Request params
  * @default MessageSendParams - Default parameter type for message sending operations
  *
  * @example
@@ -76,7 +69,7 @@ export type UpdateEvent =
  * @since 0.5.6
  */
 export type Command<
-  TParams extends NonNullable<A2ARequest["params"]> = MessageSendParams
+  TParams extends NonNullable<A2A.A2ARequest["params"]> = A2A.MessageSendParams
 > = CoreCommand<TParams>;
 
 /**
@@ -164,7 +157,7 @@ export type Update<TUpdate extends UpdateEvent = UpdateEvent> =
  *   priority: number;
  * }
  *
- * const customContext: Context<CustomCommand, State, Update<Task>> = {
+ * const customContext: Context<CustomCommand, State, Update<A2A.Task>> = {
  *   command: customCommand,
  *   state: currentState,
  *   update: taskUpdate,
@@ -181,13 +174,13 @@ export type Update<TUpdate extends UpdateEvent = UpdateEvent> =
  * @since 0.5.6
  */
 export type Context<
-  TCommand extends Command = Command<MessageSendParams>,
+  TCommand extends Command = Command<A2A.MessageSendParams>,
   TState extends State = State,
   TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>
 > = CoreContext<TCommand, TState, TUpdate>;
 
-export interface A2A<
-  TCommand extends Command = Command<MessageSendParams>,
-  TState extends State = State,
-  TUpdate extends Update<UpdateEvent> = Update<UpdateEvent>
+export interface A2ARuntime<
+  TCommand extends CoreCommand<NonNullable<A2A.A2ARequest["params"]>> = Command,
+  TState extends CoreState<TaskAndHistory> = State,
+  TUpdate extends CoreUpdate<UpdateEvent> = Update
 > extends Core<TCommand, TState, TUpdate> {}

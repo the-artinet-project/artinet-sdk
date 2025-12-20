@@ -139,6 +139,7 @@ export interface CoreContext<
    * const result = await processTask(taskType, parameters, userId);
    * ```
    */
+  //TODO: Rename to Receiver
   command: ReceiveCommandProxyInterface<TCommand>;
 
   /**

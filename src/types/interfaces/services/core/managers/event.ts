@@ -258,6 +258,7 @@ export interface EventManagerMap<
  * @public
  * @since 0.5.6
  */
+//TODO: May be better to call this the State Handler
 export interface EventManagerInterface<
   TCommand extends Core["command"] = Core["command"],
   TState extends Core["state"] = Core["state"],

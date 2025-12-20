@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  type Task,
-  type Message,
-  type MessageSendConfiguration,
-} from "@artinet/types";
-import { A2AEngine } from "./engine.js";
+import { type A2A } from "@artinet/types";
 
 /**
  * @deprecated Task now has a history property.
@@ -16,13 +11,13 @@ import { A2AEngine } from "./engine.js";
  */
 export interface TaskAndHistory {
   /** The task object */
-  task: Task;
+  task: A2A.Task;
 
   /**
    * @deprecated This property is no longer being updated. Use the task.history property instead.
    * The complete message history associated with the task
    */
-  history: Message[];
+  history: A2A.Message[];
 }
 
 /**
@@ -62,12 +57,12 @@ export interface TaskContext {
    * The current state of the task when the handler is invoked or resumed.
    * This is a snapshot - the latest state may need to be reloaded during async operations.
    */
-  task: Task;
+  task: A2A.Task;
 
   /**
    * The specific user message that triggered this handler invocation or resumption.
    */
-  userMessage: Message;
+  userMessage: A2A.Message;
 
   /**
    * Function to check if cancellation has been requested for this task.
@@ -79,32 +74,16 @@ export interface TaskContext {
   /**
    * The message history associated with the task up to the point the handler is invoked.
    */
-  history: Message[];
+  history: A2A.Message[];
 
   /**
    * @description The latest user message that triggered this handler invocation or resumption.
    * @note It's unclear whether this is necessary as userMessage already exists
    */
-  latestUserMessage?: Message;
+  latestUserMessage?: A2A.Message;
 
   /**
    * The configuration for the task.
    */
-  configuration?: MessageSendConfiguration;
+  configuration?: A2A.MessageSendConfiguration;
 }
-
-/**
- * Defines the signature for a task handler function.
- *
- * Handlers are implemented as async generators. They receive context about the
- * task and the triggering message. They perform work and yield status
- * or artifact updates (TaskYieldUpdate). The server consumes these yields,
- * updates the task state in the store, and streams events if applicable.
- *
- * @deprecated Use A2AEngine instead.
- * @param context The TaskContext object containing task details and state.
- * @yields Updates to the task's status or artifacts.
- * @returns Optionally returns the final complete Task object (needed for non-streaming 'message/send').
- *   If void is returned, the server uses the last known state after processing all yields.
- */
-export type TaskHandler = A2AEngine;

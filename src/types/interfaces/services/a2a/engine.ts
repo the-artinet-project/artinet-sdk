@@ -4,9 +4,9 @@
  */
 
 import { ExecutionEngine } from "../core/execution/index.js";
-import { A2A } from "~/types/index.js";
+import { A2ARuntime } from "~/types/index.js";
 export type A2AEngine = ExecutionEngine<
-  A2A["command"],
-  A2A["state"],
-  A2A["update"]
+  A2ARuntime["command"],
+  A2ARuntime["state"],
+  A2ARuntime["update"]
 >;

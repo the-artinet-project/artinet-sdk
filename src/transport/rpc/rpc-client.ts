@@ -13,11 +13,7 @@ import {
   INTERNAL_ERROR,
   PARSE_ERROR,
 } from "~/utils/common/errors.js";
-import type {
-  JSONRPCRequest,
-  JSONRPCResponse,
-  A2ARequest,
-} from "~/types/index.js";
+import type { A2A, MCP } from "~/types/index.js";
 import { parseResponse } from "./parser.js";
 import { logError, logWarn } from "~/utils/logging/log.js";
 
@@ -29,11 +25,11 @@ import { logError, logWarn } from "~/utils/logging/log.js";
  * @param requestId Optional request ID (generates a UUID v4 if not provided)
  * @returns A properly formatted JSON-RPC request object
  */
-export function createJsonRpcRequest<Req extends A2ARequest>(
+export function createJsonRpcRequest<Req extends A2A.A2ARequest>(
   method: Req["method"],
   params: Req["params"],
   requestId: string | number = uuidv4()
-): JSONRPCRequest {
+): MCP.JSONRPCRequest {
   return {
     jsonrpc: "2.0",
     id: requestId,
@@ -53,7 +49,7 @@ export function createJsonRpcRequest<Req extends A2ARequest>(
  * @returns A Promise resolving to the fetch Response object
  * @throws RpcError if there's a network error
  */
-export async function sendJsonRpcRequest<Req extends A2ARequest>(
+export async function sendJsonRpcRequest<Req extends A2A.A2ARequest>(
   baseUrl: URL,
   method: Req["method"],
   params: Req["params"],
@@ -127,7 +123,7 @@ export async function sendGetRequest(
  * @returns A promise resolving to the result payload
  * @throws RpcError if there's an error in the response
  */
-export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
+export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
   response: Response,
   expectedMethod?: string
 ): Promise<NonNullable<Res["result"]>> {
@@ -137,7 +133,7 @@ export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
     if (!response.ok) {
       try {
         // Try to parse error as JSON-RPC
-        parseResponse<JSONRPCResponse>(responseBody);
+        parseResponse<MCP.JSONRPCResponse>(responseBody);
         // If we get here, it means there was no error in the response
         // But the HTTP status was not OK, so we throw a generic error
       } catch (parseError) {
@@ -233,8 +229,8 @@ export async function handleJsonResponse<T>(
  * @throws RpcError if there's a network error or error in the response
  */
 export async function executeJsonRpcRequest<
-  Req extends A2ARequest,
-  Res extends JSONRPCResponse,
+  Req extends A2A.A2ARequest,
+  Res extends MCP.JSONRPCResponse
 >(
   baseUrl: URL,
   method: Req["method"],

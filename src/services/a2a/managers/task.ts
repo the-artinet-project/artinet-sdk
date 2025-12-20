@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TaskManagerInterface, A2A } from "~/types/index.js";
+import { TaskManagerInterface, A2ARuntime } from "~/types/index.js";
 
-export class TaskManager<TaskType extends A2A["state"] = A2A["state"]>
-  implements TaskManagerInterface<TaskType>
+export class TaskManager<
+  TaskType extends A2ARuntime["state"] = A2ARuntime["state"]
+> implements TaskManagerInterface<TaskType>
 {
   private states: Map<string, TaskType> = new Map();
   getState(id: string): TaskType | Promise<TaskType | undefined> | undefined {

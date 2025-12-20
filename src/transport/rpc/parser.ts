@@ -3,11 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  JSONRPCError,
-  JSONRPCResponse,
-  JSONRPCErrorSchema,
-} from "~/types/index.js";
+import { MCP } from "~/types/index.js";
 import { SystemError, PARSE_ERROR } from "~/utils/common/errors.js";
 import { logError } from "~/utils/logging/log.js";
 
@@ -20,21 +16,21 @@ import { logError } from "~/utils/logging/log.js";
  * @returns The parsed and validated response object
  * @throws A2AError if the response contains an error or is invalid
  */
-export function parseResponse<Res extends JSONRPCResponse | JSONRPCError>(
-  data: string
-): Res {
+export function parseResponse<
+  Res extends MCP.JSONRPCResponse | MCP.JSONRPCError
+>(data: string): Res {
   if (!data) {
     throw PARSE_ERROR("Invalid response data");
   }
 
   try {
     const parsed = JSON.parse(data) as Res; //todo: leverage safe parse
-    if ((parsed as JSONRPCError).error) {
-      const parsedError = JSONRPCErrorSchema.safeParse(parsed);
+    if ((parsed as MCP.JSONRPCError).error) {
+      const parsedError = MCP.JSONRPCErrorSchema.safeParse(parsed);
       if (!parsedError.success) {
         throw PARSE_ERROR(parsedError.error);
       }
-      throw new SystemError<JSONRPCError>(
+      throw new SystemError<MCP.JSONRPCError>(
         parsedError.data.error.message,
         parsedError.data.error.code,
         parsedError.data.error.data
@@ -49,7 +45,7 @@ export function parseResponse<Res extends JSONRPCResponse | JSONRPCError>(
       throw PARSE_ERROR("invalid jsonrpc");
     }
 
-    if ((parsed as JSONRPCResponse).result === undefined) {
+    if ((parsed as MCP.JSONRPCResponse).result === undefined) {
       throw PARSE_ERROR("result is undefined");
     }
 

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AgentCard, AgentCardParams } from "~/types/index.js";
+import { A2A, AgentCardParams } from "~/types/index.js";
 
 export class AgentCardBuilder {
-  agentCard: AgentCard;
+  agentCard: A2A.AgentCard;
   constructor(
-    agentCard: Partial<AgentCard> & Required<Pick<AgentCard, "name">>
+    agentCard: Partial<A2A.AgentCard> & Required<Pick<A2A.AgentCard, "name">>
   ) {
     this.agentCard = {
       ...agentCard,
@@ -24,12 +24,12 @@ export class AgentCardBuilder {
       preferredTransport: agentCard.preferredTransport ?? "JSONRPC",
     };
   }
-  valueOf(): AgentCard {
+  valueOf(): A2A.AgentCard {
     return this.agentCard;
   }
 }
 
-export function createAgentCard(agentCard: AgentCardParams): AgentCard {
+export function createAgentCard(agentCard: AgentCardParams): A2A.AgentCard {
   return new AgentCardBuilder(
     typeof agentCard === "string" ? { name: agentCard } : agentCard
   ).valueOf();

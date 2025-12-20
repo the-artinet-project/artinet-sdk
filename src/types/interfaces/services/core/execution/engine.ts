@@ -113,3 +113,8 @@ export type ExecutionEngine<
 > = (
   context: Core<TCommand, TState, TUpdate>["context"]
 ) => AsyncGenerator<TUpdate, void, unknown>;
+
+export type Engine<
+  Params extends object = object,
+  Responses extends object = object
+> = (params: Params) => AsyncGenerator<Responses, void, unknown>;

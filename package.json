@@ -65,24 +65,25 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@artinet/types": "^0.0.9",
+    "@artinet/types": "0.0.9-alpha.1",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
     "uuid": "^11.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25"
   },
   "peerDependencies": {
+    "@modelcontextprotocol/sdk": "^1.24.3",
     "@trpc/server": "^11.4.3",
-    "@modelcontextprotocol/sdk": "1.22.0"
+    "@a2a-js/sdk": "^0.3.7"
   },
   "devDependencies": {
+    "@cfworker/json-schema": "^4.1.1",
+    "@eslint/js": "^9.25.1",
     "@types/cors": "^2.8.17",
     "@types/escape-html": "^1.0.4",
     "@types/express": "^5.0.1",
-    "@cfworker/json-schema": "^4.1.1",
-    "@eslint/js": "^9.25.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.50",
     "@types/supertest": "latest",

@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, Task } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
-export function getLatestHistory(task: Task, length?: number): Message[] {
+export function getLatestHistory(
+  task: A2A.Task,
+  length?: number
+): A2A.Message[] {
   return length ? task.history?.slice(-length) ?? [] : task.history ?? [];
 }
