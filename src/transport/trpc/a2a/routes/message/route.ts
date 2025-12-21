@@ -14,10 +14,7 @@ const sendMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
     if (!input) {
       throw INVALID_PARAMS({ input: "No request detected" });
     }
-    return await opts.ctx.service.sendMessage(input, {
-      engine: opts.ctx.engine,
-      signal: opts.signal,
-    });
+    return await opts.ctx.service.sendMessage(input, opts.ctx.context);
   });
 
 const streamMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
@@ -31,10 +28,7 @@ const streamMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
     if (!input) {
       throw INVALID_PARAMS({ input: "No request detected" });
     }
-    yield* opts.ctx.service.streamMessage(input, {
-      engine: opts.ctx.engine,
-      signal: opts.signal,
-    });
+    yield* opts.ctx.service.streamMessage(input, opts.ctx.context);
   });
 
 export const messageRouter = router({

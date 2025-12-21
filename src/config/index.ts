@@ -34,7 +34,7 @@
  * ```
  */
 
-import { ILogger, noopLogger } from "../utils/logging/observability.js";
+import { ILogger, noopLogger } from "./observability.js";
 import { trace, Tracer } from "@opentelemetry/api";
 
 /**

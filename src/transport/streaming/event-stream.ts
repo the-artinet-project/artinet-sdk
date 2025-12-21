@@ -14,7 +14,7 @@ import {
 } from "eventsource-parser";
 import { A2A, MCP } from "~/types/index.js";
 import { sendJsonRpcRequest } from "../rpc/rpc-client.js";
-import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
+import { logger } from "~/config/index.js";
 
 /**
  * Creates an async generator for processing task events from an SSE stream
@@ -31,7 +31,7 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
     try {
       errorText = await response.text();
     } catch (_) {}
-    logError(
+    logger.error(
       "handleEventStream",
       `HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
       new Error(
@@ -51,7 +51,7 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
     onEvent: (event: EventSourceMessage) => {
       if (event.data) {
         if (event.event === "close") {
-          logDebug("handleEventStream", "Stream closed");
+          logger.debug("handleEventStream", "Stream closed");
           return;
         }
         try {
@@ -60,7 +60,7 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
           if (eventResult) {
             events.push(eventResult as StreamRes["result"]);
           } else {
-            logWarn(
+            logger.warn(
               "handleEventStream",
               "Failed to parse SSE data",
               parsedData
@@ -71,15 +71,15 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
           //   return;
           // }
         } catch (e) {
-          logWarn("handleEventStream", "Failed to parse SSE data", e);
+          logger.warn("handleEventStream", "Failed to parse SSE data", e);
         }
       }
     },
     onError: (error: ParseError) => {
-      logError("handleEventStream", "Error parsing SSE data", error);
+      logger.error("handleEventStream", "Error parsing SSE data", error);
     },
     onRetry: (retry: number) => {
-      logWarn("handleEventStream", "Retrying SSE connection", retry);
+      logger.warn("handleEventStream", "Retrying SSE connection", retry);
     },
   });
 
@@ -120,7 +120,7 @@ export async function* executeStreamEvents<
   params: Req["params"],
   customHeaders: Record<string, string>
 ): AsyncIterable<NonNullable<StreamRes["result"]>> {
-  logDebug(
+  logger.debug(
     "executeStreamEvents",
     `Sending streaming request to: ${baseUrl.toString()}, method: ${method}`
   );
@@ -133,6 +133,6 @@ export async function* executeStreamEvents<
     "text/event-stream"
   );
   const response = await responsePromise;
-  logDebug("executeStreamEvents", "Response", response);
+  logger.debug("executeStreamEvents", "Response", response);
   yield* handleEventStream<StreamRes>(response);
 }

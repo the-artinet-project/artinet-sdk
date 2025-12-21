@@ -15,7 +15,7 @@ import {
 } from "~/utils/common/errors.js";
 import type { A2A, MCP } from "~/types/index.js";
 import { parseResponse } from "./parser.js";
-import { logError, logWarn } from "~/utils/logging/log.js";
+import { logger } from "~/config/index.js";
 
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
@@ -73,7 +73,7 @@ export async function sendJsonRpcRequest<Req extends A2A.A2ARequest>(
       body: JSON.stringify(requestBody),
     });
   } catch (networkError) {
-    logError(
+    logger.error(
       "SendJsonRpcRequest",
       "Network error during RPC call:",
       networkError
@@ -105,7 +105,7 @@ export async function sendGetRequest(
       },
     });
   } catch (networkError) {
-    logError(
+    logger.error(
       "SendGetRequest",
       "Network error during GET request:",
       networkError
@@ -137,7 +137,7 @@ export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
         // If we get here, it means there was no error in the response
         // But the HTTP status was not OK, so we throw a generic error
       } catch (parseError) {
-        logWarn(
+        logger.warn(
           "handleJsonRpcResponse",
           "Error parsing JSON-RPC response:",
           parseError
@@ -161,7 +161,7 @@ export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
     // NonNullable is used in the return type to ensure TypeScript knows this
     return jsonResponse.result as NonNullable<Res["result"]>;
   } catch (error) {
-    logError(
+    logger.error(
       "handleJsonRpcResponse",
       `Error processing response [${expectedMethod}]:`,
       error
@@ -202,7 +202,7 @@ export async function handleJsonResponse<T>(
 
     return JSON.parse(responseBody) as T;
   } catch (error) {
-    logError(
+    logger.error(
       "handleJsonResponse",
       `Error processing response for ${endpoint || "unknown endpoint"}:`,
       error

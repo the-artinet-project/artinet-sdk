@@ -4,27 +4,20 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import {
-  A2AServiceInterface,
-  A2ARuntime,
-  ExecutionEnvironment,
-} from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
-export interface A2AExecutionEnvironment<
-  TCommand extends A2ARuntime["command"] = A2ARuntime["command"],
-  TState extends A2ARuntime["state"] = A2ARuntime["state"],
-  TUpdate extends A2ARuntime["update"] = A2ARuntime["update"]
-> extends ExecutionEnvironment<TCommand, TState, TUpdate> {
+export interface A2AEnv {
   /**
    * The service is the main interface for the A2A protocol.
    * It is used to send messages, get tasks, and cancel tasks.
    * In the future, we may want to dynamically change the service based on the path.
    * (e.g. multiple services for different paths/agents. an MCP Service. a factory function. etc.)
    */
-  service: A2AServiceInterface<TCommand, TState, TUpdate>;
+  service: A2A.Service;
+  context?: A2A.Context;
 }
 
-const trpc = initTRPC.context<A2AExecutionEnvironment>().create({});
+const trpc = initTRPC.context<A2AEnv>().create({});
 export const router = trpc.router;
 export const publicProcedure = trpc.procedure;
 

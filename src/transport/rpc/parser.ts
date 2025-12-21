@@ -5,7 +5,7 @@
 
 import { MCP } from "~/types/index.js";
 import { SystemError, PARSE_ERROR } from "~/utils/common/errors.js";
-import { logError } from "~/utils/logging/log.js";
+import { logger } from "~/config/index.js";
 
 /**
  * Parses a JSON-RPC response string and validates its structure.
@@ -52,10 +52,10 @@ export function parseResponse<
     return parsed as Res;
   } catch (error) {
     if (error instanceof SystemError) {
-      logError("parseResponse", "SystemError:", error.message);
+      logger.error("parseResponse", "SystemError:", error.message);
       throw error;
     }
-    logError("parseResponse", "Error parsing response:", data);
+    logger.error("parseResponse", "Error parsing response:", data);
     throw PARSE_ERROR(error);
   }
 }

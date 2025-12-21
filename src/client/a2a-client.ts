@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { A2A, UpdateEvent } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
 import {
   executeJsonRpcRequest,
@@ -14,7 +14,7 @@ import { executeStreamEvents } from "~/transport/streaming/event-stream.js";
 import { INTERNAL_ERROR } from "~/utils/common/errors.js";
 import { logError } from "~/utils/logging/log.js";
 
-import type { Client } from "~/types/interfaces/client.js";
+import type { Client } from "~/types/client.js";
 import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
 
 /**
@@ -170,7 +170,7 @@ export class A2AClient implements Client {
    */
   sendStreamingMessage(
     params: A2A.MessageSendParams | string
-  ): AsyncIterable<UpdateEvent> {
+  ): AsyncIterable<A2A.Update> {
     return executeStreamEvents<
       A2A.SendStreamingMessageRequest,
       A2A.SendStreamingMessageSuccessResponse
@@ -188,7 +188,7 @@ export class A2AClient implements Client {
    * @param params Task parameters for the request
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  sendTaskSubscribe(params: A2A.MessageSendParams): AsyncIterable<UpdateEvent> {
+  sendTaskSubscribe(params: A2A.MessageSendParams): AsyncIterable<A2A.Update> {
     return this.sendStreamingMessage(params);
   }
 
@@ -259,7 +259,7 @@ export class A2AClient implements Client {
    * @param params Parameters identifying the task to resubscribe to
    * @returns An AsyncIterable that yields TaskStatusUpdateEvent or TaskArtifactUpdateEvent payloads.
    */
-  resubscribeTask(params: A2A.TaskQueryParams): AsyncIterable<UpdateEvent> {
+  resubscribeTask(params: A2A.TaskQueryParams): AsyncIterable<A2A.Update> {
     return executeStreamEvents<
       A2A.TaskResubscriptionRequest,
       A2A.SendStreamingMessageSuccessResponse

@@ -20,7 +20,7 @@
  */
 
 import { configure, ArtinetConfig } from "./index.js";
-import { ILogger } from "../utils/logging/observability.js";
+import { ILogger } from "./observability.js";
 
 /**
  * Default logger implementation using console.
