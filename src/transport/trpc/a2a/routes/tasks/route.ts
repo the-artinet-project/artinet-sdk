@@ -50,10 +50,7 @@ const resubscribeRoute = A2AProcedure.input(A2A.TaskIdParamsSchema)
     if (!input) {
       throw INVALID_REQUEST({ input: "No request detected" });
     }
-    yield* opts.ctx.service.resubscribe(input, {
-      engine: opts.ctx.engine,
-      signal: opts.signal,
-    });
+    yield* opts.ctx.service.resubscribe(input, opts.ctx.context);
   });
 
 const getTaskRoute = A2AProcedure.input(A2A.TaskIdParamsSchema)

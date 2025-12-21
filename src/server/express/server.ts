@@ -5,12 +5,12 @@
 
 import express from "express";
 import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
+import { Agent, A2A } from "~/types/index.js";
 import {
-  Agent,
-  A2A,
-  FactoryParams as CreateAgentParams,
-} from "~/types/index.js";
-import { createAgent } from "~/services/index.js";
+  createAgent,
+  ServiceParams as CreateAgentParams,
+  Service,
+} from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
@@ -51,38 +51,27 @@ export function rpcParser(
   });
 }
 
-function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
-  if (
-    agentOrParams &&
-    typeof agentOrParams === "object" &&
-    "agentCard" in agentOrParams &&
-    typeof agentOrParams.agentCard === "object" &&
-    "sendMessage" in agentOrParams &&
-    typeof agentOrParams.sendMessage === "function" &&
-    "streamMessage" in agentOrParams &&
-    typeof agentOrParams.streamMessage === "function" &&
-    "addConnection" in agentOrParams &&
-    typeof agentOrParams.addConnection === "function" &&
-    "removeConnection" in agentOrParams &&
-    typeof agentOrParams.removeConnection === "function" &&
-    "getState" in agentOrParams &&
-    typeof agentOrParams.getState === "function" &&
-    "setState" in agentOrParams &&
-    typeof agentOrParams.setState === "function"
-  ) {
-    return agentOrParams;
-  } else if (
+const isParams = (
+  agentOrParams: Agent | CreateAgentParams
+): agentOrParams is CreateAgentParams => {
+  return (
     agentOrParams &&
     typeof agentOrParams === "object" &&
     "engine" in agentOrParams &&
     typeof agentOrParams.engine === "function" &&
     "agentCard" in agentOrParams &&
     typeof agentOrParams.agentCard === "object"
-  ) {
-    return createAgent(agentOrParams as CreateAgentParams);
+  );
+};
+
+const ensureAgent = (agentOrParams: Agent | CreateAgentParams): Agent => {
+  if (agentOrParams instanceof Service) {
+    return agentOrParams;
+  } else if (isParams(agentOrParams)) {
+    return createAgent(agentOrParams);
   }
   throw new Error("invalid agent or params");
-}
+};
 
 export function createAgentServer({
   app = express(),

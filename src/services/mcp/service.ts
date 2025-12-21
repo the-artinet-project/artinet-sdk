@@ -4,7 +4,7 @@
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { A2A, MCPServiceInterface } from "~/types/index.js";
+import { A2A, MCP } from "~/types/index.js";
 import { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { Agent } from "~/types/index.js";
@@ -17,7 +17,7 @@ export interface MCPServiceParams {
   agentCardUri?: string;
 }
 
-export class BaseMCPService extends McpServer implements MCPServiceInterface {
+export class BaseMCPService extends McpServer implements MCP.Service {
   readonly agent: Agent;
 
   private _registerBaseTools(uri: string = "agent://card") {
@@ -97,7 +97,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
           contents: [
             {
               uri: uri.href,
-              text: formatJson(this.agent.agentCard),
+              text: formatJson(await this.agent.getAgentCard()),
               mimeType: "application/json",
             },
           ],
