@@ -33,7 +33,6 @@ import { createAgent, ServiceParams } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 import { getContent } from "../helpers/content.js";
 import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
-import { logger } from "~/config/index.js";
 /**
  * Type alias for text-based workflow steps.
  *

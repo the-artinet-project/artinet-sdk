@@ -16,6 +16,7 @@ import { logger } from "~/config/index.js";
 
 import type { Client } from "~/types/client.js";
 import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
+import { formatError } from "~/utils/common/utils.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
@@ -108,16 +109,11 @@ export class A2AClient implements Client {
       }
     } catch (error) {
       logger.error(
-        "A2AClient:agentCard",
-        "Failed to fetch or parse agent card:",
-        error
+        "A2AClient:agentCard: Failed to fetch or parse agent card:",
+        formatError(error)
       );
 
-      throw INTERNAL_ERROR(
-        `Could not retrieve agent card: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      );
+      throw INTERNAL_ERROR(formatError(error));
     }
     this.agentUrl = new URL(this.cachedAgentCard.url, this.baseUrl);
     return this.cachedAgentCard;
@@ -293,9 +289,8 @@ export class A2AClient implements Client {
       }
     } catch (error) {
       logger.error(
-        "A2AClient:supports",
-        `Failed to determine support for capability '${capability}':`,
-        error
+        `A2AClient:supports: Failed to determine support for capability '${capability}':`,
+        formatError(error)
       );
       return false; // Assume not supported if card fetch fails
     }

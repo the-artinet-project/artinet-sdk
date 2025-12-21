@@ -1,12 +1,28 @@
 import {
   logger,
-  configureLogger,
+  configure,
   createAgentServer,
   AgentBuilder,
-  MessageSendParams,
 } from "@artinet/sdk";
-console.log("Quick server starting");
-configureLogger({ level: "silent" });
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+
+logger.info("Quick server starting");
+
+configure({
+  logger: configurePino(
+    pinoCaller(
+      pino({
+        level: "info",
+        transport: {
+          target: "pino-pretty",
+          options: { colorize: true },
+        },
+      })
+    )
+  ),
+});
 
 // Configure and start the server
 const { app } = createAgentServer({
@@ -15,13 +31,9 @@ const { app } = createAgentServer({
       logger.info(`Server received: ${userInput}`);
       return "Thinking...";
     })
-    .text(async ({ command, content: userInput, context }) => {
-      if (command?.message?.messageId?.includes("mapping-test")) {
-        console.log(
-          "command",
-          JSON.stringify(command as MessageSendParams, null, 2)
-        );
-        console.log("Mapping test message received");
+    .text(async ({ context, content: userInput }) => {
+      if (context.userMessage?.messageId?.includes("mapping-test")) {
+        logger.debug("Mapping test message received");
         let counter = 0;
         while (true) {
           await new Promise((resolve) => setTimeout(resolve, 100));
@@ -29,19 +41,20 @@ const { app } = createAgentServer({
           if (counter > 30) {
             break;
           }
-          if (context.isCancelled()) {
-            console.log("Mapping test message cancelled");
+          if (await context.isCancelled()) {
+            logger.debug("Mapping test message cancelled");
             break;
           }
         }
-        console.log("Mapping test message completed:", context.isCancelled());
+        logger.debug(
+          `Mapping test message completed: ${await context.isCancelled()}`
+        );
       }
       // Simulate work
       await new Promise((resolve) => setTimeout(resolve, 500));
       return `You said: ${userInput}`;
     })
     .createAgent({
-      enforceParamValidation: true,
       agentCard: {
         protocolVersion: "0.3.0",
         name: "QuickStart Agent",

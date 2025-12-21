@@ -92,7 +92,8 @@
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
     "uuid": "^11.1.0",
-    "zod": "^3.25"
+    "zod": "^3.25",
+    "@opentelemetry/api": "^1.9.0"
   },
   "peerDependencies": {
     "@a2a-js/sdk": "^0.3.7",
@@ -100,15 +101,6 @@
     "@trpc/server": "^11.4.3"
   },
   "optionalDependencies": {
-    "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/exporter-metrics-otlp-http": "^0.208.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.208.0",
-    "@opentelemetry/instrumentation-express": "^0.57.1",
-    "@opentelemetry/instrumentation-http": "^0.208.0",
-    "@opentelemetry/resources": "^2.2.0",
-    "@opentelemetry/sdk-metrics": "^2.2.0",
-    "@opentelemetry/sdk-node": "^0.208.0",
-    "@opentelemetry/semantic-conventions": "^1.38.0",
     "pino": "^10.1.0",
     "winston": "^3.19.0"
   },
@@ -126,33 +118,6 @@
       "optional": true
     },
     "winston": {
-      "optional": true
-    },
-    "@opentelemetry/api": {
-      "optional": true
-    },
-    "@opentelemetry/sdk-node": {
-      "optional": true
-    },
-    "@opentelemetry/exporter-trace-otlp-http": {
-      "optional": true
-    },
-    "@opentelemetry/exporter-metrics-otlp-http": {
-      "optional": true
-    },
-    "@opentelemetry/sdk-metrics": {
-      "optional": true
-    },
-    "@opentelemetry/resources": {
-      "optional": true
-    },
-    "@opentelemetry/semantic-conventions": {
-      "optional": true
-    },
-    "@opentelemetry/instrumentation-http": {
-      "optional": true
-    },
-    "@opentelemetry/instrumentation-express": {
       "optional": true
     }
   },

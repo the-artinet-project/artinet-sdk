@@ -31,16 +31,14 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
     try {
       errorText = await response.text();
     } catch (_) {}
-    logger.error(
-      "handleEventStream",
-      `HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
-      new Error(
-        `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
-      )
-    );
-    throw new Error(
+    const err = new Error(
       `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
     );
+    logger.error(
+      `handleEventStream: HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
+      err
+    );
+    throw err;
   }
   // Use eventsource-parser to process the SSE stream
   const reader = response.body.getReader();
@@ -76,7 +74,7 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
       }
     },
     onError: (error: ParseError) => {
-      logger.error("handleEventStream", "Error parsing SSE data", error);
+      logger.error("handleEventStream: Error parsing SSE data", error);
     },
     onRetry: (retry: number) => {
       logger.warn("handleEventStream", "Retrying SSE connection", retry);

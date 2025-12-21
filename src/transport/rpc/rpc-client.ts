@@ -16,7 +16,7 @@ import {
 import type { A2A, MCP } from "~/types/index.js";
 import { parseResponse } from "./parser.js";
 import { logger } from "~/config/index.js";
-
+import { formatError } from "~/utils/common/utils.js";
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
  *, ErrorCodeParseError
@@ -74,9 +74,8 @@ export async function sendJsonRpcRequest<Req extends A2A.A2ARequest>(
     });
   } catch (networkError) {
     logger.error(
-      "SendJsonRpcRequest",
-      "Network error during RPC call:",
-      networkError
+      "SendJsonRpcRequest: Network error during RPC call:",
+      formatError(networkError)
     );
     // Wrap network errors into a standard error format
     throw INTERNAL_ERROR(networkError);
@@ -106,9 +105,8 @@ export async function sendGetRequest(
     });
   } catch (networkError) {
     logger.error(
-      "SendGetRequest",
-      "Network error during GET request:",
-      networkError
+      "SendGetRequest: Network error during GET request:",
+      formatError(networkError)
     );
     throw INTERNAL_ERROR(networkError);
   }
@@ -162,9 +160,8 @@ export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
     return jsonResponse.result as NonNullable<Res["result"]>;
   } catch (error) {
     logger.error(
-      "handleJsonRpcResponse",
-      `Error processing response [${expectedMethod}]:`,
-      error
+      `handleJsonRpcResponse: Error processing response [${expectedMethod}]:`,
+      formatError(error)
     );
     // Re-throw RpcError instances directly, wrap others
     if (error instanceof SystemError) {
@@ -203,9 +200,10 @@ export async function handleJsonResponse<T>(
     return JSON.parse(responseBody) as T;
   } catch (error) {
     logger.error(
-      "handleJsonResponse",
-      `Error processing response for ${endpoint || "unknown endpoint"}:`,
-      error
+      `handleJsonResponse: Error processing response for ${
+        endpoint || "unknown endpoint"
+      }:`,
+      formatError(error)
     );
 
     if (error instanceof SystemError) {

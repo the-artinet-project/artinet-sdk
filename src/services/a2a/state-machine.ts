@@ -1,9 +1,8 @@
 import { EventEmitter } from "events";
-import assert from "assert";
 import { A2A } from "~/types/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
-import { createStateMachine } from "./factory/state-machine.js";
 import { logger } from "~/config/index.js";
+import { createStateMachine } from "./factory/state-machine.js";
 
 export class StateMachine
   extends EventEmitter<A2A.Emissions>
