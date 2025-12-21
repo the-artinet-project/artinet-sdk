@@ -13,12 +13,11 @@ export async function getReferences(
     return [];
   }
   try {
+    logger.debug("getReferences: getting references", { referenceTaskIds });
     const references: (A2A.Task | undefined)[] = await Promise.all(
       referenceTaskIds.map((referenceTaskId) => {
         return tasks.get(referenceTaskId).catch((error) => {
-          logger.error("getReferences", "failed to load reference", error, {
-            referenceTaskId,
-          });
+          logger.error("getReferences: failed to load reference", error);
           return undefined;
         });
       })
@@ -27,9 +26,10 @@ export async function getReferences(
       .filter((reference) => reference !== undefined)
       .map((reference) => reference);
   } catch (error) {
-    logger.error("getReferences", "failed to load references", error, {
-      referenceTaskIds,
-    });
+    logger.error(
+      "getReferences: failed to load references",
+      error instanceof Error ? error : new Error(error as string)
+    );
     return [];
   }
 }

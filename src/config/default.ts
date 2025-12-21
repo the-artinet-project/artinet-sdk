@@ -31,7 +31,7 @@ export const consoleLogger: ILogger = {
   debug: (msg, ...args) => console.debug(`[DEBUG] ${msg}`, ...args),
   info: (msg, ...args) => console.info(`[INFO] ${msg}`, ...args),
   warn: (msg, ...args) => console.warn(`[WARN] ${msg}`, ...args),
-  error: (msg, ...args) => console.error(`[ERROR] ${msg}`, ...args),
+  error: (msg, err) => console.error(`[ERROR] ${msg}`, err),
 };
 
 /**

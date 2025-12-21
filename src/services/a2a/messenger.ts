@@ -97,8 +97,10 @@ export class Messenger
     return Promise.resolve({ value, done: true });
   }
 
-  static create(message: A2A.MessageSendParams): A2A.MessageConsumerProxy {
-    const instance = new Messenger(message);
+  static create(
+    messageParams: A2A.MessageSendParams
+  ): A2A.MessageConsumerProxy {
+    const instance = new Messenger(messageParams);
     return new Proxy(instance, {
       get(target: Messenger, prop: string | symbol, _): any {
         if (prop in target.message) {

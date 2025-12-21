@@ -11,11 +11,7 @@ export async function validateSchema<T extends z.ZodSchema>(
   data: unknown
 ): Promise<z.infer<T>> {
   return await schema.parseAsync(data).catch((error) => {
-    logger.error("Schema validation failed", error.message, error);
-    throw INVALID_PARAMS({
-      data: {
-        message: error.message,
-      },
-    });
+    logger.error("Schema validation failed", error);
+    throw INVALID_PARAMS(error);
   });
 }

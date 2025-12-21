@@ -1,6 +1,7 @@
 import { A2A } from "~/types/index.js";
 import { sleep } from "~/utils/common/utils.js";
-const STREAM_INTERVAL = 10;
+import { logger } from "~/config/index.js";
+const STREAM_INTERVAL = 5;
 
 export class Stream implements A2A.Stream {
   protected running: AsyncGenerator<A2A.Update> | null = null;
@@ -35,17 +36,37 @@ export class Stream implements A2A.Stream {
   }: {
     service: A2A.Service;
   }): AsyncGenerator<A2A.Update> {
-    this.context.publisher.on("complete", () => {
+    this.context.publisher.on("complete", async () => {
+      logger.debug(`Stream[run:${this.contextId}]: complete`);
+      await this.kill();
       this.running = null;
     });
 
-    this.context.publisher.on("error", (_) => {
-      this.context.publisher.onComplete();
+    this.context.publisher.on("error", async (err) => {
+      logger.error(`Stream[run:${this.contextId}]: error`, err);
+      await this.context.publisher.onComplete();
     });
 
-    this.running = this.running ?? this._run({ service });
+    if (!this.running) {
+      this.running = this._run({ service });
+      yield* this.running;
+    }
 
-    yield* this.running;
+    yield* this.subscribe();
+  }
+
+  async *subscribe(): AsyncGenerator<A2A.Update> {
+    const subscription: A2A.Update[] = this.updates;
+    this.context.publisher.on("update", async (_, update) => {
+      subscription.push(update);
+    });
+    let updatesRead = 0;
+    while (!this._completed || updatesRead < subscription.length) {
+      if (updatesRead < subscription.length) {
+        yield subscription[updatesRead++];
+      }
+      await sleep(STREAM_INTERVAL);
+    }
   }
 
   async *_run({
@@ -56,8 +77,11 @@ export class Stream implements A2A.Stream {
     let executionError: Error | null = null;
     const context = this.context;
 
-    context.publisher.on("update", (_, update) => {
-      if (!context.isCancelled()) {
+    // NOTE: isCancelled() returns a Promise, so must be awaited.
+    // Without async/await here, updates would never be pushed due to
+    // Promise being truthy (making !Promise always false).
+    context.publisher.on("update", async (_, update) => {
+      if (!(await context.isCancelled())) {
         this.updates.push(update);
       }
     });

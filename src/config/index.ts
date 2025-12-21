@@ -177,8 +177,7 @@ export const logger = {
     getLogger()?.debug?.(msg, ...args),
   info: (msg: string, ...args: unknown[]) => getLogger()?.info?.(msg, ...args),
   warn: (msg: string, ...args: unknown[]) => getLogger()?.warn?.(msg, ...args),
-  error: (msg: string, ...args: unknown[]) =>
-    getLogger()?.error?.(msg, ...args),
+  error: (msg: string, err: Error) => getLogger()?.error?.(msg, err),
   setLevel: (level: "debug" | "info" | "warn" | "error") =>
     getLogger()?.setLevel?.(level),
   getLevel: () => getLogger()?.getLevel?.(),

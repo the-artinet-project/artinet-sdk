@@ -41,7 +41,7 @@ const createMessageParams = (task: A2A.Task) => {
 const getExtensions = async (
   extensions?: string[]
 ): Promise<A2A.AgentExtension[]> => {
-  logger.warn("getExtensions", "not implemented", { extensions });
+  logger.warn("getExtensions: not implemented", { extensions });
   return [];
 };
 
@@ -130,6 +130,7 @@ export class Service implements A2A.Service {
   }
 
   async stop(): Promise<void> {
+    logger.info(`Service[stop]`);
     for (const context of await this.contexts.list()) {
       await context.publisher.onCancel(
         CANCEL_UPDATE(context.taskId, context.contextId, {
@@ -155,6 +156,7 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: ServiceOptions
   ): Promise<A2A.Task> {
+    logger.info(`Service[getTask]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);
     if (!task) {
       throw TASK_NOT_FOUND({ taskId: params.id });
@@ -178,6 +180,7 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: ServiceOptions
   ): Promise<A2A.Task> {
+    logger.info(`Service[cancelTask]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);
     if (!task) {
       throw TASK_NOT_FOUND({ taskId: params.id });
@@ -225,6 +228,13 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult> {
+    logger.info(`Service[sendMessage]:`, {
+      messageId: params.message.messageId,
+    });
+    logger.debug(`Service[sendMessage]:`, { taskId: params.message.taskId });
+    logger.debug(`Service[sendMessage]:`, {
+      contextId: params.message.contextId,
+    });
     const task: A2A.Task = await this.tasks.create({
       id: params.message.taskId,
       contextId: params.message.contextId,
@@ -281,6 +291,10 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: ServiceOptions
   ): AsyncGenerator<A2A.Update> {
+    logger.info("Service[streamMessage]:", {
+      taskId: params.message.taskId,
+      contextId: params.message.contextId,
+    });
     const task = await this.tasks.create({
       id: params.message.taskId,
       contextId: params.message.contextId,
@@ -288,6 +302,10 @@ export class Service implements A2A.Service {
       metadata: {
         ...params.metadata,
       },
+    });
+    logger.debug("Service[streamMessage]: task created", {
+      taskId: task.id,
+      contextId: task.contextId,
     });
     yield* this.methods.streamMessage(
       await validateSchema(A2A.MessageSendParamsSchema, params),
@@ -313,10 +331,15 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: ServiceOptions
   ): AsyncGenerator<A2A.Update> {
+    logger.info(`Service[resubscribe]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);
     if (!task) {
       throw TASK_NOT_FOUND({ taskId: params.id });
     }
+    logger.debug("Service[resubscribe]:", {
+      taskId: task.id,
+      contextId: task.contextId,
+    });
     yield* this.methods.resubscribe(
       await validateSchema(A2A.TaskIdParamsSchema, params),
       context ??

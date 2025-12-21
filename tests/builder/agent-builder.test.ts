@@ -1,8 +1,34 @@
 import { describe, it, expect } from "@jest/globals";
-import { createAgentExecutor, AgentBuilder } from "../../src/index.js";
-import { configureLogger } from "../../src/utils/logging/index.js";
+import { createAgentExecutor, AgentBuilder, A2A } from "../../src/index.js";
 import { MOCK_AGENT_CARD } from "../utils/info.js";
-configureLogger({ level: "silent" });
+
+// Helper to create a mock context for testing
+const createMockContext = (overrides: Partial<A2A.Context> = {}): A2A.Context => {
+  const message: A2A.Message = {
+    messageId: "test-msg-id",
+    kind: "message",
+    role: "user",
+    parts: [{ kind: "text", text: "hello world" }],
+    taskId: "test-task-id",
+    contextId: "test-context-id",
+  };
+  
+  return {
+    taskId: "test-task-id",
+    contextId: "test-context-id",
+    userMessage: message,
+    messages: { message, messages: [{ message }] } as any,
+    isCancelled: async () => false,
+    abortSignal: new AbortController().signal,
+    getState: async () => undefined,
+    getTask: async () => ({ id: "test-task-id", contextId: "test-context-id", status: { state: "working" } }) as any,
+    service: {} as any,
+    publisher: { onStart: async () => ({}), onUpdate: async () => ({}), onCancel: async () => {}, onError: async () => {}, onComplete: async () => {} } as any,
+    extensions: [],
+    references: [],
+    ...overrides,
+  } as A2A.Context;
+};
 
 describe("Agent Builder Tests", () => {
   it("should create step", () => {
@@ -178,25 +204,20 @@ describe("Agent Builder Tests", () => {
       .build();
     const executionWrapper = createAgentExecutor(agent);
     const results: any[] = [];
-    for await (const result of executionWrapper({
-      command: {
-        kind: "message",
-        message: {
-          messageId: "123",
-          contextId: "456",
-          taskId: "789",
-          message: "hello there",
-        },
-      },
-      isCancelled: () => false,
+    // Use proper A2A.Context structure
+    const mockContext = createMockContext({
+      taskId: "789",
       contextId: "456",
-      State: () => ({
-        task: {
-          id: "789",
-          contextId: "456",
-        },
-      }),
-    })) {
+      userMessage: {
+        messageId: "123",
+        kind: "message",
+        role: "user",
+        parts: [{ kind: "text", text: "hello there" }],
+        taskId: "789",
+        contextId: "456",
+      },
+    });
+    for await (const result of executionWrapper(mockContext)) {
       results.push(result);
       //   console.log(result);
     }
@@ -246,25 +267,20 @@ describe("Agent Builder Tests", () => {
       });
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
-    for await (const result of executionWrapper({
+    // Use proper A2A.Context structure
+    const mockContext = createMockContext({
+      taskId: "789",
       contextId: "456",
-      command: {
+      userMessage: {
+        messageId: "123",
         kind: "message",
-        message: {
-          messageId: "123",
-          contextId: "456",
-          taskId: "789",
-          message: "hello there",
-        },
+        role: "user",
+        parts: [{ kind: "text", text: "hello there" }],
+        taskId: "789",
+        contextId: "456",
       },
-      isCancelled: () => false,
-      State: () => ({
-        task: {
-          id: "789",
-          contextId: "456",
-        },
-      }),
-    })) {
+    });
+    for await (const result of executionWrapper(mockContext)) {
       results.push(result);
     }
     expect(results).toHaveLength(5);
@@ -294,25 +310,20 @@ describe("Agent Builder Tests", () => {
       });
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
-    for await (const result of executionWrapper({
+    // Use proper A2A.Context structure
+    const mockContext = createMockContext({
+      taskId: "789",
       contextId: "456",
-      command: {
+      userMessage: {
+        messageId: "123",
         kind: "message",
-        message: {
-          messageId: "123",
-          contextId: "456",
-          taskId: "789",
-          message: "hello there",
-        },
+        role: "user",
+        parts: [{ kind: "text", text: "hello there" }],
+        taskId: "789",
+        contextId: "456",
       },
-      isCancelled: () => false,
-      State: () => ({
-        task: {
-          id: "789",
-          contextId: "456",
-        },
-      }),
-    })) {
+    });
+    for await (const result of executionWrapper(mockContext)) {
       results.push(result);
     }
     expect(results).toHaveLength(5);
@@ -332,25 +343,20 @@ describe("Agent Builder Tests", () => {
     });
     const executionWrapper = agent.createAgentEngine();
     const results: any[] = [];
-    for await (const result of executionWrapper({
+    // Use proper A2A.Context structure
+    const mockContext = createMockContext({
+      taskId: "789",
       contextId: "456",
-      command: {
+      userMessage: {
+        messageId: "123",
         kind: "message",
-        message: {
-          messageId: "123",
-          contextId: "456",
-          taskId: "789",
-          parts: [{ kind: "text", text: "hello world" }],
-        },
+        role: "user",
+        parts: [{ kind: "text", text: "hello world" }],
+        taskId: "789",
+        contextId: "456",
       },
-      isCancelled: () => false,
-      State: () => ({
-        task: {
-          id: "789",
-          contextId: "456",
-        },
-      }),
-    })) {
+    });
+    for await (const result of executionWrapper(mockContext)) {
       results.push(result);
     }
     expect(results).toHaveLength(3);
@@ -380,27 +386,23 @@ describe("Agent Builder Tests", () => {
         agentCard: MOCK_AGENT_CARD,
       });
     expect(agent).toBeDefined();
+    // Use proper A2A.MessageSendParams structure
     const result = await agent.sendMessage({
       message: {
         messageId: "123",
+        kind: "message",
+        role: "user",
         contextId: "456",
         taskId: "789",
-        message: "hello there",
+        parts: [{ kind: "text", text: "hello there" }],
       },
-      isCancelled: () => false,
-      State: () => ({
-        task: {
-          id: "789",
-          contextId: "456",
-        },
-      }),
     });
     expect(result).toBeDefined();
-    expect(result.status.state).toBe("completed");
-    expect(result.status.message.parts).toHaveLength(3);
-    expect(result.status.message.parts[0].text).toBe("hello there");
-    expect(result.status.message.parts[1].file.bytes).toBe("goodbye there");
-    expect(result.status.message.parts[2].data.entry).toBe("goodbye there 2");
+    expect((result as A2A.Task).status.state).toBe("completed");
+    expect((result as A2A.Task).status.message?.parts).toHaveLength(3);
+    expect(((result as A2A.Task).status.message?.parts[0] as any).text).toBe("hello there");
+    expect(((result as A2A.Task).status.message?.parts[1] as any).file.bytes).toBe("goodbye there");
+    expect(((result as A2A.Task).status.message?.parts[2] as any).data.entry).toBe("goodbye there 2");
     expect(result.status.message.parts[2].data.entry2).toBe("goodbye there 3");
     expect(result.status.message.taskId).toBe("789");
     expect(result.status.message.contextId).toBe("456");

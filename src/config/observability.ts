@@ -86,9 +86,9 @@ export interface ILogger {
   /**
    * Log error-level message.
    * @param msg - Log message
-   * @param args - Optional additional arguments (context, data, etc.)
+   * @param err - Error to log
    */
-  error(msg: string, ...args: unknown[]): void;
+  error(msg: string, err: Error): void;
 
   /**
    * Set log level.

@@ -6,26 +6,6 @@
 import { A2A } from "~/types/index.js";
 import { FINAL_STATES, INTERNAL_ERROR, TASK_NOT_FOUND } from "~/utils/index.js";
 
-// const createMessageParams = (task: A2A.Task) => {
-//   const latestUserMessage: A2A.Message | undefined = task.history
-//     ?.filter((msg) => msg.role === "user")
-//     ?.pop();
-
-//   if (!latestUserMessage) {
-//     throw INVALID_REQUEST("No user message found");
-//   }
-
-//   const messageParams: A2ARuntime["command"] = {
-//     message: {
-//       ...latestUserMessage,
-//       taskId: task.id,
-//       contextId: latestUserMessage.contextId ?? task.contextId,
-//     },
-//     metadata: task.metadata,
-//   };
-//   return messageParams;
-// };
-
 const flush = (task: A2A.Task, stream: A2A.Stream) => {
   if (task.artifacts && task.artifacts.length > 0) {
     for (const artifact of task.artifacts) {

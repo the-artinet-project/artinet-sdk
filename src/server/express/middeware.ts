@@ -57,7 +57,7 @@ export async function jsonRPCMiddleware(
     res.json({
       jsonrpc: "2.0",
       id: id || null,
-      error: { code: -32600, message: "Invalid Request" },
+      error: { code: A2A.ErrorCodeInvalidRequest, message: "Invalid Request" },
     });
     return;
   }
@@ -164,7 +164,13 @@ export async function jsonRPCMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
-    logger.error("jsonRPCMiddleware", "error detected", error, req.body);
+    logger.error(
+      "jsonRPCMiddleware[Error]:",
+      error instanceof Error ? error : new Error(String(error))
+    );
+    logger.warn("jsonRPCMiddleware[Error]: Request body", {
+      request: req.body,
+    });
     return next(error);
   }
 }

@@ -7,28 +7,11 @@ import {
   afterAll,
 } from "@jest/globals";
 
-import {
-  A2AClient,
-  SystemError,
-  AgentCard,
-  Message,
-  Task,
-  TaskState,
-  MessageSendParams,
-  TaskStatusUpdateEvent,
-  TaskArtifactUpdateEvent,
-  TaskPushNotificationConfig,
-  TaskIdParams,
-  TaskQueryParams,
-  PushNotificationConfig,
-} from "../src/index.js";
+import { A2AClient, SystemError, A2A } from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { configureLogger } from "../src/utils/logging/index.js";
 
-configureLogger({ level: "silent" });
-
-const MOCK_AGENT_CARD: AgentCard = {
+const MOCK_AGENT_CARD: A2A.AgentCard = {
   protocolVersion: "0.3.0",
   name: "Test Agent",
   description: "A test agent for unit tests",
@@ -51,12 +34,12 @@ const MOCK_AGENT_CARD: AgentCard = {
   defaultOutputModes: ["text"],
 };
 
-const MOCK_TASK: Task = {
+const MOCK_TASK: A2A.Task = {
   id: "test-task-123",
   contextId: "test-context-id",
   kind: "task",
   status: {
-    state: "completed" as TaskState,
+    state: A2A.TaskState.completed,
     message: {
       messageId: "test-message-id",
       kind: "message",
@@ -85,18 +68,18 @@ const MOCK_TASK: Task = {
 };
 
 // Task update events for streaming
-const STATUS_UPDATE_EVENT: TaskStatusUpdateEvent = {
+const STATUS_UPDATE_EVENT: A2A.TaskStatusUpdateEvent = {
   taskId: "test-task-123",
   contextId: "test-context-id",
   kind: "status-update",
   final: false,
   status: {
-    state: "working" as TaskState,
+    state: A2A.TaskState.working,
     timestamp: new Date().toISOString(),
   },
 };
 
-const ARTIFACT_UPDATE_EVENT: TaskArtifactUpdateEvent = {
+const ARTIFACT_UPDATE_EVENT: A2A.TaskArtifactUpdateEvent = {
   taskId: "test-task-123",
   contextId: "test-context-id",
   kind: "artifact-update",
@@ -112,12 +95,12 @@ const ARTIFACT_UPDATE_EVENT: TaskArtifactUpdateEvent = {
   },
 };
 
-const MOCK_NOTIFICATION_CONFIG: PushNotificationConfig = {
+const MOCK_NOTIFICATION_CONFIG: A2A.PushNotificationConfig = {
   url: "https://notification-endpoint.example.com",
   token: "test-notification-token",
 };
 
-const MOCK_PUSH_NOTIFICATION_CONFIG: TaskPushNotificationConfig = {
+const MOCK_PUSH_NOTIFICATION_CONFIG: A2A.TaskPushNotificationConfig = {
   taskId: "test-task-123",
   pushNotificationConfig: MOCK_NOTIFICATION_CONFIG,
 };
@@ -351,7 +334,7 @@ describe("A2AClient", () => {
 
   // Test sending a task
   test("should send a task and receive a response", async () => {
-    const message: Message = {
+    const message: A2A.Message = {
       messageId: "test-message-id",
       kind: "message",
       role: "user",
@@ -363,7 +346,7 @@ describe("A2AClient", () => {
       ],
     };
 
-    const params: MessageSendParams = {
+    const params: A2A.MessageSendParams = {
       message,
     };
 
@@ -390,7 +373,7 @@ describe("A2AClient", () => {
 
   // Test push notification config setting
   test("should set task push notification config", async () => {
-    const config: TaskPushNotificationConfig = {
+    const config: A2A.TaskPushNotificationConfig = {
       taskId: "test-task-123",
       pushNotificationConfig: {
         url: "https://notification-endpoint.example.com",
@@ -404,7 +387,7 @@ describe("A2AClient", () => {
 
   // Test push notification config getting
   test("should get task push notification config", async () => {
-    const params: TaskIdParams = {
+    const params: A2A.TaskIdParams = {
       id: "test-task-123",
     };
 
@@ -414,7 +397,7 @@ describe("A2AClient", () => {
 
   // Test streaming task updates
   test("should stream task updates", async () => {
-    const message: Message = {
+    const message: A2A.Message = {
       messageId: "test-message-id",
       kind: "message",
       role: "user",
@@ -426,16 +409,11 @@ describe("A2AClient", () => {
       ],
     };
 
-    const params: MessageSendParams = {
+    const params: A2A.MessageSendParams = {
       message,
     };
 
-    const events: (
-      | Task
-      | TaskStatusUpdateEvent
-      | TaskArtifactUpdateEvent
-      | Message
-    )[] = [];
+    const events: A2A.Update[] = [];
     const stream = client.sendTaskSubscribe(params);
     for await (const event of stream) {
       events.push(event);
@@ -449,16 +427,11 @@ describe("A2AClient", () => {
 
   // Test resubscribe task updates
   test("should resubscribe to task updates", async () => {
-    const params: TaskQueryParams = {
+    const params: A2A.TaskQueryParams = {
       id: "test-task-123",
     };
 
-    const events: (
-      | Task
-      | TaskStatusUpdateEvent
-      | TaskArtifactUpdateEvent
-      | Message
-    )[] = [];
+    const events: A2A.Update[] = [];
 
     for await (const event of client.resubscribeTask(params)) {
       events.push(event);

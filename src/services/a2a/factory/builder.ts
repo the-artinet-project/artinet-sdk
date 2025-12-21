@@ -33,6 +33,7 @@ import { createAgent, ServiceParams } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 import { getContent } from "../helpers/content.js";
 import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
+import { logger } from "~/config/index.js";
 /**
  * Type alias for text-based workflow steps.
  *
@@ -504,7 +505,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): A2A.Engine {
           }
         );
         yield taskStatusUpdate;
-      } else if (ret !== null && typeof ret === "object") {
+      } else if (ret !== null && typeof ret === "object" && "parts" in ret) {
         parts = Array.isArray(ret.parts)
           ? ret.parts.map((part) => partToMessagePart(step.kind, part))
           : [partToMessagePart(step.kind, ret.parts)];

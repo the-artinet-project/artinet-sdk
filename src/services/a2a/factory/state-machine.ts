@@ -24,7 +24,7 @@ export function createStateMachine({
     contextId: contextId,
     onStart: async (context: A2A.Context): Promise<A2A.Task> => {
       assert(context.contextId === contextId, "context mismatch");
-      logger.info(`onStart[${contextId}]:`, "starting state machine", context);
+      logger.info(`onStart[${contextId}]:`, { taskId: context.taskId });
       await service.connections.set(context.contextId);
       const task = await service.tasks.get(context.taskId);
       // we now expect the task to be created by the service
@@ -35,12 +35,8 @@ export function createStateMachine({
       return task;
     },
     onCancel: async (update: A2A.Update, task: A2A.Task): Promise<void> => {
-      logger.debug(
-        `onCancel[${contextId}]:`,
-        "cancellation triggered",
-        update,
-        task
-      );
+      logger.info(`onCancel[${contextId}]:`, "cancellation triggered");
+      logger.debug(`onCancel[${contextId}]:`, "arguments", update, task);
       await service.cancellations.set(task.id);
       const cancellation: A2A.TaskStatusUpdateEvent = CANCEL_UPDATE(
         task.id,
@@ -53,8 +49,14 @@ export function createStateMachine({
       );
     },
     onUpdate: async (update: A2A.Update, task: A2A.Task): Promise<A2A.Task> => {
-      logger.debug(`onUpdate[${contextId}]:`, "update received", update, task);
-      if (!(await service.cancellations.has(task.id))) {
+      logger.info(`onUpdate[${contextId}]:`);
+      logger.debug(`onUpdate[${contextId}]:`, { taskId: task.id });
+      if (await service.cancellations.has(task.id)) {
+        logger.warn(
+          `onUpdate[${contextId}]:`,
+          { taskId: task.id },
+          "task is cancelled, no longer processing updates"
+        );
         return task;
       }
       return await service.tasks.update(
@@ -63,9 +65,9 @@ export function createStateMachine({
       );
     },
     onError: async (error: any, task: A2A.Task): Promise<void> => {
-      logger.error(`onError[${contextId}]:`, "error detected", error, task);
+      logger.error(`onError[${contextId}]:`, error);
       if (!task) {
-        logger.error(`onError[${contextId}]:`, "task not found", error, task);
+        logger.error(`onError[${contextId}]:`, new Error("task not found"));
         return;
       }
       const errorUpdate: A2A.TaskStatusUpdateEvent = FAILED_UPDATE(
@@ -79,17 +81,12 @@ export function createStateMachine({
         .update((await service.contexts.get(contextId))!, errorUpdate)
         .catch((error) => {
           //we capture errors thrown during error handling to ensure we trigger completion gracefully
-          logger.error(
-            `onError[${contextId}]:`,
-            "error updating task",
-            error,
-            errorUpdate
-          );
+          logger.error(`onError[${contextId}]:`, error);
         });
     },
     onComplete: async (task: A2A.Task): Promise<void> => {
       assert(task.contextId === contextId, "context mismatch");
-      logger.info(`onComplete[${contextId}]:`, "task completed", task);
+      logger.info(`onComplete[${contextId}]:`, { taskId: task.id });
       await service.cancellations.delete(task.id);
       await service.connections.delete(task.contextId);
       await service.contexts.delete(task.contextId);

@@ -85,6 +85,7 @@ export interface Stream {
   updates: Update[];
   context: Context;
   run: (params: { service: Service }) => AsyncGenerator<Update>;
+  subscribe: () => AsyncGenerator<Update>;
 }
 
 export interface Streams extends Omit<core.Manager<Stream>, "set"> {

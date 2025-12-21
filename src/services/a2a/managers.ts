@@ -8,6 +8,7 @@ import { v4 } from "uuid";
 import { getCurrentTimestamp } from "~/utils/index.js";
 import { handleUpdate } from "~/services/a2a/handlers/update.js";
 import { Manager } from "~/services/core/manager.js";
+import { logger } from "~/config/index.js";
 
 export class Cancellations extends Manager<void> implements A2A.Cancellations {
   constructor(cancellations: Map<string, void> = new Map()) {
@@ -27,19 +28,28 @@ export class Contexts extends Manager<A2A.Context> implements A2A.Contexts {
   }
   async create(params: A2A.ContextParams): Promise<A2A.Context> {
     if (await this.has(params.contextId)) {
+      logger.warn("Contexts[create]: context already exists", {
+        contextId: params.contextId,
+      });
       return (await this.get(params.contextId))!;
     }
+    logger.info(`Contexts[create]: creating context`, {
+      contextId: params.contextId,
+    });
+    logger.debug(`Contexts[create]: params`, { params });
     const baseContext: A2A.BaseContext = createBaseContext(params);
     const context: A2A.Context = {
       ...createContext({
         baseContext: baseContext,
-        taskId: params.taskId ?? v4(),
+        taskId: params.task?.id ?? params.taskId ?? v4(),
         messenger: params.messenger,
         references: params.references,
         extensions: params.extensions,
       }),
-      ...params,
+      // ...params,
     };
+    logger.debug(`Contexts[create]: context`, context);
+    await this.set(context.contextId, context);
     return context;
   }
 }
@@ -69,11 +79,13 @@ export class Tasks extends Manager<A2A.Task> implements A2A.Tasks {
   }
 
   async update(context: A2A.Context, update: A2A.Update): Promise<A2A.Task> {
+    logger.info(`Tasks[update]: updating task`, { taskId: context.taskId });
     const task = await handleUpdate({
       context,
       task: await context.getTask(),
       update,
     });
+    logger.debug(`Tasks[update]: task`, task);
     await this.set(task.id, task);
     return task;
   }
@@ -82,7 +94,8 @@ export class Tasks extends Manager<A2A.Task> implements A2A.Tasks {
     if (params.id && (await this.has(params.id))) {
       return (await this.get(params.id))!;
     }
-    return {
+    logger.info(`Tasks[create]: creating task`, { id: params.id });
+    const task: A2A.Task = {
       ...params,
       id: params.id ?? v4(),
       contextId: params.contextId ?? v4(),
@@ -92,5 +105,8 @@ export class Tasks extends Manager<A2A.Task> implements A2A.Tasks {
         timestamp: getCurrentTimestamp(),
       },
     };
+    logger.debug(`Tasks[create]:`, { taskId: task.id });
+    await this.set(task.id, task);
+    return task;
   }
 }

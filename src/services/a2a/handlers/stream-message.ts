@@ -5,7 +5,6 @@
 
 import { A2A } from "~/types/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
-
 export const streamMessage: A2A.RequestHandler["streamMessage"] =
   async function* (_, context?: A2A.Context): AsyncGenerator<A2A.Update> {
     if (!context) {

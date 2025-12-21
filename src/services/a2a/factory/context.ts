@@ -69,7 +69,7 @@ export function createContext({
 
   const context: A2A.Context = {
     ...baseContext,
-    taskId: taskId,
+    taskId: (baseContext.publisher as StateMachine).currentTask.id ?? taskId,
     userMessage: messenger.message,
     messages: messenger,
     getTask,

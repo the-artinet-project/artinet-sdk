@@ -13,7 +13,7 @@ import { formatJson, safeParseSchema } from "~/utils/index.js";
  * File-based implementation of the TaskStore interface.
  * Stores tasks and their history as JSON files on disk.
  */
-export class FileStore extends Tasks {
+export class Files extends Tasks {
   private baseDir: string;
 
   /**
@@ -23,6 +23,7 @@ export class FileStore extends Tasks {
   constructor(baseDir: string) {
     super(new Map());
     this.baseDir = baseDir;
+    logger.info(`FileStore[init]: baseDir`, { baseDir });
   }
 
   /**
@@ -42,9 +43,7 @@ export class FileStore extends Tasks {
     try {
       await fs.mkdir(this.baseDir, { recursive: true });
     } catch (error) {
-      logger.error("FileStore", `Failed to create directory: ${this.baseDir}`, {
-        error,
-      });
+      logger.warn(`FileStore[ensureBaseDir]: ${this.baseDir}`, error);
       throw error;
     }
   }
@@ -62,9 +61,7 @@ export class FileStore extends Tasks {
         encoding: "utf8",
       });
     } catch (error) {
-      logger.error("FileStore", `Failed to write file: ${filePath}`, {
-        error,
-      });
+      logger.warn(`FileStore[writeJsonFile]: ${filePath}`, error);
       throw error;
     }
   }
@@ -80,12 +77,9 @@ export class FileStore extends Tasks {
       return await safeParseSchema(content, A2A.TaskSchema);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        // File not found - return null rather than throwing
+        logger.warn(`FileStore[readJsonFile]: ${filePath} not found`);
         return null;
       }
-      logger.error("FileStore", `Failed to read file: ${filePath}`, {
-        error,
-      });
       throw error;
     }
   }
@@ -96,7 +90,6 @@ export class FileStore extends Tasks {
    * @returns A promise resolving to the task and history, or null if not found.
    */
   override async get(taskId: string): Promise<A2A.Task | undefined> {
-    logger.debug("FileStore", `Loading task: ${taskId}`);
     const task =
       (await super.get(taskId)) ??
       (await this.readJsonFile(this.getTaskFilePath(taskId)).catch(
@@ -111,9 +104,12 @@ export class FileStore extends Tasks {
    * @returns A promise that resolves when the save is complete.
    */
   override async set(taskId: string, task?: A2A.Task): Promise<void> {
-    logger.debug("FileStore", `Saving task: ${task?.id}`);
-    if (taskId !== task?.id) {
-      logger.error("FileStore", `Task ID mismatch: ${taskId} !== ${task?.id}`);
+    logger.debug(`FileStore[set]: ${taskId}`);
+    if (!task) {
+      return;
+    }
+    if (task && taskId !== task.id) {
+      logger.warn("FileStore", `Task ID mismatch: ${taskId} !== ${task.id}`);
       throw new Error("Task ID mismatch");
     }
     const taskFilePath = this.getTaskFilePath(taskId);
@@ -122,14 +118,13 @@ export class FileStore extends Tasks {
   }
 
   override async delete(taskId: string): Promise<void> {
-    logger.debug("FileStore", `Deleting task: ${taskId}`);
+    logger.debug(`FileStore[delete]: ${taskId}`);
     const taskFilePath = this.getTaskFilePath(taskId);
     await fs.unlink(taskFilePath);
     await super.delete(taskId);
   }
 
   override async has(taskId: string): Promise<boolean> {
-    logger.debug("FileStore", `Checking if task exists: ${taskId}`);
     if (await super.has(taskId)) {
       return true;
     }

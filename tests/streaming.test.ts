@@ -9,28 +9,40 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  SendStreamingMessageRequest,
-  TaskResubscriptionRequest,
-  TaskState,
-  UpdateEvent,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
-  Context,
   AgentEngine,
   getParts,
 } from "../src/index.js";
-import { configureLogger } from "../src/utils/logging/index.js";
-
+import { configure } from "../src/config/index.js";
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({
+  logger: configurePino(
+    pinoCaller(
+      pino({
+        level: "info",
+        transport: {
+          target: "pino-pretty",
+          options: { colorize: true },
+        },
+      })
+    )
+  ),
+});
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
 
 // Specialized task handler for streaming tests
-const streamingTestHandler: AgentEngine = async function* (context: Context) {
-  const params = context.command;
-  const taskId = params.message.taskId ?? "";
-  const contextId = params.message.contextId ?? "";
-  const { text } = getParts(params.message.parts);
+const streamingTestHandler: AgentEngine = async function* (
+  context: A2A.Context
+) {
+  const message = context.userMessage;
+  const taskId = message.taskId ?? "";
+  const contextId = message.contextId ?? "";
+  const { text } = getParts(message.parts);
 
   // Quick completion without streaming for non-streaming tests
   if (text.includes("quick")) {
@@ -39,7 +51,7 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -59,7 +71,7 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -73,14 +85,14 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
     };
 
     // Add a small delay to allow for resubscription test
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     yield {
       taskId: taskId,
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -101,7 +113,7 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.submitted,
+      state: A2A.TaskState.submitted,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -114,12 +126,12 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
 
   // Progress updates
   for (let i = 1; i <= 3; i++) {
-    yield {
+    const progressUpdate: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -129,18 +141,17 @@ const streamingTestHandler: AgentEngine = async function* (context: Context) {
       },
       final: false,
     };
-
+    yield progressUpdate;
     // Small delay to simulate processing
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
-
   // Final completion
   yield {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -260,12 +271,14 @@ describe("Streaming API Tests", () => {
 
   describe("message/stream", () => {
     it("establishes a stream and sends events until completion", async () => {
-      const requestBody = {
+      const requestBody: A2A.SendStreamingMessageRequest = {
         jsonrpc: "2.0",
         id: "stream-request-1",
         method: "message/stream",
         params: {
           message: {
+            messageId: "stream-message-id-1",
+            kind: "message",
             taskId: "stream-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Test streaming updates" }],
@@ -321,7 +334,7 @@ describe("Streaming API Tests", () => {
   describe("tasks/resubscribe", () => {
     it("allows resubscribing to an existing task stream", async () => {
       // First create a streaming task
-      const createBody: SendStreamingMessageRequest = {
+      const createBody: A2A.SendStreamingMessageRequest = {
         jsonrpc: "2.0",
         id: "resubscribe-request-1",
         method: "message/stream",
@@ -347,10 +360,10 @@ describe("Streaming API Tests", () => {
       const initialEventsPromise = collectStreamEvents(req1, 500);
 
       // Wait a bit to ensure the task is started
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       // Now resubscribe to the same task
-      const resubscribeBody: TaskResubscriptionRequest = {
+      const resubscribeBody: A2A.TaskResubscriptionRequest = {
         jsonrpc: "2.0",
         id: "resubscribe-stream-2",
         method: "tasks/resubscribe",
@@ -368,17 +381,15 @@ describe("Streaming API Tests", () => {
 
       // Collect events from the resubscription request
       const resubscribeEvents = await collectStreamEvents(req2);
-
       // Wait for the initial events to complete
       const initialEvents = await initialEventsPromise;
-
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       // Verify we received events from resubscription
       expect(resubscribeEvents.length).toBeGreaterThan(0);
 
       // Check for task completion event in at least one of the streams
       const allEvents = [...initialEvents, ...resubscribeEvents];
       let foundCompleted = false;
-
       for (const event of allEvents) {
         const lines = event.split("\n");
         const dataLine = lines.find((line) => line.startsWith("data:"));
@@ -391,12 +402,11 @@ describe("Streaming API Tests", () => {
           }
         }
       }
-
       expect(foundCompleted).toBe(true);
     });
 
     it("returns error when resubscribing to non-existent task", async () => {
-      const requestBody = {
+      const requestBody: A2A.TaskResubscriptionRequest = {
         jsonrpc: "2.0",
         id: "nonexistent-resubscribe-1",
         method: "tasks/resubscribe",
@@ -409,12 +419,12 @@ describe("Streaming API Tests", () => {
       expect(response.status).toBe(200);
       if (response.type === "application/json") {
         expect(response.body.error).toBeDefined();
-        expect(response.body.error.code).toBe(-32001);
+        expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound);
         expect(response.body.error.message).toBe("Task not found");
       } else if (response.type === "text/event-stream") {
         const responseData = JSON.parse(response.text);
         expect(responseData.error).toBeDefined();
-        expect(responseData.error.code).toBe(-32001);
+        expect(responseData.error.code).toBe(A2A.ErrorCodeTaskNotFound);
         expect(responseData.error.message).toBe("Task not found");
       }
     });

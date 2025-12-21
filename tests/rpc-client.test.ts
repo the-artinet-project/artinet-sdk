@@ -8,9 +8,7 @@ import {
 } from "@jest/globals";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { configureLogger, SystemError } from "../src/index.js";
-
-configureLogger({ level: "silent" });
+import { SystemError } from "../src/index.js";
 
 // Override the createJsonRpcRequest for testing to avoid type checking
 function createTestRequest(

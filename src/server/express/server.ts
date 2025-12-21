@@ -14,7 +14,6 @@ import {
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
-
 export interface ServerParams {
   app?: express.Express;
   corsOptions?: CorsOptions;
@@ -32,6 +31,13 @@ export function rpcParser(
   next: express.NextFunction
 ) {
   express.json()(req, res, (err) => {
+    if (!req.body || typeof req.body !== "object") {
+      return next(
+        PARSE_ERROR({
+          data: { message: "Invalid request body" },
+        })
+      );
+    }
     if (err) {
       if (
         err instanceof SyntaxError &&

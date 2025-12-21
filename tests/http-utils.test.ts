@@ -19,11 +19,9 @@ import {
   createJsonRpcRequest,
   parseResponse,
   handleEventStream,
-  ErrorCodeParseError,
-  JSONRPCRequest,
-  JSONRPCResponse,
   SystemError,
-  configureLogger,
+  A2A,
+  MCP,
 } from "../src/index.js";
 
 // Define a TestRequest type that matches JSONRPCRequest constraint
@@ -36,7 +34,7 @@ type TestMethod =
   | "test/streaming";
 
 // Define a custom request type for testing
-interface TestRequest extends JSONRPCRequest {
+interface TestRequest extends MCP.JSONRPCRequest {
   method: TestMethod;
   params: {
     param?: string;
@@ -44,8 +42,6 @@ interface TestRequest extends JSONRPCRequest {
     [key: string]: any;
   };
 }
-
-configureLogger({ level: "silent" });
 
 // Setup MSW server for mocking HTTP requests
 const server = setupServer(
@@ -306,7 +302,10 @@ describe("HTTP Utils", () => {
       });
 
       try {
-        await handleJsonRpcResponse<JSONRPCResponse>(response, "test/error");
+        await handleJsonRpcResponse<MCP.JSONRPCResponse>(
+          response,
+          "test/error"
+        );
         // If we get here, the test should fail
         expect(true).toBe(false); // Force test to fail
       } catch (error) {
@@ -335,7 +334,7 @@ describe("HTTP Utils", () => {
       });
 
       await expect(
-        handleJsonRpcResponse<JSONRPCResponse>(response, "test/method")
+        handleJsonRpcResponse<MCP.JSONRPCResponse>(response, "test/method")
       ).rejects.toThrow();
     });
 
@@ -359,7 +358,7 @@ describe("HTTP Utils", () => {
       });
 
       await expect(
-        handleJsonRpcResponse<JSONRPCResponse>(response, "test/method")
+        handleJsonRpcResponse<MCP.JSONRPCResponse>(response, "test/method")
       ).rejects.toThrow(SystemError);
     });
 
@@ -371,7 +370,10 @@ describe("HTTP Utils", () => {
       });
 
       await expect(
-        handleJsonRpcResponse<JSONRPCResponse>(response, "test/error-with-data")
+        handleJsonRpcResponse<MCP.JSONRPCResponse>(
+          response,
+          "test/error-with-data"
+        )
       ).rejects.toThrow(SystemError);
     });
 
@@ -380,7 +382,7 @@ describe("HTTP Utils", () => {
       const invalidResponse = new Response(null, { status: 200 });
 
       try {
-        await handleJsonRpcResponse<JSONRPCResponse>(
+        await handleJsonRpcResponse<MCP.JSONRPCResponse>(
           invalidResponse,
           "test/error-handling"
         );
@@ -389,7 +391,7 @@ describe("HTTP Utils", () => {
       } catch (error) {
         // Verify it's an A2AError with the right code
         expect(error instanceof SystemError).toBe(true);
-        expect((error as SystemError<any>).code).toBe(ErrorCodeParseError);
+        expect((error as SystemError<any>).code).toBe(A2A.ErrorCodeParseError);
       }
     });
   });
@@ -644,7 +646,7 @@ describe("HTTP Utils", () => {
         },
       });
 
-      const generator = handleEventStream<JSONRPCResponse>(response);
+      const generator = handleEventStream<MCP.JSONRPCResponse>(response);
       const results: any[] = [];
 
       for await (const event of generator) {
@@ -673,7 +675,7 @@ describe("HTTP Utils", () => {
         },
       });
 
-      const generator = handleEventStream<JSONRPCResponse>(response);
+      const generator = handleEventStream<MCP.JSONRPCResponse>(response);
       const results: any[] = [];
 
       for await (const event of generator) {
@@ -708,7 +710,7 @@ describe("HTTP Utils", () => {
         },
       });
 
-      const generator = handleEventStream<JSONRPCResponse>(response);
+      const generator = handleEventStream<MCP.JSONRPCResponse>(response);
       const results: any[] = [];
 
       for await (const event of generator) {
@@ -718,12 +720,6 @@ describe("HTTP Utils", () => {
       // Should not yield any events since result was undefined
       expect(results.length).toBe(0);
     });
-  });
-
-  describe("executeStreamEvents", () => {
-    test.skip("should execute a streaming request and yield events", () => {});
-
-    test.skip("should handle errors in streaming requests", () => {});
   });
 
   describe("createJsonRpcRequest", () => {
@@ -787,7 +783,7 @@ describe("HTTP Utils", () => {
         parseResponse("invalid json");
       } catch (error) {
         expect(error).toBeInstanceOf(SystemError);
-        expect((error as SystemError<any>).code).toBe(ErrorCodeParseError);
+        expect((error as SystemError<any>).code).toBe(A2A.ErrorCodeParseError);
       }
     });
   });

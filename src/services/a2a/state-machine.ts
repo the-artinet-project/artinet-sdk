@@ -3,6 +3,7 @@ import assert from "assert";
 import { A2A } from "~/types/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
 import { createStateMachine } from "./factory/state-machine.js";
+import { logger } from "~/config/index.js";
 
 export class StateMachine
   extends EventEmitter<A2A.Emissions>
@@ -27,7 +28,10 @@ export class StateMachine
     if (this.consumer.onUpdate) {
       this.currentTask = await this.consumer.onUpdate(update, this.currentTask);
     } else {
-      assert(false, "onUpdate callback not found");
+      logger.warn(
+        `onUpdate[${this.contextId}]:`,
+        "onUpdate callback not found"
+      );
       this.currentTask = update as unknown as A2A.Task;
     }
     this.emit("update", this.currentTask, update);
