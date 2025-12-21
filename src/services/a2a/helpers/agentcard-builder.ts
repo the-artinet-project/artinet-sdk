@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { A2A, AgentCardParams } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 
 export class AgentCardBuilder {
   agentCard: A2A.AgentCard;
@@ -29,7 +29,7 @@ export class AgentCardBuilder {
   }
 }
 
-export function createAgentCard(agentCard: AgentCardParams): A2A.AgentCard {
+export function createAgentCard(agentCard: A2A.AgentCardParams): A2A.AgentCard {
   return new AgentCardBuilder(
     typeof agentCard === "string" ? { name: agentCard } : agentCard
   ).valueOf();

@@ -10,11 +10,10 @@ import {
   TASK_NOT_CANCELABLE,
   INTERNAL_ERROR,
 } from "~/utils/index.js";
-import { v2 } from "~/types/interfaces/services/v2/index.js";
 
-export const cancelTask: v2.a2a.RequestHandler["cancelTask"] = async (
+export const cancelTask: A2A.RequestHandler["cancelTask"] = async (
   { id: taskId }: A2A.TaskIdParams,
-  context?: v2.a2a.Context
+  context?: A2A.Context
 ): Promise<A2A.Task> => {
   if (!context) {
     throw INTERNAL_ERROR({ error: { message: "Context is required" } });

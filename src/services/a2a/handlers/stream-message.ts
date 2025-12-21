@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UpdateEvent } from "~/types/index.js";
-import { v2 } from "~/types/interfaces/services/v2/index.js";
+import { A2A } from "~/types/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
 
-export const streamMessage: v2.a2a.RequestHandler["streamMessage"] =
-  async function* (_, context?: v2.a2a.Context): AsyncGenerator<UpdateEvent> {
+export const streamMessage: A2A.RequestHandler["streamMessage"] =
+  async function* (_, context?: A2A.Context): AsyncGenerator<A2A.Update> {
     if (!context) {
       throw INTERNAL_ERROR({ error: { message: "Context is required" } });
     }
@@ -16,7 +15,7 @@ export const streamMessage: v2.a2a.RequestHandler["streamMessage"] =
     if (await service.streams.has(context.contextId)) {
       throw INTERNAL_ERROR({ error: { message: "Stream already exists" } });
     }
-    const stream: v2.a2a.Stream = await service.streams.create({
+    const stream: A2A.Stream = await service.streams.create({
       contextId: context.contextId,
       context,
     });
