@@ -3,19 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UpdateEvent } from "~/types/index.js";
 import { getCurrentTimestamp, validateSchema } from "~/utils/index.js";
 import { processArtifactUpdate } from "./artifact.js";
 import { A2A } from "~/types/index.js";
-import { v2 } from "~/types/interfaces/services/v2/index.js";
 
-export interface UpdateParams<Update extends UpdateEvent = UpdateEvent> {
-  context: v2.a2a.Context;
+export interface UpdateParams<Update extends A2A.Update = A2A.Update> {
+  context: A2A.Context;
   task: A2A.Task;
   update: Update;
 }
 
-type Updater<Update extends UpdateEvent> = (
+type Updater<Update extends A2A.Update> = (
   props: UpdateParams<Update>
 ) => Promise<A2A.Task>;
 
@@ -114,7 +112,7 @@ export const handleArtifactUpdate: Updater<
 };
 // The onus is now on the caller to handle errors when processing updates
 // and to decide whether the updated task should be saved or not
-export const handleUpdate: Updater<UpdateEvent> = async ({
+export const handleUpdate: Updater<A2A.Update> = async ({
   context,
   task,
   update,

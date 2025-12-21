@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { A2A, UpdateEvent } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 import { getParts } from "./part.js";
 
 /**
@@ -11,7 +11,7 @@ import { getParts } from "./part.js";
  * @param input - The input event.
  * @returns The content of the input event.
  */
-export function getContent(input: UpdateEvent): string | undefined {
+export function getContent(input: A2A.Update): string | undefined {
   const parts = getParts(
     (input as A2A.Message)?.parts ??
       (input as A2A.Task)?.status?.message?.parts ??

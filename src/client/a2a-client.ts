@@ -12,7 +12,7 @@ import {
 import { executeStreamEvents } from "~/transport/streaming/event-stream.js";
 
 import { INTERNAL_ERROR } from "~/utils/common/errors.js";
-import { logError } from "~/utils/logging/log.js";
+import { logger } from "~/config/index.js";
 
 import type { Client } from "~/types/client.js";
 import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
@@ -107,7 +107,7 @@ export class A2AClient implements Client {
         this.cachedAgentCard = fallbackCard;
       }
     } catch (error) {
-      logError(
+      logger.error(
         "A2AClient:agentCard",
         "Failed to fetch or parse agent card:",
         error
@@ -292,7 +292,7 @@ export class A2AClient implements Client {
           return false;
       }
     } catch (error) {
-      logError(
+      logger.error(
         "A2AClient:supports",
         `Failed to determine support for capability '${capability}':`,
         error

@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { A2A } from "~/types/index.js";
-import { v2 } from "~/types/interfaces/services/v2/index.js";
 import { logger } from "~/config/index.js";
 
 export async function getReferences(
-  tasks: v2.a2a.Tasks,
+  tasks: A2A.Tasks,
   referenceTaskIds?: string[]
 ): Promise<A2A.Task[]> {
   if (!referenceTaskIds) {
