@@ -12,21 +12,21 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { configure } from "../../src/config/index.js";
 import { configurePino } from "../../src/extensions/pino.js";
-import pino from "pino";
-import pinoCaller from "pino-caller";
-configure({
-  logger: configurePino(
-    pinoCaller(
-      pino({
-        level: "info",
-        transport: {
-          target: "pino-pretty",
-          options: { colorize: true },
-        },
-      })
-    )
-  ),
-});
+// import pino from "pino";
+// import pinoCaller from "pino-caller";
+// configure({
+//   logger: configurePino(
+//     pinoCaller(
+//       pino({
+//         level: "info",
+//         transport: {
+//           target: "pino-pretty",
+//           options: { colorize: true },
+//         },
+//       })
+//     )
+//   ),
+// });
 const protocolEngine: AgentEngine = async function* (
   context: A2A.Context
 ): AsyncGenerator<A2A.Update, void, unknown> {

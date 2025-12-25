@@ -81,7 +81,7 @@ const server = customApp.listen(3000, () => {
 Use our preconfigured tRPC router, or create your own integration:
 
 ```typescript
-import { createAgentRouter } from "@artinet/sdk";
+import { createAgentRouter } from "@artinet/sdk/trpc";
 
 const agentRouter = createAgentRouter();
 ```
@@ -123,4 +123,3 @@ When using custom implementations, ensure you handle:
 - [ ] Agent card endpoints at `/.well-known/agent-card.json`
 - [ ] Proper error handling and JSON-RPC compliance
 - [ ] CORS headers if needed for web clients
-
