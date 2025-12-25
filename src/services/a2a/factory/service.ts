@@ -29,6 +29,7 @@ export interface ServiceParams {
   methods?: Omit<A2A.RequestHandler, "getAgentCard">;
   overrides?: Partial<Omit<A2A.EventConsumer, "contextId">>;
 }
+export type CreateAgentParams = ServiceParams;
 
 export function createService(params: ServiceParams) {
   return new Service(

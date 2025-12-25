@@ -16,7 +16,6 @@ import { logger } from "~/config/index.js";
 
 import type { Client } from "~/types/client.js";
 import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
-import { formatError } from "~/utils/common/utils.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
@@ -110,13 +109,21 @@ export class A2AClient implements Client {
     } catch (error) {
       logger.error(
         "A2AClient:agentCard: Failed to fetch or parse agent card:",
-        formatError(error)
+        error
       );
 
-      throw INTERNAL_ERROR(formatError(error));
+      throw INTERNAL_ERROR(error);
     }
     this.agentUrl = new URL(this.cachedAgentCard.url, this.baseUrl);
     return this.cachedAgentCard;
+  }
+
+  /**
+   * Retrieves the AgentCard from the A2A server.
+   * @returns A promise resolving to the AgentCard.
+   */
+  getAgentCard(): Promise<A2A.AgentCard> {
+    return this.agentCard();
   }
 
   /**
@@ -128,13 +135,21 @@ export class A2AClient implements Client {
     return this.agentCard();
   }
 
+  sendMessage(
+    params: A2A.MessageSendParams
+  ): Promise<A2A.Message | A2A.Task | null>;
+
+  sendMessage(
+    params: string | A2A.MessageSendParams["message"]
+  ): Promise<A2A.Message | A2A.Task | null>;
+
   /**
    * Sends a Message to an agent server.
    * @param params The parameters for the message/send method.
    * @returns A promise resolving to Message/Task response from the agent server or null.
    */
   async sendMessage(
-    params: A2A.MessageSendParams | string
+    params: A2A.MessageSendParams | string | A2A.MessageSendParams["message"]
   ): Promise<A2A.Message | A2A.Task | null> {
     return await executeJsonRpcRequest<
       A2A.SendMessageRequest,
@@ -142,7 +157,11 @@ export class A2AClient implements Client {
     >(
       this.agentUrl,
       "message/send",
-      createMessageSendParams(params),
+      typeof params === "string"
+        ? createMessageSendParams(params)
+        : typeof params === "object" && "message" in params
+        ? params
+        : createMessageSendParams({ message: params }),
       this.customHeaders
     );
   }
@@ -290,7 +309,7 @@ export class A2AClient implements Client {
     } catch (error) {
       logger.error(
         `A2AClient:supports: Failed to determine support for capability '${capability}':`,
-        formatError(error)
+        error
       );
       return false; // Assume not supported if card fetch fails
     }

@@ -11,7 +11,6 @@ import {
   INVALID_PARAMS,
   METHOD_NOT_FOUND,
   AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED,
-  formatError,
 } from "~/utils/index.js";
 import { logger } from "~/config/index.js";
 
@@ -165,7 +164,7 @@ export async function jsonRPCMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
-    logger.error("jsonRPCMiddleware[Error]:", formatError(error));
+    logger.error("jsonRPCMiddleware[Error]:", error);
     logger.warn("jsonRPCMiddleware[Error]: Request body", {
       request: req.body,
     });

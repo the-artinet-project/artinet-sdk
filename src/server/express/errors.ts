@@ -8,7 +8,6 @@ import { SystemError, INTERNAL_ERROR } from "~/utils/index.js";
 import { logger } from "~/config/index.js";
 import { type ErrorRequestHandler } from "express";
 import escapeHtml from "escape-html";
-import { formatError } from "~/utils/common/utils.js";
 /**
  * Express error handler middleware.
  */
@@ -24,7 +23,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _) => {
       reqId = req.body.id;
     }
   } catch (e: unknown) {
-    logger.error("errorHandler: Error extracting request ID", formatError(e));
+    logger.error("errorHandler: Error extracting request ID", e);
   }
 
   let jsonRpcError: MCP.JSONRPCError["error"];

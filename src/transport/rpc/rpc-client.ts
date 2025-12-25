@@ -16,7 +16,6 @@ import {
 import type { A2A, MCP } from "~/types/index.js";
 import { parseResponse } from "./parser.js";
 import { logger } from "~/config/index.js";
-import { formatError } from "~/utils/common/utils.js";
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
  *, ErrorCodeParseError
@@ -75,7 +74,7 @@ export async function sendJsonRpcRequest<Req extends A2A.A2ARequest>(
   } catch (networkError) {
     logger.error(
       "SendJsonRpcRequest: Network error during RPC call:",
-      formatError(networkError)
+      networkError
     );
     // Wrap network errors into a standard error format
     throw INTERNAL_ERROR(networkError);
@@ -106,7 +105,7 @@ export async function sendGetRequest(
   } catch (networkError) {
     logger.error(
       "SendGetRequest: Network error during GET request:",
-      formatError(networkError)
+      networkError
     );
     throw INTERNAL_ERROR(networkError);
   }
@@ -161,7 +160,7 @@ export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
   } catch (error) {
     logger.error(
       `handleJsonRpcResponse: Error processing response [${expectedMethod}]:`,
-      formatError(error)
+      error
     );
     // Re-throw RpcError instances directly, wrap others
     if (error instanceof SystemError) {
@@ -203,7 +202,7 @@ export async function handleJsonResponse<T>(
       `handleJsonResponse: Error processing response for ${
         endpoint || "unknown endpoint"
       }:`,
-      formatError(error)
+      error
     );
 
     if (error instanceof SystemError) {

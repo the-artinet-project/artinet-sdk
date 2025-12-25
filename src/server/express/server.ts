@@ -5,7 +5,8 @@
 
 import express from "express";
 import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
-import { Agent, A2A } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
+import { Agent } from "~/services/a2a/index.js";
 import {
   createAgent,
   ServiceParams as CreateAgentParams,

@@ -45,10 +45,6 @@ const getExtensions = async (
   return [];
 };
 
-export interface ServiceOptions {
-  abortSignal?: AbortSignal;
-}
-
 export class Service implements A2A.Service {
   constructor(
     private _agentCard: A2A.AgentCard,
@@ -80,6 +76,7 @@ export class Service implements A2A.Service {
   get engine(): A2A.Engine {
     return this._engine;
   }
+
   set engine(engine: A2A.Engine) {
     this._engine = engine;
   }
@@ -100,6 +97,12 @@ export class Service implements A2A.Service {
     return this._contexts;
   }
 
+  set contexts(contexts: A2A.Contexts) {
+    this._contexts = {
+      ...this._contexts,
+      ...contexts,
+    };
+  }
   get streams(): A2A.Streams {
     return this._streams;
   }
@@ -154,7 +157,7 @@ export class Service implements A2A.Service {
   async getTask(
     params: A2A.TaskQueryParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.Task> {
     logger.info(`Service[getTask]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);
@@ -178,7 +181,7 @@ export class Service implements A2A.Service {
   async cancelTask(
     params: A2A.TaskIdParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.Task> {
     logger.info(`Service[cancelTask]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);
@@ -202,31 +205,38 @@ export class Service implements A2A.Service {
   sendMessage(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult>;
 
   sendMessage(
-    message: string,
+    message: string | A2A.MessageSendParams["message"],
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult>;
 
   async sendMessage(
-    paramsOrMessage: A2A.MessageSendParams | string,
+    paramsOrMessage:
+      | A2A.MessageSendParams
+      | A2A.MessageSendParams["message"]
+      | string,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult> {
     const params =
       typeof paramsOrMessage === "string"
         ? createMessageSendParams(paramsOrMessage)
-        : paramsOrMessage;
+        : typeof paramsOrMessage === "object" && "message" in paramsOrMessage
+        ? paramsOrMessage
+        : createMessageSendParams({
+            message: paramsOrMessage,
+          });
     return await this._sendMessage(params, context, options);
   }
 
   async _sendMessage(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult> {
     logger.info(`Service[sendMessage]:`, {
       messageId: params.message.messageId,
@@ -265,19 +275,19 @@ export class Service implements A2A.Service {
   streamMessage(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update>;
 
   streamMessage(
     message: string,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update>;
 
   async *streamMessage(
     paramsOrMessage: A2A.MessageSendParams | string,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
     const params =
       typeof paramsOrMessage === "string"
@@ -289,7 +299,7 @@ export class Service implements A2A.Service {
   async *_streamMessage(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
     logger.info("Service[streamMessage]:", {
       taskId: params.message.taskId,
@@ -329,7 +339,7 @@ export class Service implements A2A.Service {
   async *resubscribe(
     params: A2A.TaskIdParams,
     context?: A2A.Context,
-    options?: ServiceOptions
+    options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
     logger.info(`Service[resubscribe]:`, { taskId: params.id });
     const task: A2A.Task | undefined = await this.tasks.get(params.id);

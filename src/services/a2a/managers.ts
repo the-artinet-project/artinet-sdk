@@ -46,9 +46,8 @@ export class Contexts extends Manager<A2A.Context> implements A2A.Contexts {
         references: params.references,
         extensions: params.extensions,
       }),
-      // ...params,
     };
-    logger.debug(`Contexts[create]: context`, context);
+    logger.debug(`Contexts[create]: context created`, context.contextId);
     await this.set(context.contextId, context);
     return context;
   }

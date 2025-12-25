@@ -1,32 +1,49 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+//lets stay really granular with the imports
+import {
+  AgentCard,
+  Message,
+  Task,
+  TaskStatusUpdateEvent,
+  TaskArtifactUpdateEvent,
+  AgentExtension,
+  TaskQueryParams,
+  TaskIdParams,
+  MessageSendParams,
+  SendMessageSuccessResult,
+} from "@artinet/types/a2a";
 import { core } from "../core/index.js";
-import { A2A } from "@artinet/types";
 
 export type AgentCardParams =
-  | (Partial<A2A.AgentCard> & Required<Pick<A2A.AgentCard, "name">>)
+  | (Partial<AgentCard> & Required<Pick<AgentCard, "name">>)
   | string;
 
 export type Update =
-  | A2A.Message
-  | A2A.Task
-  | A2A.TaskStatusUpdateEvent
-  | A2A.TaskArtifactUpdateEvent;
+  | Message
+  | Task
+  | TaskStatusUpdateEvent
+  | TaskArtifactUpdateEvent;
 
 export type Engine = (
   context: Context
 ) => AsyncGenerator<Update, void, unknown>;
 
-export interface BaseContext extends core.Context<A2A.Task> {
+export interface BaseContext extends core.Context<Task> {
   readonly service: Service;
   readonly publisher: EventPublisher;
 }
 
 export interface Context extends BaseContext {
   readonly taskId: string;
-  readonly userMessage: A2A.Message;
+  readonly userMessage: Message;
   readonly messages: MessageConsumerProxy;
-  extensions?: A2A.AgentExtension[];
-  references?: A2A.Task[];
-  getTask: () => Promise<A2A.Task>;
+  extensions?: AgentExtension[];
+  references?: Task[];
+  getTask: () => Promise<Task>;
 }
 
 export type ContextParams = Omit<
@@ -35,7 +52,7 @@ export type ContextParams = Omit<
 > &
   Omit<Partial<Context>, "userMessage"> & {
     messenger: MessageConsumerProxy;
-    task?: A2A.Task;
+    task?: Task;
     overrides?: Partial<Omit<EventConsumer, "contextId">>;
     abortSignal?: AbortSignal;
   };
@@ -45,9 +62,9 @@ export interface Contexts extends core.Contexts<Context> {
   list: () => Promise<Context[]>;
 }
 
-export interface Tasks extends core.Manager<A2A.Task> {
-  update: (context: Context, update: Update) => Promise<A2A.Task>;
-  create: (params: Partial<A2A.Task>) => Promise<A2A.Task>;
+export interface Tasks extends core.Manager<Task> {
+  update: (context: Context, update: Update) => Promise<Task>;
+  create: (params: Partial<Task>) => Promise<Task>;
   has: (id: string) => Promise<boolean>;
 }
 
@@ -56,26 +73,40 @@ export interface Cancellations extends Omit<core.Manager<void>, "get"> {
 }
 export interface Connections extends Omit<core.Manager<void>, "get"> {}
 
+export interface ServiceOptions {
+  abortSignal?: AbortSignal;
+}
 export interface RequestHandler {
-  getTask: (input: A2A.TaskQueryParams, context?: Context) => Promise<A2A.Task>;
-  cancelTask: (input: A2A.TaskIdParams, context?: Context) => Promise<A2A.Task>;
+  getTask: (
+    input: TaskQueryParams,
+    context?: Context,
+    options?: ServiceOptions
+  ) => Promise<Task>;
+  cancelTask: (
+    input: TaskIdParams,
+    context?: Context,
+    options?: ServiceOptions
+  ) => Promise<Task>;
   sendMessage: (
-    message: A2A.MessageSendParams,
-    context?: Context
-  ) => Promise<A2A.SendMessageSuccessResult>;
+    message: MessageSendParams,
+    context?: Context,
+    options?: ServiceOptions
+  ) => Promise<SendMessageSuccessResult>;
   streamMessage: (
-    message: A2A.MessageSendParams,
-    context?: Context
+    message: MessageSendParams,
+    context?: Context,
+    options?: ServiceOptions
   ) => AsyncGenerator<Update>;
   resubscribe: (
-    input: A2A.TaskIdParams,
-    context?: Context
+    input: TaskIdParams,
+    context?: Context,
+    options?: ServiceOptions
   ) => AsyncGenerator<Update>;
-  getAgentCard: () => Promise<A2A.AgentCard>;
+  getAgentCard: () => Promise<AgentCard>;
 }
 
 export interface ExtendedHandler extends RequestHandler {
-  getAuthenticatedExtendedCard: () => Promise<A2A.AgentCard>;
+  getAuthenticatedExtendedCard: () => Promise<AgentCard>;
 }
 
 export interface Stream {
@@ -108,46 +139,46 @@ export interface Service
   readonly contexts: Contexts;
   readonly streams: Streams;
   engine: Engine;
-  agentCard: A2A.AgentCard;
+  agentCard: AgentCard;
 }
 
 export interface MessageProducer {
   isOpen: boolean;
-  send: (message: A2A.MessageSendParams) => Promise<void>;
+  send: (message: MessageSendParams) => Promise<void>;
 }
 
 export type MessageMap = {
-  message: [A2A.MessageSendParams];
+  message: [MessageSendParams];
   close: [];
 };
 
 export interface MessageConsumer
-  extends core.Consumer<A2A.MessageSendParams, MessageMap> {
-  message: A2A.MessageSendParams;
-  messages: A2A.MessageSendParams[];
+  extends core.Consumer<MessageSendParams, MessageMap> {
+  message: MessageSendParams;
+  messages: MessageSendParams[];
   close: () => Promise<void>;
-  next: () => Promise<IteratorResult<A2A.MessageSendParams>>;
+  next: () => Promise<IteratorResult<MessageSendParams>>;
   return: (
-    value: A2A.MessageSendParams
-  ) => Promise<IteratorResult<A2A.MessageSendParams>>;
+    value: MessageSendParams
+  ) => Promise<IteratorResult<MessageSendParams>>;
 }
-export type MessageConsumerProxy = MessageConsumer & A2A.MessageSendParams;
+export type MessageConsumerProxy = MessageConsumer & MessageSendParams;
 
 export interface EventConsumer {
   readonly contextId: string;
-  readonly onStart?: (context: Context) => Promise<A2A.Task>;
-  readonly onCancel: (update: Update, current: A2A.Task) => Promise<void>;
-  readonly onUpdate: (update: Update, current: A2A.Task) => Promise<A2A.Task>;
-  readonly onError: (error: any, current: A2A.Task) => Promise<void>;
-  onComplete: (current: A2A.Task) => Promise<void>;
+  readonly onStart?: (context: Context) => Promise<Task>;
+  readonly onCancel: (update: Update, current: Task) => Promise<void>;
+  readonly onUpdate: (update: Update, current: Task) => Promise<Task>;
+  readonly onError: (error: any, current: Task) => Promise<void>;
+  onComplete: (current: Task) => Promise<void>;
 }
 
 export type Emissions = {
-  start: [A2A.MessageSendParams, A2A.Task];
+  start: [MessageSendParams, Task];
   cancel: [Update];
-  update: [A2A.Task, Update];
-  error: [any, A2A.Task];
-  complete: [A2A.Task];
+  update: [Task, Update];
+  error: [any, Task];
+  complete: [Task];
 };
 
 export interface EventPublisher
@@ -156,9 +187,9 @@ export interface EventPublisher
       "onComplete" | "onCancel" | "onError" | "onUpdate"
     >,
     core.Publisher<Emissions> {
-  readonly onStart?: (context: Context) => Promise<A2A.Task>;
+  readonly onStart?: (context: Context) => Promise<Task>;
   readonly onCancel: (update: Update) => Promise<void>;
-  readonly onUpdate: (update: Update) => Promise<A2A.Task>;
+  readonly onUpdate: (update: Update) => Promise<Task>;
   readonly onError: (error: any) => Promise<void>;
   onComplete: () => Promise<void>;
 }

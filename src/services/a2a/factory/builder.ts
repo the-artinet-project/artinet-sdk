@@ -237,9 +237,9 @@ export class EngineBuilder<TInboundArgs extends BaseArgs = EmptyArgs>
       A2A.TextPart["text"],
       TForwardArgs
     >
-  >(step: textStep<TInboundArgs, TForwardArgs, TOutput>) {
+  >(step: textStep<TInboundArgs, TForwardArgs, TOutput> | string) {
     return this.addStep<A2A.TextPart["text"], TForwardArgs, TOutput, "text">({
-      step: step,
+      step: typeof step === "string" ? () => step as TOutput : step,
       kind: "text",
     });
   }

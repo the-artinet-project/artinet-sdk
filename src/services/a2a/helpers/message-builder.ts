@@ -33,6 +33,8 @@ export class MessageBuilder {
     return this.message;
   }
 }
+export const MESSAGE = (message: Partial<A2A.Message> = {}): A2A.Message =>
+  new MessageBuilder(message).message;
 
 export class MessageSendConfigurationBuilder {
   configuration: A2A.MessageSendConfiguration = {

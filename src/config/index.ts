@@ -177,10 +177,10 @@ export const logger = {
     getLogger()?.debug?.(msg, ...args),
   info: (msg: string, ...args: unknown[]) => getLogger()?.info?.(msg, ...args),
   warn: (msg: string, ...args: unknown[]) => getLogger()?.warn?.(msg, ...args),
-  error: (msg: string, err: Error) => getLogger()?.error?.(msg, err),
+  error: (msg: string, err: unknown) => getLogger()?.error?.(msg, err),
   setLevel: (level: "debug" | "info" | "warn" | "error") =>
     getLogger()?.setLevel?.(level),
-  getLevel: () => getLogger()?.getLevel?.(),
+  getLevel: () => getLogger()?.getLevel?.() ?? "info",
   child: (context: Record<string, unknown>) =>
     getLogger()?.child?.(context) ?? noopLogger,
 };

@@ -6,7 +6,6 @@
 import { MCP } from "~/types/index.js";
 import { SystemError, PARSE_ERROR } from "~/utils/common/errors.js";
 import { logger } from "~/config/index.js";
-import { formatError } from "~/utils/common/utils.js";
 /**
  * Parses a JSON-RPC response string and validates its structure.
  * If the response contains an error, it is thrown as an A2AError.
@@ -52,10 +51,10 @@ export function parseResponse<
     return parsed as Res;
   } catch (error) {
     if (error instanceof SystemError) {
-      logger.error("parseResponse: SystemError:", formatError(error));
+      logger.error("parseResponse: SystemError:", error);
       throw error;
     }
-    logger.error("parseResponse: Error parsing response:", formatError(error));
+    logger.error("parseResponse: Error parsing response:", error);
     throw PARSE_ERROR(error);
   }
 }

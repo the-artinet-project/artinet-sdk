@@ -1,7 +1,10 @@
 import { EventEmitter } from "events";
 
-export interface Service<Params extends object = object> {
-  execute: (params: Params) => Promise<void>;
+export interface Service<
+  Params extends object = object,
+  Result extends unknown = void
+> {
+  execute: (params: Params) => Promise<Result>;
   stop: () => Promise<void>;
 }
 
