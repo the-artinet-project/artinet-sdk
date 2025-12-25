@@ -17,6 +17,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./trpc": {
+      "types": "./dist/transport/trpc/index.d.ts",
+      "import": "./dist/transport/trpc/index.js",
+      "default": "./dist/transport/trpc/index.js"
+    },
     "./types": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/types/index.js",

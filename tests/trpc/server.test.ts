@@ -6,13 +6,14 @@ import {
   afterEach,
   expect,
 } from "@jest/globals";
-import { createA2ARouter, createAgent } from "../../src/index.js";
+import { createAgent } from "../../src/index.js";
 import { A2A, TASK_NOT_FOUND } from "../../src/index.js";
 import express from "express";
 import request from "supertest";
 import { createAgentServer } from "../../src/index.js";
 import { TestAgentLogic as engine } from "../utils/engine.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
+import { createA2ARouter } from "../../src/transport/trpc/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 const agentRouter = createA2ARouter();
