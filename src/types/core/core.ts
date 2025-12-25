@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 
 export interface Service<
   Params extends object = object,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
   Result extends unknown = void
 > {
   execute: (params: Params) => Promise<Result>;
@@ -38,13 +39,17 @@ export type Optional<T extends object = object> = Partial<T> & {
   contextId: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Contexts<T extends Context = Context> extends Manager<T> {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Publisher<
   EventMap extends Record<string, any[]> = Record<string, any[]>
 > extends EventEmitter<EventMap> {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Consumer<
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
   Received extends unknown,
   EventMap extends Record<string, any[]> = Record<string, any[]>
 > extends AsyncIterable<Received, Received, Received | undefined>,

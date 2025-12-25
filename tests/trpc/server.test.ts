@@ -123,14 +123,14 @@ describe("trpc-server", () => {
         agent.tasks.get({
           id: testId,
         })
-      ).rejects.toThrowError("Task not found");
+      ).rejects.toThrow("Task not found");
     });
     it("should call cancel", async () => {
       await expect(
         agent.tasks.cancel({
           id: testId,
         })
-      ).rejects.toThrowError("Task not found");
+      ).rejects.toThrow("Task not found");
     });
   });
 

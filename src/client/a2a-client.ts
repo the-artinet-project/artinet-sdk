@@ -86,6 +86,10 @@ export class A2AClient implements Client {
 
         this.cachedAgentCard = card as A2A.AgentCard;
       } catch (error) {
+        logger.error(
+          "A2AClient:agentCard: Failed to fetch agent card (well-known):",
+          error
+        );
         const fallbackUrl = new URL(this.fallbackPath, this.baseUrl);
         if (this.mergePath) {
           fallbackUrl.pathname = this.baseUrl.pathname + fallbackUrl.pathname;
@@ -102,7 +106,7 @@ export class A2AClient implements Client {
           fallbackCard.name === null ||
           fallbackCard.name === undefined
         ) {
-          throw new Error("No fallback agent card found");
+          throw new Error("No fallback agent card found" + error);
         }
         this.cachedAgentCard = fallbackCard;
       }

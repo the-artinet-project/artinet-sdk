@@ -76,6 +76,7 @@ export interface Tasks extends core.Manager<Task> {
 export interface Cancellations extends Omit<core.Manager<void>, "get"> {
   has: (id: string) => Promise<boolean>;
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Connections extends Omit<core.Manager<void>, "get"> {}
 
 export interface ServiceOptions {
