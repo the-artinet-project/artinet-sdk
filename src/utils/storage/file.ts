@@ -3,21 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  TaskAndHistory,
-  TaskManagerInterface,
-  Task,
-  Message,
-} from "~/types/index.js";
-import { logError, logDebug } from "../logging/log.js";
+import { A2A } from "~/types/index.js";
 import fs from "fs/promises";
 import path from "path";
-
+import { logger } from "~/config/index.js";
+import { Tasks } from "~/services/a2a/managers.js";
+import { formatJson, safeParseSchema } from "~/utils/index.js";
 /**
  * File-based implementation of the TaskStore interface.
  * Stores tasks and their history as JSON files on disk.
  */
-export class FileStore implements TaskManagerInterface<TaskAndHistory> {
+export class Files extends Tasks {
   private baseDir: string;
 
   /**
@@ -25,7 +21,9 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param baseDir The base directory to store task files in.
    */
   constructor(baseDir: string) {
+    super(new Map());
     this.baseDir = baseDir;
+    logger.info(`FileStore[init]: baseDir`, { baseDir });
   }
 
   /**
@@ -38,15 +36,6 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
   }
 
   /**
-   * Constructs the file path for a task's history.
-   * @param taskId The task ID
-   * @returns The full file path for the history JSON file
-   */
-  private getHistoryFilePath(taskId: string): string {
-    return path.join(this.baseDir, `${taskId}.history.json`);
-  }
-
-  /**
    * Ensures the base directory exists.
    * @returns A promise that resolves when the directory exists.
    */
@@ -54,11 +43,7 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
     try {
       await fs.mkdir(this.baseDir, { recursive: true });
     } catch (error) {
-      logError(
-        "FileStore",
-        `Failed to create directory: ${this.baseDir}`,
-        error
-      );
+      logger.warn(`FileStore[ensureBaseDir]: ${this.baseDir}`, error);
       throw error;
     }
   }
@@ -69,14 +54,14 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param data The data to write
    * @returns A promise that resolves when the write is complete
    */
-  private async writeJsonFile<T>(filePath: string, data: T): Promise<void> {
+  private async writeJsonFile(filePath: string, task: A2A.Task): Promise<void> {
     try {
       await this.ensureBaseDir();
-      await fs.writeFile(filePath, JSON.stringify(data, null, 2), {
+      await fs.writeFile(filePath, formatJson(task), {
         encoding: "utf8",
       });
     } catch (error) {
-      logError("FileStore", `Failed to write file: ${filePath}`, error);
+      logger.warn(`FileStore[writeJsonFile]: ${filePath}`, error);
       throw error;
     }
   }
@@ -86,35 +71,17 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param filePath The path to read from
    * @returns A promise resolving to the parsed data, or null if the file doesn't exist
    */
-  private async readJsonFile<T>(filePath: string): Promise<T | null> {
+  private async readJsonFile(filePath: string): Promise<A2A.Task | null> {
     try {
       const content = await fs.readFile(filePath, { encoding: "utf8" });
-      return JSON.parse(content) as T;
+      return await safeParseSchema(content, A2A.TaskSchema);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        // File not found - return null rather than throwing
+        logger.warn(`FileStore[readJsonFile]: ${filePath} not found`);
         return null;
       }
-      logError("FileStore", `Failed to read file: ${filePath}`, error);
       throw error;
     }
-  }
-
-  /**
-   * Type guard to validate the structure of history file content.
-   * @param content The content to check
-   * @returns True if the content is a valid history file content
-   */
-  private isHistoryFileContent(
-    content: unknown
-  ): content is { messageHistory: Message[] } {
-    return (
-      content !== undefined &&
-      typeof content === "object" &&
-      content !== null &&
-      "messageHistory" in content &&
-      Array.isArray((content as any).messageHistory)
-    );
   }
 
   /**
@@ -122,52 +89,13 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param taskId The ID of the task to load.
    * @returns A promise resolving to the task and history, or null if not found.
    */
-  async getState(taskId: string): Promise<TaskAndHistory | undefined> {
-    logDebug("FileStore", `Loading task: ${taskId}`);
-
-    const taskFilePath = this.getTaskFilePath(taskId);
-    const historyFilePath = this.getHistoryFilePath(taskId);
-
-    // Read task file first - if it doesn't exist, the task doesn't exist.
-    const task = await this.readJsonFile<Task>(taskFilePath).catch(
-      () => undefined
-    );
-    if (!task) {
-      return undefined; // Task not found
-    }
-
-    // Task exists, now try to read history. It might not exist yet.
-    let history: Message[] = [];
-    try {
-      const historyContent = await this.readJsonFile<unknown>(
-        historyFilePath
-      ).catch(() => undefined);
-      // Validate the structure
-      if (this.isHistoryFileContent(historyContent)) {
-        history = historyContent.messageHistory;
-      } else if (historyContent !== null) {
-        // Log a warning if the history file exists but is malformed
-        logError(
-          "FileStore",
-          `Malformed history file found for task ${taskId}`,
-          new Error("Invalid history file format"),
-          { path: historyFilePath }
-        );
-        // Proceed with empty history
-      }
-      // If historyContent is null (file not found), history remains []
-    } catch (error) {
-      // Log error reading history but proceed with empty history
-      logError(
-        "FileStore",
-        `Error reading history file for task ${taskId}`,
-        error,
-        { path: historyFilePath }
-      );
-      // Proceed with empty history
-    }
-
-    return { task, history };
+  override async get(taskId: string): Promise<A2A.Task | undefined> {
+    const task =
+      (await super.get(taskId)) ??
+      (await this.readJsonFile(this.getTaskFilePath(taskId)).catch(
+        () => undefined
+      ));
+    return task ?? undefined;
   }
 
   /**
@@ -175,27 +103,42 @@ export class FileStore implements TaskManagerInterface<TaskAndHistory> {
    * @param data The task and history to save.
    * @returns A promise that resolves when the save is complete.
    */
-  async setState(taskId: string, data: TaskAndHistory): Promise<void> {
-    logDebug("FileStore", `Saving task: ${data.task.id}`);
-    if (taskId !== data.task.id) {
+  override async set(taskId: string, task?: A2A.Task): Promise<void> {
+    logger.debug(`FileStore[set]: ${taskId}`);
+    if (!task) {
+      return;
+    }
+    if (task && taskId !== task.id) {
+      logger.warn("FileStore", `Task ID mismatch: ${taskId} !== ${task.id}`);
       throw new Error("Task ID mismatch");
     }
     const taskFilePath = this.getTaskFilePath(taskId);
-    const historyFilePath = this.getHistoryFilePath(taskId);
-
-    // For simplicity and atomicity, we'll write each file individually
-    // First, write the task file
-    await this.writeJsonFile(taskFilePath, data.task);
-
-    // Then, write the history file
-    // We'll wrap it in an object to allow for future extensibility
-    await this.writeJsonFile(historyFilePath, {
-      messageHistory: data.history,
-    });
+    await this.writeJsonFile(taskFilePath, task);
+    await super.set(taskId, task);
   }
 
-  async getStates(): Promise<string[]> {
+  override async delete(taskId: string): Promise<void> {
+    logger.debug(`FileStore[delete]: ${taskId}`);
+    const taskFilePath = this.getTaskFilePath(taskId);
+    await fs.unlink(taskFilePath);
+    await super.delete(taskId);
+  }
+
+  override async has(taskId: string): Promise<boolean> {
+    if (await super.has(taskId)) {
+      return true;
+    }
+    const taskFilePath = this.getTaskFilePath(taskId);
+    return fs
+      .access(taskFilePath)
+      .then(() => true)
+      .catch(() => false);
+  }
+
+  override async list(): Promise<A2A.Task[]> {
     const taskIds = await fs.readdir(this.baseDir);
-    return taskIds.map((taskId) => taskId.replace(".task.json", ""));
+    return Promise.all(
+      taskIds.map((taskId) => this.get(taskId).catch(() => undefined))
+    ).then((tasks) => tasks.filter((task) => task !== undefined));
   }
 }

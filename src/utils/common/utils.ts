@@ -10,3 +10,38 @@
 export function getCurrentTimestamp(): string {
   return new Date().toISOString();
 }
+
+/**
+ * Sleeps for a given number of milliseconds.
+ * @param ms - The number of milliseconds to sleep.
+ * @returns A promise that resolves when the sleep is complete.
+ *
+ * @example
+ * ```typescript
+ * await sleep(1000);
+ * ```
+ */
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Formats a JSON object into a string with indentation.
+ * @param json - The JSON object to format.
+ * @returns A string representation of the JSON object.
+ */
+export function formatJson(json: object): string {
+  return JSON.stringify(json, null, 2);
+}
+
+/**
+ * Formats an error into a standard error object for logging.
+ * @param error - The error to format.
+ * @returns A standard error object.
+ */
+export function formatError(error: unknown): Error {
+  if (error instanceof Error) {
+    return error;
+  }
+  return new Error(String(error));
+}

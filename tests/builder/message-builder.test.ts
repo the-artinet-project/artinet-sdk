@@ -1,13 +1,10 @@
 import { describe, it, expect } from "@jest/globals";
-import {
-  createMessageSendParams,
-  MessageSendParams,
-  TextPart,
-} from "../../src/index.js";
+import { createMessageSendParams, A2A } from "../../src/index.js";
 
 describe("Message Builder Tests", () => {
   it("should create MessageSendParams", () => {
-    const params: MessageSendParams = createMessageSendParams("hello there");
+    const params: A2A.MessageSendParams =
+      createMessageSendParams("hello there");
     expect(params).toBeDefined();
     expect(params.message).toBeDefined();
     expect(params.message.role).toBe("user");
@@ -15,10 +12,10 @@ describe("Message Builder Tests", () => {
     expect(params.message.messageId).toBeDefined();
     expect(params.message.parts).toBeDefined();
     expect(params.message.parts.length).toBe(1);
-    expect((params.message.parts[0] as TextPart).text).toBe("hello there");
+    expect((params.message.parts[0] as A2A.TextPart).text).toBe("hello there");
   });
   it("should create full MessageSendParams", () => {
-    const params: MessageSendParams = createMessageSendParams({
+    const params: A2A.MessageSendParams = createMessageSendParams({
       message: {
         role: "user",
         kind: "message",
@@ -54,7 +51,7 @@ describe("Message Builder Tests", () => {
     expect(params.message.role).toBe("user");
     expect(params.message.parts).toBeDefined();
     expect(params.message.parts.length).toBe(1);
-    expect((params.message.parts[0] as TextPart).text).toBe("hello there");
+    expect((params.message.parts[0] as A2A.TextPart).text).toBe("hello there");
     expect(params.message.messageId).toBe("123");
     expect(params.message.metadata).toBeDefined();
     expect(params.message.metadata?.foo).toBe("bar");

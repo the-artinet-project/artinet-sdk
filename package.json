@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.5.18",
+  "version": "0.6.0-preview.1",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,10 +17,36 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./trpc": {
+      "types": "./dist/transport/trpc/index.d.ts",
+      "import": "./dist/transport/trpc/index.js",
+      "default": "./dist/transport/trpc/index.js"
+    },
     "./types": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/types/index.js",
       "default": "./dist/types/index.js"
+    },
+    "./pino": {
+      "node": {
+        "types": "./dist/extensions/pino.d.ts",
+        "import": "./dist/extensions/pino.js",
+        "default": "./dist/extensions/pino.js"
+      }
+    },
+    "./winston": {
+      "node": {
+        "types": "./dist/extensions/winston.d.ts",
+        "import": "./dist/extensions/winston.js",
+        "default": "./dist/extensions/winston.js"
+      }
+    },
+    "./otel": {
+      "node": {
+        "types": "./dist/extensions/opentelemetry.d.ts",
+        "import": "./dist/extensions/opentelemetry.js",
+        "default": "./dist/extensions/opentelemetry.js"
+      }
     }
   },
   "rootDir": ".",
@@ -65,37 +91,73 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.20.1",
-    "@trpc/server": "^11.4.3",
-    "@types/cors": "^2.8.17",
-    "@types/escape-html": "^1.0.4",
-    "@types/express": "^5.0.1",
+    "@artinet/types": "^0.0.9-alpha.3",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
-    "uuid": "^11.1.0",
-    "zod": "^3.23.8"
+    "uuid": "^13.0.0",
+    "zod": "^3.25"
+  },
+  "peerDependencies": {
+    "@a2a-js/sdk": "^0.3.7",
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@trpc/server": "^11.4.3",
+    "@opentelemetry/api": "^1.9.0"
+  },
+  "optionalDependencies": {
+    "pino": "^10.1.0",
+    "winston": "^3.19.0"
+  },
+  "peerDependenciesMeta": {
+    "@modelcontextprotocol/sdk": {
+      "optional": false
+    },
+    "@trpc/server": {
+      "optional": true
+    },
+    "@a2a-js/sdk": {
+      "optional": true
+    },
+    "@opentelemetry/api": {
+      "optional": false
+    },
+    "pino": {
+      "optional": true
+    },
+    "winston": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@cfworker/json-schema": "^4.1.1",
     "@eslint/js": "^9.25.1",
-    "@types/jest": "^29.5.14",
-    "@types/node": "^20.17.50",
+    "@opentelemetry/api": "^1.9.0",
+    "@types/cors": "^2.8.17",
+    "@types/escape-html": "^1.0.4",
+    "@types/express": "^5.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
     "@types/supertest": "latest",
     "eslint": "^9.25.1",
     "globals": "^16.0.0",
-    "jest": "^29.7.0",
+    "jest": "^30.2.0",
     "msw": "^2.7.5",
-    "rimraf": "^5.0.5",
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "pino": "^10.1.0",
+    "pino-caller": "^4.0.0",
+    "pino-pretty": "^13.1.3",
+    "rimraf": "^6.1.2",
     "supertest": "latest",
+    "@trpc/server": "^11.4.3",
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.1",
     "ts-patch": "^3.3.0",
     "tsx": "^4.20.4",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.31.0",
-    "typescript-transform-paths": "^3.5.5"
+    "typescript-transform-paths": "^3.5.5",
+    "winston": "^3.19.0"
   },
   "engines": {
     "node": ">=18.9.1"

@@ -12,9 +12,9 @@ import {
   EventSourceMessage,
   ParseError,
 } from "eventsource-parser";
-import type { JSONRPCResponse, A2ARequest } from "~/types/index.js";
+import { A2A, MCP } from "~/types/index.js";
 import { sendJsonRpcRequest } from "../rpc/rpc-client.js";
-import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
+import { logger } from "~/config/index.js";
 
 /**
  * Creates an async generator for processing task events from an SSE stream
@@ -23,24 +23,22 @@ import { logError, logWarn, logDebug } from "~/utils/logging/index.js";
  * @param response The fetch Response object containing the event stream
  * @returns An async generator yielding the specified type of task events from StreamingResponse
  */
-export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
-  response: Response
-): AsyncGenerator<NonNullable<StreamRes["result"]>> {
+export async function* handleEventStream<
+  StreamRes extends MCP.JSONRPCResultResponse
+>(response: Response): AsyncGenerator<NonNullable<StreamRes["result"]>> {
   if (!response.ok || !response.body) {
     let errorText: string | null = null;
     try {
       errorText = await response.text();
     } catch (_) {}
-    logError(
-      "handleEventStream",
-      `HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
-      new Error(
-        `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
-      )
-    );
-    throw new Error(
+    const err = new Error(
       `HTTP error [${response.status}:${response.statusText}] - ${errorText}`
     );
+    logger.error(
+      `handleEventStream: HTTP error [${response.status}:${response.statusText}] - ${errorText}`,
+      err
+    );
+    throw err;
   }
   // Use eventsource-parser to process the SSE stream
   const reader = response.body.getReader();
@@ -51,7 +49,7 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
     onEvent: (event: EventSourceMessage) => {
       if (event.data) {
         if (event.event === "close") {
-          logDebug("handleEventStream", "Stream closed");
+          logger.debug("handleEventStream", "Stream closed");
           return;
         }
         try {
@@ -60,7 +58,7 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
           if (eventResult) {
             events.push(eventResult as StreamRes["result"]);
           } else {
-            logWarn(
+            logger.warn(
               "handleEventStream",
               "Failed to parse SSE data",
               parsedData
@@ -71,15 +69,15 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
           //   return;
           // }
         } catch (e) {
-          logWarn("handleEventStream", "Failed to parse SSE data", e);
+          logger.warn("handleEventStream", "Failed to parse SSE data", e);
         }
       }
     },
     onError: (error: ParseError) => {
-      logError("handleEventStream", "Error parsing SSE data", error);
+      logger.error("handleEventStream: Error parsing SSE data", error);
     },
     onRetry: (retry: number) => {
-      logWarn("handleEventStream", "Retrying SSE connection", retry);
+      logger.warn("handleEventStream", "Retrying SSE connection", retry);
     },
   });
 
@@ -112,15 +110,15 @@ export async function* handleEventStream<StreamRes extends JSONRPCResponse>(
  * @returns An AsyncIterable yielding events from the stream
  */
 export async function* executeStreamEvents<
-  Req extends A2ARequest,
-  StreamRes extends JSONRPCResponse,
+  Req extends A2A.A2ARequest,
+  StreamRes extends MCP.JSONRPCResultResponse
 >(
   baseUrl: URL,
   method: Req["method"],
   params: Req["params"],
   customHeaders: Record<string, string>
 ): AsyncIterable<NonNullable<StreamRes["result"]>> {
-  logDebug(
+  logger.debug(
     "executeStreamEvents",
     `Sending streaming request to: ${baseUrl.toString()}, method: ${method}`
   );
@@ -133,6 +131,6 @@ export async function* executeStreamEvents<
     "text/event-stream"
   );
   const response = await responsePromise;
-  logDebug("executeStreamEvents", "Response", response);
+  logger.debug("executeStreamEvents", "Response", response);
   yield* handleEventStream<StreamRes>(response);
 }

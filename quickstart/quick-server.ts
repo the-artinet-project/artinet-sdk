@@ -1,11 +1,28 @@
 import {
   logger,
-  configureLogger,
+  configure,
   createAgentServer,
   AgentBuilder,
 } from "@artinet/sdk";
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
 
-configureLogger({ level: "info" });
+logger.info("Quick server starting");
+
+configure({
+  logger: configurePino(
+    pinoCaller(
+      pino({
+        level: "info",
+        transport: {
+          target: "pino-pretty",
+          options: { colorize: true },
+        },
+      })
+    )
+  ),
+});
 
 // Configure and start the server
 const { app } = createAgentServer({
@@ -14,7 +31,25 @@ const { app } = createAgentServer({
       logger.info(`Server received: ${userInput}`);
       return "Thinking...";
     })
-    .text(async ({ content: userInput }) => {
+    .text(async ({ context, content: userInput }) => {
+      if (context.userMessage?.messageId?.includes("mapping-test")) {
+        logger.debug("Mapping test message received");
+        let counter = 0;
+        while (true) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          counter++;
+          if (counter > 30) {
+            break;
+          }
+          if (await context.isCancelled()) {
+            logger.debug("Mapping test message cancelled");
+            break;
+          }
+        }
+        logger.debug(
+          `Mapping test message completed: ${await context.isCancelled()}`
+        );
+      }
       // Simulate work
       await new Promise((resolve) => setTimeout(resolve, 500));
       return `You said: ${userInput}`;
@@ -36,6 +71,8 @@ const { app } = createAgentServer({
             },
           ],
         },
+        preferredTransport: "JSONRPC",
+        supportsAuthenticatedExtendedCard: false,
         skills: [
           {
             id: "echo",
@@ -51,9 +88,8 @@ const { app } = createAgentServer({
         defaultOutputModes: ["text"],
       },
     }),
+  agentCardPath: "/.well-known/agent-card.json",
   basePath: "/a2a",
 });
 
-app.listen(4000, () => {
-  logger.info("QuickAgent running on http://localhost:4000/a2a");
-});
+app.listen(4000);

@@ -13,14 +13,9 @@ import {
   INTERNAL_ERROR,
   PARSE_ERROR,
 } from "~/utils/common/errors.js";
-import type {
-  JSONRPCRequest,
-  JSONRPCResponse,
-  A2ARequest,
-} from "~/types/index.js";
+import type { A2A, MCP } from "~/types/index.js";
 import { parseResponse } from "./parser.js";
-import { logError, logWarn } from "~/utils/logging/log.js";
-
+import { logger } from "~/config/index.js";
 /**
  * Creates a JSON-RPC request body with the specified method and parameters.
  *, ErrorCodeParseError
@@ -29,11 +24,11 @@ import { logError, logWarn } from "~/utils/logging/log.js";
  * @param requestId Optional request ID (generates a UUID v4 if not provided)
  * @returns A properly formatted JSON-RPC request object
  */
-export function createJsonRpcRequest<Req extends A2ARequest>(
+export function createJsonRpcRequest<Req extends A2A.A2ARequest>(
   method: Req["method"],
   params: Req["params"],
   requestId: string | number = uuidv4()
-): JSONRPCRequest {
+): MCP.JSONRPCRequest {
   return {
     jsonrpc: "2.0",
     id: requestId,
@@ -53,7 +48,7 @@ export function createJsonRpcRequest<Req extends A2ARequest>(
  * @returns A Promise resolving to the fetch Response object
  * @throws RpcError if there's a network error
  */
-export async function sendJsonRpcRequest<Req extends A2ARequest>(
+export async function sendJsonRpcRequest<Req extends A2A.A2ARequest>(
   baseUrl: URL,
   method: Req["method"],
   params: Req["params"],
@@ -77,9 +72,8 @@ export async function sendJsonRpcRequest<Req extends A2ARequest>(
       body: JSON.stringify(requestBody),
     });
   } catch (networkError) {
-    logError(
-      "SendJsonRpcRequest",
-      "Network error during RPC call:",
+    logger.error(
+      "SendJsonRpcRequest: Network error during RPC call:",
       networkError
     );
     // Wrap network errors into a standard error format
@@ -109,9 +103,8 @@ export async function sendGetRequest(
       },
     });
   } catch (networkError) {
-    logError(
-      "SendGetRequest",
-      "Network error during GET request:",
+    logger.error(
+      "SendGetRequest: Network error during GET request:",
       networkError
     );
     throw INTERNAL_ERROR(networkError);
@@ -127,7 +120,9 @@ export async function sendGetRequest(
  * @returns A promise resolving to the result payload
  * @throws RpcError if there's an error in the response
  */
-export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
+export async function handleJsonRpcResponse<
+  Res extends MCP.JSONRPCResultResponse
+>(
   response: Response,
   expectedMethod?: string
 ): Promise<NonNullable<Res["result"]>> {
@@ -137,11 +132,11 @@ export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
     if (!response.ok) {
       try {
         // Try to parse error as JSON-RPC
-        parseResponse<JSONRPCResponse>(responseBody);
+        parseResponse<MCP.JSONRPCResponse>(responseBody);
         // If we get here, it means there was no error in the response
         // But the HTTP status was not OK, so we throw a generic error
       } catch (parseError) {
-        logWarn(
+        logger.warn(
           "handleJsonRpcResponse",
           "Error parsing JSON-RPC response:",
           parseError
@@ -165,9 +160,8 @@ export async function handleJsonRpcResponse<Res extends JSONRPCResponse>(
     // NonNullable is used in the return type to ensure TypeScript knows this
     return jsonResponse.result as NonNullable<Res["result"]>;
   } catch (error) {
-    logError(
-      "handleJsonRpcResponse",
-      `Error processing response [${expectedMethod}]:`,
+    logger.error(
+      `handleJsonRpcResponse: Error processing response [${expectedMethod}]:`,
       error
     );
     // Re-throw RpcError instances directly, wrap others
@@ -206,9 +200,10 @@ export async function handleJsonResponse<T>(
 
     return JSON.parse(responseBody) as T;
   } catch (error) {
-    logError(
-      "handleJsonResponse",
-      `Error processing response for ${endpoint || "unknown endpoint"}:`,
+    logger.error(
+      `handleJsonResponse: Error processing response for ${
+        endpoint || "unknown endpoint"
+      }:`,
       error
     );
 
@@ -233,8 +228,8 @@ export async function handleJsonResponse<T>(
  * @throws RpcError if there's a network error or error in the response
  */
 export async function executeJsonRpcRequest<
-  Req extends A2ARequest,
-  Res extends JSONRPCResponse,
+  Req extends A2A.A2ARequest,
+  Res extends MCP.JSONRPCResultResponse
 >(
   baseUrl: URL,
   method: Req["method"],

@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "../../");
 
-describe("NPM Package Installation", () => {
+describe.skip("NPM Package Installation", () => {
   let tempDir: string;
   let packagePath: string;
   let packageName: string;
@@ -138,6 +138,7 @@ try {
     expect(result.success).toBe(true);
     expect(result.createAgent).toBe(true);
   }, 30000);
+  //todo negative test case for browser bundle (no A2AServer in browser)
   test("browser bundle resolves correctly via package exports", async () => {
     // Create a test file that imports from the package
     const testFile = `

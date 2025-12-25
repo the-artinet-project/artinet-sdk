@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TaskState, TaskStatusUpdateEvent, Message } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 import { getCurrentTimestamp } from "./utils.js";
 //todo: protocol specific so move to a2a folder
 
 export const STATUS_UPDATE = (
   taskId: string,
   contextId: string,
-  status: TaskState,
-  message?: Message,
+  status: A2A.TaskState,
+  message?: A2A.Message,
   timestamp: string = getCurrentTimestamp(),
   final: boolean = false
-): TaskStatusUpdateEvent => {
+): A2A.TaskStatusUpdateEvent => {
   return {
     taskId: taskId,
     contextId: contextId,
@@ -31,13 +31,13 @@ export const STATUS_UPDATE = (
 export const WORKING_UPDATE = (
   taskId: string,
   contextId: string,
-  message?: Message,
+  message?: A2A.Message,
   timestamp?: string
-): TaskStatusUpdateEvent => {
+): A2A.TaskStatusUpdateEvent => {
   return STATUS_UPDATE(
     taskId,
     contextId,
-    TaskState.working,
+    A2A.TaskState.working,
     message,
     timestamp
   );
@@ -46,13 +46,13 @@ export const WORKING_UPDATE = (
 export const CANCEL_UPDATE = (
   taskId: string,
   contextId: string,
-  message?: Message,
+  message?: A2A.Message,
   timestamp?: string
-): TaskStatusUpdateEvent => {
+): A2A.TaskStatusUpdateEvent => {
   return STATUS_UPDATE(
     taskId,
     contextId,
-    TaskState.canceled,
+    A2A.TaskState.canceled,
     message,
     timestamp,
     true
@@ -62,13 +62,13 @@ export const CANCEL_UPDATE = (
 export const SUBMITTED_UPDATE = (
   taskId: string,
   contextId: string,
-  message?: Message,
+  message?: A2A.Message,
   timestamp?: string
-): TaskStatusUpdateEvent => {
+): A2A.TaskStatusUpdateEvent => {
   return STATUS_UPDATE(
     taskId,
     contextId,
-    TaskState.submitted,
+    A2A.TaskState.submitted,
     message,
     timestamp
   );
@@ -77,21 +77,21 @@ export const SUBMITTED_UPDATE = (
 export const FAILED_UPDATE_EVENT = (
   taskId: string,
   contextId: string,
-  message?: Message,
+  message?: A2A.Message,
   timestamp?: string
-): TaskStatusUpdateEvent => {
+): A2A.TaskStatusUpdateEvent => {
   return STATUS_UPDATE(
     taskId,
     contextId,
-    TaskState.failed,
+    A2A.TaskState.failed,
     message,
     timestamp,
     true
   );
 };
-export const FINAL_STATES: TaskState[] = [
-  TaskState.completed,
-  TaskState.failed,
-  TaskState.canceled,
-  TaskState.rejected,
+export const FINAL_STATES: A2A.TaskState[] = [
+  A2A.TaskState.completed,
+  A2A.TaskState.failed,
+  A2A.TaskState.canceled,
+  A2A.TaskState.rejected,
 ];

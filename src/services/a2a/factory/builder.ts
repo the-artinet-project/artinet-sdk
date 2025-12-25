@@ -11,7 +11,7 @@
  * workflows with type-safe step composition and automatic execution orchestration.
  *
  * @module A2ABuilder
- * @version 0.5.7
+ * @version 0.6.0-preview
  * @since 0.5.6
  * @author The Artinet Project
  */
@@ -19,25 +19,17 @@
 import {
   StepBuilder,
   Step,
-  StepOutput,
   StepOutputWithForwardArgs,
-  MessageSendParams,
-  TextPart,
-  DataPart,
-  FilePart,
-  Context,
-  TaskStatusUpdateEvent,
-  TaskState,
-  AgentEngine,
+  A2A,
   StepParams,
   StepWithKind,
-  Task,
-  FactoryParams,
-  Command,
-  Message,
-  Part,
+  OutputType,
+  BaseArgs,
+  EmptyArgs,
+  OutArgsOf,
+  PartContent,
 } from "~/types/index.js";
-import { createAgent } from "./service.js";
+import { createAgent, ServiceParams } from "./service.js";
 import { v4 as uuidv4 } from "uuid";
 import { getContent } from "../helpers/content.js";
 import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
@@ -50,7 +42,7 @@ import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
  * decision making.
  *
  * @template TCommand - The command type, defaults to MessageSendParams
- * @template TPart - The text part type, defaults to TextPart["text"]
+ * @template TPart - The text part type, defaults to A2A.TextPart["text"]
  * @template TInboundArgs - Arguments received from previous step
  * @template TForwardArgs - Arguments passed to next step
  * @template TOutput - The output type of the step
@@ -67,16 +59,13 @@ import { SUBMITTED_UPDATE, WORKING_UPDATE } from "~/utils/index.js";
  * @since 0.5.6
  */
 export type textStep<
-  TCommand extends MessageSendParams = MessageSendParams,
-  TPart extends TextPart["text"] = TextPart["text"],
-  TInboundArgs extends readonly unknown[] = [],
-  TForwardArgs extends readonly unknown[] = [],
-  TOutput extends
-    | StepOutput<TPart>
-    | StepOutputWithForwardArgs<TPart, TForwardArgs>
-    | Array<TPart>
-    | TPart = StepOutput<TPart>
-> = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
+  TInboundArgs extends BaseArgs = EmptyArgs,
+  TForwardArgs extends BaseArgs = EmptyArgs,
+  TOutput extends OutputType<A2A.TextPart["text"], TForwardArgs> = OutputType<
+    A2A.TextPart["text"],
+    TForwardArgs
+  >
+> = Step<A2A.TextPart["text"], TInboundArgs, TForwardArgs, TOutput>;
 
 /**
  * Type alias for file-based workflow steps.
@@ -86,7 +75,7 @@ export type textStep<
  * file generation, and file-based data operations.
  *
  * @template TCommand - The command type, defaults to MessageSendParams
- * @template TPart - The file part type, defaults to FilePart["file"]
+ * @template TPart - The file part type, defaults to A2A.FilePart["file"]
  * @template TInboundArgs - Arguments received from previous step
  * @template TForwardArgs - Arguments passed to next step
  * @template TOutput - The output type of the step
@@ -107,16 +96,13 @@ export type textStep<
  * @since 0.5.6
  */
 export type fileStep<
-  TCommand extends MessageSendParams = MessageSendParams,
-  TPart extends FilePart["file"] = FilePart["file"],
-  TInboundArgs extends readonly unknown[] = [],
-  TForwardArgs extends readonly unknown[] = [],
-  TOutput extends
-    | StepOutput<TPart>
-    | StepOutputWithForwardArgs<TPart, TForwardArgs>
-    | Array<TPart>
-    | TPart = StepOutput<TPart>
-> = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
+  TInboundArgs extends BaseArgs = EmptyArgs,
+  TForwardArgs extends BaseArgs = EmptyArgs,
+  TOutput extends OutputType<A2A.FilePart["file"], TForwardArgs> = OutputType<
+    A2A.FilePart["file"],
+    TForwardArgs
+  >
+> = Step<A2A.FilePart["file"], TInboundArgs, TForwardArgs, TOutput>;
 
 /**
  * Type alias for data-based workflow steps.
@@ -126,7 +112,7 @@ export type fileStep<
  * and structured data transformations.
  *
  * @template TCommand - The command type, defaults to MessageSendParams
- * @template TPart - The data part type, defaults to DataPart["data"]
+ * @template TPart - The data part type, defaults to A2A.DataPart["data"]
  * @template TInboundArgs - Arguments received from previous step
  * @template TForwardArgs - Arguments passed to next step
  * @template TOutput - The output type of the step
@@ -147,27 +133,13 @@ export type fileStep<
  * @since 0.5.6
  */
 export type dataStep<
-  TCommand extends MessageSendParams = MessageSendParams,
-  TPart extends DataPart["data"] = DataPart["data"],
-  TInboundArgs extends readonly unknown[] = [],
-  TForwardArgs extends readonly unknown[] = [],
-  TOutput extends
-    | StepOutput<TPart>
-    | StepOutputWithForwardArgs<TPart, TForwardArgs>
-    | Array<TPart>
-    | TPart = StepOutput<TPart>
-> = Step<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>;
-/**
- * Utility type to extract forward arguments from step output.
- *
- * This helper type extracts the forward arguments type from a step output,
- * enabling proper type chaining between workflow steps.
- *
- * @template O - The output type to extract arguments from
- * @internal
- */
-//@typescript-eslint/no-explicit-any
-type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
+  TInboundArgs extends BaseArgs = EmptyArgs,
+  TForwardArgs extends BaseArgs = EmptyArgs,
+  TOutput extends OutputType<A2A.DataPart["data"], TForwardArgs> = OutputType<
+    A2A.DataPart["data"],
+    TForwardArgs
+  >
+> = Step<A2A.DataPart["data"], TInboundArgs, TForwardArgs, TOutput>;
 
 /**
  * Fluent builder for constructing A2A agent execution engines.
@@ -197,13 +169,11 @@ type OutArgsOf<O> = O extends StepOutputWithForwardArgs<any, infer A> ? A : [];
  * @public
  * @since 0.5.6
  */
-export class EngineBuilder<
-  TCommand extends MessageSendParams = MessageSendParams,
-  TInboundArgs extends readonly unknown[] = []
-> implements StepBuilder<TCommand, TInboundArgs>
+export class EngineBuilder<TInboundArgs extends BaseArgs = EmptyArgs>
+  implements StepBuilder<TInboundArgs>
 {
   //@typescript-eslint/no-explicit-any
-  private steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = [];
+  private steps: Array<StepWithKind<any, any, any, any, any>> = [];
 
   /**
    * Protected constructor to enforce factory method usage.
@@ -212,7 +182,7 @@ export class EngineBuilder<
    */
   protected constructor(
     //@typescript-eslint/no-explicit-any
-    steps: Array<StepWithKind<TCommand, any, any, any, any, any>> = []
+    steps: Array<StepWithKind<any, any, any, any, any>> = []
   ) {
     this.steps = steps;
   }
@@ -229,39 +199,20 @@ export class EngineBuilder<
    * const builder = EngineBuilder.create<MyCommand, [string, number]>();
    * ```
    */
-  public static create<
-    TCommand extends MessageSendParams = MessageSendParams,
-    TInboundArgs extends readonly unknown[] = []
-  >() {
-    return new EngineBuilder<TCommand, TInboundArgs>();
+  public static create<TInboundArgs extends BaseArgs = EmptyArgs>() {
+    return new EngineBuilder<TInboundArgs>();
   }
 
   addStep<
-    TPart extends
-      | DataPart["data"]
-      | FilePart["file"]
-      | TextPart["text"] = TextPart["text"],
-    TForwardArgs extends readonly unknown[] = [],
-    TOutput extends
-      | StepOutput<TPart>
-      | StepOutputWithForwardArgs<TPart, TForwardArgs>
-      | Array<TPart>
-      | TPart = StepOutput<TPart>,
-    TKind extends "text" | "file" | "data" = "text"
-  >(
-    step: StepWithKind<
-      TCommand,
+    TPart extends PartContent = A2A.TextPart["text"],
+    TForwardArgs extends BaseArgs = EmptyArgs,
+    TOutput extends OutputType<TPart, TForwardArgs> = OutputType<
       TPart,
-      TInboundArgs,
-      TForwardArgs,
-      TOutput,
-      TKind
-    >
-  ) {
-    return new EngineBuilder<TCommand, OutArgsOf<TOutput>>([
-      ...this.steps,
-      step,
-    ]);
+      TForwardArgs
+    >,
+    TKind extends "text" | "file" | "data" = "text"
+  >(step: StepWithKind<TPart, TInboundArgs, TForwardArgs, TOutput, TKind>) {
+    return new EngineBuilder<OutArgsOf<TOutput>>([...this.steps, step]);
   }
 
   /**
@@ -281,16 +232,14 @@ export class EngineBuilder<
    * ```
    */
   public text<
-    TPart extends TextPart["text"] = TextPart["text"],
-    TForwardArgs extends readonly unknown[] = [],
-    TOutput extends
-      | StepOutput<TPart>
-      | StepOutputWithForwardArgs<TPart, TForwardArgs>
-      | Array<TPart>
-      | TPart = StepOutput<TPart>
-  >(step: textStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
-    return this.addStep<TPart, TForwardArgs, TOutput, "text">({
-      step: step,
+    TForwardArgs extends BaseArgs = EmptyArgs,
+    TOutput extends OutputType<A2A.TextPart["text"], TForwardArgs> = OutputType<
+      A2A.TextPart["text"],
+      TForwardArgs
+    >
+  >(step: textStep<TInboundArgs, TForwardArgs, TOutput> | string) {
+    return this.addStep<A2A.TextPart["text"], TForwardArgs, TOutput, "text">({
+      step: typeof step === "string" ? () => step as TOutput : step,
       kind: "text",
     });
   }
@@ -316,15 +265,13 @@ export class EngineBuilder<
    * ```
    */
   public file<
-    TPart extends FilePart["file"] = FilePart["file"],
-    TForwardArgs extends readonly unknown[] = [],
-    TOutput extends
-      | StepOutput<TPart>
-      | StepOutputWithForwardArgs<TPart, TForwardArgs>
-      | Array<TPart>
-      | TPart = StepOutput<TPart>
-  >(step: fileStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
-    return this.addStep<TPart, TForwardArgs, TOutput, "file">({
+    TForwardArgs extends BaseArgs = EmptyArgs,
+    TOutput extends OutputType<A2A.FilePart["file"], TForwardArgs> = OutputType<
+      A2A.FilePart["file"],
+      TForwardArgs
+    >
+  >(step: fileStep<TInboundArgs, TForwardArgs, TOutput>) {
+    return this.addStep<A2A.FilePart["file"], TForwardArgs, TOutput, "file">({
       step: step,
       kind: "file",
     });
@@ -350,15 +297,13 @@ export class EngineBuilder<
    * ```
    */
   public data<
-    TPart extends DataPart["data"] = DataPart["data"],
-    TForwardArgs extends readonly unknown[] = [],
-    TOutput extends
-      | StepOutput<TPart>
-      | StepOutputWithForwardArgs<TPart, TForwardArgs>
-      | Array<TPart>
-      | TPart = StepOutput<TPart>
-  >(step: dataStep<TCommand, TPart, TInboundArgs, TForwardArgs, TOutput>) {
-    return this.addStep<TPart, TForwardArgs, TOutput, "data">({
+    TForwardArgs extends BaseArgs = EmptyArgs,
+    TOutput extends OutputType<A2A.DataPart["data"], TForwardArgs> = OutputType<
+      A2A.DataPart["data"],
+      TForwardArgs
+    >
+  >(step: dataStep<TInboundArgs, TForwardArgs, TOutput>) {
+    return this.addStep<A2A.DataPart["data"], TForwardArgs, TOutput, "data">({
       step: step,
       kind: "data",
     });
@@ -381,7 +326,7 @@ export class EngineBuilder<
    * });
    * ```
    */
-  public createAgent(params: Omit<FactoryParams, "engine">) {
+  public createAgent(params: Omit<ServiceParams, "engine">) {
     return createAgent({
       ...params,
       engine: this.createAgentEngine(),
@@ -400,7 +345,7 @@ export class EngineBuilder<
    * ```
    */
   public createAgentEngine() {
-    return createAgentExecutor(this.build() as StepWithKind<Command>[]);
+    return createAgentExecutor(this.build() as StepWithKind[]);
   }
 
   /**
@@ -437,18 +382,18 @@ export class EngineBuilder<
  * @public
  * @since 0.5.6
  */
-export const AgentBuilder = () => EngineBuilder.create<MessageSendParams>();
+export const AgentBuilder = () => EngineBuilder.create();
 
 const partToMessagePart = (
   kind: "text" | "file" | "data",
-  part: FilePart["file"] | DataPart["data"] | TextPart["text"]
-): FilePart | DataPart | TextPart => {
+  part: A2A.FilePart["file"] | A2A.DataPart["data"] | A2A.TextPart["text"]
+): A2A.FilePart | A2A.DataPart | A2A.TextPart => {
   switch (kind) {
     case "text": {
-      return { kind: "text", text: part as TextPart["text"] };
+      return { kind: "text", text: part as A2A.TextPart["text"] };
     }
     case "file": {
-      const filePart: FilePart["file"] = part as FilePart["file"];
+      const filePart: A2A.FilePart["file"] = part as A2A.FilePart["file"];
       if (filePart.uri) {
         return {
           kind: "file",
@@ -472,7 +417,7 @@ const partToMessagePart = (
       };
     }
     case "data": {
-      return { kind: "data", data: part as DataPart["data"] };
+      return { kind: "data", data: part as A2A.DataPart["data"] };
     }
     default:
       throw new Error("Invalid part kind");
@@ -501,29 +446,33 @@ const partToMessagePart = (
  * @public
  * @since 0.5.6
  */
-export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
-  return async function* (context: Context) {
-    const content = getContent(context.command.message);
+export function createAgentExecutor(stepsList: StepWithKind[]): A2A.Engine {
+  return async function* (context: A2A.Context) {
+    const content = getContent(context.userMessage);
+    let _skipStep = false;
     const stepArgs: StepParams = {
-      command: context.command,
+      message: context.messages,
       context: context,
       content: content,
-      args: [],
+      skip: () => {
+        _skipStep = true;
+        return;
+      },
     };
 
     const contextId = context.contextId;
-    const taskId = context.State().task.id;
+    const taskId = context.taskId;
 
     if (!contextId || !taskId) {
       throw new Error("Context ID and task ID are required");
     }
-    const taskStarted: TaskStatusUpdateEvent = SUBMITTED_UPDATE(
+    const taskStarted: A2A.TaskStatusUpdateEvent = SUBMITTED_UPDATE(
       taskId,
       contextId
     );
     yield taskStarted;
-    let finalState: TaskState = TaskState.completed;
-    const finalMessage: Message = {
+    let finalState: A2A.TaskState = A2A.TaskState.completed;
+    const finalMessage: A2A.Message = {
       taskId: taskId,
       contextId: contextId,
       messageId: uuidv4(),
@@ -532,15 +481,19 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       parts: [],
     };
     for (const step of stepsList) {
-      if (context.isCancelled()) {
-        finalState = TaskState.canceled;
+      if (await context.isCancelled()) {
+        finalState = A2A.TaskState.canceled;
         break;
       }
       const ret = await step.step({ ...stepArgs });
-      let parts: Part[] = [];
+      if (_skipStep) {
+        _skipStep = false;
+        continue;
+      }
+      let parts: A2A.Part[] = [];
       if (Array.isArray(ret)) {
         parts = ret.map((part) => partToMessagePart(step.kind, part));
-        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+        const taskStatusUpdate: A2A.TaskStatusUpdateEvent = WORKING_UPDATE(
           taskId,
           contextId,
           {
@@ -551,11 +504,11 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
           }
         );
         yield taskStatusUpdate;
-      } else if (ret !== null && typeof ret === "object") {
+      } else if (ret !== null && typeof ret === "object" && "parts" in ret) {
         parts = Array.isArray(ret.parts)
           ? ret.parts.map((part) => partToMessagePart(step.kind, part))
           : [partToMessagePart(step.kind, ret.parts)];
-        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+        const taskStatusUpdate: A2A.TaskStatusUpdateEvent = WORKING_UPDATE(
           taskId,
           contextId,
           {
@@ -569,7 +522,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
         stepArgs.args = (ret as StepOutputWithForwardArgs<any, any>).args;
       } else {
         parts = [partToMessagePart(step.kind, ret)];
-        const taskStatusUpdate: TaskStatusUpdateEvent = WORKING_UPDATE(
+        const taskStatusUpdate: A2A.TaskStatusUpdateEvent = WORKING_UPDATE(
           taskId,
           contextId,
           {
@@ -583,7 +536,7 @@ export function createAgentExecutor(stepsList: StepWithKind[]): AgentEngine {
       }
       finalMessage.parts.push(...parts);
     }
-    const task: Task = {
+    const task: A2A.Task = {
       kind: "task",
       id: taskId,
       contextId: contextId,

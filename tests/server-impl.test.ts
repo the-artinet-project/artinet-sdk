@@ -10,26 +10,23 @@ import express from "express";
 import request from "supertest";
 import {
   INTERNAL_ERROR,
-  AgentCard,
-  TaskState,
-  SendMessageRequest,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
-  Context,
   getParts,
 } from "../src/index.js";
-import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
-const serverImplTestHandler: AgentEngine = async function* (context: Context) {
-  const params = context.command;
-  const taskId = params.message.taskId ?? "";
-  const contextId = params.message.contextId ?? "";
-  const { text } = getParts(params.message.parts);
+const serverImplTestHandler: AgentEngine = async function* (
+  context: A2A.Context
+) {
+  const message = context.userMessage;
+  const taskId = message.taskId ?? "";
+  const contextId = message.contextId ?? "";
+  const { text } = getParts(message.parts);
   // Need to specifically test error conditions
   if (text.includes("throw-internal")) {
     throw INTERNAL_ERROR({ data: { message: "Internal test error" } });
@@ -42,7 +39,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.submitted,
+        state: A2A.TaskState.submitted,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -58,7 +55,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -76,7 +73,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
         contextId: contextId,
         kind: "status-update",
         status: {
-          state: TaskState.working,
+          state: A2A.TaskState.working,
           message: {
             messageId: "test-message-id",
             kind: "message",
@@ -96,7 +93,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -115,7 +112,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -131,7 +128,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -150,7 +147,7 @@ describe("Server Implementation Tests", () => {
 
   beforeEach(() => {
     // Create a server with a custom agent card to test that code path
-    const customCard: AgentCard = {
+    const customCard: A2A.AgentCard = {
       protocolVersion: "0.3.0",
       name: "Server Impl Test Agent",
       url: "http://localhost:41241",
@@ -473,7 +470,7 @@ describe("Server Implementation Tests", () => {
 
   describe("Task Timestamps", () => {
     it("includes timestamps in task status", async () => {
-      const requestBody: SendMessageRequest = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "timestamp-request-1",
         method: "message/send",

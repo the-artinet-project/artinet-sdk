@@ -5,30 +5,40 @@
 
 import express from "express";
 import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
+import { A2A } from "~/types/index.js";
+import { Agent } from "~/services/a2a/index.js";
 import {
-  Agent,
-  AgentCard,
-  FactoryParams as CreateAgentParams,
-} from "~/types/index.js";
-import { createAgent } from "~/services/index.js";
+  createAgent,
+  ServiceParams as CreateAgentParams,
+  Service,
+} from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
-
 export interface ServerParams {
   app?: express.Express;
   corsOptions?: CorsOptions;
   basePath?: string;
   /* Your agentCard must have supportsAuthenticatedExtendedCard set to true */
-  extendedAgentCard?: AgentCard;
+  extendedAgentCard?: A2A.AgentCard;
+  agent: Agent | CreateAgentParams;
+  agentCardPath?: string;
+  register?: boolean;
 }
 
-function rpcParser(
+export function rpcParser(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
   express.json()(req, res, (err) => {
+    if (!req.body || typeof req.body !== "object") {
+      return next(
+        PARSE_ERROR({
+          data: { message: "Invalid request body" },
+        })
+      );
+    }
     if (err) {
       if (
         err instanceof SyntaxError &&
@@ -48,57 +58,41 @@ function rpcParser(
   });
 }
 
-function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
-  if (
-    agentOrParams &&
-    typeof agentOrParams === "object" &&
-    "agentCard" in agentOrParams &&
-    typeof agentOrParams.agentCard === "object" &&
-    "sendMessage" in agentOrParams &&
-    typeof agentOrParams.sendMessage === "function" &&
-    "streamMessage" in agentOrParams &&
-    typeof agentOrParams.streamMessage === "function" &&
-    "addConnection" in agentOrParams &&
-    typeof agentOrParams.addConnection === "function" &&
-    "removeConnection" in agentOrParams &&
-    typeof agentOrParams.removeConnection === "function" &&
-    "getState" in agentOrParams &&
-    typeof agentOrParams.getState === "function" &&
-    "setState" in agentOrParams &&
-    typeof agentOrParams.setState === "function"
-  ) {
-    return agentOrParams;
-  } else if (
+const isParams = (
+  agentOrParams: Agent | CreateAgentParams
+): agentOrParams is CreateAgentParams => {
+  return (
     agentOrParams &&
     typeof agentOrParams === "object" &&
     "engine" in agentOrParams &&
     typeof agentOrParams.engine === "function" &&
     "agentCard" in agentOrParams &&
     typeof agentOrParams.agentCard === "object"
-  ) {
-    return createAgent(agentOrParams as CreateAgentParams);
+  );
+};
+
+const ensureAgent = (agentOrParams: Agent | CreateAgentParams): Agent => {
+  if (agentOrParams instanceof Service) {
+    return agentOrParams;
+  } else if (isParams(agentOrParams)) {
+    return createAgent(agentOrParams);
   }
   throw new Error("invalid agent or params");
-}
+};
 
-export function createAgentServer(
-  params: ServerParams & {
-    agent: Agent | CreateAgentParams;
-    agentCardPath?: string;
-    register?: boolean;
-  }
-) {
-  const {
-    app = express(),
-    basePath = "/",
-    agentCardPath = "/.well-known/agent-card.json",
-    agent,
-  } = params;
-
+export function createAgentServer({
+  app = express(),
+  basePath = "/",
+  agentCardPath = "/.well-known/agent-card.json",
+  agent,
+  corsOptions,
+  extendedAgentCard,
+}: ServerParams) {
   const agentInstance = ensureAgent(agent);
-  app.use(cors(params.corsOptions));
+  app.use(cors(corsOptions));
   if (agentCardPath !== "/.well-known/agent-card.json") {
     // mount at the root for compliance with RFC8615 standard
+    // todo: align with emerging multi-agent standards
     app.use("/.well-known/agent-card.json", (_, res) => {
       res.json(agentInstance.agentCard);
     });
@@ -132,7 +126,7 @@ export function createAgentServer(
           req,
           res,
           next,
-          params.extendedAgentCard
+          extendedAgentCard
         );
       }
       next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));

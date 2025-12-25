@@ -2,24 +2,16 @@ import { describe, it, beforeEach, afterEach, expect } from "@jest/globals";
 import { join } from "path";
 import { mkdtemp, rm } from "fs/promises";
 import * as os from "os";
-import {
-  configureLogger,
-  FileStore,
-  Task,
-  TaskState,
-  Message,
-} from "../src/index.js";
-
-configureLogger({ level: "silent" });
+import { A2A, Files } from "../src/index.js";
 
 describe("FileStore", () => {
   let tempDir: string;
-  let fileStore: FileStore;
+  let fileStore: Files;
 
   // Create a temporary directory for testing
   beforeEach(async () => {
     tempDir = await mkdtemp(join(os.tmpdir(), "a2a-file-store-test-"));
-    fileStore = new FileStore(tempDir);
+    fileStore = new Files(tempDir);
   });
 
   // Clean up the temporary directory after tests
@@ -29,49 +21,49 @@ describe("FileStore", () => {
 
   it("should save and retrieve a task", async () => {
     const taskId = "test-task-1";
-    const task: Task = {
+    const task: A2A.Task = {
       id: taskId,
       contextId: "test-context-id",
       kind: "task",
       status: {
-        state: "working" as TaskState,
+        state: A2A.TaskState.working,
         timestamp: new Date().toISOString(),
       },
     };
 
     // Save the task
-    await fileStore.setState(taskId, { task, history: [] });
+    await fileStore.set(taskId, task);
 
     // Retrieve the task
-    const result = await fileStore.getState(taskId);
+    const result: A2A.Task | undefined = await fileStore.get(taskId);
 
     expect(result).toBeDefined();
-    expect(result?.task.id).toBe(taskId);
-    expect(result?.task.status.state).toBe("working");
+    expect(result?.id).toBe(taskId);
+    expect(result?.status.state).toBe("working");
   });
 
   it("should update an existing task", async () => {
     const taskId = "test-task-2";
-    const task: Task = {
+    const task: A2A.Task = {
       id: taskId,
       contextId: "test-context-id",
       kind: "task",
       status: {
-        state: "submitted" as TaskState,
+        state: A2A.TaskState.submitted,
         timestamp: new Date().toISOString(),
       },
     };
 
     // Save the task initially
-    await fileStore.setState(taskId, { task, history: [] });
+    await fileStore.set(taskId, task);
 
     // Update the task
-    const updatedTask: Task = {
+    const updatedTask: A2A.Task = {
       id: taskId,
       contextId: "test-context-id",
       kind: "task",
       status: {
-        state: "completed" as TaskState,
+        state: A2A.TaskState.completed,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
@@ -88,35 +80,36 @@ describe("FileStore", () => {
       ],
     };
 
-    await fileStore.setState(taskId, { task: updatedTask, history: [] });
+    await fileStore.set(taskId, updatedTask);
 
     // Retrieve the updated task
-    const result = await fileStore.getState(taskId);
+    const result: A2A.Task | undefined = await fileStore.get(taskId);
 
     expect(result).toBeDefined();
-    expect(result?.task.id).toBe(taskId);
-    expect(result?.task.status.state).toBe("completed");
-    expect(result?.task.artifacts).toBeDefined();
-    expect(result?.task.artifacts?.length).toBe(1);
-    expect(result?.task.artifacts?.[0].name).toBe("result.txt");
+    expect(result?.id).toBe(taskId);
+    expect(result?.status.state).toBe("completed");
+    expect(result?.artifacts).toBeDefined();
+    expect(result?.artifacts?.length).toBe(1);
+    expect(result?.artifacts?.[0].name).toBe("result.txt");
   });
 
-  it.skip("should throw for non-existent task", async () => {
+  it("should not throw for non-existent task", async () => {
     const nonExistentTaskId = "non-existent-task";
 
-    expect(fileStore.getState(nonExistentTaskId)).rejects.toThrowError();
+    const result: A2A.Task | undefined = await fileStore.get(nonExistentTaskId);
+    expect(result).toBeUndefined();
   });
 
   it("should handle tasks with artifacts containing file parts", async () => {
     const taskId = "test-file-task";
     const fileContent = "SGVsbG8gQTJBIQ=="; // Base64 encoded "Hello A2A!"
 
-    const task: Task = {
+    const task: A2A.Task = {
       id: taskId,
       contextId: "test-context-id",
       kind: "task",
       status: {
-        state: "completed" as TaskState,
+        state: A2A.TaskState.completed,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
@@ -138,16 +131,16 @@ describe("FileStore", () => {
     };
 
     // Save the task
-    await fileStore.setState(taskId, { task, history: [] });
+    await fileStore.set(taskId, task);
 
     // Retrieve the task
-    const result = await fileStore.getState(taskId);
+    const result: A2A.Task | undefined = await fileStore.get(taskId);
 
     expect(result).toBeDefined();
-    expect(result?.task.artifacts).toBeDefined();
-    expect(result?.task.artifacts?.length).toBe(1);
+    expect(result?.artifacts).toBeDefined();
+    expect(result?.artifacts?.length).toBe(1);
 
-    const filePart = result?.task.artifacts?.[0].parts[0];
+    const filePart = result?.artifacts?.[0].parts[0];
     expect(filePart?.kind).toBe("file");
     expect((filePart as any).file.name).toBe("example.txt");
     expect((filePart as any).file.bytes).toBe(fileContent);
@@ -156,12 +149,12 @@ describe("FileStore", () => {
   it("should handle tasks with multiple artifacts", async () => {
     const taskId = "multi-artifact-task";
 
-    const task: Task = {
+    const task: A2A.Task = {
       id: taskId,
       contextId: "test-context-id",
       kind: "task",
       status: {
-        state: "completed" as TaskState,
+        state: A2A.TaskState.completed,
         timestamp: new Date().toISOString(),
       },
       artifacts: [
@@ -189,32 +182,21 @@ describe("FileStore", () => {
     };
 
     // Save the task
-    await fileStore.setState(taskId, { task, history: [] });
+    await fileStore.set(taskId, task);
 
     // Retrieve the task
-    const result = await fileStore.getState(taskId);
+    const result: A2A.Task | undefined = await fileStore.get(taskId);
 
     expect(result).toBeDefined();
-    expect(result?.task.artifacts).toBeDefined();
-    expect(result?.task.artifacts?.length).toBe(2);
-    expect(result?.task.artifacts?.[0].name).toBe("result1.txt");
-    expect(result?.task.artifacts?.[1].name).toBe("result2.txt");
+    expect(result?.artifacts).toBeDefined();
+    expect(result?.artifacts?.length).toBe(2);
+    expect(result?.artifacts?.[0].name).toBe("result1.txt");
+    expect(result?.artifacts?.[1].name).toBe("result2.txt");
   });
 
   it("should save and retrieve task history", async () => {
     const taskId = "history-task";
-
-    const task: Task = {
-      id: taskId,
-      contextId: "test-context-id",
-      kind: "task",
-      status: {
-        state: "completed" as TaskState,
-        timestamp: new Date().toISOString(),
-      },
-    };
-
-    const history: Message[] = [
+    const history: A2A.Message[] = [
       {
         messageId: "test-message-id-1",
         kind: "message",
@@ -238,17 +220,27 @@ describe("FileStore", () => {
         ],
       },
     ];
+    const task: A2A.Task = {
+      id: taskId,
+      contextId: "test-context-id",
+      kind: "task",
+      status: {
+        state: A2A.TaskState.completed,
+        timestamp: new Date().toISOString(),
+      },
+      history: history,
+    };
 
     // Save the task with history
-    await fileStore.setState(taskId, { task, history });
+    await fileStore.set(taskId, task);
 
     // Retrieve the task and history
-    const result = await fileStore.getState(taskId);
+    const result: A2A.Task | undefined = await fileStore.get(taskId);
 
     expect(result).toBeDefined();
     expect(result?.history).toBeDefined();
-    expect(result?.history.length).toBe(2);
-    expect(result?.history[0].role).toBe("user");
-    expect(result?.history[1].role).toBe("agent");
+    expect(result?.history?.length).toBe(2);
+    expect(result?.history?.[0].role).toBe("user");
+    expect(result?.history?.[1].role).toBe("agent");
   });
 });

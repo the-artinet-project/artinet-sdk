@@ -2,49 +2,40 @@ import { jest, describe, it, beforeEach, expect } from "@jest/globals";
 import express from "express";
 import request from "supertest";
 import {
-  TaskState,
-  TaskStatusUpdateEvent,
-  TextPart,
-  UpdateEvent,
-  SendMessageRequest,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
-  Context,
   getParts,
-  MessageSendParams,
-  Message,
 } from "../src/index.js";
-import { configureLogger } from "../src/utils/logging/index.js";
-configureLogger({ level: "silent" });
 
-// Set a reasonable timeout for all tests
+// With options
+
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
 const protocolEngine: AgentEngine = async function* (
-  context: Context
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const request: MessageSendParams = context.command;
-  const message: Message = context.command.message;
-  const taskId = request.message.taskId ?? "";
-  const contextId = request.message.contextId ?? "";
-  const { text, file, data } = getParts(request.message.parts);
+  context: A2A.Context
+): AsyncGenerator<A2A.Update, void, unknown> {
+  const message: A2A.Message = context.userMessage;
+  const taskId = context.taskId;
+  const contextId = context.contextId;
+  const { text } = getParts(message.parts);
 
-  const taskState = context.State();
+  const task = context.getTask();
   // Test for all possible states in A2A protocol
   if (text.includes("throw")) {
     throw new Error("Simulated task error");
   }
 
   if (text.includes("fail")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.failed,
+        state: A2A.TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -58,13 +49,13 @@ const protocolEngine: AgentEngine = async function* (
   }
 
   if (text.includes("input-required")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState["input-required"],
+        state: A2A.TaskState["input-required"],
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -79,13 +70,13 @@ const protocolEngine: AgentEngine = async function* (
   }
 
   if (text.includes("working-only")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-working-only",
           kind: "message",
@@ -105,7 +96,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -124,7 +115,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -153,7 +144,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-streaming",
           kind: "message",
@@ -193,7 +184,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id-streaming-completed",
           kind: "message",
@@ -212,7 +203,7 @@ const protocolEngine: AgentEngine = async function* (
     contextId: contextId,
     final: false,
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id-working",
         kind: "message",
@@ -228,7 +219,7 @@ const protocolEngine: AgentEngine = async function* (
     contextId: contextId,
     final: true,
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id-completed",
         kind: "message",
@@ -294,7 +285,7 @@ describe("A2A Protocol Specification Tests", () => {
 
   describe("Task States", () => {
     it("handles task/send with task/completed state", async () => {
-      const requestBody: SendMessageRequest = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "test-request-1",
         method: "message/send",
@@ -467,10 +458,13 @@ describe("A2A Protocol Specification Tests", () => {
             role: "user",
             parts: [{ kind: "text", text: "Task to be retrieved" }],
           },
+          configuration: {
+            blocking: true,
+          },
         },
       };
 
-      await request(app).post("/").send(createBody);
+      const createResponse = await request(app).post("/").send(createBody);
 
       // Now retrieve it
       const retrieveBody = {
@@ -486,7 +480,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("retrieve-task-1");
-      expect(response.body.result.status.state).toBe("completed");
+      expect(response.body.result.status.state).toBe(A2A.TaskState.completed);
     });
 
     it("returns error for non-existent task", async () => {
@@ -503,7 +497,7 @@ describe("A2A Protocol Specification Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001); // Task not found error
+      expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound); // Task not found error
       expect(response.body.error.message).toBe("Task not found");
     });
 
@@ -557,7 +551,7 @@ describe("A2A Protocol Specification Tests", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001); // Task not found error
+      expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound); // Task not found error
       expect(response.body.error.message).toBe("Task not found");
     });
 
@@ -582,7 +576,6 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const createResponse = await request(app).post("/").send(createBody);
-
       // Now try to cancel it
       const cancelBody = {
         jsonrpc: "2.0",
@@ -594,10 +587,9 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await request(app).post("/").send(cancelBody);
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32002);
+      expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotCancelable);
       expect(response.body.error.message).toBe("Task cannot be canceled");
     });
   });
@@ -724,7 +716,7 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await request(app).post("/").send(requestBody);
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32601); // Method not found error
+      expect(response.body.error.code).toBe(A2A.ErrorCodeMethodNotFound); // Method not found error
       expect(response.body.error.message).toBe("Method not found");
     });
 
@@ -739,7 +731,7 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await request(app).post("/").send(requestBody);
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32602); // Invalid params error
+      expect(response.body.error.code).toBe(A2A.ErrorCodeInvalidParams); // Invalid params error
       expect(response.body.error.message).toBe("Invalid parameters");
     });
   });

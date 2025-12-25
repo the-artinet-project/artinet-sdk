@@ -9,32 +9,26 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  InMemoryTaskStore,
-  TaskState,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
-  Context,
-  TaskManagerInterface,
-  MessageSendParams,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
-import { configureLogger } from "../src/utils/logging/index.js";
-// Set a reasonable timeout for all tests
+
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
 // Define test task handler
-const basicTaskHandler: AgentEngine = async function* (context: Context) {
-  const params: MessageSendParams = context.command;
-  const taskId = params.message.taskId ?? "";
-  const contextId = params.message.contextId ?? "";
+const basicTaskHandler: AgentEngine = async function* (context: A2A.Context) {
+  const message = context.userMessage;
+  const taskId = message.taskId ?? "";
+  const contextId = message.contextId ?? "";
   // Check if task already has status, if not, use "working"
-  yield {
+  const workingUpdate: A2A.TaskStatusUpdateEvent = {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -44,7 +38,7 @@ const basicTaskHandler: AgentEngine = async function* (context: Context) {
     },
     final: false,
   };
-
+  yield workingUpdate;
   // Simulate some work
   await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -60,10 +54,10 @@ const basicTaskHandler: AgentEngine = async function* (context: Context) {
   //   return;
   // }
   // Generate a result artifact
-  yield {
+  const artifactUpdate: A2A.TaskArtifactUpdateEvent = {
     taskId: taskId,
     contextId: contextId,
-    kind: "artifact-update",
+    kind: A2A.Kind["artifact-update"],
     artifact: {
       artifactId: "test-artifact-id",
       name: "result.txt",
@@ -76,13 +70,14 @@ const basicTaskHandler: AgentEngine = async function* (context: Context) {
     },
     lastChunk: true,
   };
+  yield artifactUpdate;
   // Final completion status
   yield {
     taskId: taskId,
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -200,7 +195,7 @@ describe("A2AServer", () => {
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32600);
+      expect(response.body.error.code).toBe(A2A.ErrorCodeInvalidRequest);
       expect(response.body.error.message).toBe(
         "Request payload validation error"
       );
@@ -210,12 +205,14 @@ describe("A2AServer", () => {
   describe("tasks/get", () => {
     it("retrieves a task after it has been created", async () => {
       // First create a task
-      const createRequest = {
+      const createRequest: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "create-req",
         method: "message/send",
         params: {
           message: {
+            messageId: "test-message-id",
+            kind: "message",
             taskId: "retrieve-task",
             role: "user",
             parts: [{ kind: "text", text: "Task to retrieve" }],
@@ -228,7 +225,7 @@ describe("A2AServer", () => {
       );
 
       // Now try to retrieve it
-      const getRequest = {
+      const getRequest: A2A.GetTaskRequest = {
         jsonrpc: "2.0",
         id: "get-req",
         method: "tasks/get",
@@ -263,7 +260,7 @@ describe("A2AServer", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32001);
+      expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound);
       expect(response.body.error.message).toBe("Task not found");
     });
   });
@@ -271,12 +268,14 @@ describe("A2AServer", () => {
   describe("tasks/cancel", () => {
     it("successfully cancels a task", async () => {
       // First create a task
-      const createRequest = {
+      const createRequest: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "create-cancel-req",
         method: "message/send",
         params: {
           message: {
+            messageId: "test-message-id",
+            kind: "message",
             taskId: "cancel-task",
             role: "user",
             parts: [{ kind: "text", text: "Task to cancel" }],
@@ -287,7 +286,7 @@ describe("A2AServer", () => {
       await trackRequest(request(app).post("/").send(createRequest));
 
       // Now try to cancel it (note: the task may complete before cancellation in this test)
-      const cancelRequest = {
+      const cancelRequest: A2A.CancelTaskRequest = {
         jsonrpc: "2.0",
         id: "cancel-req",
         method: "tasks/cancel",
@@ -304,7 +303,7 @@ describe("A2AServer", () => {
       // in which case we'll get a "task not cancelable" error,
       // but that's also a valid test result
       if (response.body.error) {
-        expect(response.body.error.code).toBe(-32002);
+        expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotCancelable);
         expect(response.body.error.message).toBe("Task cannot be canceled");
       } else {
         expect(response.status).toBe(200);
@@ -329,7 +328,7 @@ describe("A2AServer", () => {
       );
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32601);
+      expect(response.body.error.code).toBe(A2A.ErrorCodeMethodNotFound);
       expect(response.body.error.message).toBe("Method not found");
     });
   });

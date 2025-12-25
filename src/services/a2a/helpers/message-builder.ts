@@ -1,12 +1,13 @@
-import {
-  MessageSendParams,
-  Message as MessageType,
-  MessageSendConfiguration,
-} from "~/types/index.js";
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { A2A } from "~/types/index.js";
 import { v4 as uuidv4 } from "uuid";
 
 export class MessageBuilder {
-  message: MessageType = {
+  message: A2A.Message = {
     role: "user",
     parts: [],
     metadata: undefined,
@@ -17,7 +18,7 @@ export class MessageBuilder {
     contextId: undefined,
     kind: "message",
   };
-  constructor(message: Partial<MessageType> = {}) {
+  constructor(message: Partial<A2A.Message> = {}) {
     this.message.role = message.role ?? this.message.role;
     this.message.parts = message.parts ?? this.message.parts;
     this.message.metadata = message.metadata ?? this.message.metadata;
@@ -28,19 +29,23 @@ export class MessageBuilder {
     this.message.taskId = message.taskId ?? this.message.taskId;
     this.message.contextId = message.contextId ?? this.message.contextId;
   }
-  valueOf(): MessageType {
+  valueOf(): A2A.Message {
     return this.message;
   }
 }
+export const MESSAGE = (message: Partial<A2A.Message> = {}): A2A.Message =>
+  new MessageBuilder(message).message;
 
 export class MessageSendConfigurationBuilder {
-  configuration: MessageSendConfiguration = {
+  configuration: A2A.MessageSendConfiguration = {
     acceptedOutputModes: undefined,
     historyLength: undefined,
     pushNotificationConfig: undefined,
     blocking: undefined,
   };
-  constructor(configuration: Partial<MessageSendConfiguration> | null = {}) {
+  constructor(
+    configuration: Partial<A2A.MessageSendConfiguration> | null = {}
+  ) {
     this.configuration.acceptedOutputModes =
       configuration?.acceptedOutputModes ??
       this.configuration.acceptedOutputModes;
@@ -52,14 +57,14 @@ export class MessageSendConfigurationBuilder {
     this.configuration.blocking =
       configuration?.blocking ?? this.configuration.blocking;
   }
-  valueOf(): MessageSendConfiguration {
+  valueOf(): A2A.MessageSendConfiguration {
     return this.configuration;
   }
 }
 
 export const createMessageSendParams = (
-  messageSendParams: Partial<MessageSendParams> | string
-): MessageSendParams => {
+  messageSendParams: Partial<A2A.MessageSendParams> | string
+): A2A.MessageSendParams => {
   const isString = typeof messageSendParams === "string";
   return {
     message: new MessageBuilder(

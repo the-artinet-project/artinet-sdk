@@ -4,7 +4,7 @@
  */
 
 import { NextFunction, Request, Response } from "express";
-import { A2AServiceInterface, AgentCard } from "~/types/index.js";
+import { A2A } from "~/types/index.js";
 import {
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   INVALID_REQUEST,
@@ -12,7 +12,7 @@ import {
   METHOD_NOT_FOUND,
   AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED,
 } from "~/utils/index.js";
-import { logError } from "~/utils/logging/index.js";
+import { logger } from "~/config/index.js";
 
 const isValidMethod = (method: string) => {
   return (
@@ -43,11 +43,11 @@ const checkParams = (params: unknown, method: string) => {
 };
 
 export async function jsonRPCMiddleware(
-  service: A2AServiceInterface,
+  service: A2A.Service,
   req: Request,
   res: Response,
   next: NextFunction,
-  extendedAgentCard?: AgentCard
+  extendedAgentCard?: A2A.AgentCard
 ): Promise<void> {
   const { method, params, id, jsonrpc } = req.body;
   if (
@@ -57,7 +57,7 @@ export async function jsonRPCMiddleware(
     res.json({
       jsonrpc: "2.0",
       id: id || null,
-      error: { code: -32600, message: "Invalid Request" },
+      error: { code: A2A.ErrorCodeInvalidRequest, message: "Invalid Request" },
     });
     return;
   }
@@ -123,6 +123,8 @@ export async function jsonRPCMiddleware(
         result = await service.cancelTask(params);
         break;
       }
+      //todo: Implement push notifications
+      //todo: Implement Tasks List
       case "tasks/pushNotificationConfig/set":
       case "tasks/pushNotificationConfig/get":
       case "tasks/pushNotificationConfig/delete":
@@ -138,7 +140,8 @@ export async function jsonRPCMiddleware(
       case "agent/getAuthenticatedExtendedCard": {
         if (
           !extendedAgentCard ||
-          service.agentCard.supportsAuthenticatedExtendedCard !== true
+          (await service.getAgentCard()).supportsAuthenticatedExtendedCard !==
+            true
         ) {
           throw AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED({
             data: {
@@ -161,7 +164,10 @@ export async function jsonRPCMiddleware(
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {
-    logError("jsonRPCMiddleware", "error detected", error, req.body);
+    logger.error("jsonRPCMiddleware[Error]:", error);
+    logger.warn("jsonRPCMiddleware[Error]: Request body", {
+      request: req.body,
+    });
     return next(error);
   }
 }

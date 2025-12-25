@@ -1,23 +1,22 @@
-import { A2AEngine, Task, TaskState, Context } from "../../src/types/index.js";
+import { AgentEngine, A2A } from "../../src/types/index.js";
 import { SUBMITTED_UPDATE } from "../../src/utils/common/constants.js";
 //echoes the users input back as a task
-export const TestAgentLogic: A2AEngine = async function* (context: Context) {
-  const command = context.command;
-  yield SUBMITTED_UPDATE(
-    command.message.taskId ?? "",
-    command.message.contextId ?? ""
-  );
-  const Task: Task = {
-    id: command.message.taskId ?? "",
-    contextId: command.message.contextId ?? "",
+export const TestAgentLogic: AgentEngine = async function* (
+  context: A2A.Context
+) {
+  const message = context.userMessage;
+  yield SUBMITTED_UPDATE(message.taskId ?? "", message.contextId ?? "");
+  const Task: A2A.Task = {
+    id: context.taskId,
+    contextId: context.contextId,
     status: {
-      state: TaskState.completed,
-      message: command.message,
+      state: A2A.TaskState.completed,
+      message: message,
       timestamp: "2024-01-01T00:00:00.000Z",
     },
     kind: "task",
     metadata: {},
-    history: [command.message],
+    history: [message],
   };
   yield Task;
 };

@@ -6,16 +6,16 @@ import {
   afterEach,
   expect,
 } from "@jest/globals";
-import { createA2ARouter, createAgent } from "../../src/index.js";
-import { configureLogger, TaskState, TASK_NOT_FOUND } from "../../src/index.js";
+import { createAgent } from "../../src/index.js";
+import { A2A, TASK_NOT_FOUND } from "../../src/index.js";
 import express from "express";
 import request from "supertest";
 import { createAgentServer } from "../../src/index.js";
 import { TestAgentLogic as engine } from "../utils/engine.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
+import { createA2ARouter } from "../../src/transport/trpc/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "error" });
 const agentRouter = createA2ARouter();
 describe("trpc-server", () => {
   const testId = "123";
@@ -80,7 +80,7 @@ describe("trpc-server", () => {
             role: "user",
             parts: [{ kind: "text", text: "hello world" }],
           },
-          state: TaskState.completed,
+          state: A2A.TaskState.completed,
           timestamp: "2024-01-01T00:00:00.000Z",
         },
       });
@@ -123,14 +123,14 @@ describe("trpc-server", () => {
         agent.tasks.get({
           id: testId,
         })
-      ).rejects.toThrowError("Task not found");
+      ).rejects.toThrow("Task not found");
     });
     it("should call cancel", async () => {
       await expect(
         agent.tasks.cancel({
           id: testId,
         })
-      ).rejects.toThrowError("Task not found");
+      ).rejects.toThrow("Task not found");
     });
   });
 
