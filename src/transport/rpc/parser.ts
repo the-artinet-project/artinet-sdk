@@ -44,7 +44,7 @@ export function parseResponse<
       throw PARSE_ERROR("invalid jsonrpc");
     }
 
-    if ((parsed as MCP.JSONRPCResponse).result === undefined) {
+    if ((parsed as MCP.JSONRPCResultResponse).result === undefined) {
       throw PARSE_ERROR("result is undefined");
     }
 

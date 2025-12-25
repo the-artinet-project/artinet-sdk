@@ -91,7 +91,7 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@artinet/types": "0.0.9-alpha.1",
+    "@artinet/types": "^0.0.9-alpha.3",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",
@@ -114,10 +114,10 @@
       "optional": false
     },
     "@trpc/server": {
-      "optional": false
+      "optional": true
     },
     "@a2a-js/sdk": {
-      "optional": false
+      "optional": true
     },
     "@opentelemetry/api": {
       "optional": false

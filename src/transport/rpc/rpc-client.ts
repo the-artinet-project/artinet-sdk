@@ -120,7 +120,9 @@ export async function sendGetRequest(
  * @returns A promise resolving to the result payload
  * @throws RpcError if there's an error in the response
  */
-export async function handleJsonRpcResponse<Res extends MCP.JSONRPCResponse>(
+export async function handleJsonRpcResponse<
+  Res extends MCP.JSONRPCResultResponse
+>(
   response: Response,
   expectedMethod?: string
 ): Promise<NonNullable<Res["result"]>> {
@@ -227,7 +229,7 @@ export async function handleJsonResponse<T>(
  */
 export async function executeJsonRpcRequest<
   Req extends A2A.A2ARequest,
-  Res extends MCP.JSONRPCResponse
+  Res extends MCP.JSONRPCResultResponse
 >(
   baseUrl: URL,
   method: Req["method"],

@@ -23,9 +23,9 @@ import { logger } from "~/config/index.js";
  * @param response The fetch Response object containing the event stream
  * @returns An async generator yielding the specified type of task events from StreamingResponse
  */
-export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
-  response: Response
-): AsyncGenerator<NonNullable<StreamRes["result"]>> {
+export async function* handleEventStream<
+  StreamRes extends MCP.JSONRPCResultResponse
+>(response: Response): AsyncGenerator<NonNullable<StreamRes["result"]>> {
   if (!response.ok || !response.body) {
     let errorText: string | null = null;
     try {
@@ -111,7 +111,7 @@ export async function* handleEventStream<StreamRes extends MCP.JSONRPCResponse>(
  */
 export async function* executeStreamEvents<
   Req extends A2A.A2ARequest,
-  StreamRes extends MCP.JSONRPCResponse
+  StreamRes extends MCP.JSONRPCResultResponse
 >(
   baseUrl: URL,
   method: Req["method"],

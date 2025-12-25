@@ -3,22 +3,22 @@ import { AgentBuilder, getContent, A2A } from "../../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 import { configure } from "../../src/config/index.js";
 import { configurePino } from "../../src/extensions/pino.js";
-import pino from "pino";
-import pinoCaller from "pino-caller";
-import { ResourceReferenceSchema } from "@modelcontextprotocol/sdk/types.js";
-configure({
-  logger: configurePino(
-    pinoCaller(
-      pino({
-        level: "info",
-        transport: {
-          target: "pino-pretty",
-          options: { colorize: true },
-        },
-      })
-    )
-  ),
-});
+// import pino from "pino";
+// import pinoCaller from "pino-caller";
+// import { ResourceReferenceSchema } from "@modelcontextprotocol/sdk/types.js";
+// configure({
+//   logger: configurePino(
+//     pinoCaller(
+//       pino({
+//         level: "info",
+//         transport: {
+//           target: "pino-pretty",
+//           options: { colorize: true },
+//         },
+//       })
+//     )
+//   ),
+// });
 describe("A2A Service Tests", () => {
   let agent: A2A.Service;
 

@@ -8,25 +8,30 @@ import {
   AgentCard,
   Message,
   Task,
-  TaskStatusUpdateEvent,
-  TaskArtifactUpdateEvent,
   AgentExtension,
   TaskQueryParams,
   TaskIdParams,
   MessageSendParams,
   SendMessageSuccessResult,
+  TaskArtifactUpdateEventSchema,
+  MessageSchema,
+  TaskSchema,
+  TaskStatusUpdateEventSchema,
 } from "@artinet/types/a2a";
 import { core } from "../core/index.js";
+import { z } from "zod/v4";
 
 export type AgentCardParams =
   | (Partial<AgentCard> & Required<Pick<AgentCard, "name">>)
   | string;
 
-export type Update =
-  | Message
-  | Task
-  | TaskStatusUpdateEvent
-  | TaskArtifactUpdateEvent;
+export const UpdateSchema = z.discriminatedUnion("kind", [
+  MessageSchema,
+  TaskSchema,
+  TaskStatusUpdateEventSchema,
+  TaskArtifactUpdateEventSchema,
+]);
+export type Update = z.infer<typeof UpdateSchema>;
 
 export type Engine = (
   context: Context
