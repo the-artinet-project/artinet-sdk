@@ -168,12 +168,6 @@ export const task = Task.create;
 // Task Status Update Event
 // ============================================================================
 
-// export type BuilderStatusUpdateParams =
-//   | (Partial<Kindless<A2A.TaskStatusUpdateEvent>> & {
-//       status: BuilderStatusParams;
-//     })
-//   | BuilderStatusParams;
-
 export type StatusUpdateParams =
   | (Partial<Kindless<A2A.TaskStatusUpdateEvent>> & {
       status: StatusParams;
@@ -186,11 +180,13 @@ export class TaskStatusUpdateEvent {
     params: Partial<Kindless<A2A.TaskStatusUpdateEvent>> &
       Required<Pick<Kindless<A2A.TaskStatusUpdateEvent>, "status">>
   ) {
-    const taskId = params.taskId ?? uuidv4();
+    const taskId = params.taskId ?? params.status.message?.taskId ?? uuidv4();
+    const contextId =
+      params.contextId ?? params.status.message?.contextId ?? taskId;
     this._event = {
       ...params,
       taskId,
-      contextId: params.contextId ?? taskId,
+      contextId,
       kind: A2A.Kind["status-update"],
       final: params.final ?? false,
     };
@@ -201,6 +197,8 @@ export class TaskStatusUpdateEvent {
   static create(params: StatusUpdateParams): A2A.TaskStatusUpdateEvent {
     if (isStatusParams(params)) {
       return new TaskStatusUpdateEvent({
+        /*allows for a mixture of Update & Status Params*/
+        ...(typeof params === "object" ? params : {}),
         status: TaskStatus.create(params),
       }).event;
     }
@@ -287,7 +285,7 @@ function _working(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {
 }
 
 function _canceled(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {
-  return _buildUpdate(A2A.TaskState.canceled, params);
+  return _buildUpdate(A2A.TaskState.canceled, params, true);
 }
 
 function _submitted(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {
@@ -299,7 +297,7 @@ function _failed(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {
 }
 
 function _completed(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {
-  return _buildUpdate(A2A.TaskState.completed, params);
+  return _buildUpdate(A2A.TaskState.completed, params, true);
 }
 
 function _inputRequired(params: BuildStatusParams): A2A.TaskStatusUpdateEvent {

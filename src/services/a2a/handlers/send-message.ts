@@ -6,7 +6,6 @@
 import { A2A } from "~/types/index.js";
 import { getLatestHistory } from "../helpers/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
-import { logger } from "~/config/index.js";
 
 export const sendMessage: A2A.RequestHandler["sendMessage"] = async (
   { configuration }: A2A.MessageSendParams,

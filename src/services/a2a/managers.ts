@@ -80,6 +80,11 @@ export class Tasks extends Manager<A2A.Task> implements A2A.Tasks {
 
   async update(context: A2A.Context, update: A2A.Update): Promise<A2A.Task> {
     logger.info(`Tasks[update]: updating task`, { taskId: context.taskId });
+    logger.debug(`Tasks[update]: update`, { update });
+    logger.debug(`Tasks[update]: context`, { context });
+    logger.debug(`Tasks[update]: context task`, {
+      task: await context.getTask(),
+    });
     const task = await handleUpdate({
       context,
       task: await context.getTask(),

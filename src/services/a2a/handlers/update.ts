@@ -35,7 +35,11 @@ export const handleMessageUpdate: Updater<A2A.Message> = async ({
   const validated = await validateSchema(A2A.MessageSchema, update);
   if (validated.taskId && task.id !== validated.taskId) {
     throw new Error(`updateMessage: Invalid task id: ${validated.taskId}`, {
-      cause: validated,
+      cause: {
+        validated,
+        actual: task.id,
+        task,
+      },
     });
   }
   updateHistory(task, validated);
