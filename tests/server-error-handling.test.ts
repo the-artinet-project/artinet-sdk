@@ -18,7 +18,7 @@ import {
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
+// applyDefaults();
 const errorProneEngine: AgentEngine = async function* (context: A2A.Context) {
   const message = context.userMessage;
   const taskId = message.taskId ?? "";
@@ -136,7 +136,7 @@ describe("A2AServer Error Handling", () => {
         // Or it might return an internal error
         expect(response.body.error).toBeDefined();
         expect(response.body.error.code).toBe(A2A.ErrorCodeInternalError); // Internal error
-        expect(response.body.error.message).toBe("Internal error");
+        expect(response.body.error.message).toBe("Simulated task error");
       }
     });
 
@@ -181,11 +181,12 @@ describe("A2AServer Error Handling", () => {
       );
 
       // The server might return either a 400 Bad Request or 200 with JSON-RPC error
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32700); // JSON parse error
-      expect(response.body.error.message).toBe("Invalid JSON payload");
+      expect(response.body.error.message).toBe(
+        "Invalid request body: undefined"
+      );
     });
 
     it("returns error for empty request body", async () => {

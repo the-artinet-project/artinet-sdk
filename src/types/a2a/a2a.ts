@@ -31,7 +31,7 @@ export const UpdateSchema = z.discriminatedUnion("kind", [
   TaskStatusUpdateEventSchema,
   TaskArtifactUpdateEventSchema,
 ]);
-export type Update = z.infer<typeof UpdateSchema>;
+export type Update = z.output<typeof UpdateSchema>;
 
 export type Engine = (
   context: Context
@@ -39,6 +39,10 @@ export type Engine = (
 
 export interface BaseContext extends core.Context<Task> {
   readonly service: Service;
+  /**
+   * Considering ommit OnStart & OnComplete from Context consumers.
+   * That way the user cannot inadvertently trigger a start/completion out of band.
+   */
   readonly publisher: EventPublisher;
 }
 
@@ -55,9 +59,9 @@ export type ContextParams = Omit<
   BaseContext,
   "publisher" | "isCancelled" | "getState" | "abortSignal"
 > &
-  Omit<Partial<Context>, "userMessage"> & {
+  Omit<Partial<Context>, "userMessage" | "taskId"> & {
     messenger: MessageConsumerProxy;
-    task?: Task;
+    task: Task;
     overrides?: Partial<Omit<EventConsumer, "contextId">>;
     abortSignal?: AbortSignal;
   };
@@ -103,10 +107,12 @@ export interface RequestHandler {
     context?: Context,
     options?: ServiceOptions
   ) => AsyncGenerator<Update>;
+  //TODO: Rename to subscribeToTask
   resubscribe: (
     input: TaskIdParams,
     context?: Context,
     options?: ServiceOptions
+    //TODO: Omit Message as an update
   ) => AsyncGenerator<Update>;
   getAgentCard: () => Promise<AgentCard>;
 }

@@ -1,6 +1,9 @@
 export * from "./part.js";
 export * from "./content.js";
-export * from "./agentcard-builder.js";
-export * from "./message-builder.js";
+export { AgentCardBuilder } from "~/create/agentcard-builder.js";
+export {
+  MessageBuilder,
+  MessageSendConfigurationBuilder,
+} from "~/create/message-builder.js";
 export * from "./history.js";
 export * from "./references.js";

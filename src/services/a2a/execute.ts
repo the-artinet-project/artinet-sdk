@@ -4,7 +4,11 @@
  */
 
 import { A2A } from "~/types/index.js";
-
+/**
+ * Our universal executor for {@link A2A.Engine}.
+ * @param engine - {@link A2A.Engine} to execute.
+ * @param context - {@link A2A.Context} provided to the engine.
+ */
 export const execute = async (
   engine: A2A.Engine,
   context: A2A.Context
@@ -21,8 +25,9 @@ export const execute = async (
       await context.publisher.onUpdate(update);
     }
   } catch (error) {
+    /** onError triggers completion internally */
     await context.publisher.onError(error);
-    throw error;
+    // throw error;
   } finally {
     await context.publisher.onComplete();
   }

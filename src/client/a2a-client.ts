@@ -15,7 +15,7 @@ import { INTERNAL_ERROR } from "~/utils/common/errors.js";
 import { logger } from "~/config/index.js";
 
 import type { Client } from "~/types/client.js";
-import { createMessageSendParams } from "~/services/a2a/helpers/message-builder.js";
+import * as describe from "~/create/describe.js";
 
 /**
  * A2AClient is the main client class for interacting with Agent2Agent (A2A) protocol-compliant services.
@@ -162,10 +162,10 @@ export class A2AClient implements Client {
       this.agentUrl,
       "message/send",
       typeof params === "string"
-        ? createMessageSendParams(params)
+        ? describe.messageSendParams(params)
         : typeof params === "object" && "message" in params
         ? params
-        : createMessageSendParams({ message: params }),
+        : describe.messageSendParams({ message: params }),
       this.customHeaders
     );
   }
@@ -196,7 +196,7 @@ export class A2AClient implements Client {
     >(
       this.agentUrl,
       "message/stream",
-      createMessageSendParams(params),
+      describe.messageSendParams(params),
       this.customHeaders
     );
   }

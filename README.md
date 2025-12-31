@@ -55,7 +55,7 @@ npm install @artinet/sdk
 **Peer dependencies (required):**
 
 ```bash
-npm install @a2a-js/sdk @modelcontextprotocol/sdk
+npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
 ```
 
 ## Requirements

@@ -28,22 +28,22 @@
       "default": "./dist/types/index.js"
     },
     "./pino": {
+      "types": "./dist/extensions/pino.d.ts",
       "node": {
-        "types": "./dist/extensions/pino.d.ts",
         "import": "./dist/extensions/pino.js",
         "default": "./dist/extensions/pino.js"
       }
     },
     "./winston": {
+      "types": "./dist/extensions/winston.d.ts",
       "node": {
-        "types": "./dist/extensions/winston.d.ts",
         "import": "./dist/extensions/winston.js",
         "default": "./dist/extensions/winston.js"
       }
     },
     "./otel": {
+      "types": "./dist/extensions/opentelemetry.d.ts",
       "node": {
-        "types": "./dist/extensions/opentelemetry.d.ts",
         "import": "./dist/extensions/opentelemetry.js",
         "default": "./dist/extensions/opentelemetry.js"
       }
@@ -130,6 +130,7 @@
     }
   },
   "devDependencies": {
+    "@a2a-js/sdk": "^0.3.7",
     "@cfworker/json-schema": "^4.1.1",
     "@eslint/js": "^9.25.1",
     "@opentelemetry/api": "^1.9.0",

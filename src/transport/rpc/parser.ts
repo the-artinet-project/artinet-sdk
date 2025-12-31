@@ -16,7 +16,7 @@ import { logger } from "~/config/index.js";
  * @throws A2AError if the response contains an error or is invalid
  */
 export function parseResponse<
-  Res extends MCP.JSONRPCResponse | MCP.JSONRPCError
+  Res extends MCP.JSONRPCResponse | MCP.JSONRPCErrorResponse
 >(data: string): Res {
   if (!data) {
     throw PARSE_ERROR("Invalid response data");
@@ -24,12 +24,13 @@ export function parseResponse<
 
   try {
     const parsed = JSON.parse(data) as Res; //todo: leverage safe parse
-    if ((parsed as MCP.JSONRPCError).error) {
-      const parsedError = MCP.JSONRPCErrorSchema.safeParse(parsed);
+    if ((parsed as MCP.JSONRPCErrorResponse).error) {
+      //MCP Error defs may be a wee bit restrictive
+      const parsedError = MCP.JSONRPCErrorResponseSchema.safeParse(parsed);
       if (!parsedError.success) {
         throw PARSE_ERROR(parsedError.error);
       }
-      throw new SystemError<MCP.JSONRPCError>(
+      throw new SystemError<MCP.JSONRPCErrorResponse>(
         parsedError.data.error.message,
         parsedError.data.error.code,
         parsedError.data.error.data

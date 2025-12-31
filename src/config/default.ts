@@ -9,7 +9,7 @@
  *
  * @example
  * ```typescript
- * import { applyDefaults } from '@artinet/core';
+ * import { applyDefaults } from '@artinet/armada';
  *
  * // Enable console logging with defaults
  * applyDefaults();

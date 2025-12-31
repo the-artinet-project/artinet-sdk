@@ -15,7 +15,7 @@
  *
  * @example
  * ```typescript
- * import { configure, getLogger, getTracer } from '@artinet/core';
+ * import { configure, getLogger, getTracer } from '@artinet/armada';
  * import pino from 'pino';
  *
  * // Configure at app startup

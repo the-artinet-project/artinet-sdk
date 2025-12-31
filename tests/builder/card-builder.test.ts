@@ -1,14 +1,15 @@
 import { describe, it, expect } from "@jest/globals";
 import {
-  createAgentCard,
+  describe as des6,
   AgentBuilder,
   createAgentServer,
   A2A,
+  cr8,
 } from "../../src/index.js";
 
 describe("Card Builder Tests", () => {
   it("should create AgentCard", () => {
-    const card: A2A.AgentCard = createAgentCard("TestAgent");
+    const card: A2A.AgentCard = des6.card("TestAgent");
     expect(card).toBeDefined();
     expect(card.name).toBe("TestAgent");
     expect(card.description).toBe("An agent that can use the A2A protocol.");
@@ -27,7 +28,7 @@ describe("Card Builder Tests", () => {
     expect(card.skills?.length).toBe(0);
   });
   it("should create full AgentCard", () => {
-    const card: A2A.AgentCard = createAgentCard({
+    const card: A2A.AgentCard = des6.card({
       name: "TestAgent",
       description: "A test agent for unit tests",
       url: "https://test-agent.example.com/api",
@@ -84,13 +85,9 @@ describe("Card Builder Tests", () => {
     expect(card.skills?.[0].description).toBe("A test skill for unit tests");
   });
   it("should create AgentServer", () => {
-    const server = createAgentServer({
-      agent: AgentBuilder()
-        .text(() => "hello world!")
-        .createAgent({
-          agentCard: "TestAgent",
-        }),
-    });
+    const server = cr8({
+      agentCard: "TestAgent",
+    }).text("hello world!").server;
     expect(server).toBeDefined();
   });
 });

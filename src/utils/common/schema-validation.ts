@@ -9,7 +9,7 @@ import { z } from "zod/v4";
 export async function validateSchema<T extends z.ZodSchema>(
   schema: T,
   data: unknown
-): Promise<z.infer<T>> {
+): Promise<z.output<T>> {
   return await schema.parseAsync(data).catch((error) => {
     logger.error("Schema validation failed", error);
     throw INVALID_PARAMS(error);

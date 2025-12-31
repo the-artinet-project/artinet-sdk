@@ -4,11 +4,9 @@
  */
 
 import { A2A } from "~/types/index.js";
-import { createMessageSendParams } from "./helpers/message-builder.js";
 import { validateSchema } from "~/utils/common/schema-validation.js";
-import { CANCEL_UPDATE } from "~/utils/common/constants.js";
+import * as describe from "~/create/describe.js";
 import { INVALID_REQUEST, TASK_NOT_FOUND } from "~/utils/common/errors.js";
-import { v4 as uuidv4 } from "uuid";
 import { Messenger } from "./messenger.js";
 import { execute } from "./execute.js";
 import { createService, ServiceParams } from "./factory/service.js";
@@ -45,6 +43,10 @@ const getExtensions = async (
   return [];
 };
 
+/**
+ * @note We endeavor to remove all optional parameters from below this class.
+ * This will allow the service to act as the boundary to our Hexagonal Architecture.
+ */
 export class Service implements A2A.Service {
   constructor(
     private _agentCard: A2A.AgentCard,
@@ -136,18 +138,10 @@ export class Service implements A2A.Service {
     logger.info(`Service[stop]`);
     for (const context of await this.contexts.list()) {
       await context.publisher.onCancel(
-        CANCEL_UPDATE(context.taskId, context.contextId, {
-          role: "agent",
-          parts: [
-            {
-              kind: "text",
-              text: "service stopped",
-            },
-          ],
-          messageId: uuidv4(),
-          kind: "message",
-          taskId: context.taskId,
+        describe.update.canceled({
           contextId: context.contextId,
+          taskId: context.taskId,
+          message: describe.message("service stopped"),
         })
       );
     }
@@ -159,13 +153,20 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): Promise<A2A.Task> {
-    logger.info(`Service[getTask]:`, { taskId: params.id });
-    const task: A2A.Task | undefined = await this.tasks.get(params.id);
+    const taskParams: A2A.TaskQueryParams = await validateSchema(
+      A2A.TaskQueryParamsSchema,
+      params
+    );
+
+    logger.info(`Service[getTask]:`, { taskId: taskParams.id });
+
+    const task: A2A.Task | undefined = await this.tasks.get(taskParams.id);
     if (!task) {
-      throw TASK_NOT_FOUND({ taskId: params.id });
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
     }
+
     return await this.methods.getTask(
-      await validateSchema(A2A.TaskQueryParamsSchema, params),
+      taskParams,
       context ??
         (await this.contexts.create({
           contextId: task.contextId,
@@ -183,13 +184,20 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): Promise<A2A.Task> {
-    logger.info(`Service[cancelTask]:`, { taskId: params.id });
-    const task: A2A.Task | undefined = await this.tasks.get(params.id);
+    const taskParams: A2A.TaskIdParams = await validateSchema(
+      A2A.TaskIdParamsSchema,
+      params
+    );
+
+    logger.info(`Service[cancelTask]:`, { taskId: taskParams.id });
+
+    const task: A2A.Task | undefined = await this.tasks.get(taskParams.id);
     if (!task) {
-      throw TASK_NOT_FOUND({ taskId: params.id });
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
     }
+
     return await this.methods.cancelTask(
-      await validateSchema(A2A.TaskIdParamsSchema, params),
+      taskParams,
       context ??
         (await this.contexts.create({
           contextId: task.contextId,
@@ -222,39 +230,43 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult> {
-    const params =
-      typeof paramsOrMessage === "string"
-        ? createMessageSendParams(paramsOrMessage)
-        : typeof paramsOrMessage === "object" && "message" in paramsOrMessage
-        ? paramsOrMessage
-        : createMessageSendParams({
-            message: paramsOrMessage,
-          });
+    const params = describe.messageSendParams(paramsOrMessage);
     return await this._sendMessage(params, context, options);
   }
 
-  async _sendMessage(
+  protected async _sendMessage(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): Promise<A2A.SendMessageSuccessResult> {
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
+    );
+
     logger.info(`Service[sendMessage]:`, {
-      messageId: params.message.messageId,
+      messageId: messageParams.message.messageId,
     });
-    logger.debug(`Service[sendMessage]:`, { taskId: params.message.taskId });
+
     logger.debug(`Service[sendMessage]:`, {
-      contextId: params.message.contextId,
+      taskId: messageParams.message.taskId,
     });
+
+    logger.debug(`Service[sendMessage]:`, {
+      contextId: messageParams.message.contextId,
+    });
+
     const task: A2A.Task = await this.tasks.create({
-      id: params.message.taskId,
-      contextId: params.message.contextId,
-      history: [params.message],
+      id: messageParams.message.taskId,
+      contextId: messageParams.message.contextId,
+      history: [messageParams.message],
       metadata: {
-        ...params.metadata,
+        ...messageParams.metadata,
       },
     });
+
     return await this.methods.sendMessage(
-      await validateSchema(A2A.MessageSendParamsSchema, params),
+      messageParams,
       context ??
         (await this.contexts.create({
           contextId: task.contextId,
@@ -262,12 +274,12 @@ export class Service implements A2A.Service {
           abortSignal: options?.abortSignal,
           task: task,
           overrides: this.overrides,
-          messenger: Messenger.create(params),
+          messenger: Messenger.create(messageParams),
           references: await getReferences(
             this.tasks,
-            params.message.referenceTaskIds
+            messageParams.message.referenceTaskIds
           ),
-          extensions: await getExtensions(params.message.extensions),
+          extensions: await getExtensions(messageParams.message.extensions),
         }))
     );
   }
@@ -289,36 +301,41 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
-    const params =
-      typeof paramsOrMessage === "string"
-        ? createMessageSendParams(paramsOrMessage)
-        : paramsOrMessage;
-    yield* this._streamMessage(params, context, options);
+    const params = describe.messageSendParams(paramsOrMessage);
+    yield* this.sendMessageStream(params, context, options);
   }
 
-  async *_streamMessage(
+  async *sendMessageStream(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
+    );
+
     logger.info("Service[streamMessage]:", {
-      taskId: params.message.taskId,
-      contextId: params.message.contextId,
+      taskId: messageParams.message.taskId,
+      contextId: messageParams.message.contextId,
     });
-    const task = await this.tasks.create({
-      id: params.message.taskId,
-      contextId: params.message.contextId,
-      history: [params.message],
+
+    const task: A2A.Task = await this.tasks.create({
+      id: messageParams.message.taskId,
+      contextId: messageParams.message.contextId,
+      history: [messageParams.message],
       metadata: {
-        ...params.metadata,
+        ...messageParams.metadata,
       },
     });
+
     logger.debug("Service[streamMessage]: task created", {
       taskId: task.id,
       contextId: task.contextId,
     });
+
     yield* this.methods.streamMessage(
-      await validateSchema(A2A.MessageSendParamsSchema, params),
+      messageParams,
       context ??
         (await this.contexts.create({
           contextId: task.contextId,
@@ -326,12 +343,12 @@ export class Service implements A2A.Service {
           abortSignal: options?.abortSignal,
           task: task,
           overrides: this.overrides,
-          messenger: Messenger.create(params),
+          messenger: Messenger.create(messageParams),
           references: await getReferences(
             this.tasks,
-            params.message.referenceTaskIds
+            messageParams.message.referenceTaskIds
           ),
-          extensions: await getExtensions(params.message.extensions),
+          extensions: await getExtensions(messageParams.message.extensions),
         }))
     );
   }
@@ -341,17 +358,25 @@ export class Service implements A2A.Service {
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update> {
-    logger.info(`Service[resubscribe]:`, { taskId: params.id });
-    const task: A2A.Task | undefined = await this.tasks.get(params.id);
+    const taskParams: A2A.TaskIdParams = await validateSchema(
+      A2A.TaskIdParamsSchema,
+      params
+    );
+
+    logger.info(`Service[resubscribe]:`, { taskId: taskParams.id });
+
+    const task: A2A.Task | undefined = await this.tasks.get(taskParams.id);
     if (!task) {
-      throw TASK_NOT_FOUND({ taskId: params.id });
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
     }
+
     logger.debug("Service[resubscribe]:", {
       taskId: task.id,
       contextId: task.contextId,
     });
+
     yield* this.methods.resubscribe(
-      await validateSchema(A2A.TaskIdParamsSchema, params),
+      taskParams,
       context ??
         (await this.contexts.create({
           contextId: task.contextId,

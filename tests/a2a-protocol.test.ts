@@ -8,7 +8,7 @@ import {
   AgentEngine,
   getParts,
 } from "../src/index.js";
-
+import { A2AError } from "@a2a-js/sdk/server";
 // With options
 
 jest.setTimeout(10000);
@@ -634,7 +634,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32003);
       expect(response.body.error.message).toBe(
-        "Push Notifications is not supported"
+        "Push Notification is not supported"
       );
     });
 
@@ -717,7 +717,9 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeMethodNotFound); // Method not found error
-      expect(response.body.error.message).toBe("Method not found");
+      expect(response.body.error.message).toBe(
+        "Method not found: invalid/method"
+      );
     });
 
     it("handles invalid params", async () => {
@@ -727,12 +729,11 @@ describe("A2A Protocol Specification Tests", () => {
         method: "message/send",
         params: {},
       };
-
       const response = await request(app).post("/").send(requestBody);
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeInvalidParams); // Invalid params error
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toBe("Params Required");
     });
   });
 });

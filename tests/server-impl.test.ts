@@ -24,8 +24,8 @@ const serverImplTestHandler: AgentEngine = async function* (
   context: A2A.Context
 ) {
   const message = context.userMessage;
-  const taskId = message.taskId ?? "";
-  const contextId = message.contextId ?? "";
+  const taskId = context.taskId;
+  const contextId = context.contextId;
   const { text } = getParts(message.parts);
   // Need to specifically test error conditions
   if (text.includes("throw-internal")) {
@@ -284,7 +284,6 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32603);
@@ -327,7 +326,9 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32601);
-      expect(response.body.error.message).toBe("Method not found");
+      expect(response.body.error.message).toBe(
+        "Method not found: invalid/method"
+      );
     });
 
     it("returns INVALID_PARAMS error for missing params", async () => {
@@ -345,7 +346,7 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toBe("Invalid Parameters");
     });
 
     it("returns INVALID_PARAMS error for invalid task ID", async () => {
@@ -365,7 +366,7 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toBe("Params Required");
     });
   });
 

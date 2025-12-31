@@ -3,23 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { createHandler } from "./handler.js";
-import { createAgentCard } from "../helpers/agentcard-builder.js";
-
+import * as describe from "~/create/agentcard-builder.js";
 import { A2A } from "~/types/index.js";
-import { Service } from "../service.js";
+import { Service } from "~/services/a2a/service.js";
 import {
   Contexts,
   Streams,
   Connections,
   Cancellations,
   Tasks,
-} from "../managers.js";
-export type AgentCardParams =
-  | (Partial<A2A.AgentCard> & Required<Pick<A2A.AgentCard, "name">>)
-  | string;
+} from "~/services/a2a/managers.js";
 
 export interface ServiceParams {
-  agentCard: AgentCardParams;
+  agentCard: describe.AgentCardParams;
   engine: A2A.Engine;
   contexts?: A2A.Contexts;
   streams?: A2A.Streams;
@@ -33,7 +29,7 @@ export type CreateAgentParams = ServiceParams;
 
 export function createService(params: ServiceParams) {
   return new Service(
-    createAgentCard(params.agentCard),
+    describe.card(params.agentCard),
     params.engine,
     params.connections ?? new Connections(),
     params.cancellations ?? new Cancellations(),

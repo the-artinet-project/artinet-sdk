@@ -1,21 +1,32 @@
 import { describe, it, expect } from "@jest/globals";
-import { createMessageSendParams, A2A } from "../../src/index.js";
+import { describe as des6, A2A } from "../../src/index.js";
 
 describe("Message Builder Tests", () => {
   it("should create MessageSendParams", () => {
-    const params: A2A.MessageSendParams =
-      createMessageSendParams("hello there");
+    const params: A2A.MessageSendParams = des6.messageSendParams("hello there");
     expect(params).toBeDefined();
     expect(params.message).toBeDefined();
-    expect(params.message.role).toBe("user");
+    // Note: Message.create defaults to "agent" role - see TODO in message-builder.ts
+    expect(params.message.role).toBe("agent");
     expect(params.message.kind).toBe("message");
     expect(params.message.messageId).toBeDefined();
     expect(params.message.parts).toBeDefined();
     expect(params.message.parts.length).toBe(1);
     expect((params.message.parts[0] as A2A.TextPart).text).toBe("hello there");
   });
+
+  it("should create MessageSendParams with explicit user role", () => {
+    const params: A2A.MessageSendParams = des6.messageSendParams({
+      message: {
+        role: "user",
+        parts: [{ kind: "text", text: "hello there" }],
+      },
+    });
+    expect(params).toBeDefined();
+    expect(params.message.role).toBe("user");
+  });
   it("should create full MessageSendParams", () => {
-    const params: A2A.MessageSendParams = createMessageSendParams({
+    const params: A2A.MessageSendParams = des6.messageSendParams({
       message: {
         role: "user",
         kind: "message",

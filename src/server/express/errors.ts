@@ -4,10 +4,11 @@
  */
 
 import { MCP } from "~/types/index.js";
-import { SystemError, INTERNAL_ERROR } from "~/utils/index.js";
+import { SystemError } from "~/utils/index.js";
 import { logger } from "~/config/index.js";
 import { type ErrorRequestHandler } from "express";
 import escapeHtml from "escape-html";
+import { A2AError } from "@a2a-js/sdk/server";
 /**
  * Express error handler middleware.
  */
@@ -26,16 +27,14 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _) => {
     logger.error("errorHandler: Error extracting request ID", e);
   }
 
-  let jsonRpcError: MCP.JSONRPCError["error"];
-  if (err instanceof SystemError) {
+  let jsonRpcError: MCP.JSONRPCErrorResponse["error"];
+  if (err instanceof A2AError || err instanceof SystemError) {
     jsonRpcError = { code: err.code, message: err.message, data: err.data };
   } else {
-    const internalError = INTERNAL_ERROR(err.stack);
-    jsonRpcError = {
-      code: internalError.code,
-      message: internalError.message,
-      data: internalError.data,
-    };
+    jsonRpcError = A2AError.internalError(
+      err.message,
+      err.data
+    ).toJSONRPCError();
   }
 
   const errorResponse = {

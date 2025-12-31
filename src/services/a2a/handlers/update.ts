@@ -4,7 +4,7 @@
  */
 
 import { getCurrentTimestamp, validateSchema } from "~/utils/index.js";
-import { processArtifactUpdate } from "./artifact.js";
+import { upsertArtifact } from "./artifact.js";
 import { A2A } from "~/types/index.js";
 import { logger } from "~/config/index.js";
 
@@ -106,11 +106,7 @@ export const handleArtifactUpdate: Updater<
     validated.taskId = task.id;
   }
 
-  task.artifacts = processArtifactUpdate(
-    update.append ?? false,
-    task.artifacts ?? [],
-    update.artifact
-  );
+  task.artifacts = upsertArtifact(task.artifacts ?? [], validated);
   return task;
 };
 // The onus is now on the caller to handle errors when processing updates
@@ -123,14 +119,18 @@ export const handleUpdate: Updater<A2A.Update> = async ({
   if (!update || !update.kind) {
     throw new Error("updateState: Invalid update", { cause: update });
   }
+
   logger.debug(`handleUpdate:`, {
     contextId: context?.contextId,
     taskId: task?.id,
   });
+
   task = await validateSchema(A2A.TaskSchema, task);
+
   if (!context || !context.contextId) {
     throw new Error("updateState: Invalid context", { cause: context });
   }
+
   switch (update.kind) {
     case A2A.Kind.message: {
       return handleMessageUpdate({

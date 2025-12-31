@@ -1,5 +1,5 @@
 import { AgentEngine, A2A } from "../../src/types/index.js";
-import { SUBMITTED_UPDATE } from "../../src/utils/common/constants.js";
+import { SUBMITTED_UPDATE } from "../../src/create/index.js";
 //echoes the users input back as a task
 export const TestAgentLogic: AgentEngine = async function* (
   context: A2A.Context

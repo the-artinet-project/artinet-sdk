@@ -196,9 +196,7 @@ describe("A2AServer", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeInvalidRequest);
-      expect(response.body.error.message).toBe(
-        "Request payload validation error"
-      );
+      expect(response.body.error.message).toBe("Invalid JSON-RPC request");
     });
   });
 
@@ -329,7 +327,9 @@ describe("A2AServer", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeMethodNotFound);
-      expect(response.body.error.message).toBe("Method not found");
+      expect(response.body.error.message).toBe(
+        "Method not found: unknown/method"
+      );
     });
   });
 });

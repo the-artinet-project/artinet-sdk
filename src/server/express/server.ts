@@ -4,7 +4,6 @@
  */
 
 import express from "express";
-import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
 import { A2A } from "~/types/index.js";
 import { Agent } from "~/services/a2a/index.js";
 import {
@@ -15,11 +14,18 @@ import {
 import cors, { CorsOptions } from "cors";
 import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
+import { logger } from "~/config/index.js";
+import { A2AError } from "@a2a-js/sdk/server";
+import { formatJson } from "~/utils/common/utils.js";
+
 export interface ServerParams {
   app?: express.Express;
   corsOptions?: CorsOptions;
   basePath?: string;
-  /* Your agentCard must have supportsAuthenticatedExtendedCard set to true */
+  port?: number;
+  /**
+   * Your agentCard must have supportsAuthenticatedExtendedCard set to true
+   */
   extendedAgentCard?: A2A.AgentCard;
   agent: Agent | CreateAgentParams;
   agentCardPath?: string;
@@ -34,9 +40,7 @@ export function rpcParser(
   express.json()(req, res, (err) => {
     if (!req.body || typeof req.body !== "object") {
       return next(
-        PARSE_ERROR({
-          data: { message: "Invalid request body" },
-        })
+        A2AError.parseError(`Invalid request body: ${formatJson(req.body)}`)
       );
     }
     if (err) {
@@ -47,9 +51,7 @@ export function rpcParser(
         "body" in err
       ) {
         return next(
-          PARSE_ERROR({
-            data: err.message,
-          })
+          A2AError.parseError(`Invalid request body: ${formatJson(req.body)}`)
         );
       }
       return next(err);
@@ -80,6 +82,11 @@ const ensureAgent = (agentOrParams: Agent | CreateAgentParams): Agent => {
   throw new Error("invalid agent or params");
 };
 
+const registerAgent = async (agentCard: A2A.AgentCard) => {
+  logger.debug("registerAgent: not implemented", { agentCard });
+  return Promise.resolve(agentCard);
+};
+
 export function createAgentServer({
   app = express(),
   basePath = "/",
@@ -87,6 +94,8 @@ export function createAgentServer({
   agent,
   corsOptions,
   extendedAgentCard,
+  register = false,
+  port,
 }: ServerParams) {
   const agentInstance = ensureAgent(agent);
   app.use(cors(corsOptions));
@@ -120,16 +129,16 @@ export function createAgentServer({
       next: express.NextFunction
     ) => {
       const { jsonrpc } = req.body;
-      if (jsonrpc === "2.0") {
-        return await jsonRPCMiddleware(
-          agentInstance,
-          req,
-          res,
-          next,
-          extendedAgentCard
-        );
+      if (jsonrpc !== "2.0") {
+        return next(A2AError.invalidRequest("Invalid JSON-RPC request"));
       }
-      next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));
+      return await jsonRPCMiddleware(
+        agentInstance,
+        req,
+        res,
+        next,
+        extendedAgentCard
+      );
     }
   );
   app.use(errorHandler);
@@ -149,7 +158,23 @@ export function createAgentServer({
     );
    * we could also use trpc directly or any other transport layer
    */
-  return { app, agent: agentInstance };
+  const start = (_port?: number) => {
+    try {
+      const listenPort = _port ?? port;
+      const server = app.listen(listenPort, () => {
+        logger.info(`Agent server started on port ${listenPort}`);
+      });
+
+      if (register) {
+        registerAgent(agentInstance.agentCard);
+      }
+      return server;
+    } catch (error) {
+      logger.error(`Failed to start agent server`, error);
+      throw error;
+    }
+  };
+  return { app, agent: agentInstance, start };
 }
 
 export type ExpressAgentServer = ReturnType<typeof createAgentServer>;

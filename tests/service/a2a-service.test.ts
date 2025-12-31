@@ -1,38 +1,19 @@
 import { describe, it, beforeEach, expect, afterEach } from "@jest/globals";
-import { AgentBuilder, getContent, A2A } from "../../src/index.js";
+import { cr8, getContent, A2A } from "../../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
-import { configure } from "../../src/config/index.js";
-import { configurePino } from "../../src/extensions/pino.js";
-// import pino from "pino";
-// import pinoCaller from "pino-caller";
-// import { ResourceReferenceSchema } from "@modelcontextprotocol/sdk/types.js";
-// configure({
-//   logger: configurePino(
-//     pinoCaller(
-//       pino({
-//         level: "info",
-//         transport: {
-//           target: "pino-pretty",
-//           options: { colorize: true },
-//         },
-//       })
-//     )
-//   ),
-// });
+import { applyDefaults } from "../../src/config/default.js";
+
+// applyDefaults();
 describe("A2A Service Tests", () => {
   let agent: A2A.Service;
 
   beforeEach(() => {
-    agent = AgentBuilder()
-      .text(({ context }) => {
-        return context.references?.[0]?.id ?? "no reference";
-      })
-      .createAgent({
-        agentCard: defaultAgentCard,
-      });
+    agent = cr8(defaultAgentCard).text(({ context }) => {
+      return context.references?.[0]?.id ?? "no reference";
+    }).agent;
   });
-  afterEach(() => {
-    agent.stop();
+  afterEach(async () => {
+    await agent.stop();
   });
   it("should get referenceTasks", async () => {
     const result1: A2A.SendMessageSuccessResult = await agent.sendMessage({

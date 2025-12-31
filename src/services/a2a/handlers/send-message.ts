@@ -6,6 +6,7 @@
 import { A2A } from "~/types/index.js";
 import { getLatestHistory } from "../helpers/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
+import { logger } from "~/config/index.js";
 
 export const sendMessage: A2A.RequestHandler["sendMessage"] = async (
   { configuration }: A2A.MessageSendParams,
@@ -14,31 +15,26 @@ export const sendMessage: A2A.RequestHandler["sendMessage"] = async (
   if (!context) {
     throw INTERNAL_ERROR({ error: { message: "Context is required" } });
   }
-  context.publisher.on("complete", () => {
-    context.service.contexts.delete(context.contextId);
-  });
-
-  context.publisher.on("error", () => {
-    context.publisher.onComplete();
-  });
 
   const service = context.service;
+
+  let task: A2A.Task;
   if (configuration?.blocking === false) {
-    const result: A2A.SendMessageSuccessResult = await Promise.race([
+    task = await Promise.race([
       service.execute({ engine: service.engine, context }).then(async () => {
         return await context.getTask();
       }),
-      new Promise<A2A.SendMessageSuccessResult>((resolve) => {
+      new Promise<A2A.Task>((resolve) => {
         context.publisher.on("start", (_, task: A2A.Task) => {
           resolve(task);
         });
       }),
     ]);
-    return result;
+  } else {
+    await service.execute({ engine: service.engine, context });
+    task = await context.getTask();
   }
 
-  await service.execute({ engine: service.engine, context });
-  const task: A2A.Task = await context.getTask();
   task.history = getLatestHistory(task, configuration?.historyLength);
   return task;
 };

@@ -41,7 +41,7 @@ import { core } from "../core/index.js";
  * @public
  * @since 0.5.7
  */
-//TODO: Implement execute (execute will take MCPServerOptions as params and start the MCP server)
+//TODO: Implement execute (execute will take MCPServerOptions as params and start the MCP server)// Or it will trigger callTools?
 export interface Service extends Omit<core.Service, "execute"> {
   /**
    * Registers tools for the MCP service.

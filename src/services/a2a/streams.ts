@@ -57,9 +57,11 @@ export class Stream implements A2A.Stream {
 
   async *subscribe(): AsyncGenerator<A2A.Update> {
     const subscription: A2A.Update[] = this.updates;
+
     this.context.publisher.on("update", async (_, update) => {
       subscription.push(update);
     });
+
     let updatesRead = 0;
     while (!this._completed || updatesRead < subscription.length) {
       if (updatesRead < subscription.length) {

@@ -5,60 +5,39 @@
 
 import { A2A } from "~/types/index.js";
 
-export function updateByIndex(
-  append: boolean,
-  artifacts: A2A.Artifact[],
-  index: number,
-  artifactUpdate: A2A.Artifact
-): { artifacts: A2A.Artifact[]; replaced: boolean } {
-  if (append) {
-    const existingArtifact: A2A.Artifact = artifacts[index];
-    existingArtifact.parts.push(...artifactUpdate.parts);
+export function updateArtifact(
+  _artifact: A2A.Artifact,
+  update: A2A.TaskArtifactUpdateEvent
+): A2A.Artifact {
+  if (!update.append) return update.artifact;
 
-    if (artifactUpdate.metadata) {
-      existingArtifact.metadata = {
-        ...(existingArtifact.metadata || {}),
-        ...artifactUpdate.metadata,
-      };
-    }
+  const artifactUpdate: A2A.Artifact = update.artifact;
+  const artifact: A2A.Artifact = _artifact;
 
-    if (artifactUpdate.description) {
-      existingArtifact.description = artifactUpdate.description;
-    }
+  artifact.metadata = {
+    ...(artifact.metadata || {}),
+    ...artifactUpdate.metadata,
+  };
 
-    if (artifactUpdate.name) {
-      existingArtifact.name = artifactUpdate.name;
-    }
+  artifact.description = artifactUpdate.description;
+  artifact.name = artifactUpdate.name;
+  artifact.parts.push(...artifactUpdate.parts);
 
-    artifacts[index] = existingArtifact;
-  } else {
-    artifacts[index] = { ...artifactUpdate };
-  }
-  return { artifacts, replaced: true };
+  return artifact;
 }
 
-export function processArtifactUpdate(
-  append: boolean,
+export function upsertArtifact(
   artifacts: A2A.Artifact[],
-  artifactUpdate: A2A.Artifact
+  update: A2A.TaskArtifactUpdateEvent
 ): A2A.Artifact[] {
-  const existingIndex = artifacts.findIndex(
-    (a) => a.artifactId === artifactUpdate.artifactId
-  );
+  const updateId = update.artifact.artifactId;
+  const index = artifacts.findIndex((a) => a.artifactId === updateId);
 
-  let replaced: boolean = false;
-  let newArtifacts: A2A.Artifact[] = artifacts;
+  if (index === -1) {
+    artifacts.push({ ...update.artifact });
+    return artifacts;
+  }
 
-  if (existingIndex !== -1) {
-    ({ artifacts: newArtifacts, replaced } = updateByIndex(
-      append,
-      artifacts,
-      existingIndex,
-      artifactUpdate
-    ));
-  }
-  if (!replaced) {
-    newArtifacts.push({ ...artifactUpdate });
-  }
-  return newArtifacts;
+  artifacts[index] = updateArtifact(artifacts[index], update);
+  return artifacts;
 }

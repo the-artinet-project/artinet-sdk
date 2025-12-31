@@ -29,8 +29,13 @@ export const cancelTask: A2A.RequestHandler["cancelTask"] = async (
     throw TASK_NOT_CANCELABLE("Task is in a final state: " + task.status.state);
   }
 
-  service.cancellations.set(taskId);
-
+  /**
+   * By triggering onCancel, we're guaranteed that:
+   *  - No further updates will be processed other than errors
+   *  - The task will be cancelled
+   *  - The task will be completed
+   *  - The cancellations will be cleaned up
+   */
   const cancelledTask: A2A.Task = {
     ...task,
     status: {
@@ -38,11 +43,6 @@ export const cancelTask: A2A.RequestHandler["cancelTask"] = async (
       state: A2A.TaskState.canceled,
     },
   };
-
-  context.publisher?.on("complete", async () => {
-    await service.cancellations.delete(taskId);
-    await service.contexts.delete(context.contextId);
-  });
 
   await context.publisher.onCancel(cancelledTask);
   return cancelledTask;

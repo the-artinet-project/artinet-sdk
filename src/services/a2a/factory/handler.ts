@@ -8,8 +8,8 @@ import {
   getTask,
   cancelTask,
   sendMessage,
-  streamMessage,
-  resubscribe,
+  sendMessageStream,
+  subscribeToTask,
 } from "../handlers/index.js";
 
 export function createHandler(
@@ -19,7 +19,7 @@ export function createHandler(
     getTask: methods?.getTask ?? getTask,
     cancelTask: methods?.cancelTask ?? cancelTask,
     sendMessage: methods?.sendMessage ?? sendMessage,
-    streamMessage: methods?.streamMessage ?? streamMessage,
-    resubscribe: methods?.resubscribe ?? resubscribe,
+    streamMessage: methods?.streamMessage ?? sendMessageStream,
+    resubscribe: methods?.resubscribe ?? subscribeToTask,
   };
 }

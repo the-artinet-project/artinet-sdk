@@ -11,7 +11,7 @@ import { getParts } from "./part.js";
  * @param input - The input event.
  * @returns The content of the input event.
  */
-export function getContent(input: A2A.Update): string | undefined {
+export function extractTextContent(input: A2A.Update): string | undefined {
   const parts = getParts(
     (input as A2A.Message)?.parts ??
       (input as A2A.Task)?.status?.message?.parts ??
@@ -27,3 +27,8 @@ export function getContent(input: A2A.Update): string | undefined {
     undefined
   );
 }
+
+/**
+ * @deprecated Use extractTextContent instead.
+ */
+export const getContent = extractTextContent;

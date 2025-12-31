@@ -30,16 +30,16 @@ export function createBaseContext({
 }: {
   contextId: string;
   service: A2A.Service;
-  task?: A2A.Task;
+  task: A2A.Task;
   overrides?: Partial<Omit<A2A.EventConsumer, "contextId">>;
   abortSignal?: AbortSignal;
 }): A2A.BaseContext {
   const isCancelled = async () =>
-    (await service.cancellations.has(task?.id ?? contextId)) ||
-    abortSignal.aborted;
+    (await service.cancellations.has(task.id)) || abortSignal.aborted;
 
   const getState = async (args?: string) =>
     args ? await service.tasks.get(args) : task;
+
   const context: A2A.BaseContext = {
     contextId: contextId,
     service: service,
@@ -69,7 +69,7 @@ export function createContext({
 
   const context: A2A.Context = {
     ...baseContext,
-    taskId: (baseContext.publisher as StateMachine).currentTask.id ?? taskId,
+    taskId,
     userMessage: messenger.message,
     messages: messenger,
     getTask,

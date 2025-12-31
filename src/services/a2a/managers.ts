@@ -38,10 +38,11 @@ export class Contexts extends Manager<A2A.Context> implements A2A.Contexts {
     });
     logger.debug(`Contexts[create]: params`, { params });
     const baseContext: A2A.BaseContext = createBaseContext(params);
+    //todo: consider allowing ContextParams to cascade
     const context: A2A.Context = {
       ...createContext({
         baseContext: baseContext,
-        taskId: params.task?.id ?? params.taskId ?? v4(),
+        taskId: params.task.id,
         messenger: params.messenger,
         references: params.references,
         extensions: params.extensions,

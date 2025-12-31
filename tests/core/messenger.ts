@@ -1,11 +1,11 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import { Messenger } from "../../src/index.js";
 import { A2A } from "../../src/types/index.js";
-import { createMessageSendParams } from "../../src/index.js";
+import { describe as des6 } from "../../src/index.js";
 
 // Helper to create a stable message with a fixed messageId for testing
 const createTestMessage = (text: string, messageId = "test-message-id") => {
-  const params = createMessageSendParams(text);
+  const params = des6.messageSendParams(text);
   params.message.messageId = messageId;
   return params;
 };

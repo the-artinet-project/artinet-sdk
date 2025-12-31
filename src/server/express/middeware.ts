@@ -5,15 +5,9 @@
 
 import { NextFunction, Request, Response } from "express";
 import { A2A } from "~/types/index.js";
-import {
-  PUSH_NOTIFICATION_NOT_SUPPORTED,
-  INVALID_REQUEST,
-  INVALID_PARAMS,
-  METHOD_NOT_FOUND,
-  AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED,
-} from "~/utils/index.js";
 import { logger } from "~/config/index.js";
-
+import { formatJson } from "~/utils/common/utils.js";
+import { A2AError } from "@a2a-js/sdk/server";
 const isValidMethod = (method: string) => {
   return (
     method &&
@@ -26,18 +20,14 @@ const isValidMethod = (method: string) => {
 
 const checkParams = (params: unknown, method: string) => {
   if (!params || (typeof params !== "object" && !Array.isArray(params))) {
-    throw INVALID_PARAMS({
-      data: {
-        message: "Invalid params",
-        method,
-      },
+    throw A2AError.invalidParams("Invalid Parameters", {
+      params,
+      method,
     });
   } else if (typeof params === "object" && Object.keys(params).length === 0) {
-    throw INVALID_PARAMS({
-      data: {
-        message: "No params provided",
-        method,
-      },
+    throw A2AError.invalidParams("Params Required", {
+      params,
+      method,
     });
   }
 };
@@ -52,24 +42,24 @@ export async function jsonRPCMiddleware(
   const { method, params, id, jsonrpc } = req.body;
   if (
     jsonrpc !== "2.0" ||
-    (id && typeof id !== "string" && typeof id !== "number" && id !== null)
+    (typeof id !== "string" &&
+      typeof id === "number" &&
+      !Number.isInteger(id) &&
+      id !== null)
   ) {
     res.json({
       jsonrpc: "2.0",
       id: id || null,
-      error: { code: A2A.ErrorCodeInvalidRequest, message: "Invalid Request" },
+      error: A2AError.invalidRequest(
+        `Invalid JSONRPC info: ${formatJson({ method, params, id, jsonrpc })}`
+      ).toJSONRPCError(),
     });
     return;
   }
 
   try {
     if (!isValidMethod(method)) {
-      throw INVALID_REQUEST({
-        data: {
-          message: "No method provided",
-          method,
-        },
-      });
+      throw A2AError.invalidRequest("No method provided");
     }
 
     let result;
@@ -129,12 +119,7 @@ export async function jsonRPCMiddleware(
       case "tasks/pushNotificationConfig/get":
       case "tasks/pushNotificationConfig/delete":
       case "task/pushNotificationConfig/list": {
-        throw PUSH_NOTIFICATION_NOT_SUPPORTED({
-          data: {
-            message: "Push notifications not supported",
-            method,
-          },
-        });
+        throw A2AError.pushNotificationNotSupported();
       }
 
       case "agent/getAuthenticatedExtendedCard": {
@@ -143,24 +128,14 @@ export async function jsonRPCMiddleware(
           (await service.getAgentCard()).supportsAuthenticatedExtendedCard !==
             true
         ) {
-          throw AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED({
-            data: {
-              message: "Authenticated Extended Card is not configured",
-              method,
-            },
-          });
+          throw A2AError.authenticatedExtendedCardNotConfigured();
         }
         result = extendedAgentCard;
         break;
       }
 
       default:
-        throw METHOD_NOT_FOUND({
-          data: {
-            message: "Method not found",
-            method,
-          },
-        });
+        throw A2AError.methodNotFound(method);
     }
     res.json({ jsonrpc: "2.0", id, result });
   } catch (error) {

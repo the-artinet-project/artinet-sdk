@@ -4,8 +4,13 @@
  */
 
 import { A2A, MCP } from "~/types/index.js";
+import { describe } from "~/create/index.js";
 
-export class SystemError<T extends MCP.JSONRPCError> extends Error {
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
+export class SystemError<T extends MCP.JSONRPCErrorResponse> extends Error {
   message: string;
   code: T["error"]["code"];
   data: T["error"]["data"];
@@ -15,18 +20,25 @@ export class SystemError<T extends MCP.JSONRPCError> extends Error {
     code: T["error"]["code"],
     data: T["error"]["data"]
   ) {
-    super(message);
+    super(message, { cause: data });
     // this.name = "RpcError";
     this.message = message;
     this.code = code;
     this.data = data;
   }
 }
-// Factory methods for common errors
+
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const PARSE_ERROR = <T extends A2A.JSONParseError>(
   data: T["error"]["data"]
 ) => new SystemError<T>("Invalid JSON payload", A2A.ErrorCodeParseError, data);
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const INVALID_REQUEST = <T extends A2A.InvalidRequestError>(
   data: T["error"]["data"]
 ) =>
@@ -35,23 +47,38 @@ export const INVALID_REQUEST = <T extends A2A.InvalidRequestError>(
     A2A.ErrorCodeInvalidRequest,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const METHOD_NOT_FOUND = <T extends A2A.MethodNotFoundError>(
   data: T["error"]["data"]
 ) => new SystemError<T>("Method not found", A2A.ErrorCodeMethodNotFound, data);
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const INVALID_PARAMS = <T extends A2A.InvalidParamsError>(
   data: T["error"]["data"]
 ) => new SystemError<T>("Invalid parameters", A2A.ErrorCodeInvalidParams, data);
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const INTERNAL_ERROR = <T extends A2A.InternalError>(
   data: T["error"]["data"]
 ) => new SystemError<T>("Internal error", A2A.ErrorCodeInternalError, data);
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const TASK_NOT_FOUND = <T extends A2A.TaskNotFoundError>(
   data: T["error"]["data"]
 ) => new SystemError<T>("Task not found", A2A.ErrorCodeTaskNotFound, data);
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const TASK_NOT_CANCELABLE = <T extends A2A.TaskNotCancelableError>(
   data: T["error"]["data"]
 ) =>
@@ -60,7 +87,10 @@ export const TASK_NOT_CANCELABLE = <T extends A2A.TaskNotCancelableError>(
     A2A.ErrorCodeTaskNotCancelable,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2A.A2AError>(
   data: T["error"]["data"]
 ) =>
@@ -69,7 +99,10 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2A.A2AError>(
     A2A.ErrorCodePushNotificationNotSupported,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
   T extends A2A.AuthenticatedExtendedCardNotConfiguredError
 >(
@@ -80,7 +113,10 @@ export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
     A2A.ErrorCodeAuthenticatedExtendedCardNotConfigured,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const UNSUPPORTED_OPERATION = <T extends A2A.A2AError>(
   data: T["error"]["data"]
 ) =>
@@ -89,7 +125,10 @@ export const UNSUPPORTED_OPERATION = <T extends A2A.A2AError>(
     A2A.ErrorCodeUnsupportedOperation,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const CONTENT_TYPE_NOT_SUPPORTED = <
   T extends A2A.ContentTypeNotSupportedError
 >(
@@ -100,7 +139,10 @@ export const CONTENT_TYPE_NOT_SUPPORTED = <
     A2A.ErrorCodeContentTypeNotSupported,
     data
   );
-
+/**
+ * @deprecated Use errors from the `@a2a-js/sdk` package instead
+ * @since 0.6.0
+ */
 export const INVALID_AGENT_RESPONSE = <T extends A2A.InvalidAgentResponseError>(
   data: T["error"]["data"]
 ) =>
@@ -109,24 +151,23 @@ export const INVALID_AGENT_RESPONSE = <T extends A2A.InvalidAgentResponseError>(
     A2A.ErrorCodeInvalidAgentResponse,
     data
   );
-
+/**
+ * @deprecated Use {@link describe.update.failed} instead
+ * @since 0.6.0
+ */
 export const FAILED_UPDATE = (
   taskId: string,
   contextId: string,
   messageId: string = "failed-update",
   errMessage: string
-): A2A.TaskStatusUpdateEvent => ({
-  taskId,
-  contextId,
-  kind: "status-update",
-  final: true,
-  status: {
-    state: A2A.TaskState.failed,
-    message: {
+): A2A.TaskStatusUpdateEvent => {
+  return describe.update.failed({
+    taskId,
+    contextId,
+    final: true,
+    message: describe.message({
       messageId,
-      role: "agent",
       parts: [{ kind: "text", text: errMessage }],
-      kind: "message",
-    },
-  },
-});
+    }),
+  });
+};

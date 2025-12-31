@@ -41,6 +41,8 @@ export class StateMachine
     if (this.consumer.onError) {
       await this.consumer.onError(error, this.currentTask);
     }
+    if (!this.listenerCount("error")) return;
+
     this.emit("error", error, this.currentTask);
   };
 
@@ -54,7 +56,7 @@ export class StateMachine
   constructor(
     readonly _contextId: string,
     private readonly _consumer: A2A.EventConsumer,
-    private _currentTask?: A2A.Task
+    private _currentTask: A2A.Task
   ) {
     super();
   }
@@ -83,7 +85,7 @@ export class StateMachine
   static create(
     contextId: string,
     service: A2A.Service,
-    task?: A2A.Task,
+    task: A2A.Task,
     overrides?: Partial<Omit<A2A.EventConsumer, "contextId">>
   ): StateMachine {
     return createStateMachine({

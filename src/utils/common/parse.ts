@@ -18,6 +18,6 @@ export function safeParse<T = any>(json: string): T {
 export async function safeParseSchema<T extends z.ZodSchema>(
   json: string,
   schema: T
-): Promise<z.infer<T>> {
+): Promise<z.output<T>> {
   return await validateSchema(schema, safeParse(json));
 }
