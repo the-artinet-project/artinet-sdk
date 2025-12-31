@@ -4,7 +4,8 @@
  */
 
 import { A2A, MCP } from "~/types/index.js";
-import { describe } from "~/create/index.js";
+import * as describe from "~/create/describe.js";
+import { formatJson } from "~/utils/common/utils.js";
 
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
@@ -20,7 +21,7 @@ export class SystemError<T extends MCP.JSONRPCErrorResponse> extends Error {
     code: T["error"]["code"],
     data: T["error"]["data"]
   ) {
-    super(message, { cause: data });
+    super(message + " " + formatJson({ cause: data }));
     // this.name = "RpcError";
     this.message = message;
     this.code = code;

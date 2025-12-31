@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getCurrentTimestamp, validateSchema } from "~/utils/index.js";
+import { getCurrentTimestamp, formatJson } from "~/utils/common/utils.js";
+import { validateSchema } from "~/utils/common/schema-validation.js";
 import { upsertArtifact } from "./artifact.js";
 import { A2A } from "~/types/index.js";
 import { logger } from "~/config/index.js";
@@ -34,13 +35,15 @@ export const handleMessageUpdate: Updater<A2A.Message> = async ({
 }: UpdateParams<A2A.Message>) => {
   const validated = await validateSchema(A2A.MessageSchema, update);
   if (validated.taskId && task.id !== validated.taskId) {
-    throw new Error(`updateMessage: Invalid task id: ${validated.taskId}`, {
-      cause: {
-        validated,
-        actual: task.id,
-        task,
-      },
-    });
+    throw new Error(
+      `updateMessage: Invalid task id: ${validated.taskId} ${formatJson({
+        cause: {
+          validated,
+          actual: task.id,
+          task,
+        },
+      })}`
+    );
   }
   updateHistory(task, validated);
   return task;
