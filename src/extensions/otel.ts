@@ -1,4 +1,7 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ *
  * @fileoverview OpenTelemetry integration for Artinet SDK.
  *
  * Lightweight utilities for integrating user-configured OpenTelemetry

@@ -1,4 +1,7 @@
 /**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ *
  * @fileoverview Pino logger adapter for Artinet SDK.
  *
  * Lightweight wrapper that adapts a user-configured Pino instance

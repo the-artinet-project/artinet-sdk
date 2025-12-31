@@ -36,7 +36,9 @@ export const handleMessageUpdate: Updater<A2A.Message> = async ({
   const validated = await validateSchema(A2A.MessageSchema, update);
   if (validated.taskId && task.id !== validated.taskId) {
     throw new Error(
-      `updateMessage: Invalid task id: ${validated.taskId} ${formatJson({
+      `updateMessage: Invalid task id: incoming: ${
+        validated.taskId
+      } expected: ${task.id} ${formatJson({
         cause: {
           validated,
           actual: task.id,
@@ -57,9 +59,12 @@ export const handleTaskUpdate: Updater<A2A.Task> = async ({
   const validated = await validateSchema(A2A.TaskSchema, update);
 
   if (task.id !== validated.id) {
-    throw new Error(`updateTask: Invalid task id: ${validated.id}`, {
-      cause: validated,
-    });
+    throw new Error(
+      `updateTask: Invalid task id: incoming: ${validated.id} expected: ${task.id}`,
+      {
+        cause: validated,
+      }
+    );
   }
 
   task = { ...task, ...validated };
@@ -81,7 +86,7 @@ export const handleStatusUpdate: Updater<A2A.TaskStatusUpdateEvent> = async ({
 
   if (validated.taskId && task.id !== validated.taskId) {
     throw new Error(
-      `updateTaskStatusUpdate: Invalid task id: ${validated.taskId}`,
+      `updateTaskStatusUpdate: Invalid task id: incoming: ${validated.taskId} expected: ${task.id}`,
       { cause: validated }
     );
   }
@@ -104,14 +109,13 @@ export const handleArtifactUpdate: Updater<
 
   if (validated.taskId && task.id !== validated.taskId) {
     throw new Error(
-      `updateTaskArtifactUpdate: Invalid task id: ${validated.taskId}`,
+      `updateTaskArtifactUpdate: Invalid task id: incoming: ${validated.taskId} expected: ${task.id}`,
       {
         cause: validated,
       }
     );
-  } else {
-    validated.taskId = task.id;
   }
+  validated.taskId = task.id;
 
   task.artifacts = upsertArtifact(task.artifacts ?? [], validated);
   return task;
