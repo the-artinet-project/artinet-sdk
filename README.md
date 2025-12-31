@@ -67,22 +67,13 @@ npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
 **Server:**
 
 ```typescript
-import { createAgentServer, AgentBuilder } from "@artinet/sdk";
+import { cr8 } from "@artinet/sdk";
 
-const { app } = createAgentServer({
-  agent: AgentBuilder()
-    .text(async ({ content }) => {
-      return `You said: ${content}`;
-    })
-    .createAgent({
-      agentCard: "QuickStart Agent",
-    }),
-  basePath: "/a2a",
-});
-
-app.listen(3000, () => {
-  console.log("A2A Server running at http://localhost:3000/a2a");
-});
+const { app } = cr8("QuickStart Agent")
+  .text(async ({ content }) => {
+    return `You said: ${content}`;
+  }) //start an a2a server on port 3000
+  .server.start(3000);
 ```
 
 **Client:**

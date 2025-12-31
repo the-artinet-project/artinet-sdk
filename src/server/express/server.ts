@@ -86,7 +86,20 @@ const registerAgent = async (agentCard: A2A.AgentCard) => {
   logger.debug("registerAgent: not implemented", { agentCard });
   return Promise.resolve(agentCard);
 };
-
+/**
+ * @note Best used with the `cr8` builder.
+ * @param {ServerParams} params - The server parameters
+ * @returns {ExpressAgentServer} - The express agent server
+ * @example
+ * ```typescript
+ * const { app, agent, start } = createAgentServer({
+ *   agent: cr8("MyAgent")
+ *     .text("Hello, world!")
+ *     .agent,
+ *   basePath: "/a2a",
+ * });
+ * ```
+ */
 export function createAgentServer({
   app = express(),
   basePath = "/",

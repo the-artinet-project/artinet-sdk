@@ -7,10 +7,9 @@ This document provides a quick reference for the major objects and types in the 
 | Object              | Description                                             | Import                                             |
 | ------------------- | ------------------------------------------------------- | -------------------------------------------------- |
 | `A2AClient`         | HTTP client for communicating with A2A-compliant agents | `import { A2AClient } from "@artinet/sdk"`         |
-| `AgentBuilder`      | Fluent builder for creating multi-step agent workflows  | `import { AgentBuilder } from "@artinet/sdk"`      |
-| `createAgent`       | Factory function to create an agent service instance    | `import { createAgent } from "@artinet/sdk"`       |
-| `createAgentServer` | Creates an Express app with A2A endpoints configured    | `import { createAgentServer } from "@artinet/sdk"` |
+| `cr8`               | Fluent builder for creating multi-step agent workflows  | `import { cr8 } from "@artinet/sdk"`               |
 | `createMCPAgent`    | Wraps an A2A agent with MCP protocol support            | `import { createMCPAgent } from "@artinet/sdk"`    |
+| `describe`          | Helper namespace for creating A2A objects               | `import { describe } from "@artinet/sdk"`          |
 
 ## Configuration
 
@@ -77,6 +76,52 @@ import { A2A } from "@artinet/sdk";
 | `A2A.Context` | Execution context passed to agent engines         |
 | `A2A.Service` | A2A service interface                             |
 
+## Describe Helper
+
+The `describe` namespace provides utilities for creating A2A objects:
+
+| Function              | Description                     | Returns            |
+| --------------------- | ------------------------------- | ------------------ |
+| `describe.card()`     | Create an AgentCard             | `A2A.AgentCard`    |
+| `describe.message()`  | Create a Message                | `A2A.Message`      |
+| `describe.task()`     | Create a Task                   | `A2A.Task`         |
+| `describe.artifact()` | Create an Artifact              | `A2A.Artifact`     |
+| `describe.update.*()`      | Create status updates           | `A2A.Update`       |
+| `describe.messageSendParams()` | Create MessageSendParams | `A2A.MessageSendParams` |
+
+### Usage Examples
+
+```typescript
+import { describe } from "@artinet/sdk";
+
+// Create a card
+const card = describe.card({
+  name: "My Agent",
+  version: "1.0.0",
+});
+
+// Create a message
+const msg = describe.message("Hello world!");
+// or
+const msg = describe.message({
+  role: "agent",
+  parts: [describe.part.text("Hello")],
+});
+
+// Create a task
+const task = describe.task({
+  id: "task-123",
+  contextId: "ctx-456",
+  status: { state: A2A.TaskState.completed },
+});
+
+// Create status updates
+const submitted = describe.update.submitted({
+  taskId: "task-123",
+  contextId: "ctx-456",
+});
+```
+
 ## Storage
 
 | Class       | Description                                  | Import                                      |
@@ -116,24 +161,33 @@ The `A2AClient` provides the following methods:
 <!-- | `setTaskPushNotification(params)` | Configure push notifications          | `Promise<A2A.TaskPushNotificationConfig>` |
 | `getTaskPushNotification(params)` | Get push notification config          | `Promise<A2A.TaskPushNotificationConfig>` | -->
 
-## AgentBuilder Steps
+## cr8 / AgentBuilder Steps
 
-| Method                 | Description                | Output Type   |
-| ---------------------- | -------------------------- | ------------- |
-| `.text(handler)`       | Add a text processing step | `TextPart`    |
-| `.file(handler)`       | Add a file processing step | `FilePart`    |
-| `.data(handler)`       | Add a data processing step | `DataPart`    |
-| `.createAgent(params)` | Build the agent service    | `A2A.Service` |
-| `.createAgentEngine()` | Build just the engine      | `A2A.Engine`  |
+| Method                     | Description                        | Output Type         |
+| -------------------------- | ---------------------------------- | ------------------- |
+| `.text(handler)`           | Add a text processing step         | `TextPart`          |
+| `.file(handler)`           | Add a file processing step         | `FilePart`          |
+| `.data(handler)`           | Add a data processing step         | `DataPart`          |
+| `.message(handler)`        | Add a message step                 | `Message`           |
+| `.artifact(handler)`       | Add an artifact creation step      | `Artifact`          |
+| `.status(handler)`         | Add a status update step           | `StatusUpdate`      |
+| `.task(handler)`           | Add a task step                    | `Task`              |
+| `.sendMessage(config)`     | Orchestrate with another agent     | `Task`              |
+| `.agent`                   | Get the agent service              | `Service`           |
+| `.engine`                  | Get the execution engine           | `A2A.Engine`        |
+| `.server`                  | Get Express app with agent         | `{ app, agent }`    |
+| `.steps`                   | Get workflow steps                 | `Array<Step>`       |
+| `.createAgent(params)`     | (Deprecated) Build agent service   | `A2A.Service`       |
+| `.createAgentEngine()`     | (Deprecated) Build just the engine | `A2A.Engine`        |
 
 ### Step Handler Parameters
 
 ```typescript
-interface StepParams {
+interface StepParams<Args = any> {
   content: string | undefined; // Extracted text from user message
   message: A2A.MessageSendParams; // Full message params
   context: A2A.Context; // Execution context
-  args: unknown[]; // Arguments from previous step
+  args: Args; // Typed arguments from previous step
   skip: () => void; // Skip this step
 }
 ```
@@ -144,12 +198,18 @@ interface StepParams {
 // Simple return - just the content
 return "Hello world";
 
-// With parts array
+// With reply array
 return ["Part 1", "Part 2"];
 
-// With forward args
+// With forward args (typed)
 return {
-  parts: ["Processing..."],
-  args: [dataForNextStep],
+  reply: "Processing...",
+  args: { processedData: "value", timestamp: Date.now() },
 };
+
+// Array of parts
+return [
+  { name: "file1.txt", bytes: "content1" },
+  { name: "file2.txt", bytes: "content2" },
+];
 ```

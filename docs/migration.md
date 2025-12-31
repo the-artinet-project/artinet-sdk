@@ -52,13 +52,46 @@ import { A2A } from "@artinet/sdk";
 - `@artinet/metadata-validator` has been removed due to build issues.
 - The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
 
-### AgentBuilder
+### AgentBuilder / cr8
 
+- **New `cr8` API**: The recommended way to build agents is now `cr8()` instead of `AgentBuilder()`.
+- New step types: `.message()`, `.artifact()`, `.status()`, `.task()`, `.sendMessage()`.
+- New builder properties: `.agent`, `.engine`, `.server` (no more need for `.createAgent()`).
+- Agent orchestration via `.sendMessage()` for multi-agent workflows.
 - AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
 - AgentBuilder now prefers the contextId & taskId from the calling context.
 - AgentBuilder now supports `skip()` to conditionally skip workflow steps.
 - AgentBuilder now checks for cancellations after each step.
 - `AgentBuilder` will now throw an error if it receives an invalid `FilePart`.
+
+#### Migration Example
+
+```typescript
+// Before (v0.5.x)
+import { AgentBuilder, createAgentServer } from "@artinet/sdk";
+
+const { app } = createAgentServer({
+  agent: AgentBuilder()
+    .text(() => "Hello!")
+    .createAgent({ agentCard: "MyAgent" }),
+  basePath: "/a2a",
+});
+
+// After (v0.6.0)
+import { cr8 } from "@artinet/sdk";
+
+const { app } = cr8("MyAgent", { basePath: "/a2a" }).text("Hello!").server;
+
+// Or keep using AgentBuilder (deprecated but still works)
+import { AgentBuilder, createAgentServer } from "@artinet/sdk";
+
+const { app } = createAgentServer({
+  agent: AgentBuilder()
+    .text(() => "Hello!")
+    .createAgent({ agentCard: "MyAgent" }),
+  basePath: "/a2a",
+});
+```
 
 ### A2AClient
 
@@ -87,6 +120,72 @@ import { A2A } from "@artinet/sdk";
 - The default `sendMessage` implementation now supports the `MessageSendConfiguration`.`blocking` toggle.
 - The default `sendMessage` and `getTask` implementations now support the `MessageSendConfiguration`.`historyLength` parameter.
 
+## New Features in v0.6.0
+
+### New Step Types
+
+v0.6.0 introduces several new step types for more expressive agent workflows:
+
+```typescript
+import { cr8, describe, A2A } from "@artinet/sdk";
+
+cr8("AdvancedAgent")
+  // Message steps - full control over message structure
+  .message(({ content }) => ({
+    role: "agent",
+    parts: [
+      { kind: "text", text: "Results:" },
+      { kind: "data", data: { result: content } },
+    ],
+  }))
+
+  // Artifact steps - persistent, versioned outputs
+  .artifact(({ context }) => ({
+    artifactId: `report-${context.taskId}`,
+    name: "Report",
+    parts: [{ kind: "text", text: "Report content" }],
+  }))
+
+  // Status steps - progress updates
+  .status("working")
+  .status(() => ({
+    status: {
+      state: A2A.TaskState.completed,
+      message: describe.message("Done!"),
+    },
+  }))
+
+  // Task steps - complete task objects
+  .task(({ context }) => ({
+    id: context.taskId,
+    contextId: context.contextId,
+    status: { state: A2A.TaskState.completed },
+  }))
+
+  // Agent orchestration
+  .sendMessage({
+    agent: otherAgent,
+    message: "Process this",
+  }).agent;
+```
+
+### The describe Helper
+
+A new `describe` namespace provides utilities for creating A2A objects:
+
+```typescript
+import { describe } from "@artinet/sdk";
+
+const card = describe.card({ name: "MyAgent" });
+const message = describe.message("Hello!");
+const task = describe.task({ id: "123", contextId: "456" });
+const artifact = describe.artifact({ artifactId: "abc", parts: [] });
+const submitted = describe.update.submitted({
+  taskId: "123",
+  contextId: "456",
+});
+```
+
 ## Ecosystem Integration
 
 > **Note:** v0.6.0 marks the beginning of our integration with the official A2A JavaScript SDK (`@a2a-js/sdk`). This enables interoperability with the broader Agent2Agent ecosystem while maintaining the artinet-sdk's unique architecture.
@@ -94,4 +193,3 @@ import { A2A } from "@artinet/sdk";
 > This will **NOT** require modification of existing `AgentEngine` implementations. The architecture was designed with this shift in mind, using loosely typed interfaces, MPSC & SPMC queues, and the `CoreExecute` contract (onStart, onUpdate, onError, onCancel & onComplete).
 
 > v0.6 is the final preview before our first LTS release.
-

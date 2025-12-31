@@ -2,13 +2,42 @@
 
 Our architecture provides multiple ways to customize your agent server.
 
-## Using createAgentServer
+## Using cr8 with Custom Parameters
 
-Easily spin up an A2A Express app:
+The `cr8` builder accepts optional parameters for server configuration:
+
+```typescript
+import { cr8 } from "@artinet/sdk";
+
+const { app } = cr8("Custom Agent", {
+  basePath: "/a2a",
+  agentCardPath: "/.well-known/agent-card.json",
+  port: 3000,
+})
+  .text("Hello from custom agent!")
+  .server;
+
+// Add custom middleware
+app.use((req, res, next) => {
+  console.log("Request received:", req.path);
+  next();
+});
+
+// Add custom endpoints
+app.get("/health", (req, res) => {
+  res.json({ status: "healthy" });
+});
+
+app.listen(3000);
+```
+
+## Using createAgentServer (deprecated)
+
+For more control, use `createAgentServer` with an existing Express app:
 
 ```typescript
 import express from "express";
-import { createAgentServer } from "@artinet/sdk";
+import { createAgentServer, cr8 } from "@artinet/sdk";
 
 const initialApp = express();
 
@@ -18,12 +47,13 @@ initialApp.use((req, res, next) => {
   next();
 });
 
+const myAgent = cr8("Custom Agent")
+  .text("Hello!")
+  .agent;
+
 const { app, agent } = createAgentServer({
   app: initialApp,
-  agent: {
-    engine: myAgent,
-    agentCard: "Custom Agent",
-  },
+  agent: myAgent,
   basePath: "/a2a",
 });
 
@@ -91,28 +121,47 @@ const agentRouter = createAgentRouter();
 Directly invoke the agent to use it locally:
 
 ```typescript
-import { createAgent } from "@artinet/sdk";
+import { cr8 } from "@artinet/sdk";
 
-const agent = createAgent({
-  engine: myAgentLogic,
-  agentCard: {
-    name: "Local Agent",
-    // ...
-  },
-});
+const agent = cr8("Local Agent")
+  .text(({ content }) => `Echo: ${content}`)
+  .agent;
 
 // Wrap these calls in your desired transport logic
-const result = await agent.sendMessage("Hello");
+const result = await agent.sendMessage({
+  message: { parts: [{ kind: "text", text: "Hello" }] },
+});
 
 // Directly process streams
 const stream = agent.streamMessage({
   message: { parts: [{ kind: "text", text: "Stream this" }] },
-  ...
 });
 
 for await (const update of stream) {
   console.log(update);
 }
+```
+
+## Using Engines Directly
+
+Access and use the engine separately from the service:
+
+```typescript
+import { cr8 } from "@artinet/sdk";
+
+// Build your workflow
+const builder = cr8("MyAgent")
+  .text("Step 1")
+  .data({ processed: true });
+
+// Get just the engine
+const engine = builder.engine;
+
+// Or create a custom service with the engine
+const customAgent = builder.from(engine);
+
+// Or create a custom server
+const { app } = builder.serve(engine);
 ```
 
 ## Custom Implementation Checklist
