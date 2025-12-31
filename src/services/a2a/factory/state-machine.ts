@@ -110,14 +110,14 @@ export function createStateMachine({
       });
 
       // we trigger completion here to ensure the context is cleaned up
-      // await context.publisher.onComplete();
+      await context.publisher.onComplete();
     },
     onComplete: async (task: A2A.Task): Promise<void> => {
       assert(task.contextId === contextId, "context mismatch");
       logger.info(`onComplete[ctx:${contextId}]: `, { taskId: task.id });
       await service.cancellations.delete(task.id);
       await service.connections.delete(task.contextId);
-      // await service.contexts.delete(task.contextId);
+      await service.contexts.delete(task.contextId);
     },
   };
   return new StateMachine(

@@ -25,9 +25,10 @@ export const execute = async (
       await context.publisher.onUpdate(update);
     }
   } catch (error) {
-    /** onError triggers completion internally */
+    /* onError triggers completion internally */
     await context.publisher.onError(error);
-    // throw error;
+    /* rethrow the error to be handled by the caller */
+    throw error;
   } finally {
     await context.publisher.onComplete();
   }
