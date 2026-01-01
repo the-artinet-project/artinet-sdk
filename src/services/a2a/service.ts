@@ -37,7 +37,7 @@ const createMessageParams = (task: A2A.Task) => {
  * @note Comprehensive Extension system coming in a future release
  */
 const getExtensions = async (
-  extensions?: string[]
+  _extensions?: string[]
 ): Promise<A2A.AgentExtension[]> => {
   // logger.warn("getExtensions: not implemented", { extensions });
   return [];
