@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.6.0-preview.2",
+  "version": "0.6.0-preview.3",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",
@@ -91,7 +91,7 @@
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
-    "@artinet/types": "^0.0.9-alpha.3",
+    "@artinet/types": "^0.0.9-alpha.4",
     "cors": "^2.8.5",
     "escape-html": "^1.0.3",
     "eventsource-parser": "^3.0.1",

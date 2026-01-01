@@ -6,6 +6,5 @@ export * from "./common/constants.js";
 export * from "./common/errors.js";
 export * from "./common/schema-validation.js";
 export * from "./common/utils.js";
-export * from "./common/zAsyncIterable.js";
 export * from "./common/parse.js";
 export * from "./storage/file.js";
