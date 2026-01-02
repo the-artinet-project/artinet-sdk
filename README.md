@@ -1,12 +1,14 @@
-[![Website](https://img.shields.io/badge/website-artinet.io-black)](https://artinet.io/)
-[![npm version](https://img.shields.io/npm/v/@artinet/sdk.svg?logoColor=black)](https://www.npmjs.com/package/@artinet/sdk)
-[![npm downloads](https://img.shields.io/npm/dt/@artinet/sdk.svg)](https://www.npmjs.com/package/@artinet/sdk)
-[![Apache License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Known Vulnerabilities](https://snyk.io/test/npm/@artinet/sdk/badge.svg)](https://snyk.io/test/npm/@artinet/sdk)
-[![GitHub stars](https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social)](https://github.com/the-artinet-project/artinet-sdk/stargazers)
-[![Discord](https://dcbadge.limes.pink/api/server/DaxzSchmmX?style=flat)](https://discord.gg/DaxzSchmmX)
+<p align="center">
+<a href="https://artinet.io"><img src="https://img.shields.io/badge/website-artinet.io-black" alt="Website"></a>
+<a href="https://www.npmjs.com/package/@artinet/sdk"><img src="https://img.shields.io/npm/v/@artinet/sdk?color=black" alt="Version"></a>
+<a href="https://www.npmjs.com/package/@artinet/sdk"><img src="https://img.shields.io/npm/dt/@artinet/sdk?color=black" alt="Downloads"></a>
+<a><img src="https://img.shields.io/badge/License-Apache_2.0-black.svg" alt="License"></a>
+<a href="https://reddit.com/r/artinet"><img src="https://img.shields.io/reddit/subreddit-subscribers/theartinet?label=reddit&style=flat&color=black" alt="Subreddit"></a>
+<a><img src="https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social&color=black" alt="Github"></a>
+<a href="https://snyk.io/test/npm/@artinet/sdk"><img src="https://snyk.io/test/npm/@artinet/sdk/badge.svg" alt="Known Vulnerabilities"></a>
+</p>
 
-# artinet-sdk
+<h1 align="center"><em>artinet-sdk</em></h1>
 
 Create agents that communicate across frameworks.
 
@@ -123,3 +125,8 @@ This project is licensed under the Apache License 2.0 - see the `LICENSE` file f
 ## Acknowledgements
 
 This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A).
+
+## Join the Community
+
+- **Reddit:** [r/theartinet](https://www.reddit.com/r/theartinet/)
+- **Discord:** [the artinet channel](https://discord.gg/DaxzSchmmX)
