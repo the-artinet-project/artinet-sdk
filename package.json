@@ -17,6 +17,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./express": {
+      "types": "./dist/server/express/index.d.ts",
+      "import": "./dist/server/express/index.js",
+      "default": "./dist/server/express/index.js"
+    },
     "./trpc": {
       "types": "./dist/transport/trpc/index.d.ts",
       "import": "./dist/transport/trpc/index.js",
@@ -97,13 +102,13 @@
     "eventsource-parser": "^3.0.1",
     "express": "^5.1.0",
     "uuid": "^13.0.0",
-    "zod": "^3.25"
+    "zod": "^3.25",
+    "@opentelemetry/api": "^1.9.0"
   },
   "peerDependencies": {
     "@a2a-js/sdk": "^0.3.7",
     "@modelcontextprotocol/sdk": "^1.24.3",
-    "@trpc/server": "^11.4.3",
-    "@opentelemetry/api": "^1.9.0"
+    "@trpc/server": "^11.4.3"
   },
   "optionalDependencies": {
     "pino": "^10.1.0",
@@ -113,10 +118,10 @@
     "@modelcontextprotocol/sdk": {
       "optional": false
     },
-    "@trpc/server": {
-      "optional": true
-    },
     "@a2a-js/sdk": {
+      "optional": false
+    },
+    "@trpc/server": {
       "optional": true
     },
     "@opentelemetry/api": {
