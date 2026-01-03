@@ -71,7 +71,7 @@ npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
 ```typescript
 import { cr8 } from "@artinet/sdk";
 
-const { app } = cr8("QuickStart Agent")
+cr8("QuickStart Agent")
   .text(async ({ content }) => {
     return `You said: ${content}`;
   }) //start an a2a server on port 3000
