@@ -72,9 +72,7 @@ npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
 import { cr8 } from "@artinet/sdk";
 
 cr8("QuickStart Agent")
-  .text(async ({ content }) => {
-    return `You said: ${content}`;
-  }) //start an a2a server on port 3000
+  .text(async ({ content }) => `You said: ${content}`) //start an a2a server on port 3000
   .server.start(3000);
 ```
 
