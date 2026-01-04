@@ -1,6 +1,6 @@
 export {
   createMessenger,
   A2AClient,
-  type AgentMessenger,
+  AgentMessenger,
   type MessengerParams,
 } from "./messenger.js";

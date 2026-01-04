@@ -6,9 +6,9 @@ import { A2A } from "~/types/index.js";
 import { TASK_NOT_FOUND, INTERNAL_ERROR } from "~/utils/index.js";
 import { getLatestHistory } from "../helpers/index.js";
 
-export const getTask: A2A.RequestHandler["getTask"] = async (
+export const getTask: A2A.Handles["getTask"] = async (
   { id: taskId, historyLength }: A2A.TaskQueryParams,
-  context?: A2A.Context
+  context: A2A.Context
 ): Promise<A2A.Task> => {
   if (!context) {
     throw INTERNAL_ERROR({ error: { message: "Context is required" } });

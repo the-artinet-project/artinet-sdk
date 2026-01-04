@@ -12,15 +12,13 @@ import {
   subscribeToTask,
 } from "../handlers/index.js";
 
-export function createHandler(
-  methods?: Omit<Partial<A2A.RequestHandler>, "getAgentCard">
-): Omit<A2A.RequestHandler, "getAgentCard"> {
+export function bindHandles(handles?: Partial<A2A.Handles>): A2A.Handles {
   return {
-    getTask: methods?.getTask ?? getTask,
-    cancelTask: methods?.cancelTask ?? cancelTask,
-    sendMessage: methods?.sendMessage ?? sendMessage,
-    sendMessageStream: methods?.sendMessageStream ?? sendMessageStream,
-    streamMessage: methods?.streamMessage ?? sendMessageStream,
-    resubscribe: methods?.resubscribe ?? subscribeToTask,
+    getTask: handles?.getTask ?? getTask,
+    cancelTask: handles?.cancelTask ?? cancelTask,
+    sendMessage: handles?.sendMessage ?? sendMessage,
+    sendMessageStream: handles?.sendMessageStream ?? sendMessageStream,
+    streamMessage: handles?.streamMessage ?? sendMessageStream,
+    resubscribe: handles?.resubscribe ?? subscribeToTask,
   };
 }

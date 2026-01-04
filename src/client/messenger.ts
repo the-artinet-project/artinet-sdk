@@ -364,16 +364,17 @@ class Messenger
  * @param headers Optional custom headers to include in all requests.
  * @param fallbackPath Optional fallback path to use if the agent card is not found at the base URL.
  * @example
- * const client = messenger("http://localhost:4000/a2a");
+ * const client = createMessenger("http://localhost:4000/a2a");
  * const card = await client.agentCard();
  * console.log(card);
  * @example
- * const client = messenger("http://localhost:4000/a2a", {}, "/agent-card");
+ * const client = createMessenger("http://localhost:4000/a2a", {}, "/agent-card");
  * const card = await client.agentCard();
  * console.log(card);
  */
 export const createMessenger = Messenger.create;
-export type AgentMessenger = Awaited<ReturnType<typeof createMessenger>>;
+export const AgentMessenger = Messenger;
+export type AgentMessenger = Messenger;
 /**
  * @deprecated Use {@link createMessenger} instead.
  */

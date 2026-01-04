@@ -2,7 +2,7 @@
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
  */
-import { createHandler } from "./handler.js";
+import { bindHandles } from "./handler.js";
 import * as describe from "~/create/agentcard-builder.js";
 import { A2A } from "~/types/index.js";
 import { Service } from "~/services/a2a/service.js";
@@ -22,7 +22,7 @@ export interface ServiceParams {
   connections?: A2A.Connections;
   cancellations?: A2A.Cancellations;
   tasks?: A2A.Tasks;
-  methods?: Omit<A2A.RequestHandler, "getAgentCard">;
+  handles?: Partial<A2A.Handles>;
   overrides?: Partial<Omit<A2A.EventConsumer, "contextId">>;
 }
 export type CreateAgentParams = ServiceParams;
@@ -36,7 +36,7 @@ export function createService(params: ServiceParams) {
     params.tasks ?? new Tasks(),
     params.contexts ?? new Contexts(),
     params.streams ?? new Streams(),
-    createHandler(params.methods),
+    bindHandles(params.handles),
     params.overrides
   );
 }

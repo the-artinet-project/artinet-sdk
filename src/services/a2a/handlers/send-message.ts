@@ -7,9 +7,9 @@ import { A2A } from "~/types/index.js";
 import { getLatestHistory } from "../helpers/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
 
-export const sendMessage: A2A.RequestHandler["sendMessage"] = async (
+export const sendMessage: A2A.Handles["sendMessage"] = async (
   { configuration }: A2A.MessageSendParams,
-  context?: A2A.Context
+  context: A2A.Context
 ): Promise<A2A.SendMessageSuccessResult> => {
   if (!context) {
     throw INTERNAL_ERROR({ error: { message: "Context is required" } });

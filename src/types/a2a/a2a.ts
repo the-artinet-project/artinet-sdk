@@ -64,7 +64,6 @@ export type ContextParams = Omit<
     messenger: MessageConsumerProxy;
     task: Task;
     overrides?: Partial<Omit<EventConsumer, "contextId">>;
-    abortSignal?: AbortSignal;
   };
 
 export interface Contexts extends core.Contexts<Context> {
@@ -89,28 +88,43 @@ export interface Notifier {
   register: (taskId: string, config: PushNotificationConfig) => Promise<void>;
 }
 
-export type ServiceOptions = Pick<
-  ContextParams,
-  "userId" | "extensions" | "abortSignal"
-> & {
+export type ServiceOptions = Pick<ContextParams, "userId" | "extensions"> & {
   task?: Task;
+  signal?: AbortSignal;
   notifier?: Notifier;
 };
 
-export interface RequestHandler {
-  getTask: (
-    input: TaskQueryParams,
-    context?: Context,
-    options?: ServiceOptions
-  ) => Promise<Task>;
-  cancelTask: (
-    input: TaskIdParams,
-    context?: Context,
-    options?: ServiceOptions
-  ) => Promise<Task>;
+export interface Handles {
+  getTask: (input: TaskQueryParams, context: Context) => Promise<Task>;
+  cancelTask: (input: TaskIdParams, context: Context) => Promise<Task>;
   sendMessage: (
     message: MessageSendParams,
-    context?: Context,
+    context: Context
+  ) => Promise<SendMessageSuccessResult>;
+  /**
+   * @deprecated Use sendMessageStream instead
+   */
+  streamMessage: (
+    message: MessageSendParams,
+    context: Context
+  ) => AsyncGenerator<Update>;
+  sendMessageStream: (
+    message: MessageSendParams,
+    context: Context
+  ) => AsyncGenerator<Update>;
+  //TODO: Rename to subscribeToTask
+  resubscribe: (
+    input: TaskIdParams,
+    context: Context
+    //TODO: Omit Message as an update
+  ) => AsyncGenerator<Update>;
+}
+
+export interface RequestHandler {
+  getTask: (input: TaskQueryParams, options?: ServiceOptions) => Promise<Task>;
+  cancelTask: (input: TaskIdParams, options?: ServiceOptions) => Promise<Task>;
+  sendMessage: (
+    message: MessageSendParams,
     options?: ServiceOptions
   ) => Promise<SendMessageSuccessResult>;
   /**
@@ -118,34 +132,20 @@ export interface RequestHandler {
    */
   streamMessage: (
     message: MessageSendParams,
-    context?: Context,
     options?: ServiceOptions
   ) => AsyncGenerator<Update>;
   sendMessageStream: (
     message: MessageSendParams,
-    context?: Context,
     options?: ServiceOptions
   ) => AsyncGenerator<Update>;
   //TODO: Rename to subscribeToTask
   resubscribe: (
     input: TaskIdParams,
-    context?: Context,
     options?: ServiceOptions
     //TODO: Omit Message as an update
   ) => AsyncGenerator<Update>;
   getAgentCard: () => Promise<AgentCard>;
 }
-
-/**
- * @deprecated This interface is no longer supported; use {@link RequestHandler} instead
- * @note Authentication is now completely a Transport Layer concern.
- */
-export type ExtendedHandler = RequestHandler & {
-  getAuthenticatedExtendedCard: (
-    context?: Context,
-    options?: ServiceOptions
-  ) => Promise<AgentCard>;
-};
 
 export interface Stream {
   readonly contextId: string;

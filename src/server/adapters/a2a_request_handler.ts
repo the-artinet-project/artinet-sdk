@@ -82,7 +82,7 @@ export class Native implements A2ARequestHandler {
       throw A2AError.invalidParams("Params Required");
     }
     return await this.service
-      .getTask(params, undefined, toServiceOptions(context))
+      .getTask(params, toServiceOptions(context))
       .catch((error) => {
         throw toA2AError(error);
       });
@@ -91,7 +91,7 @@ export class Native implements A2ARequestHandler {
   async cancelTask(params: A2A.TaskIdParams, context?: ServerCallContext) {
     paramsRequired(params);
     return await this.service
-      .cancelTask(params, undefined, toServiceOptions(context))
+      .cancelTask(params, toServiceOptions(context))
       .catch((error) => {
         throw toA2AError(error);
       });
@@ -105,7 +105,6 @@ export class Native implements A2ARequestHandler {
     return await this.service
       .sendMessage(
         params,
-        undefined,
         toServiceOptions(context, {
           notify: this.notify,
           register: this.registerConfig,
@@ -124,7 +123,6 @@ export class Native implements A2ARequestHandler {
     try {
       yield* this.service.sendMessageStream(
         params,
-        undefined,
         toServiceOptions(context, {
           notify: this.notify,
           register: this.registerConfig,
@@ -140,7 +138,6 @@ export class Native implements A2ARequestHandler {
     try {
       yield* this.service.resubscribe(
         params,
-        undefined,
         toServiceOptions(context, {
           notify: this.notify,
           register: this.registerConfig,

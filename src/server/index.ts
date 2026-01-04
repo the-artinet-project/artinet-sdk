@@ -6,3 +6,4 @@ export {
   type ExpressAgentServer,
   createAgentServer,
 } from "./express/server.js";
+export { rpcParser, errorHandler } from "./express/utils.js";

@@ -11,9 +11,9 @@ import {
   INTERNAL_ERROR,
 } from "~/utils/index.js";
 
-export const cancelTask: A2A.RequestHandler["cancelTask"] = async (
+export const cancelTask: A2A.Handles["cancelTask"] = async (
   { id: taskId }: A2A.TaskIdParams,
-  context?: A2A.Context
+  context: A2A.Context
 ): Promise<A2A.Task> => {
   if (!context) {
     throw INTERNAL_ERROR({ error: { message: "Context is required" } });
