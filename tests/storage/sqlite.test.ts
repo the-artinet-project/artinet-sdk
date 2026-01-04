@@ -1,6 +1,14 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
-import { describe, it, expect, beforeEach } from "@jest/globals";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from "@jest/globals";
 import {
   TaskTable,
   SQLiteStore,
@@ -8,8 +16,6 @@ import {
   TABLE_NAME,
 } from "../../src/storage/sqlite.js";
 import { A2A } from "../../src/types/index.js";
-const sqlite = new Database(":memory:");
-const db = drizzle<TaskTable>(sqlite);
 
 export const createValidTask = (
   overrides: Partial<A2A.Task> = {}
@@ -26,7 +32,11 @@ export const createValidTask = (
 
 describe("SQLiteStore", () => {
   let store: SQLiteStore;
+  let db: ReturnType<typeof drizzle<TaskTable>>;
+  let sqlite: Database.Database;
   beforeAll(() => {
+    sqlite = new Database(":memory:");
+    db = drizzle<TaskTable>(sqlite);
     createTaskTable(db);
   });
   beforeEach(() => {
