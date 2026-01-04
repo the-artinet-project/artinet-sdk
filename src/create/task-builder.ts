@@ -5,7 +5,7 @@
 
 import { A2A } from "~/types/index.js";
 import { v4 as uuidv4 } from "uuid";
-import { getCurrentTimestamp } from "~/utils/common/utils.js";
+import { getCurrentTimestamp } from "~/utils/utils.js";
 import {
   isMessageParams,
   Message,

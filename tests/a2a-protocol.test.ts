@@ -1,13 +1,8 @@
 import { jest, describe, it, beforeEach, expect } from "@jest/globals";
 import express from "express";
 import request from "supertest";
-import {
-  A2A,
-  ExpressAgentServer,
-  createAgentServer,
-  AgentEngine,
-  getParts,
-} from "../src/index.js";
+import { ExpressAgentServer, createAgentServer } from "../src/server/index.js";
+import { A2A, AgentEngine, getParts } from "../src/index.js";
 import { applyDefaults } from "../src/config/default.js";
 // import { A2AError } from "@a2a-js/sdk/server";
 // With options
@@ -235,8 +230,8 @@ describe("A2A Protocol Specification Tests", () => {
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
 
-  beforeEach(() => {
-    const agentServer: ExpressAgentServer = createAgentServer({
+  beforeEach(async () => {
+    const agentServer: ExpressAgentServer = await createAgentServer({
       agentCardPath: "/.well-known/agent-card.json",
       agent: {
         engine: protocolEngine,

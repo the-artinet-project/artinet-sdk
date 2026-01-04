@@ -7,8 +7,8 @@ import { StateMachine } from "~/services/a2a/state-machine.js";
 import { A2A } from "~/types/index.js";
 import { logger } from "~/config/index.js";
 import * as describe from "~/create/describe.js";
-import { TASK_NOT_FOUND } from "~/utils/common/errors.js";
-import { formatJson } from "~/utils/common/utils.js";
+import { TASK_NOT_FOUND } from "~/utils/errors.js";
+import { formatJson } from "~/utils/utils.js";
 import assert from "assert";
 
 export function createStateMachine({

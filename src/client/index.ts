@@ -1,1 +1,6 @@
-export * from "./a2a-client.js";
+export {
+  createMessenger,
+  A2AClient,
+  type AgentMessenger,
+  type MessengerParams,
+} from "./messenger.js";

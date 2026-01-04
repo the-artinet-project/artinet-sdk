@@ -10,8 +10,6 @@ export class Message {
   private readonly _message: A2A.Message;
   constructor(params: Partial<Kindless<A2A.Message>> = {}) {
     const messageId = params.messageId ?? uuidv4();
-    // TODO: Consider whether default role should be "user" when used in messageSendParams context.
-    // Currently defaults to "agent" which may be incorrect for MessageSendParams.
     this._message = {
       ...params,
       role: params.role ?? "agent",
@@ -100,7 +98,7 @@ export type MessageSendParamsParams =
  * @returns New {@link A2A.MessageSendParams} with default parameters
  * @defaults {
  *   message: {
- *     role: "agent",
+ *     role: "user",
  *     parts: [],
  *     messageId: uuidv4(),
  *     kind: "message",
@@ -119,13 +117,27 @@ export type MessageSendParamsParams =
 export function messageSendParams(
   params: MessageSendParamsParams
 ): A2A.MessageSendParams {
-  const _isMessageParams = isMessageParams(params);
+  if (!isMessageParams(params)) {
+    return {
+      message: message(params.message),
+      configuration: new MessageSendConfiguration(params.configuration)
+        .configuration,
+      metadata: params.metadata,
+    };
+  }
+
+  if (typeof params === "string") {
+    return {
+      message: message({
+        role: "user",
+        parts: [{ text: params, kind: "text" }],
+      }),
+    };
+  }
+
+  params.role = params.role ?? "user";
   return {
-    message: message(_isMessageParams ? params : params.message),
-    configuration: new MessageSendConfiguration(
-      _isMessageParams ? undefined : params.configuration
-    ).configuration,
-    metadata: _isMessageParams ? undefined : params.metadata,
+    message: message(params),
   };
 }
 /**

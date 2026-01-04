@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-//lets stay really granular with the imports
 import {
   AgentCard,
   Message,

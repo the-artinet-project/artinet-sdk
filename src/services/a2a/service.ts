@@ -4,9 +4,9 @@
  */
 
 import { A2A } from "~/types/index.js";
-import { validateSchema } from "~/utils/common/schema-validation.js";
+import { validateSchema } from "~/utils/schema-validation.js";
 import * as describe from "~/create/describe.js";
-import { INVALID_REQUEST, TASK_NOT_FOUND } from "~/utils/common/errors.js";
+import { INVALID_REQUEST, TASK_NOT_FOUND } from "~/utils/errors.js";
 import { Messenger } from "./messenger.js";
 import { execute } from "./execute.js";
 import { createService, ServiceParams } from "./factory/service.js";
@@ -368,17 +368,43 @@ export class Service implements A2A.Service {
     return await this.handlers.sendMessage(messageParams, _context);
   }
 
-  streamMessage(
+  sendMessageStream(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update>;
-
-  streamMessage(
+  sendMessageStream(
     message: string,
     context?: A2A.Context,
     options?: A2A.ServiceOptions
   ): AsyncGenerator<A2A.Update>;
+  sendMessageStream(
+    params: A2A.MessageSendParams["message"],
+    context?: A2A.Context,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update>;
+
+  async *sendMessageStream(
+    _params: A2A.MessageSendParams | string | A2A.MessageSendParams["message"],
+    context?: A2A.Context,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update> {
+    let params: A2A.MessageSendParams;
+    if (
+      typeof _params === "string" ||
+      (typeof _params === "object" && "parts" in _params)
+    ) {
+      params = describe.messageSendParams(_params);
+    } else {
+      params = _params;
+    }
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
+    );
+    yield* this._sendMessageStream(messageParams, context, options);
+  }
+
   /**
    * @deprecated Use sendMessageStream instead
    */
@@ -391,7 +417,7 @@ export class Service implements A2A.Service {
     yield* this.sendMessageStream(params, context, options);
   }
 
-  async *sendMessageStream(
+  protected async *_sendMessageStream(
     params: A2A.MessageSendParams,
     context?: A2A.Context,
     options?: A2A.ServiceOptions

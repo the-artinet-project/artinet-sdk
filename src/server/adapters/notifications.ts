@@ -1,3 +1,7 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import {
   PushNotificationStore,
   PushNotificationSender,
@@ -56,6 +60,7 @@ export class PushNotifications
     await this.set(taskId, [
       ...(configs?.filter(
         /**Since this is pure memory we can stomach the heavy filter operation for now*/
+        // and its unlikely that an individual task will have excessive configs
         (config) => config.id !== pushNotificationConfig.id
       ) ?? []),
       pushNotificationConfig,

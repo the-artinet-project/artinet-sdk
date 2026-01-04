@@ -9,8 +9,8 @@ import { A2A } from "~/types/index.js";
 import {
   INVALID_REQUEST,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
-} from "~/utils/common/errors.js";
-import { zAsyncIterable } from "~/utils/common/zAsyncIterable.js";
+} from "~/utils/errors.js";
+import { zAsyncIterable } from "~/utils/zAsyncIterable.js";
 
 const pushNotificationConfigRouter = router({
   set: A2AProcedure.input(A2A.TaskPushNotificationConfigSchema)
@@ -25,7 +25,7 @@ const pushNotificationConfigRouter = router({
       console.warn("task/pushNotificationConfig/get", input);
       throw PUSH_NOTIFICATION_NOT_SUPPORTED("Push notifications not supported");
     }),
-  list: A2AProcedure.input(A2A.ListTaskPushNotificationConfigsParamsSchema)
+  list: A2AProcedure.input(A2A.ListTaskPushNotificationConfigParamsSchema)
     .output(A2A.ListTaskPushNotificationConfigResultSchema)
     .query(async ({ input }) => {
       console.warn("task/pushNotificationConfig/list", input);

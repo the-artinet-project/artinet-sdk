@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getCurrentTimestamp, formatJson } from "~/utils/common/utils.js";
-import { validateSchema } from "~/utils/common/schema-validation.js";
+import { getCurrentTimestamp, formatJson } from "~/utils/utils.js";
+import { validateSchema } from "~/utils/schema-validation.js";
 import { upsertArtifact } from "./artifact.js";
 import { A2A } from "~/types/index.js";
 import { logger } from "~/config/index.js";

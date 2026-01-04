@@ -8,13 +8,14 @@ import {
 } from "@jest/globals";
 import express from "express";
 import {
-  A2AClient,
+  AgentMessenger,
   A2A,
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
   getParts,
   SUBMITTED_UPDATE,
+  createMessenger,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 // Set a reasonable timeout for all tests
@@ -111,14 +112,14 @@ describe("Client-Server Integration Tests", () => {
   let app: express.Express;
   let expressServer: any;
   let port: number;
-  let client: A2AClient;
+  let client: AgentMessenger;
 
   beforeEach(async () => {
     // Get an available port by listening on 0, then close and reuse
     const tempApp = express();
     const tempServer = tempApp.listen(0);
     port = (tempServer.address() as any).port;
-    
+
     // Create agent card with correct localhost URL BEFORE creating server
     // NOTE: The default MOCK_AGENT_CARD has url: "https://test-agent.example.com/api"
     // The A2AClient fetches the agent card and uses card.url for subsequent requests.
@@ -144,7 +145,7 @@ describe("Client-Server Integration Tests", () => {
     expressServer = app.listen(port);
 
     // Create client
-    client = new A2AClient(`http://localhost:${port}`);
+    client = await createMessenger({ baseUrl: `http://localhost:${port}` });
   });
 
   afterEach(async () => {
@@ -157,7 +158,7 @@ describe("Client-Server Integration Tests", () => {
   });
 
   test("client can retrieve agent card", async () => {
-    const card = await client.agentCard();
+    const card = await client.getAgentCard();
 
     expect(card).toBeDefined();
     expect(card.name).toBe(defaultAgentCard.name);
@@ -168,7 +169,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can send task and get response", async () => {
     const testMessage = "Hello, A2A!";
-    const task = await client.sendTask({
+    const task = await client.sendMessage({
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -197,7 +198,7 @@ describe("Client-Server Integration Tests", () => {
 
   test("client can stream task updates", async () => {
     const testMessage = "Test streaming";
-    const stream = client.sendStreamingMessage({
+    const stream = client.sendMessageStream({
       message: {
         taskId: "stream-task-test",
         messageId: "test-message-id",
@@ -258,21 +259,23 @@ describe("Client-Server Integration Tests", () => {
     });
 
     // Wait a moment for the task to be created on the server before canceling
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     const canceledTask = await client.cancelTask({
       id: "cancel-task-test",
     });
     expect(canceledTask).toBeDefined();
     expect(canceledTask!.status.state).toBe("canceled");
-    
+
     // Wait for the original task promise to resolve
     const task = await taskPromise;
     // NOTE: Due to race conditions between the task handler and cancel request,
     // the original sendMessage may return the task in either "canceled" or "completed" state.
     // The cancel request itself succeeds (verified above), but the original handler may
     // complete before it checks the cancellation flag.
-    expect(["canceled", "completed"]).toContain((task as A2A.Task)?.status.state);
+    expect(["canceled", "completed"]).toContain(
+      (task as A2A.Task)?.status.state
+    );
   });
 
   test("client can get task by ID", async () => {

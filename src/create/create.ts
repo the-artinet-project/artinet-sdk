@@ -43,7 +43,6 @@ import {
 } from "../services/a2a/factory/service.js";
 import { describe } from "./index.js";
 import { extractTextContent } from "../services/a2a/helpers/content.js";
-import { createAgentServer, ServerParams } from "~/server/index.js";
 import { Service } from "~/services/a2a/service.js";
 import { MessageParams } from "./message-builder.js";
 import {
@@ -54,7 +53,14 @@ import {
 import { logger } from "~/config/index.js";
 import { v4 as uuidv4 } from "uuid";
 import { formatJson } from "~/utils/index.js";
-import { A2AClient } from "~/client/a2a-client.js";
+import { ServerParams, serve } from "~/server/express/server.js";
+
+export interface MessageSender {
+  sendMessage(
+    params: A2A.MessageSendParams
+  ): Promise<A2A.SendMessageSuccessResult>;
+}
+
 /**
  * Type alias for text-based workflow steps.
  *
@@ -475,13 +481,12 @@ export class AgentFactory<I extends A.bargs = A.empty>
   }
 
   get server() {
-    return createAgentServer({
+    return serve({
       agent: this.agent,
       ...this._params,
     });
   }
 
-  /** This method will become static in v0.6.0 */
   from(engine: A2A.Engine = this.engine) {
     return createAgentImpl({
       ...this._params,
@@ -490,9 +495,8 @@ export class AgentFactory<I extends A.bargs = A.empty>
     });
   }
 
-  /** This method will become static in v0.6.0 */
   serve(engine: A2A.Engine = this.engine) {
-    return createAgentServer({
+    return serve({
       agent: this.from(engine),
       ...this._params,
     });
@@ -555,7 +559,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "text",
+      kind: A2A.Kind["text"],
       handler: transform.Parts("text"),
     });
   }
@@ -611,7 +615,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "file",
+      kind: A2A.Kind["file"],
       handler: transform.Parts("file"),
     });
   }
@@ -665,7 +669,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "data",
+      kind: A2A.Kind["data"],
       handler: transform.Parts("data"),
     });
   }
@@ -720,7 +724,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "message",
+      kind: A2A.Kind["message"],
       handler: transform.Message(),
     });
   }
@@ -772,7 +776,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "artifact-update",
+      kind: A2A.Kind["artifact-update"],
       handler: transform.Artifact(),
     });
   }
@@ -827,7 +831,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     >({
       id: uuidv4(),
       step: stepFn,
-      kind: "status-update",
+      kind: A2A.Kind["status-update"],
       handler: transform.Status(),
     });
   }
@@ -929,7 +933,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
   public sendMessage<
     Carry extends A.BaseArgs = { task?: A2A.Task }
   >(agent_and_message: {
-    agent: Service | A2AClient;
+    agent: MessageSender;
     message?: A.sMessage | string;
   }): AgentFactory<A.inferCarry<A.Reply<A.Stateless<TaskParams>, Carry>>> {
     const stepFn: taskStep<I, Carry> = async ({ context }) => {
@@ -937,16 +941,17 @@ export class AgentFactory<I extends A.bargs = A.empty>
         agent: agent_and_message.agent.constructor.name,
       });
 
-      const response = await agent_and_message.agent
-        .sendMessage(
-          describe.messageSendParams(
-            agent_and_message.message ?? context.userMessage
+      const response: A2A.SendMessageSuccessResult | null =
+        await agent_and_message.agent
+          .sendMessage(
+            describe.messageSendParams(
+              agent_and_message.message ?? context.userMessage
+            )
           )
-        )
-        .catch((error) => {
-          logger.error("sendMessage: Error sending message: ", error);
-          return null;
-        });
+          .catch((error) => {
+            logger.error("sendMessage: Error sending message: ", error);
+            return null;
+          });
 
       if (!response) {
         logger.warn("sendMessage: No response from agent");
@@ -1003,23 +1008,6 @@ export class AgentFactory<I extends A.bargs = A.empty>
     params?: FactoryParams
   ) {
     return new AgentFactory<Input>(describe.card(agentCard), params);
-  }
-
-  /**
-   * @deprecated Use {@link engine} instead
-   */
-  public createAgentEngine() {
-    return createStepEngine(this.steps);
-  }
-
-  /**
-   * @deprecated Use {@link agent} instead
-   */
-  public createAgent(params: Omit<ServiceParams, "engine">) {
-    return createAgentImpl({
-      ...params,
-      engine: this.createAgentEngine(),
-    });
   }
 }
 

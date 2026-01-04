@@ -41,6 +41,7 @@ export class StateMachine
     if (this.consumer.onError) {
       await this.consumer.onError(error, this.currentTask);
     }
+    //TODO: no longer necessary with eventemitter3
     if (!this.listenerCount("error")) return;
 
     this.emit("error", error, this.currentTask);

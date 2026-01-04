@@ -364,7 +364,7 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toContain("Params Required");
     });
   });
 

@@ -6,8 +6,8 @@ describe("Message Builder Tests", () => {
     const params: A2A.MessageSendParams = des6.messageSendParams("hello there");
     expect(params).toBeDefined();
     expect(params.message).toBeDefined();
-    // Note: Message.create defaults to "agent" role - see TODO in message-builder.ts
-    expect(params.message.role).toBe("agent");
+    // Note: Message.create defaults to "user" role - see TODO in message-builder.ts
+    expect(params.message.role).toBe("user");
     expect(params.message.kind).toBe("message");
     expect(params.message.messageId).toBeDefined();
     expect(params.message.parts).toBeDefined();

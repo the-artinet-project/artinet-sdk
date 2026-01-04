@@ -4,8 +4,8 @@
  */
 
 import { router, A2AProcedure } from "../../trpc.js";
-import { INVALID_PARAMS } from "~/utils/common/errors.js";
-import { zAsyncIterable } from "~/utils/common/zAsyncIterable.js";
+import { INVALID_PARAMS } from "~/utils/errors.js";
+import { zAsyncIterable } from "~/utils/zAsyncIterable.js";
 import { A2A } from "~/types/index.js";
 
 const sendMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/** //todo move to @artinet/sdk from core v0.1
+/**
  * @fileoverview Zero-dependency observability interfaces for the Artinet ecosystem.
  *
  * Provides minimal interfaces for logging and tracing that consumers can implement

@@ -1,4 +1,5 @@
 import { EventEmitter } from "eventemitter3";
+import { IStore } from "~/types/storage.js";
 
 export interface Service<
   Params extends object = object,
@@ -27,7 +28,7 @@ export interface Context<State extends object = object> {
   readonly hooks?: Record<string, (...args: unknown[]) => Promise<unknown>>;
 }
 
-export interface Manager<T = object> {
+export interface Manager<T = object> extends IStore<T> {
   get: (id: string) => Promise<T | undefined>;
   set: (id: string, data?: T) => Promise<void>;
   delete: (id: string) => Promise<void>;

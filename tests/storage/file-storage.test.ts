@@ -2,7 +2,7 @@ import { describe, it, beforeEach, afterEach, expect } from "@jest/globals";
 import { join } from "path";
 import { mkdtemp, rm } from "fs/promises";
 import * as os from "os";
-import { A2A, Files } from "../src/index.js";
+import { A2A, Files } from "../../src/index.js";
 
 describe("FileStore", () => {
   let tempDir: string;

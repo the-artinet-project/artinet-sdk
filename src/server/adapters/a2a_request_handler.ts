@@ -1,3 +1,8 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   A2ARequestHandler,
   ServerCallContext,
@@ -5,14 +10,13 @@ import {
   ExtendedAgentCardProvider,
   PushNotificationSender,
   PushNotificationStore,
-  InMemoryPushNotificationStore,
   DefaultPushNotificationSender,
 } from "@a2a-js/sdk/server";
 import { A2A } from "~/types/index.js";
 import { PushNotifications } from "./notifications.js";
 import { logger } from "~/config/index.js";
-import { SystemError } from "~/utils/index.js";
-
+import { SystemError, validateSchema } from "~/utils/index.js";
+import { z } from "zod/v4";
 /**We want to avoid pulling a2a-js/sdk logic into our business logic. */
 const toServiceOptions = (
   context?: ServerCallContext,
@@ -45,6 +49,19 @@ const isGetTaskPushNotificationConfigParam = (
   return A2A.GetTaskPushNotificationConfigParamSchema.safeParse(params).success;
 };
 
+const paramsRequired = (params: unknown): void => {
+  if (!params || Object.keys(params).length === 0) {
+    throw A2AError.invalidParams("Params Required");
+  }
+};
+const validateParams = async <T extends z.ZodSchema>(
+  schema: T,
+  params: unknown
+): Promise<z.output<T>> => {
+  paramsRequired(params);
+  return await validateSchema(schema, params);
+};
+
 export class Native implements A2ARequestHandler {
   constructor(
     protected _service: A2A.Service,
@@ -61,6 +78,9 @@ export class Native implements A2ARequestHandler {
   }
 
   async getTask(params: A2A.TaskQueryParams, context?: ServerCallContext) {
+    if (!params || Object.keys(params).length === 0) {
+      throw A2AError.invalidParams("Params Required");
+    }
     return await this.service
       .getTask(params, undefined, toServiceOptions(context))
       .catch((error) => {
@@ -69,6 +89,7 @@ export class Native implements A2ARequestHandler {
   }
 
   async cancelTask(params: A2A.TaskIdParams, context?: ServerCallContext) {
+    paramsRequired(params);
     return await this.service
       .cancelTask(params, undefined, toServiceOptions(context))
       .catch((error) => {
@@ -80,9 +101,7 @@ export class Native implements A2ARequestHandler {
     params: A2A.MessageSendParams,
     context?: ServerCallContext
   ) {
-    if (!params || Object.keys(params).length === 0) {
-      throw A2AError.invalidParams("Params Required");
-    }
+    paramsRequired(params);
     return await this.service
       .sendMessage(
         params,
@@ -101,9 +120,7 @@ export class Native implements A2ARequestHandler {
     params: A2A.MessageSendParams,
     context?: ServerCallContext
   ) {
-    if (!params || Object.keys(params).length === 0) {
-      throw A2AError.invalidParams("Params Required");
-    }
+    paramsRequired(params);
     try {
       yield* this.service.sendMessageStream(
         params,
@@ -119,9 +136,7 @@ export class Native implements A2ARequestHandler {
   }
 
   async *resubscribe(params: A2A.TaskIdParams, context?: ServerCallContext) {
-    if (!params || Object.keys(params).length === 0) {
-      throw A2AError.invalidParams("Params Required");
-    }
+    paramsRequired(params);
     try {
       yield* this.service.resubscribe(
         params,
@@ -156,15 +171,19 @@ export class Native implements A2ARequestHandler {
   }
 
   async setTaskPushNotificationConfig(
-    params: A2A.TaskPushNotificationConfig,
+    _params: A2A.TaskPushNotificationConfig,
     _context?: ServerCallContext
   ): Promise<A2A.TaskPushNotificationConfig> {
+    const params: A2A.TaskPushNotificationConfig = await validateParams(
+      A2A.TaskPushNotificationConfigSchema,
+      _params
+    );
     await this.pushNotificationsEnabled(params.taskId);
     const { taskId, pushNotificationConfig } = params;
 
     pushNotificationConfig.id = pushNotificationConfig.id ?? taskId;
     await this.pushNotifications!.save(taskId, pushNotificationConfig);
-    logger.debug("Set push notification config for task: ", {
+    logger.debug("Setting push notification config for task: ", {
       taskId,
       pushNotificationConfigId: pushNotificationConfig.id,
     });
@@ -175,9 +194,14 @@ export class Native implements A2ARequestHandler {
   }
 
   async getTaskPushNotificationConfig(
-    params: A2A.GetTaskPushNotificationConfigParams,
+    _params: A2A.GetTaskPushNotificationConfigParams,
     _context?: ServerCallContext
   ): Promise<A2A.TaskPushNotificationConfig> {
+    const params: A2A.GetTaskPushNotificationConfigParams =
+      await validateParams(
+        A2A.GetTaskPushNotificationConfigParamsSchema,
+        _params
+      );
     await this.pushNotificationsEnabled(params.id);
 
     const { id: taskId } = params;
@@ -212,9 +236,14 @@ export class Native implements A2ARequestHandler {
   }
 
   async listTaskPushNotificationConfigs(
-    params: A2A.ListTaskPushNotificationConfigsParams,
+    _params: A2A.ListTaskPushNotificationConfigParams,
     _context?: ServerCallContext
   ): Promise<A2A.TaskPushNotificationConfig[]> {
+    const params: A2A.ListTaskPushNotificationConfigParams =
+      await validateParams(
+        A2A.ListTaskPushNotificationConfigParamsSchema,
+        _params
+      );
     await this.pushNotificationsEnabled(params.id);
     const { id: taskId } = params;
     const configs: A2A.PushNotificationConfig[] | undefined =
@@ -230,9 +259,14 @@ export class Native implements A2ARequestHandler {
   }
 
   async deleteTaskPushNotificationConfig(
-    params: A2A.DeleteTaskPushNotificationConfigParams,
+    _params: A2A.DeleteTaskPushNotificationConfigParams,
     _context?: ServerCallContext
   ): Promise<void> {
+    const params: A2A.DeleteTaskPushNotificationConfigParams =
+      await validateParams(
+        A2A.DeleteTaskPushNotificationConfigParamsSchema,
+        _params
+      );
     await this.pushNotificationsEnabled(params.id);
     const { id: taskId } = params;
     await this.pushNotifications!.delete(taskId);
@@ -308,9 +342,7 @@ export class Native implements A2ARequestHandler {
       return new Native(service, _pushNotifications, extendAgentCard);
     }
 
-    const pushNotifications = new PushNotifications(
-      _pushNotifications?.store ?? new InMemoryPushNotificationStore()
-    );
+    const pushNotifications = new PushNotifications(_pushNotifications?.store);
     pushNotifications.sender =
       _pushNotifications?.sender ??
       new DefaultPushNotificationSender(pushNotifications);

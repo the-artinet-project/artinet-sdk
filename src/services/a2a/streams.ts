@@ -1,5 +1,5 @@
 import { A2A } from "~/types/index.js";
-import { sleep } from "~/utils/common/utils.js";
+import { sleep } from "~/utils/utils.js";
 import { logger } from "~/config/index.js";
 const STREAM_INTERVAL = 5;
 

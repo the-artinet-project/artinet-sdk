@@ -8,7 +8,7 @@ import { A2A, MCP } from "~/types/index.js";
 import { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { Agent } from "../a2a/index.js";
-import { formatJson } from "~/utils/common/utils.js";
+import { formatJson } from "~/utils/utils.js";
 
 export interface MCPServiceParams {
   serverInfo: Implementation;

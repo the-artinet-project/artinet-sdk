@@ -194,6 +194,7 @@ export const FAILED_UPDATE = (
     contextId,
     final: true,
     message: describe.message({
+      role: "agent",
       messageId,
       parts: [{ kind: "text", text: errMessage }],
     }),
