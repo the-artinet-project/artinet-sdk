@@ -16,7 +16,7 @@ import {
   AgentEngine,
   getParts,
 } from "../src/index.js";
-import { configure } from "../src/config/index.js";
+import { configure, logger } from "../src/config/index.js";
 import { configurePino } from "../src/extensions/pino.js";
 import pino from "pino";
 import pinoCaller from "pino-caller";
@@ -387,6 +387,7 @@ describe("Server Implementation Tests", () => {
 
   describe("Task History Management", () => {
     it("requests task with history", async () => {
+      logger.info("requests task with history");
       // First create a task
       const createBody = {
         jsonrpc: "2.0",
@@ -402,9 +403,12 @@ describe("Server Implementation Tests", () => {
           },
         },
       };
-
-      await trackRequest(request(app).post("/api").send(createBody));
-
+      logger.info("creating task with history");
+      const resp = await trackRequest(
+        request(app).post("/api").send(createBody)
+      );
+      logger.info("task created with history", resp.body);
+      logger.info("task created with history");
       // Now retrieve it with history
       const retrieveBody = {
         jsonrpc: "2.0",
@@ -415,11 +419,11 @@ describe("Server Implementation Tests", () => {
           historyLength: 2,
         },
       };
-
+      logger.info("retrieving task with history");
       const response = await trackRequest(
         request(app).post("/api").send(retrieveBody)
       );
-
+      logger.info("task retrieved with history", response.body);
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("history-task-1");
