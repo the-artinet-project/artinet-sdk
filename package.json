@@ -143,6 +143,7 @@
     }
   },
   "devDependencies": {
+    "better-sqlite3": "^12.5.0",
     "drizzle-orm": "^0.45.1",
     "@a2a-js/sdk": "^0.3.7",
     "@cfworker/json-schema": "^4.1.1",
