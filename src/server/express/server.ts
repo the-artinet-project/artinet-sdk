@@ -114,58 +114,37 @@ export function createAgentServer({
   userBuilder = UserBuilder.noAuthentication,
 }: ServerParams) {
   const agentInstance = ensureAgent(agent);
-  app.use(cors(corsOptions));
+  /**
+   * Now that agents are services we can wrap them in any kind of transport layer
+   * or in express we can use json-rpc, but we could also use websockets, etc
+   */
+
+  const router = express.Router();
+  router.use(cors(corsOptions));
   if (agentCardPath !== "/.well-known/agent-card.json") {
     // mount at the root for compliance with RFC8615 standard
     // todo: align with emerging multi-agent standards
-    app.use("/.well-known/agent-card.json", (_, res) => {
+    router.use(`/.well-known/agent-card.json`, (_, res) => {
       res.json(agentInstance.agentCard);
     });
   }
-  app.use(agentCardPath, (_, res) => {
+  router.use(`${agentCardPath}`, (_, res) => {
     // mount at the custom path
     res.json(agentInstance.agentCard);
   });
   // mount at the old agent card path for backwards compatibility
-  app.use("/.well-known/agent.json", (_, res) => {
+  router.use(`/.well-known/agent.json`, (_, res) => {
     res.json(agentInstance.agentCard);
   });
-  /**
-   * Now that agents are services we can wrap them in any kind of transport layer
-   * for express we can use json-rpc, but we could also use websockets, or any other
-   * transport layer.
-   */
-  //a standard express middleware to handle json-rpc requests
-  // app.use(
-  //   basePath,
-  //   rpcParser,
-  //   async (
-  //     req: express.Request,
-  //     res: express.Response,
-  //     next: express.NextFunction
-  //   ) => {
-  //     const { jsonrpc } = req.body;
-  //     if (jsonrpc !== "2.0") {
-  //       return next(A2AError.invalidRequest("Invalid JSON-RPC request"));
-  //     }
-  //     return await jsonRPCMiddleware(
-  //       agentInstance,
-  //       req,
-  //       res,
-  //       next,
-  //       extendedAgentCard
-  //     );
-  //   }
-  // );
-
-  app.use(
-    basePath,
+  router.use(
     jsonRpcHandler({
       requestHandler: native(agentInstance, undefined, extendedAgentCard),
       userBuilder: userBuilder,
     })
   );
-  app.use(errorHandler);
+  /**Fallback error handler */
+  router.use(errorHandler);
+  app.use(basePath, router);
   /** this is an example of using trpc as express middleware
     app.use(
       `${basePath}`,

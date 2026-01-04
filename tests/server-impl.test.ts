@@ -239,7 +239,7 @@ describe("Server Implementation Tests", () => {
 
     it("uses custom agent card", async () => {
       const response = await trackRequest(
-        request(app).get("/.well-known/agent-card.json")
+        request(app).get("/api/.well-known/agent-card.json")
       );
 
       expect(response.status).toBe(200);
