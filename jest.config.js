@@ -1,4 +1,6 @@
 export default {
+  maxWorkers: 1,
+  testEnvironment: "node",
   preset: "ts-jest",
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
