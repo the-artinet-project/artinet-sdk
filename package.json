@@ -1,6 +1,6 @@
 {
   "name": "@artinet/sdk",
-  "version": "0.6.0-preview.3",
+  "version": "0.6.0-alpha",
   "description": "A TypeScript SDK for building collaborative AI agents.",
   "type": "module",
   "main": "./dist/index.js",

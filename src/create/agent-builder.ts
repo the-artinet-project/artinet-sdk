@@ -120,9 +120,7 @@ export type inferCarry<Carried> = Carried extends ReturnAndCarry<
   ? Carry
   : EmptyArgs;
 
-export type inC<Carried> = Carried extends ReturnAndCarry<any, infer Carry>
-  ? Carry
-  : EmptyArgs;
+export type inC<C> = inferCarry<C>;
 
 export interface AgentBuilder<Input extends BaseArgs = EmptyArgs> {
   /**

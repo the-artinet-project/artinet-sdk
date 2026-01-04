@@ -12,20 +12,21 @@ import {
   Service,
 } from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
-// import { jsonRPCMiddleware } from "./middeware.js";
-import { errorHandler } from "./errors.js";
 import { logger } from "~/config/index.js";
 import { A2AError, ExtendedAgentCardProvider } from "@a2a-js/sdk/server";
 import { formatJson } from "~/utils/common/utils.js";
 import { native } from "../adapters/a2a_request_handler.js";
 import { jsonRpcHandler, UserBuilder } from "@a2a-js/sdk/server/express";
+
+//TODO: move to index.ts
 export interface ServerParams {
+  //App will be removed from BaseServerParams in v0.6.0
   app?: express.Express;
   corsOptions?: CorsOptions;
   basePath?: string;
   port?: number;
   /**
-   * Your agentCard must have supportsAuthenticatedExtendedCard set to true
+   * Your agentCard must have {@link A2A.AgentCard.supportsAuthenticatedExtendedCard} set to true
    */
   extendedAgentCard?: A2A.AgentCard | ExtendedAgentCardProvider;
   agent: Agent | CreateAgentParams;
@@ -34,6 +35,9 @@ export interface ServerParams {
   userBuilder?: UserBuilder;
 }
 
+/**
+ * @deprecated Use {@link jsonRpcHandler} instead.
+ */
 export function rpcParser(
   req: express.Request,
   res: express.Response,
@@ -102,7 +106,7 @@ const registerAgent = async (agentCard: A2A.AgentCard) => {
  * });
  * ```
  */
-export function createAgentServer({
+export function serve({
   app = express(),
   basePath = "/",
   agentCardPath = "/.well-known/agent-card.json",
@@ -122,7 +126,6 @@ export function createAgentServer({
   const router = express.Router();
   router.use(cors(corsOptions));
   if (agentCardPath !== "/.well-known/agent-card.json") {
-    // mount at the root for compliance with RFC8615 standard
     // todo: align with emerging multi-agent standards
     router.use(`/.well-known/agent-card.json`, (_, res) => {
       res.json(agentInstance.agentCard);
@@ -142,8 +145,6 @@ export function createAgentServer({
       userBuilder: userBuilder,
     })
   );
-  /**Fallback error handler */
-  router.use(errorHandler);
   app.use(basePath, router);
   /** this is an example of using trpc as express middleware
     app.use(
@@ -179,5 +180,8 @@ export function createAgentServer({
   };
   return { app, agent: agentInstance, start };
 }
-
-export type ExpressAgentServer = ReturnType<typeof createAgentServer>;
+/**
+ * @deprecated Use `cr8.server` instead.
+ */
+export const createAgentServer = serve;
+export type ExpressAgentServer = ReturnType<typeof serve>;

@@ -337,13 +337,14 @@ export type FactoryParams = Omit<ServiceParams, "engine" | "agentCard"> &
 
 const toFunction = <
   Ret extends A.AcceptedReturnValues,
+  I extends A.bargs,
   C extends A.bargs,
   R extends A.rep<Ret, C>
 >(
   function_or_ret: unknown
-): A.Invocable<Ret, C, C, R> => {
+): A.Invocable<Ret, I, C, R> => {
   return typeof function_or_ret === "function"
-    ? (function_or_ret as A.Invocable<Ret, C, C, R>)
+    ? (function_or_ret as A.Invocable<Ret, I, C, R>)
     : () => function_or_ret as R;
 };
 /**
@@ -480,6 +481,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     });
   }
 
+  /** This method will become static in v0.6.0 */
   from(engine: A2A.Engine = this.engine) {
     return createAgentImpl({
       ...this._params,
@@ -488,6 +490,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
     });
   }
 
+  /** This method will become static in v0.6.0 */
   serve(engine: A2A.Engine = this.engine) {
     return createAgentServer({
       agent: this.from(engine),
@@ -1003,7 +1006,7 @@ export class AgentFactory<I extends A.bargs = A.empty>
   }
 
   /**
-   * @deprecated Use engine instead
+   * @deprecated Use {@link engine} instead
    */
   public createAgentEngine() {
     return createStepEngine(this.steps);
@@ -1057,75 +1060,24 @@ export class AgentFactory<I extends A.bargs = A.empty>
  * @public
  * @since 0.6.0
  */
-export const cr8 = AgentFactory.create.bind(AgentFactory);
-
-const testAgent = cr8("TestAgent").text("Hello there!").agent;
-export const test = cr8("TestAgent")
-  .text("Hello there!")
-  .text(({ message }) => {
-    const jackfruit = `${message.message.role} there`;
-    return {
-      reply: ["hello there"],
-      args: {
-        jackfruit: jackfruit,
-      },
-    };
-  })
-  .task(({ context, args }) => {
-    console.log(context);
-    return args?.jackfruit ?? "no jackfruit";
-  })
-  .sendMessage({ agent: testAgent, message: "Hello there!" })
-  .text(({ args }) => {
-    return args?.task?.status.state ?? "no task";
-  })
-  .message("Hello there!")
-  .artifact(({ context }) => {
-    return describe.artifact({
-      artifactId: context.taskId,
-      parts: [{ kind: "text", text: "Hello there!" }],
-    });
-  })
-  .message(({ context }) => {
-    return context.taskId;
-  })
-  .message(({ context }) => {
-    return describe.message({
-      role: "agent",
-      contextId: context.contextId,
-      parts: [{ kind: "text", text: "Hello there!" }],
-    });
-  })
-  .text(({ args }) => {
-    return [`Hello ${args?.jackfruit}!`];
-  })
-  .status("working")
-  .status(() => {
-    return {
-      status: {
-        state: A2A.TaskState.completed,
-      },
-    };
-  })
-  .text(({ context }) => {
-    return [`Hello!`, context.taskId];
-  })
-  .status(({ context }) => {
-    return {
-      status: {
-        contextId: context.contextId,
-        state: A2A.TaskState.completed,
-      },
-    };
-  })
-  .task(({ context }) => {
-    return context.taskId;
-  }).steps;
+export const cr8 = AgentFactory.create;
 
 /**
- * @deprecated Use cr8 instead
+ * @deprecated Use {@link cr8} instead
  */
-export const AgentBuilder = AgentFactory;
+export class AgentBuilder extends AgentFactory {
+  constructor(
+    agentCard: describe.AgentCardParams | string = "default",
+    params?: FactoryParams
+  ) {
+    super(
+      describe.card(
+        typeof agentCard === "string" ? { name: agentCard } : agentCard
+      ),
+      params
+    );
+  }
+}
 
 /**
  * Creates an agent execution engine from a list of workflow steps.
@@ -1192,13 +1144,10 @@ export function createStepEngine(stepsList: A.Resolved[]): A2A.Engine {
     logger.debug(`engine[context:${context.contextId}]: submitted`);
     yield submitted;
 
-    // let finalState: A2A.TaskState = A2A.TaskState.completed;
-
     for (const step of stepsList) {
-      // if (await context.isCancelled()) {
-      //   finalState = A2A.TaskState.canceled;
-      //   break;
-      // }
+      if (await context.isCancelled()) {
+        break;
+      }
 
       logger.debug(
         `engine[context:${context.contextId}]: executing step[${step.id}]: ${step.kind}`
@@ -1225,7 +1174,6 @@ export function createStepEngine(stepsList: A.Resolved[]): A2A.Engine {
         task.id
       }]: ${formatJson(task)}`
     );
-    // task.status.state = finalState;
     yield task;
   };
 }
