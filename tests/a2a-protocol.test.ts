@@ -5,6 +5,23 @@ import { ExpressAgentServer, createAgentServer } from "../src/server/index.js";
 import { A2A, AgentEngine, getParts } from "../src/index.js";
 import { applyDefaults } from "../src/config/default.js";
 import nock from "nock";
+import { configure } from "../src/config/index.js";
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({
+  logger: configurePino(
+    pinoCaller(
+      pino({
+        level: "info",
+        transport: {
+          target: "pino-pretty",
+          options: { colorize: true },
+        },
+      })
+    )
+  ),
+});
 // import { A2AError } from "@a2a-js/sdk/server";
 // With options
 // applyDefaults();
