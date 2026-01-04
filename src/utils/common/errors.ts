@@ -5,7 +5,6 @@
 
 import { A2A, MCP } from "~/types/index.js";
 import * as describe from "~/create/describe.js";
-import { formatJson } from "~/utils/common/utils.js";
 /**
  * @since 0.6.0
  */
