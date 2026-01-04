@@ -173,7 +173,9 @@
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.31.0",
     "typescript-transform-paths": "^3.5.5",
-    "winston": "^3.19.0"
+    "winston": "^3.19.0",
+    "@types/nock": "^11.1.0",
+    "nock": "^14.0.10"
   },
   "engines": {
     "node": ">=18.9.1"
