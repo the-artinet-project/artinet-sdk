@@ -4,6 +4,7 @@ import request from "supertest";
 import { ExpressAgentServer, createAgentServer } from "../src/server/index.js";
 import { A2A, AgentEngine, getParts } from "../src/index.js";
 import { applyDefaults } from "../src/config/default.js";
+import nock from "nock";
 // import { A2AError } from "@a2a-js/sdk/server";
 // With options
 // applyDefaults();
@@ -231,6 +232,10 @@ describe("A2A Protocol Specification Tests", () => {
   let pendingRequests: request.Test[] = [];
 
   beforeEach(async () => {
+    nock("https://example.com")
+      .post("/webhook")
+      .reply(200, { ok: true })
+      .persist();
     const agentServer: ExpressAgentServer = await createAgentServer({
       agentCardPath: "/.well-known/agent-card.json",
       agent: {
