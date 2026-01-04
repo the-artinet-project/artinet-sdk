@@ -20,7 +20,7 @@ export class SystemError<T extends MCP.JSONRPCErrorResponse> extends Error {
     data?: T["error"]["data"],
     taskId?: string
   ) {
-    super(message, { cause: data });
+    super(message);
     // this.name = "RpcError";
     this.code = code;
     this.data = data;
