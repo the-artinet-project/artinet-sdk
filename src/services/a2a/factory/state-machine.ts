@@ -7,7 +7,8 @@ import { StateMachine } from "~/services/a2a/state-machine.js";
 import { A2A } from "~/types/index.js";
 import { logger } from "~/config/index.js";
 import * as describe from "~/create/describe.js";
-import { TASK_NOT_FOUND } from "~/utils/index.js";
+import { TASK_NOT_FOUND } from "~/utils/common/errors.js";
+import { formatJson } from "~/utils/common/utils.js";
 import assert from "assert";
 
 export function createStateMachine({
@@ -47,8 +48,15 @@ export function createStateMachine({
         message: (update as A2A.TaskStatusUpdateEvent).status?.message,
       });
 
-      await service.tasks.update(
+      /**We've intentionally blocked further updates, so the first cancellation update is responsible for updating stored task state and notifying listeners*/
+      const updatedTask = await service.tasks.update(
         (await service.contexts.get(contextId))!,
+        cancellation
+      );
+
+      (await service.contexts.get(contextId))?.publisher.emit(
+        "update",
+        updatedTask,
         cancellation
       );
     },
@@ -82,11 +90,11 @@ export function createStateMachine({
         taskId: task.id,
         contextId,
         message: describe.message({
-          messageId: "failed-update",
+          messageId: `failed:${task.id}`,
           parts: [
             {
               kind: "text",
-              text: error instanceof Error ? error.message : String(error),
+              text: error instanceof Error ? error.message : formatJson(error),
             },
           ],
         }),
@@ -103,13 +111,11 @@ export function createStateMachine({
         );
         return;
       }
-
-      await service.tasks.update(context, errorUpdate).catch((error) => {
+      /**triggering onUpdate here with a catch instead of a raw tasks.update call*/
+      await context.publisher.onUpdate(errorUpdate).catch((error) => {
         //we capture errors thrown during error handling to ensure we trigger completion gracefully
         logger.error(`onError: task update error[ctx:${contextId}]:`, error);
       });
-
-      // we trigger completion here to ensure the context is cleaned up
       await context.publisher.onComplete();
     },
     onComplete: async (task: A2A.Task): Promise<void> => {

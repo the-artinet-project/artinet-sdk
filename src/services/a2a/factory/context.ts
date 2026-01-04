@@ -57,12 +57,14 @@ export function createContext({
   messenger,
   extensions,
   references,
+  userId,
 }: {
   baseContext: A2A.BaseContext;
   taskId: string;
   messenger: A2A.MessageConsumerProxy;
   extensions?: A2A.AgentExtension[];
   references?: A2A.Task[];
+  userId?: string;
 }): A2A.Context {
   const getTask = async () =>
     (baseContext.publisher as StateMachine).currentTask;
@@ -73,8 +75,9 @@ export function createContext({
     userMessage: messenger.message,
     messages: messenger,
     getTask,
-    extensions: extensions,
-    references: references,
+    extensions,
+    references,
+    userId,
   };
   return context;
 }

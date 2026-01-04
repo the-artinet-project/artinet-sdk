@@ -19,6 +19,7 @@ export function createHandler(
     getTask: methods?.getTask ?? getTask,
     cancelTask: methods?.cancelTask ?? cancelTask,
     sendMessage: methods?.sendMessage ?? sendMessage,
+    sendMessageStream: methods?.sendMessageStream ?? sendMessageStream,
     streamMessage: methods?.streamMessage ?? sendMessageStream,
     resubscribe: methods?.resubscribe ?? subscribeToTask,
   };

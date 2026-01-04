@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 
 export interface Service<
   Params extends object = object,
@@ -23,7 +23,7 @@ export interface Context<State extends object = object> {
   readonly getState: (args?: string) => Promise<State | undefined>;
 
   metadata?: Record<string, unknown>;
-
+  /**hooks allow consumers to modify context on the fly*/
   readonly hooks?: Record<string, (...args: unknown[]) => Promise<unknown>>;
 }
 

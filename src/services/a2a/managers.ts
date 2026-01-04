@@ -38,7 +38,7 @@ export class Contexts extends Manager<A2A.Context> implements A2A.Contexts {
     });
     logger.debug(`Contexts[create]: params`, { params });
     const baseContext: A2A.BaseContext = createBaseContext(params);
-    //todo: consider allowing ContextParams to cascade
+    /**intentional deep copy*/
     const context: A2A.Context = {
       ...createContext({
         baseContext: baseContext,
@@ -46,6 +46,7 @@ export class Contexts extends Manager<A2A.Context> implements A2A.Contexts {
         messenger: params.messenger,
         references: params.references,
         extensions: params.extensions,
+        userId: params.userId,
       }),
     };
     logger.debug(`Contexts[create]: context created`, context.contextId);

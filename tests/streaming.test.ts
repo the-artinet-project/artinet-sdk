@@ -422,10 +422,10 @@ describe("Streaming API Tests", () => {
         expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound);
         expect(response.body.error.message).toBe("Task not found");
       } else if (response.type === "text/event-stream") {
-        const responseData = JSON.parse(response.text);
+        const responseData = JSON.parse(response.text.split("data:")[1].trim());
         expect(responseData.error).toBeDefined();
         expect(responseData.error.code).toBe(A2A.ErrorCodeTaskNotFound);
-        expect(responseData.error.message).toBe("Task not found");
+        expect(responseData.error.message).toContain("Task not found");
       }
     });
   });

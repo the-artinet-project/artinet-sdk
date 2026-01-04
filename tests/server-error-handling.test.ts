@@ -179,14 +179,11 @@ describe("A2AServer Error Handling", () => {
           .set("Content-Type", "application/json")
           .send("this is not valid json")
       );
-
       // The server might return either a 400 Bad Request or 200 with JSON-RPC error
-      expect(response.status).toBe(200);
+      expect([400, 200].includes(response.status)).toBe(true);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32700); // JSON parse error
-      expect(response.body.error.message).toBe(
-        "Invalid request body: undefined"
-      );
+      expect(response.body.error.message).toContain("Invalid JSON payload");
     });
 
     it("returns error for empty request body", async () => {

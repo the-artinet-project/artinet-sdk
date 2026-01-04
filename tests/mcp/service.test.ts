@@ -361,7 +361,7 @@ describe("MCP Agent Tests", () => {
       },
     });
     expect(result).toBeDefined();
-    expect(result.content[0].text).toEqual("Task not found");
+    expect(result.content[0].text).toContain("Task not found");
   });
   it("should call cancelTask through mcp", async () => {
     const client = new Client({
@@ -377,7 +377,7 @@ describe("MCP Agent Tests", () => {
       },
     });
     expect(result).toBeDefined();
-    expect(result.content[0].text).toEqual("Task not found");
+    expect(result.content[0].text).toContain("Task not found");
   });
   it("should call sendMessage through mcp", async () => {
     const client = new Client({

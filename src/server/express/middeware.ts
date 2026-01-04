@@ -31,7 +31,9 @@ const checkParams = (params: unknown, method: string) => {
     });
   }
 };
-
+/**
+ * @deprecated Use the jsonRpcHandler from @a2a-js/sdk/server/express instead
+ */
 export async function jsonRPCMiddleware(
   service: A2A.Service,
   req: Request,

@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 import { A2A } from "~/types/index.js";
 import { INTERNAL_ERROR } from "~/utils/index.js";
 import { logger } from "~/config/index.js";

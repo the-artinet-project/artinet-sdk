@@ -12,12 +12,13 @@ import {
   Service,
 } from "~/services/index.js";
 import cors, { CorsOptions } from "cors";
-import { jsonRPCMiddleware } from "./middeware.js";
+// import { jsonRPCMiddleware } from "./middeware.js";
 import { errorHandler } from "./errors.js";
 import { logger } from "~/config/index.js";
-import { A2AError } from "@a2a-js/sdk/server";
+import { A2AError, ExtendedAgentCardProvider } from "@a2a-js/sdk/server";
 import { formatJson } from "~/utils/common/utils.js";
-
+import { native } from "../adapters/a2a_request_handler.js";
+import { jsonRpcHandler, UserBuilder } from "@a2a-js/sdk/server/express";
 export interface ServerParams {
   app?: express.Express;
   corsOptions?: CorsOptions;
@@ -26,10 +27,11 @@ export interface ServerParams {
   /**
    * Your agentCard must have supportsAuthenticatedExtendedCard set to true
    */
-  extendedAgentCard?: A2A.AgentCard;
+  extendedAgentCard?: A2A.AgentCard | ExtendedAgentCardProvider;
   agent: Agent | CreateAgentParams;
   agentCardPath?: string;
   register?: boolean;
+  userBuilder?: UserBuilder;
 }
 
 export function rpcParser(
@@ -109,6 +111,7 @@ export function createAgentServer({
   extendedAgentCard,
   register = false,
   port,
+  userBuilder = UserBuilder.noAuthentication,
 }: ServerParams) {
   const agentInstance = ensureAgent(agent);
   app.use(cors(corsOptions));
@@ -133,26 +136,34 @@ export function createAgentServer({
    * transport layer.
    */
   //a standard express middleware to handle json-rpc requests
-  app.post(
+  // app.use(
+  //   basePath,
+  //   rpcParser,
+  //   async (
+  //     req: express.Request,
+  //     res: express.Response,
+  //     next: express.NextFunction
+  //   ) => {
+  //     const { jsonrpc } = req.body;
+  //     if (jsonrpc !== "2.0") {
+  //       return next(A2AError.invalidRequest("Invalid JSON-RPC request"));
+  //     }
+  //     return await jsonRPCMiddleware(
+  //       agentInstance,
+  //       req,
+  //       res,
+  //       next,
+  //       extendedAgentCard
+  //     );
+  //   }
+  // );
+
+  app.use(
     basePath,
-    rpcParser,
-    async (
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction
-    ) => {
-      const { jsonrpc } = req.body;
-      if (jsonrpc !== "2.0") {
-        return next(A2AError.invalidRequest("Invalid JSON-RPC request"));
-      }
-      return await jsonRPCMiddleware(
-        agentInstance,
-        req,
-        res,
-        next,
-        extendedAgentCard
-      );
-    }
+    jsonRpcHandler({
+      requestHandler: native(agentInstance, undefined, extendedAgentCard),
+      userBuilder: userBuilder,
+    })
   );
   app.use(errorHandler);
   /** this is an example of using trpc as express middleware

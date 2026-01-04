@@ -1,5 +1,5 @@
 import { A2A } from "~/types/index.js";
-import { EventEmitter } from "events";
+import { EventEmitter } from "eventemitter3";
 
 export class Messenger
   extends EventEmitter<A2A.MessageMap>

@@ -342,11 +342,10 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid Parameters");
+      expect(response.body.error.message).toBe("Invalid method parameters.");
     });
 
     it("returns INVALID_PARAMS error for invalid task ID", async () => {
@@ -362,11 +361,10 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Params Required");
+      expect(response.body.error.message).toBe("Invalid parameters");
     });
   });
 

@@ -5,6 +5,8 @@
 
 import { logger } from "~/config/index.js";
 
+//TODO: Add  persistance layer and turn Manager into an LRU cache
+
 export abstract class Manager<T> {
   constructor(
     private _data: Map<string, T> = new Map(),

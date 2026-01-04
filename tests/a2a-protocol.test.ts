@@ -8,9 +8,10 @@ import {
   AgentEngine,
   getParts,
 } from "../src/index.js";
-import { A2AError } from "@a2a-js/sdk/server";
+import { applyDefaults } from "../src/config/default.js";
+// import { A2AError } from "@a2a-js/sdk/server";
 // With options
-
+// applyDefaults();
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing
@@ -274,7 +275,6 @@ describe("A2A Protocol Specification Tests", () => {
       const response = await request(app).get("/.well-known/agent-card.json");
 
       expect(response.status).toBe(200);
-      // console.log("response", response.body);
       expect(response.body.name).toBe("A2A Protocol Test Agent");
       expect(response.body.capabilities.streaming).toBe(true);
       expect(response.body.capabilities.pushNotifications).toBe(true);
@@ -301,7 +301,6 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await request(app).post("/").send(requestBody);
-      // console.log("response", response.body);
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("test-task-1");
@@ -494,11 +493,10 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await request(app).post("/").send(retrieveBody);
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound); // Task not found error
-      expect(response.body.error.message).toBe("Task not found");
+      expect(response.body.error.message).toContain("Task not found");
     });
 
     it("cancels a task with tasks/cancel", async () => {
@@ -548,11 +546,10 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await request(app).post("/").send(cancelBody);
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound); // Task not found error
-      expect(response.body.error.message).toBe("Task not found");
+      expect(response.body.error.message).toContain("Task not found");
     });
 
     it("returns error when canceling completed task", async () => {
@@ -590,7 +587,7 @@ describe("A2A Protocol Specification Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotCancelable);
-      expect(response.body.error.message).toBe("Task cannot be canceled");
+      expect(response.body.error.message).toContain("Task cannot be canceled");
     });
   });
 
@@ -612,15 +609,15 @@ describe("A2A Protocol Specification Tests", () => {
         },
       };
 
-      await request(app).post("/").send(createBody);
-
+      const rep = await request(app).post("/").send(createBody);
+      const taskId = rep.body.result.id;
       // Now set push notification config
       const requestBody = {
         jsonrpc: "2.0",
         id: "push-request-1",
         method: "tasks/pushNotificationConfig/set",
         params: {
-          taskId: "push-task-1",
+          taskId: taskId,
           pushNotificationConfig: {
             url: "https://example.com/webhook",
             token: "test-token",
@@ -629,16 +626,18 @@ describe("A2A Protocol Specification Tests", () => {
       };
 
       const response = await request(app).post("/").send(requestBody);
-
       expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32003);
-      expect(response.body.error.message).toBe(
-        "Push Notification is not supported"
+      expect(response.body.result).toBeDefined();
+      expect(response.body.result.taskId).toBe(taskId);
+      expect(response.body.result.pushNotificationConfig.url).toBe(
+        "https://example.com/webhook"
+      );
+      expect(response.body.result.pushNotificationConfig.token).toBe(
+        "test-token"
       );
     });
 
-    it("does not get push notification configuration", async () => {
+    it("does get push notification configuration", async () => {
       // First create a task
       const createBody = {
         jsonrpc: "2.0",
@@ -650,12 +649,21 @@ describe("A2A Protocol Specification Tests", () => {
             kind: "message",
             messageId: "push-get-message-id-1",
             role: "user",
-            parts: [{ type: "text", text: "Task for push notifications" }],
+            parts: [{ kind: "text", text: "Task for push notifications" }],
+          },
+          configuration: {
+            blocking: true,
+            pushNotificationConfig: {
+              id: "push-notification-config-1",
+              url: "https://example.com/webhook",
+              token: "test-token",
+            },
           },
         },
       };
 
-      await request(app).post("/").send(createBody);
+      const rep = await request(app).post("/").send(createBody);
+      const taskId = rep.body.result.id;
 
       // Now try to get push notification config
       const getBody = {
@@ -663,19 +671,21 @@ describe("A2A Protocol Specification Tests", () => {
         id: "push-get-request-1",
         method: "tasks/pushNotificationConfig/get",
         params: {
-          id: "push-get-task-1",
-          config: {
-            url: "https://example.com/webhook",
-            token: "test-token",
-          },
+          id: taskId,
+          pushNotificationConfigId: "push-notification-config-1",
         },
       };
 
       const response = await request(app).post("/").send(getBody);
-
       expect(response.status).toBe(200);
-      expect(response.body.error).toBeDefined();
-      expect(response.body.error.code).toBe(-32003);
+      expect(response.body.result).toBeDefined();
+      expect(response.body.result.taskId).toBe(taskId);
+      expect(response.body.result.pushNotificationConfig.url).toBe(
+        "https://example.com/webhook"
+      );
+      expect(response.body.result.pushNotificationConfig.token).toBe(
+        "test-token"
+      );
     });
 
     it("returns error when setting push notification for non-existent task", async () => {

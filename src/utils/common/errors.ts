@@ -6,99 +6,119 @@
 import { A2A, MCP } from "~/types/index.js";
 import * as describe from "~/create/describe.js";
 import { formatJson } from "~/utils/common/utils.js";
-
 /**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export class SystemError<T extends MCP.JSONRPCErrorResponse> extends Error {
-  message: string;
   code: T["error"]["code"];
-  data: T["error"]["data"];
+  data?: T["error"]["data"];
+  taskId?: string;
+  message: string;
 
   constructor(
     message: string,
     code: T["error"]["code"],
-    data: T["error"]["data"]
+    data?: T["error"]["data"],
+    taskId?: string
   ) {
-    super(message + " " + formatJson({ cause: data }));
+    super(message, { cause: data });
     // this.name = "RpcError";
-    this.message = message;
     this.code = code;
     this.data = data;
+    this.taskId = taskId;
+    this.message = message;
   }
 }
 
 /**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export const PARSE_ERROR = <T extends A2A.JSONParseError>(
-  data: T["error"]["data"]
-) => new SystemError<T>("Invalid JSON payload", A2A.ErrorCodeParseError, data);
+  data: T["error"]["data"],
+  taskId?: string
+) =>
+  new SystemError<T>(
+    "Invalid JSON payload",
+    A2A.ErrorCodeParseError,
+    data,
+    taskId
+  );
 /**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export const INVALID_REQUEST = <T extends A2A.InvalidRequestError>(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Request payload validation error",
     A2A.ErrorCodeInvalidRequest,
-    data
+    data,
+    taskId
   );
 /**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export const METHOD_NOT_FOUND = <T extends A2A.MethodNotFoundError>(
-  data: T["error"]["data"]
-) => new SystemError<T>("Method not found", A2A.ErrorCodeMethodNotFound, data);
-/**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
- * @since 0.6.0
- */
+  data: T["error"]["data"],
+  taskId?: string
+) =>
+  new SystemError<T>(
+    "Method not found",
+    A2A.ErrorCodeMethodNotFound,
+    data,
+    taskId
+  );
 export const INVALID_PARAMS = <T extends A2A.InvalidParamsError>(
-  data: T["error"]["data"]
-) => new SystemError<T>("Invalid parameters", A2A.ErrorCodeInvalidParams, data);
-/**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
- * @since 0.6.0
- */
+  data: T["error"]["data"],
+  taskId?: string
+) =>
+  new SystemError<T>(
+    "Invalid parameters",
+    A2A.ErrorCodeInvalidParams,
+    data,
+    taskId
+  );
 export const INTERNAL_ERROR = <T extends A2A.InternalError>(
-  data: T["error"]["data"]
-) => new SystemError<T>("Internal error", A2A.ErrorCodeInternalError, data);
-/**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
- * @since 0.6.0
- */
+  data: T["error"]["data"],
+  taskId?: string
+) =>
+  new SystemError<T>(
+    "Internal error",
+    A2A.ErrorCodeInternalError,
+    data,
+    taskId
+  );
 export const TASK_NOT_FOUND = <T extends A2A.TaskNotFoundError>(
-  data: T["error"]["data"]
-) => new SystemError<T>("Task not found", A2A.ErrorCodeTaskNotFound, data);
-/**
- * @deprecated Use errors from the `@a2a-js/sdk` package instead
- * @since 0.6.0
- */
+  data: T["error"]["data"],
+  taskId?: string
+) =>
+  new SystemError<T>("Task not found", A2A.ErrorCodeTaskNotFound, data, taskId);
 export const TASK_NOT_CANCELABLE = <T extends A2A.TaskNotCancelableError>(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Task cannot be canceled",
     A2A.ErrorCodeTaskNotCancelable,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
-export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2A.A2AError>(
-  data: T["error"]["data"]
+export const PUSH_NOTIFICATION_NOT_SUPPORTED = <
+  T extends A2A.PushNotificationNotSupportedError
+>(
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Push Notifications is not supported",
     A2A.ErrorCodePushNotificationNotSupported,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
@@ -107,24 +127,28 @@ export const PUSH_NOTIFICATION_NOT_SUPPORTED = <T extends A2A.A2AError>(
 export const AUTHENTICATED_EXTENDED_CARD_NOT_CONFIGURED = <
   T extends A2A.AuthenticatedExtendedCardNotConfiguredError
 >(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Authenticated Extended Card is not configured",
     A2A.ErrorCodeAuthenticatedExtendedCardNotConfigured,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export const UNSUPPORTED_OPERATION = <T extends A2A.A2AError>(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "This operation is not supported",
     A2A.ErrorCodeUnsupportedOperation,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
@@ -133,24 +157,28 @@ export const UNSUPPORTED_OPERATION = <T extends A2A.A2AError>(
 export const CONTENT_TYPE_NOT_SUPPORTED = <
   T extends A2A.ContentTypeNotSupportedError
 >(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Content type not supported",
     A2A.ErrorCodeContentTypeNotSupported,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use errors from the `@a2a-js/sdk` package instead
  * @since 0.6.0
  */
 export const INVALID_AGENT_RESPONSE = <T extends A2A.InvalidAgentResponseError>(
-  data: T["error"]["data"]
+  data: T["error"]["data"],
+  taskId?: string
 ) =>
   new SystemError<T>(
     "Invalid agent response",
     A2A.ErrorCodeInvalidAgentResponse,
-    data
+    data,
+    taskId
   );
 /**
  * @deprecated Use {@link describe.update.failed} instead

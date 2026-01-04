@@ -17,6 +17,7 @@ import {
   MessageSchema,
   TaskSchema,
   TaskStatusUpdateEventSchema,
+  PushNotificationConfig,
 } from "@artinet/types/a2a";
 import { core } from "../core/index.js";
 import { z } from "zod/v4";
@@ -52,6 +53,7 @@ export interface Context extends BaseContext {
   readonly messages: MessageConsumerProxy;
   extensions?: AgentExtension[];
   references?: Task[];
+  userId?: string;
   getTask: () => Promise<Task>;
 }
 
@@ -83,9 +85,19 @@ export interface Cancellations extends Omit<core.Manager<void>, "get"> {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Connections extends Omit<core.Manager<void>, "get"> {}
 
-export interface ServiceOptions {
-  abortSignal?: AbortSignal;
+export interface Notifier {
+  notify: (task: Task, update: Update, context?: Context) => Promise<void>;
+  register: (taskId: string, config: PushNotificationConfig) => Promise<void>;
 }
+
+export type ServiceOptions = Pick<
+  ContextParams,
+  "userId" | "extensions" | "abortSignal"
+> & {
+  task?: Task;
+  notifier?: Notifier;
+};
+
 export interface RequestHandler {
   getTask: (
     input: TaskQueryParams,
@@ -102,7 +114,15 @@ export interface RequestHandler {
     context?: Context,
     options?: ServiceOptions
   ) => Promise<SendMessageSuccessResult>;
+  /**
+   * @deprecated Use sendMessageStream instead
+   */
   streamMessage: (
+    message: MessageSendParams,
+    context?: Context,
+    options?: ServiceOptions
+  ) => AsyncGenerator<Update>;
+  sendMessageStream: (
     message: MessageSendParams,
     context?: Context,
     options?: ServiceOptions
@@ -117,9 +137,16 @@ export interface RequestHandler {
   getAgentCard: () => Promise<AgentCard>;
 }
 
-export interface ExtendedHandler extends RequestHandler {
-  getAuthenticatedExtendedCard: () => Promise<AgentCard>;
-}
+/**
+ * @deprecated This interface is no longer supported; use {@link RequestHandler} instead
+ * @note Authentication is now completely a Transport Layer concern.
+ */
+export type ExtendedHandler = RequestHandler & {
+  getAuthenticatedExtendedCard: (
+    context?: Context,
+    options?: ServiceOptions
+  ) => Promise<AgentCard>;
+};
 
 export interface Stream {
   readonly contextId: string;

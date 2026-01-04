@@ -196,7 +196,7 @@ describe("A2AServer", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeInvalidRequest);
-      expect(response.body.error.message).toBe("Invalid JSON-RPC request");
+      expect(response.body.error.message).toBe("Invalid JSON-RPC Request.");
     });
   });
 
@@ -255,7 +255,6 @@ describe("A2AServer", () => {
       const response = await trackRequest(
         request(app).post("/").send(getRequest)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(A2A.ErrorCodeTaskNotFound);
