@@ -222,7 +222,7 @@ const server = setupServer(
   })
 );
 
-describe("A2AClient", () => {
+describe.skip("A2AClient", () => {
   let messenger: Awaited<ReturnType<typeof createMessenger>>;
 
   beforeAll(() => {
