@@ -1,8 +1,9 @@
 /**
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
-
- * @archive Helper utilities for Express servers.
+ *
+ * @archive Helper utilities for express servers.
+ * @note We recommend using the @a2a-js/sdk/express middleware instead as these utilities will no longer be robustly maintained.
  */
 
 import { MCP } from "~/types/index.js";

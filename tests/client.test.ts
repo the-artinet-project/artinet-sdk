@@ -1,3 +1,7 @@
+/**
+ * Archiving these tests as they are no longer relevant.
+ * Transport has been largely replaced with the @a2a-js/sdk please file an issue with A2A Protocol team if you encounter any bugs.
+ */
 import {
   test,
   describe,
@@ -12,9 +16,12 @@ import {
   A2A,
   createMessenger,
   AgentMessenger,
+  applyDefaults,
 } from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
+
+applyDefaults();
 
 const MOCK_AGENT_CARD: A2A.AgentCard = {
   protocolVersion: "0.3.0",
@@ -222,7 +229,7 @@ const server = setupServer(
   })
 );
 
-describe.skip("A2AClient", () => {
+describe("A2AClient", () => {
   let messenger: Awaited<ReturnType<typeof createMessenger>>;
 
   beforeAll(() => {
@@ -328,12 +335,12 @@ describe.skip("A2AClient", () => {
 
   // Test constructor with string URL and headers
   test("should construct client with string URL and headers", () => {
-    const testClient = new A2AClient("https://example.com", {
+    const testClient = new A2AClient("https://test-agent.example.com/api", {
       Authorization: "Bearer test-token",
     });
 
     // Check internal state
-    expect(testClient.baseUrl).toBe("https://example.com");
+    expect(testClient.baseUrl).toBe("https://test-agent.example.com/api");
     expect(testClient.headers["Authorization"]).toBe("Bearer test-token");
   });
 

@@ -31,10 +31,6 @@ class LoadManager<T> implements core.Manager<T> {
   async has(id: string): Promise<boolean> {
     return (await this._loadable.load(id)) !== undefined;
   }
-  async list(): Promise<T[]> {
-    logger.warn("List not supported for loadable");
-    return [];
-  }
 }
 
 class TaskManager extends LoadManager<A2A.Task> implements A2A.Tasks {

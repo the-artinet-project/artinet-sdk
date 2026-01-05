@@ -1,6 +1,6 @@
 # Advanced Server Customization
 
-Our architecture provides multiple ways to customize your agent server.
+Our architecture provides multiple ways to customize your agent.
 
 ## Using cr8 with Custom Parameters
 
@@ -12,10 +12,7 @@ import { cr8 } from "@artinet/sdk";
 const { app } = cr8("Custom Agent", {
   basePath: "/a2a",
   agentCardPath: "/.well-known/agent-card.json",
-  port: 3000,
-})
-  .text("Hello from custom agent!")
-  .server;
+}).text("Hello from custom agent!").server;
 
 // Add custom middleware
 app.use((req, res, next) => {
@@ -31,80 +28,54 @@ app.get("/health", (req, res) => {
 app.listen(3000);
 ```
 
-## Using createAgentServer (deprecated)
+## Native
 
-For more control, use `createAgentServer` with an existing Express app:
+The _`@artinet/sdk`_ provides tools for integrating with the `@a2a-js/sdk`, so you can use your agents anywhere.
 
-```typescript
-import express from "express";
-import { createAgentServer, cr8 } from "@artinet/sdk";
+### `A2ARequestHandler` Support
 
-const initialApp = express();
+You can convert any _`@artinet/sdk`_ agent into an `@a2a-js/sdk` compatible `RequestHandler` using `native`.
 
-// Custom middleware
-initialApp.use((req, res, next) => {
-  console.log("Request received:", req.path);
-  next();
-});
-
-const myAgent = cr8("Custom Agent")
-  .text("Hello!")
-  .agent;
-
-const { app, agent } = createAgentServer({
-  app: initialApp,
-  agent: myAgent,
-  basePath: "/a2a",
-});
-
-// More custom middleware
-app.use("/custom", (req, res, next) => {
-  // Custom endpoint logic
-});
-
-app.listen(3000);
-```
-
-## Using JSON-RPC Middleware
-
-Directly import our preconfigured JSON-RPC middleware:
+_Below is an example of how the `@artinet/sdk` creates JSONRPC Express Servers internally_
 
 ```typescript
-import express from "express";
-import { createAgent, jsonRPCMiddleware, errorHandler } from "@artinet/sdk";
+import { cr8, native, Agent } from "@artinet/sdk";
+import { jsonRpcHandler } from "@a2a-js/sdk/server/express";
+import type { A2ARequestHandler } from "@a2a-js/sdk/server";
+import express, { RequestHandler } from "express";
 
-const customApp = express();
+// Create an `Agent`
+const agent: Agent = cr8("Test Agent").text("Hello World").agent;
 
-const agent = createAgent({
-  engine: myAgentLogic,
-  agentCard: {
-    name: "Custom Agent",
-    // ...
-  },
-});
+// Convert it into an `A2ARequestHandler`
+const nativeHandler: A2ARequestHandler = native(agent);
 
-customApp.use("/auth", yourAuthMiddleware);
-customApp.use("/metrics", yourMetricsMiddleware);
-customApp.use(express.json());
-
-// Add A2A middleware
-customApp.post("/", async (req, res, next) => {
-  return await jsonRPCMiddleware(agent, req, res, next);
-});
-
-// Don't forget to add error handling
-customApp.use(errorHandler);
-
-// Serve the agent card
-customApp.get("/.well-known/agent-card.json", (req, res) => {
-  res.json(agent.agentCard);
-});
-
-// Start your custom server
-const server = customApp.listen(3000, () => {
-  console.log("Custom A2A server running on port 3000");
+// Use it with `@a2a-js/sdk`
+const rpcHandler: RequestHandler = jsonRpcHandler({
+  requestHandler: nativeHandler,
 });
 ```
+
+- `native` provides a comprehensive compatibility layer with robust support for push notifications.
+
+### `TaskStore` -> `Tasks`
+
+Transform a `TaskStore` from the `@a2a-js/sdk` into an _`@artinet/sdk`_ `ResourceManager` with the `tasks` utility:
+
+```typescript
+import { cr8, tasks, Agent } from "@artinet/sdk";
+import { TaskStore, InMemoryTaskStore } from "@a2a-js/sdk/server";
+
+const nativeStore: TaskStore = new InMemoryTaskStore();
+
+const agent: Agent = cr8("Native Agent", {
+  tasks: tasks(nativeStore),
+}).text("artinet compliant").agent;
+```
+
+- `tasks` upgrades `TaskStore` with additional methods (`get`,`set`,`delete`,`has`, `create`, `update`).
+
+> Additional methods coming soon with caching.
 
 ## Using Custom Transport Layers
 
@@ -116,59 +87,38 @@ import { createAgentRouter } from "@artinet/sdk/trpc";
 const agentRouter = createAgentRouter();
 ```
 
-## Direct Agent Invocation
+## Using `AgentEngine`s Directly
 
-Directly invoke the agent to use it locally:
-
-```typescript
-import { cr8 } from "@artinet/sdk";
-
-const agent = cr8("Local Agent")
-  .text(({ content }) => `Echo: ${content}`)
-  .agent;
-
-// Wrap these calls in your desired transport logic
-const result = await agent.sendMessage({
-  message: { parts: [{ kind: "text", text: "Hello" }] },
-});
-
-// Directly process streams
-const stream = agent.streamMessage({
-  message: { parts: [{ kind: "text", text: "Stream this" }] },
-});
-
-for await (const update of stream) {
-  console.log(update);
-}
-```
-
-## Using Engines Directly
-
-Access and use the engine separately from the service:
+Access and use the `AgentEngine` separately from an `Agent`:
 
 ```typescript
-import { cr8 } from "@artinet/sdk";
+import { cr8, AgentEngine } from "@artinet/sdk";
 
 // Build your workflow
-const builder = cr8("MyAgent")
-  .text("Step 1")
-  .data({ processed: true });
+const builder = cr8("MyAgent").text("Step 1").data({ processed: true });
 
 // Get just the engine
-const engine = builder.engine;
-
-// Or create a custom service with the engine
-const customAgent = builder.from(engine);
-
-// Or create a custom server
-const { app } = builder.serve(engine);
+const engine: AgentEngine = builder.engine;
 ```
 
-## Custom Implementation Checklist
+Create an `Agent` with a custom `AgentEngine`:
 
-When using custom implementations, ensure you handle:
+```typescript
+import { cr8, describe } from "@artinet/sdk";
 
-- [ ] Server-Sent Events (SSE) for `message/stream` and `tasks/resubscribe`
-- [ ] Agent card endpoints at `/.well-known/agent-card.json`
-- [ ] Proper error handling and JSON-RPC compliance
-- [ ] CORS headers if needed for web clients
+const custom = cr8("Custom Agent").from(async function* (context: A2A.Context) {
+  yield describe.message("Hello User!");
+});
+```
+
+Or a custom server:
+
+```typescript
+cr8("Custom Server")
+  .serve(async function* (context: A2A.Context) {
+    yield describe.message(
+      `Hello Remote User! ${context.userMessage?.parts[0]?.text}`
+    );
+  })
+  .start(3000);
+```

@@ -7,8 +7,9 @@ The SDK provides a Model Context Protocol (MCP) <-> A2A compatibility layer.
 Use `createMCPAgent` to expose your agent via MCP:
 
 ```typescript
-import { createMCPAgent, createAgent } from "@artinet/sdk";
+import { createMCPAgent } from "@artinet/sdk";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { myAgent } from "./my-agent.ts";
 
 // Wrap your agent in an MCP Server
 const mcpAgent = createMCPAgent({
@@ -19,10 +20,7 @@ const mcpAgent = createMCPAgent({
   options: {
     // MCP server options
   },
-  agent: createAgent({
-    engine: myAgentEngine,
-    agentCard: "MCP Agent",
-  }),
+  agent: myAgent,
   agentCardUri: "agent://card", // Customize the URI for your AgentCard
 });
 
@@ -59,12 +57,12 @@ const result = await client.callTool({
 
 ## Available MCP Tools & Resources
 
-| Name | Type | Description |
-|------|------|-------------|
-| `send-message` | Tool | Send messages to the A2A agent |
-| `get-task` | Tool | Retrieve tasks by ID |
-| `cancel-task` | Tool | Cancel a running task |
-| `agent://card` | Resource | Retrieve the AgentCard |
+| Name           | Type     | Description                    |
+| -------------- | -------- | ------------------------------ |
+| `send-message` | Tool     | Send messages to the A2A agent |
+| `get-task`     | Tool     | Retrieve tasks by ID           |
+| `cancel-task`  | Tool     | Cancel a running task          |
+| `agent://card` | Resource | Retrieve the AgentCard         |
 
 ## Limitations
 
@@ -74,13 +72,12 @@ The following A2A features are not supported by default in MCP:
 - `task-resubscribe`
 - `push-notifications`
 
-Leverage the A2A Zod Schemas to manually implement your own tools for these features.
+_*You can leverage the A2A Zod Schemas to implement more A2A tools.*_
 
 ## Installation
 
-MCP support requires the peer dependency:
+Required:
 
 ```bash
 npm install @modelcontextprotocol/sdk
 ```
-

@@ -507,8 +507,8 @@ export class AgentFactory<I extends A.bargs = A.empty>
     C extends A.bargs = A.empty,
     R extends A.rep<Ret, C> = A.rep<Ret, C>,
     Kind extends A.AcceptedKinds = "text"
-  >(step: A.Resolved<Ret, I, C, R, Kind>): AgentFactory<A.inC<R>> {
-    return new AgentFactory<A.inC<R>>(this._agentCard, this._params, [
+  >(step: A.Resolved<Ret, I, C, R, Kind>): AgentFactory<A.inferCarry<R>> {
+    return new AgentFactory<A.inferCarry<R>>(this._agentCard, this._params, [
       ...this.steps,
       step,
     ]);
@@ -895,16 +895,17 @@ export class AgentFactory<I extends A.bargs = A.empty>
   /**
    * Adds an agent-to-agent orchestration step to the workflow.
    *
-   * This step sends a message to another agent (local Service or remote A2AClient)
+   * This step sends a message to another agent (local Service or remote A2A Server)
    * and yields the response as a task. Enables multi-agent workflows where one
    * agent delegates work to others.
    *
    * **Note:** This is currently a blocking call. Streaming responses are not
    * yet supported in orchestration steps.
+   * @note Args passed from the previous step are inserted, by default,
+   *  (`unshift`) as `DataPart`s onto the forwarded `Message`.`Parts`.
    *
-   * @param agent_and_message - Configuration object with target agent and optional message
-   * @param agent_and_message.agent - The target agent (Service or A2AClient)
-   * @param agent_and_message.message - Message to send (defaults to context.userMessage)
+   * @param agent - The target agent (Agent or AgentMessenger)
+   * @param message - Message to send (defaults to context.userMessage)
    * @returns New builder instance with task carry args (args.task)
    *
    * @example
@@ -936,18 +937,24 @@ export class AgentFactory<I extends A.bargs = A.empty>
     agent: MessageSender;
     message?: A.sMessage | string;
   }): AgentFactory<A.inferCarry<A.Reply<A.Stateless<TaskParams>, Carry>>> {
-    const stepFn: taskStep<I, Carry> = async ({ context }) => {
+    const stepFn: taskStep<I, Carry> = async ({ context, args }) => {
       logger.info("sendMessage: Sending message: ", {
         agent: agent_and_message.agent.constructor.name,
       });
+      const messageSendParams: A2A.MessageSendParams =
+        describe.messageSendParams(
+          agent_and_message.message ?? context.userMessage
+        );
+
+      if (args) {
+        messageSendParams.message.parts.unshift(
+          describe.part.data({ ...args })
+        );
+      }
 
       const response: A2A.SendMessageSuccessResult | null =
         await agent_and_message.agent
-          .sendMessage(
-            describe.messageSendParams(
-              agent_and_message.message ?? context.userMessage
-            )
-          )
+          .sendMessage(messageSendParams)
           .catch((error) => {
             logger.error("sendMessage: Error sending message: ", error);
             return null;
@@ -1003,11 +1010,8 @@ export class AgentFactory<I extends A.bargs = A.empty>
    * const factory = AgentFactory.create(myCard, { params });
    * ```
    */
-  static create<Input extends A.bargs = A.empty>(
-    agentCard: describe.AgentCardParams,
-    params?: FactoryParams
-  ) {
-    return new AgentFactory<Input>(describe.card(agentCard), params);
+  static create(agentCard: describe.AgentCardParams, params?: FactoryParams) {
+    return new AgentFactory<A.empty>(describe.card(agentCard), params);
   }
 }
 
@@ -1052,6 +1056,9 @@ export const cr8 = AgentFactory.create;
 
 /**
  * @deprecated Use {@link cr8} instead
+ * @note This export exists only to alert users that `AgentBuilder` is deprecated.
+ * `AgentBuilder` no longer comes with the `createAgent` method.
+ * @since 0.6.0
  */
 export class AgentBuilder extends AgentFactory {
   constructor(

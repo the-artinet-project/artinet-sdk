@@ -17,7 +17,7 @@ import { PushNotifications } from "./notifications.js";
 import { logger } from "~/config/index.js";
 import { SystemError, validateSchema } from "~/utils/index.js";
 import { z } from "zod/v4";
-/**We want to avoid pulling a2a-js/sdk logic into our business logic. */
+/**We want to avoid pulling @a2a-js/sdk logic into our business logic. */
 const toServiceOptions = (
   context?: ServerCallContext,
   notify?: A2A.Notifier
@@ -305,15 +305,19 @@ export class Native implements A2ARequestHandler {
         "Agent does not support authenticated extended card."
       );
     }
+
     if (!this._extendAgentCard) {
       throw A2AError.authenticatedExtendedCardNotConfigured();
     }
+
     if (typeof this._extendAgentCard === "function") {
       return await this._extendAgentCard(context);
     }
+
     if (context?.user?.isAuthenticated) {
-      return await this._extendAgentCard;
+      return this._extendAgentCard;
     }
+
     return await this.getAgentCard();
   }
 
@@ -347,4 +351,18 @@ export class Native implements A2ARequestHandler {
   }
 }
 
+/**
+ * native adapter for `@a2a-js/sdk`
+ * @param service - The service to wrap
+ * @param pushNotifications - (optional) arguments for creating {@link PushNotifications}
+ * @param extendAgentCard - (optional) The extend agent card/provider to use
+ * @returns A {@link A2ARequestHandler} instance
+ * @example
+ * ```typescript
+ * const agent = cr8("Custom Agent")
+ *   .text("Hello!")
+ *   .agent;
+ * const nativeAdapter = native(agent, pushNotifications, extendAgentCard);
+ * ```
+ */
 export const native = Native.create;

@@ -5,8 +5,11 @@
 
 import { logger } from "~/config/index.js";
 
-//TODO: Add  persistance layer and turn Manager into an LRU cache
-
+//TODO: Add persistence layer plugin support and turn Manager into an LRU cache.
+/**
+ * Manager should optionally take a persistent storage object as a constructor parameter,
+ * That way we don't need to re-implement the same caching logic for each derived manager.
+ */
 export abstract class Manager<T> {
   constructor(
     private _data: Map<string, T> = new Map(),
@@ -41,3 +44,4 @@ export abstract class Manager<T> {
     return Array.from(this.data.values());
   }
 }
+export const ResourceManager = Manager;

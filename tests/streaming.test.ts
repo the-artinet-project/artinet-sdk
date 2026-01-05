@@ -1,3 +1,7 @@
+/**
+ * Archiving these tests as they are no longer relevant.
+ * Transport has been largely replaced with the @a2a-js/sdk please file an issue with A2A Protocol team if you encounter any bugs.
+ */
 import {
   jest,
   describe,
@@ -148,7 +152,7 @@ const streamingTestHandler: AgentEngine = async function* (
   };
 };
 
-describe.skip("Streaming API Tests", () => {
+describe("Streaming API Tests", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];

@@ -1,3 +1,7 @@
+/**
+ * Archiving these tests as they are no longer relevant.
+ * Transport has been largely replaced with the @a2a-js/sdk please file an issue with A2A Protocol team if you encounter any bugs.
+ */
 import {
   describe,
   beforeEach,
@@ -105,7 +109,7 @@ const basicTaskHandler: AgentEngine = async function* (context: A2A.Context) {
   };
 };
 
-describe.skip("A2AServer", () => {
+describe("A2AServer", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
   // Track any pending requests for cleanup
@@ -162,7 +166,7 @@ describe.skip("A2AServer", () => {
   });
 
   describe("message/send", () => {
-    it.skip("handles a valid task send request", async () => {
+    it("handles a valid task send request", async () => {
       const requestBody = {
         jsonrpc: "2.0",
         id: "test-request-1",

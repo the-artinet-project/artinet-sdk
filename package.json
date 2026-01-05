@@ -95,10 +95,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-artinet-project/artinet-sdk"
+    "url": "https://github.com/the-artinet-project/artinet"
   },
   "bugs": {
-    "url": "https://github.com/the-artinet-project/artinet-sdk/issues"
+    "url": "https://github.com/the-artinet-project/artinet/issues"
   },
   "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
   "dependencies": {
@@ -128,9 +128,6 @@
     },
     "@trpc/server": {
       "optional": true
-    },
-    "@opentelemetry/api": {
-      "optional": false
     },
     "pino": {
       "optional": true

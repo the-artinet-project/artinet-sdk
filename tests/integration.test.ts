@@ -159,9 +159,7 @@ describe("Client-Server Integration Tests", () => {
     app = server.app;
 
     // Start server on the reserved port
-    expressServer = app.listen(port, () => {
-      console.log(`Server started on port ${port}`);
-    });
+    expressServer = app.listen(port, () => {});
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Create client

@@ -1,13 +1,41 @@
 # Persistent Storage
 
-For Task storage, use one of our simple storage providers like `Files`, or implement the `Tasks` interface to create your own.
+For `Task` storage, use one of our simple storage providers like `FileStore`, or implement the `Tasks` interface to create your own.
 
-## Using FileStore
+## SQLite Store
+
+Use our built in `SQLiteStore` for production-ready `Task` storage.
+
+```typescript
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
+import { SQLiteStore, TaskTable } from "@artinet/sdk/sqlite";
+import { cr8 } from "@artinet/sdk";
+
+const sqlite: Database.Database = new Database(":memory:");
+const db = drizzle<TaskTable>(sqlite);
+
+const sqlStore = new SQLiteStore(db);
+
+const agent = cr8("SQL Agent", {
+  tasks: sqlStore,
+}).agent;
+```
+
+- `SQLiteStore` uses [`drizzle-orm`](https://www.npmjs.com/package/drizzle-orm) under the hood, so its compatible with any [drizzle](https://orm.drizzle.team/docs/overview) supported database.
+
+Required:
+
+```bash
+npm install drizzle-orm
+```
+
+## FileStore
 
 ```typescript
 import path from "path";
 import fs from "fs";
-import { Files, createAgentServer } from "@artinet/sdk";
+import { FileStore, cr8 } from "@artinet/sdk";
 
 // Make sure the directory exists
 const dataDir = path.join(process.cwd(), "a2a-data");
@@ -15,19 +43,12 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-const myStore = new Files(dataDir);
+const myStore = new FileStore(dataDir);
 
-const { app, agent } = createAgentServer({
-  agent: {
-    engine: myAgent,
-    agentCard: {
-      name: "Persistent Agent",
-      // ...
-    },
-    tasks: myStore,
-  },
+const agent = cr8("My Agent", {
+  tasks: myStore,
   basePath: "/a2a",
-});
+}).agent;
 ```
 
 ## Custom Storage Implementation
@@ -54,17 +75,15 @@ class CustomStorage extends Tasks {
     // Remove from storage
   }
 
-  override async update(context: A2A.Context, update: A2A.Update): Promise<A2A.Task> {
+  override async update(
+    context: A2A.Context,
+    update: A2A.Update
+  ): Promise<A2A.Task> {
     // Update task with new state
+  }
+
+  async create(params: Partial<A2A.Task>): Promise<A2A.Task> {
+    // Create a new task for the agent
   }
 }
 ```
-
-## Storage Use Cases
-
-| Provider | Use Case |
-|----------|----------|
-| `Files` | Development, single-instance deployments |
-| Custom Redis | Multi-instance, distributed deployments |
-| Custom Database | Production, querying, analytics |
-

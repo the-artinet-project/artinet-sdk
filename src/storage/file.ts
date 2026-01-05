@@ -142,3 +142,6 @@ export class Files extends Tasks {
     ).then((tasks) => tasks.filter((task) => task !== undefined));
   }
 }
+
+export const FileStore = Files;
+export type FileStore = typeof FileStore;

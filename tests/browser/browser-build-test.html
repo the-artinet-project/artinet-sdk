@@ -27,14 +27,13 @@ To test: open the browser and navigate to http://localhost:8080/tests/browser/br
       const output = document.getElementById("output");
       output.innerHTML = '<p style="color: blue">⏳ Starting Client...</p>';
       try {
-        const { A2AClient } = await import("../../dist/browser/browser.js");
-        //ensure you have a server running at http://localhost:4000/a2a
-        const client = new A2AClient(
-          "http://localhost:4000/a2a",
-          {},
-          "/agent-card",
-          true
+        const { createMessenger } = await import(
+          "../../dist/browser/browser.js"
         );
+        //ensure you have a server running at http://localhost:4000/a2a
+        const client = createMessenger({
+          baseUrl: "http://localhost:4000/a2a",
+        });
 
         const agentCard = await client.agentCard();
         output.innerHTML = `<p style="color: green">✓ Agent Card: ${JSON.stringify(

@@ -1,5 +1,5 @@
 /**
- * @note: please prefer using {@link core.Manager} instead
+ * @note prefer implementing `Manager` instead of `IStore` as it provides a more robust interface.
  *  Interface for a store of data.
  * @template T - The type of data to store
  */

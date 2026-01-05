@@ -1,16 +1,14 @@
 # Migration Guide (v0.6.0)
 
-## Breaking Changes
-
-### 1. Peer Dependencies Required
+### Peer Dependencies Required
 
 The following packages are now peer dependencies. Install them explicitly:
 
 ```bash
-npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
+npm install @a2a-js/sdk @modelcontextprotocol/sdk express
 ```
 
-### 2. New Configuration API
+### New Configuration API
 
 ```typescript
 // Before (v0.5.x)
@@ -18,14 +16,14 @@ import { configureLogger } from "@artinet/sdk";
 configureLogger({ level: "info" });
 
 // After (v0.6.0)
-import { configure } from "@artinet/sdk";
-import { configurePino } from "@artinet/sdk/pino";
-import pino from "pino";
+import { applyDefaults } from "@artinet/sdk";
 
-configure({ logger: configurePino(pino({ level: "info" })) });
+applyDefaults();
 ```
 
-### 3. Types Now Use A2A Namespace
+- See [configuration](./configuration.md) for more options (Pino/Winston/Otel).
+
+### Types Now Use A2A Namespace
 
 ```typescript
 // Before (v0.5.x)
@@ -36,33 +34,18 @@ import { A2A } from "@artinet/sdk";
 // Use A2A.Task, A2A.Message, A2A.Context
 ```
 
-## Additional Changes (since v0.5.8)
+- See [api-reference](./api-reference.md) for details.
 
 ### Logging
 
-- Pino has been removed and replaced with pluggable logger extensions (`@artinet/sdk/pino`, `@artinet/sdk/winston`, `@artinet/sdk/otel`).
+- Logging utilities have been restored via pluggable logger extensions (`@artinet/sdk/pino`, `@artinet/sdk/winston`, `@artinet/sdk/otel`).
 
-### Streaming
+### AgentBuilder -> cr8
 
-- The default handler for streamMessage no longer automatically emits an initial `submitted` and `working` event.
-
-### Removed Features
-
-- Agent Registration, Bundling and Deployment utils are returning soon.
-- `@artinet/metadata-validator` has been removed due to build issues.
-- The examples folder will be removed in favor of [`create-agent`](https://github.com/the-artinet-project/create-agent).
-
-### AgentBuilder / cr8
-
-- **New `cr8` API**: The recommended way to build agents is now `cr8()` instead of `AgentBuilder()`.
-- New step types: `.message()`, `.artifact()`, `.status()`, `.task()`, `.sendMessage()`.
-- New builder properties: `.agent`, `.engine`, `.server` (no more need for `.createAgent()`).
-- Agent orchestration via `.sendMessage()` for multi-agent workflows.
-- AgentBuilder now returns a unique messageId for each status update instead of the original user provided messageId.
-- AgentBuilder now prefers the contextId & taskId from the calling context.
-- AgentBuilder now supports `skip()` to conditionally skip workflow steps.
-- AgentBuilder now checks for cancellations after each step.
-- `AgentBuilder` will now throw an error if it receives an invalid `FilePart`.
+- **New `cr8` tool**: The recommended way to build agents is now `cr8` instead of `AgentBuilder`.
+- New step types: `message`, `artifact`, `status`, `task`, `sendMessage`.
+- New builder properties: `agent`, `engine`, `server` (no more need for `createAgent`).
+- Agent orchestration via `sendMessage` for multi-agent workflows.
 
 #### Migration Example
 
@@ -81,97 +64,36 @@ const { app } = createAgentServer({
 import { cr8 } from "@artinet/sdk";
 
 const { app } = cr8("MyAgent", { basePath: "/a2a" }).text("Hello!").server;
-
-// Or keep using AgentBuilder (deprecated but still works)
-import { AgentBuilder, createAgentServer } from "@artinet/sdk";
-
-const { app } = createAgentServer({
-  agent: AgentBuilder()
-    .text(() => "Hello!")
-    .createAgent({ agentCard: "MyAgent" }),
-  basePath: "/a2a",
-});
 ```
 
-### A2AClient
+- For a detailed breakdown of all the new capabilities see [create](./create.md).
 
-- The `A2AClient` now checks `/.well-known/agent-card.json` as opposed to `/.well-known/agent.json` in-line with the A2A spec.
-- The `A2AClient` now uses the `AgentCard`.url if an `AgentCard` has been successfully retrieved, else it will default to the `baseUrl`.
-- `A2AClient` now exposes `mergePath` making it easier to access `AgentCards` that are not exposed at the root.
-- `getTask` now correctly takes `TaskQueryParams` as an argument vs `TaskIdParams` in accordance with the A2A spec.
+### A2AClient -> AgentMessenger
 
-### Server
+- **New `AgentMessenger` Class**: The recommended way to connect to remote agents is now `AgentMessenger` instead of `A2AClient`.
+- `AgentMessenger` is now backed by the `a2a-js/sdk` `ClientFactory` and provides an easy to use & familiar interface for scaffolding A2A compliant clients via the `createMessenger` method.
 
-- `createAgentServer` no longer adds `express.json()` to the root of the express server and now uses the utility function `rpcParser` only on the agents `basePath`.
-- The Express Server now provides support for `AuthenticatedExtendedCard`.
-- `createAgent` now enforces parameter validation.
+#### Migration Example
 
-### Types
+```typescript
+// Before (v0.5.x)
+import { A2AClient } from "@artinet/sdk";
 
-- The `history` object from `TaskAndHistory` is deprecated and no longer being updated. Use `Task.history` instead.
-- In `Task` the `contextId` field is now required (inline with the A2A spec).
-- In `AgentSkill` the `tag` field is now required (inline with the A2A spec).
-- The `EngineBuilder` constructor is now protected and open for extension.
+const client = A2AClient("https://example.com");
 
-### createAgent
+// After (v0.6.0)
+import { createMessenger } from "@artinet/sdk";
 
-- `createAgent`/`createService` can now take a single string (i.e. agentName) as valid value for the AgentCard.
-- `AgentCardBuilder` now sets the `preferredTransport` field to the default (`JSONRPC`) if none is provided.
-- The default `sendMessage` implementation now supports the `MessageSendConfiguration`.`blocking` toggle.
-- The default `sendMessage` and `getTask` implementations now support the `MessageSendConfiguration`.`historyLength` parameter.
+const messenger = createMessenger({ baseUrl: "https://example.com" });
+```
+
+- See [messenger](./messenger.md) for more details.
 
 ## New Features in v0.6.0
 
-### New Step Types
+### `describe`
 
-v0.6.0 introduces several new step types for more expressive agent workflows:
-
-```typescript
-import { cr8, describe, A2A } from "@artinet/sdk";
-
-cr8("AdvancedAgent")
-  // Message steps - full control over message structure
-  .message(({ content }) => ({
-    role: "agent",
-    parts: [
-      { kind: "text", text: "Results:" },
-      { kind: "data", data: { result: content } },
-    ],
-  }))
-
-  // Artifact steps - persistent, versioned outputs
-  .artifact(({ context }) => ({
-    artifactId: `report-${context.taskId}`,
-    name: "Report",
-    parts: [{ kind: "text", text: "Report content" }],
-  }))
-
-  // Status steps - progress updates
-  .status("working")
-  .status(() => ({
-    status: {
-      state: A2A.TaskState.completed,
-      message: describe.message("Done!"),
-    },
-  }))
-
-  // Task steps - complete task objects
-  .task(({ context }) => ({
-    id: context.taskId,
-    contextId: context.contextId,
-    status: { state: A2A.TaskState.completed },
-  }))
-
-  // Agent orchestration
-  .sendMessage({
-    agent: otherAgent,
-    message: "Process this",
-  }).agent;
-```
-
-### The describe Helper
-
-A new `describe` namespace provides utilities for creating A2A objects:
+The new `describe` namespace provides utilities for creating A2A objects:
 
 ```typescript
 import { describe } from "@artinet/sdk";
@@ -186,10 +108,11 @@ const submitted = describe.update.submitted({
 });
 ```
 
-## Ecosystem Integration
+## `@a2a-js/sdk` compatibility
+
+In v0.6 we've fully adopted the `a2a-js/sdk` at the transport layer for both `Server`s and `Client`s (`AgentMessenger`). Meaning _`@artinet/sdk`_ servers will always be fully compliant with the A2A specification as it evolves!
+
+- `PushNotifications` are now supported by the `@artinet/sdk`.
+- See [native](./customization.md#native) for more details.
 
 > **Note:** v0.6.0 marks the beginning of our integration with the official A2A JavaScript SDK (`@a2a-js/sdk`). This enables interoperability with the broader Agent2Agent ecosystem while maintaining the artinet-sdk's unique architecture.
-
-> This will **NOT** require modification of existing `AgentEngine` implementations. The architecture was designed with this shift in mind, using loosely typed interfaces, MPSC & SPMC queues, and the `CoreExecute` contract (onStart, onUpdate, onError, onCancel & onComplete).
-
-> v0.6 is the final preview before our first LTS release.

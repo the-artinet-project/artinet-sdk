@@ -43,8 +43,8 @@ export interface MessengerParams {
   config?: ClientConfig;
 }
 /**
- * Messenger is the main communication client for interacting with Agent2Agent (A2A) protocol-compliant services.
- * It provides methods for sending tasks, retrieving statuses, canceling operations, and handling streaming responses.
+ * Messenger is the main communication client for interacting with remote A2A-compatible services.
+ * It provides methods for sending messages, retrieving tasks, canceling operations, and handling streaming responses.
  */
 class Messenger
   implements
@@ -65,7 +65,6 @@ class Messenger
     config?: ClientConfig
   ) {
     this._baseUrl = typeof baseUrl === "string" ? baseUrl : baseUrl.toString();
-
     this._fallbackPath = _fallbackPath ?? "/agent.json";
 
     this._factory = new ClientFactory(
@@ -91,7 +90,7 @@ class Messenger
     this._fallbackPath = fallbackPath ?? "/agent.json";
     this.clientPromise = this._factory
       .createFromUrl(this._baseUrl)
-      .catch((error) => {
+      .catch(async (error) => {
         if (!this._fallbackPath) {
           logger.error(
             "Messenger: Failed to create client, no fallback path provided",
@@ -103,9 +102,9 @@ class Messenger
           "Messenger: Failed to create client, falling back to fallback path: ",
           { error, fallbackPath: this._fallbackPath }
         );
-        return this._factory
+        return await this._factory
           .createFromUrl(this._baseUrl, this._fallbackPath)
-          .catch((error) => {
+          .catch(async (error) => {
             logger.error(
               "Messenger: Failed to create client, at fallback path: ",
               { error, fallbackPath: this._fallbackPath }
@@ -115,12 +114,15 @@ class Messenger
       });
     return this.clientPromise;
   }
+
   get baseUrl(): string {
     return this._baseUrl;
   }
+
   get headers(): Record<string, string> {
     return this._headers;
   }
+
   set headers(headers: Record<string, string>) {
     this._headers = headers;
   }
@@ -386,12 +388,17 @@ class Messenger
  * @param headers Optional custom headers to include in all requests.
  * @param fallbackPath Optional fallback path to use if the agent card is not found at the base URL.
  * @example
- * const client = createMessenger("http://localhost:4000/a2a");
- * const card = await client.agentCard();
+ * const messenger = createMessenger({
+ *   baseUrl: "http://localhost:4000/a2a",
+ * });
+ * const card = await messenger.getAgentCard();
  * console.log(card);
  * @example
- * const client = createMessenger("http://localhost:4000/a2a", {}, "/agent-card");
- * const card = await client.agentCard();
+ * const messenger = createMessenger({
+ *   baseUrl: "http://localhost:4000/a2a",
+ *   fallbackPath: "/agent-card",
+ * });
+ * const card = await messenger.getAgentCard();
  * console.log(card);
  */
 export const createMessenger = Messenger.create;

@@ -4,14 +4,14 @@ This document provides a quick reference for the major objects and types in the 
 
 ## Core Objects
 
-| Object              | Description                                             | Import                                             |
-| ------------------- | ------------------------------------------------------- | -------------------------------------------------- |
-| `A2AClient`         | HTTP client for communicating with A2A-compliant agents | `import { A2AClient } from "@artinet/sdk"`         |
-| `cr8`               | Fluent builder for creating multi-step agent workflows  | `import { cr8 } from "@artinet/sdk"`               |
-| `createMCPAgent`    | Wraps an A2A agent with MCP protocol support            | `import { createMCPAgent } from "@artinet/sdk"`    |
-| `describe`          | Helper namespace for creating A2A objects               | `import { describe } from "@artinet/sdk"`          |
+| Object           | Description                                             | Import                                           |
+| ---------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| `cr8`            | Fluent builder for creating multi-step agent workflows  | `import { cr8 } from "@artinet/sdk"`             |
+| `describe`       | Helper namespace for creating A2A objects               | `import { describe } from "@artinet/sdk"`        |
+| `AgentMessenger` | HTTP client for communicating with A2A-compliant agents | `import { createMessenger } from "@artinet/sdk"` |
+| `MCPAgent`       | Wraps an A2A agent with MCP protocol support            | `import { createMCPAgent } from "@artinet/sdk"`  |
 
-## Configuration
+## Settings
 
 | Function        | Description                                   | Import                                         |
 | --------------- | --------------------------------------------- | ---------------------------------------------- |
@@ -40,83 +40,84 @@ import { A2A } from "@artinet/sdk";
 
 ### Core Types
 
-| Type            | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| `A2A.Task`      | Represents an agent task with status, artifacts, and history |
-| `A2A.Message`   | A message exchanged between client and agent                 |
-| `A2A.Part`      | Content part (text, file, or data) within a message          |
-| `A2A.TextPart`  | Text content part                                            |
-| `A2A.FilePart`  | File content part (bytes or URI)                             |
-| `A2A.DataPart`  | Structured data content part                                 |
-| `A2A.Artifact`  | Output artifact produced by an agent                         |
-| `A2A.AgentCard` | Agent metadata and capabilities declaration                  |
+| Type        | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `AgentCard` | Agent metadata and capabilities declaration                  |
+| `Part`      | Content part (text, file, or data) within a message          |
+| `TextPart`  | Text content part                                            |
+| `FilePart`  | File content part (bytes or URI)                             |
+| `DataPart`  | Structured data content part                                 |
+| `Message`   | A message exchanged between client and agent                 |
+| `Artifact`  | Output artifact produced by an agent                         |
+| `Task`      | Represents an agent task with status, artifacts, and history |
 
-### Request/Response Parameters
+### Request Parameters
 
-| Type                             | Description                          |
-| -------------------------------- | ------------------------------------ |
-| `A2A.MessageSendParams`          | Parameters for sending a message     |
-| `A2A.TaskQueryParams`            | Parameters for querying a task       |
-| `A2A.TaskIdParams`               | Parameters containing just a task ID |
+| Type                | Description                          |
+| ------------------- | ------------------------------------ |
+| `MessageSendParams` | Parameters for sending a message     |
+| `TaskQueryParams`   | Parameters for querying a task       |
+| `TaskIdParams`      | Parameters containing just a task ID |
 
 ### Event Types
 
-| Type                          | Description                                               |
-| ----------------------------- | --------------------------------------------------------- |
-| `A2A.TaskStatusUpdateEvent`   | Event fired when task status changes                      |
-| `A2A.TaskArtifactUpdateEvent` | Event fired when an artifact is produced                  |
-| `A2A.Update`                  | Union of all update event types                           |
-| `A2A.TaskState`               | Enum of task states (submitted, working, completed, etc.) |
+| Type                      | Description                                                                                          |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `TaskState`               | Enum of task states (submitted, working, completed, etc.)                                            |
+| `TaskStatusUpdateEvent`   | Event fired when task status changes                                                                 |
+| `TaskStatusUpdateEvent`   | Event fired when task status changes                                                                 |
+| `TaskArtifactUpdateEvent` | Event fired when an artifact is produced                                                             |
+| `Update`                  | Union of all update event types (`Message`/`Task`/`TaskStatusUpdateEvent`/`TaskArtifactUpdateEvent`) |
 
 ### Execution Types
 
-| Type          | Description                                       |
-| ------------- | ------------------------------------------------- |
-| `A2A.Engine`  | Agent execution engine (async generator function) |
-| `A2A.Context` | Execution context passed to agent engines         |
-| `A2A.Service` | A2A service interface                             |
+| Type      | Description                                       |
+| --------- | ------------------------------------------------- |
+| `Engine`  | Agent execution engine (async generator function) |
+| `Context` | Execution context passed to agent engines         |
+| `Service` | A2A service interface                             |
 
 ## Describe Helper
 
 The `describe` namespace provides utilities for creating A2A objects:
 
-| Function              | Description                     | Returns            |
-| --------------------- | ------------------------------- | ------------------ |
-| `describe.card()`     | Create an AgentCard             | `A2A.AgentCard`    |
-| `describe.message()`  | Create a Message                | `A2A.Message`      |
-| `describe.task()`     | Create a Task                   | `A2A.Task`         |
-| `describe.artifact()` | Create an Artifact              | `A2A.Artifact`     |
-| `describe.update.*()`      | Create status updates           | `A2A.Update`       |
-| `describe.messageSendParams()` | Create MessageSendParams | `A2A.MessageSendParams` |
+| Function            | Description              | Returns             |
+| ------------------- | ------------------------ | ------------------- |
+| `card`              | Create an AgentCard      | `AgentCard`         |
+| `message`           | Create a Message         | `Message`           |
+| `task`              | Create a Task            | `Task`              |
+| `artifact`          | Create an Artifact       | `Artifact`          |
+| `update.*`          | Create status updates    | `Update`            |
+| `messageSendParams` | Create MessageSendParams | `MessageSendParams` |
 
 ### Usage Examples
 
 ```typescript
-import { describe } from "@artinet/sdk";
+import { describe, A2A } from "@artinet/sdk";
 
 // Create a card
-const card = describe.card({
+const card: A2A.AgentCard = describe.card({
   name: "My Agent",
   version: "1.0.0",
 });
 
 // Create a message
-const msg = describe.message("Hello world!");
+const msg: A2A.Message = describe.message("Hello world!");
 // or
-const msg = describe.message({
+const msg: A2A.Message = describe.message({
   role: "agent",
   parts: [describe.part.text("Hello")],
 });
 
 // Create a task
-const task = describe.task({
+const task: A2A.Task = describe.task({
   id: "task-123",
   contextId: "ctx-456",
   status: { state: A2A.TaskState.completed },
 });
 
 // Create status updates
-const submitted = describe.update.submitted({
+const submitted: : A2A.TaskStatusUpdateEvent = describe.update.submitted({
   taskId: "task-123",
   contextId: "ctx-456",
 });
@@ -124,70 +125,76 @@ const submitted = describe.update.submitted({
 
 ## Storage
 
-| Class       | Description                                  | Import                                      |
-| ----------- | -------------------------------------------- | ------------------------------------------- |
-| `Files`     | File-based task storage                      | `import { Files } from "@artinet/sdk"`      |
-<!-- | `Store`     | Interface for custom storage implementations | `import type { Store } from "@artinet/sdk"` | -->
+| Class         | Description                                  | Import                                       |
+| ------------- | -------------------------------------------- | -------------------------------------------- |
+| `FileStore`   | File-based task storage                      | `import { FileStore } from "@artinet/sdk"`   |
+| `SQLiteStore` | SQLite backed storage                        | `import { SQLiteStore } from "@artinet/sdk"` |
+| `IStore`      | Interface for custom storage implementations | `import type { IStore } from "@artinet/sdk"` |
 
-## Middleware & Transport
+## Transport
 
-| Export              | Description                              | Import                                             |
-| ------------------- | ---------------------------------------- | -------------------------------------------------- |
-| `jsonRPCMiddleware` | Express middleware for JSON-RPC handling | `import { jsonRPCMiddleware } from "@artinet/sdk"` |
-| `errorHandler`      | Express error handler middleware         | `import { errorHandler } from "@artinet/sdk"`      |
-| `createAgentRouter` | Creates a tRPC router for the agent      | `import { createAgentRouter } from "@artinet/sdk"` |
+| Export              | Description                         | Import                                             |
+| ------------------- | ----------------------------------- | -------------------------------------------------- |
+| `createAgentRouter` | Creates a tRPC router for the agent | `import { createAgentRouter } from "@artinet/sdk"` |
 
-<!-- ## Error Helpers
+> 🚧 Coming Soon: Support for Hono Servers.
 
-| Function         | Description                        |
-| ---------------- | ---------------------------------- |
-| `TASK_NOT_FOUND` | Create a task not found error      |
-| `INVALID_PARAMS` | Create an invalid parameters error |
-| `INTERNAL_ERROR` | Create an internal error           |
-| `PARSE_ERROR`    | Create a parse error               |
-... -->
-## Client Methods
+## Messenger (Client) Methods
 
-The `A2AClient` provides the following methods:
+The `AgentMessenger` provides the following methods:
 
-| Method                            | Description                           | Returns                                   |
-| --------------------------------- | ------------------------------------- | ----------------------------------------- |
-| `agentCard()`                     | Fetch the agent's card                | `Promise<A2A.AgentCard>`                  |
-| `sendMessage(params)`             | Send a message (blocking)             | `Promise<A2A.Task \| A2A.Message>`        |
-| `sendStreamingMessage(params)`    | Send a message with streaming updates | `AsyncIterable<A2A.Update>`               |
-| `getTask(params)`                 | Get a task by ID                      | `Promise<A2A.Task>`                       |
-| `cancelTask(params)`              | Cancel a running task                 | `Promise<A2A.Task>`                       |
-| `resubscribeTask(params)`         | Resubscribe to task updates           | `AsyncIterable<A2A.Update>`               |
-<!-- | `setTaskPushNotification(params)` | Configure push notifications          | `Promise<A2A.TaskPushNotificationConfig>` |
-| `getTaskPushNotification(params)` | Get push notification config          | `Promise<A2A.TaskPushNotificationConfig>` | -->
+| Method                             | Description                           | Returns                                 |
+| ---------------------------------- | ------------------------------------- | --------------------------------------- |
+| `getAgentCard`                     | Fetch the agent's card                | `Promise<AgentCard>`                    |
+| `sendMessage`                      | Send a message (default: blocking)    | `Promise<Task \| Message>`              |
+| `sendMessageStream`                | Send a message with streaming updates | `AsyncIterable<Update>`                 |
+| `getTask`                          | Get a task by ID                      | `Promise<Task>`                         |
+| `cancelTask`                       | Cancel a running task                 | `Promise<Task>`                         |
+| `resubscribeTask`                  | Resubscribe to task updates           | `AsyncIterable<Update>`                 |
+| `setTaskPushNotification`          | Configure push notifications          | `Promise<TaskPushNotificationConfig>`   |
+| `getTaskPushNotification`          | Get push notification config          | `Promise<TaskPushNotificationConfig>`   |
+| `listTaskPushNotificationConfig`   | List push notification configs        | `Promise<TaskPushNotificationConfig[]>` |
+| `deleteTaskPushNotificationConfig` | Delete push notification config       | `Promise<void>`                         |
 
-## cr8 / AgentBuilder Steps
+## [cr8](./create.md)
 
-| Method                     | Description                        | Output Type         |
-| -------------------------- | ---------------------------------- | ------------------- |
-| `.text(handler)`           | Add a text processing step         | `TextPart`          |
-| `.file(handler)`           | Add a file processing step         | `FilePart`          |
-| `.data(handler)`           | Add a data processing step         | `DataPart`          |
-| `.message(handler)`        | Add a message step                 | `Message`           |
-| `.artifact(handler)`       | Add an artifact creation step      | `Artifact`          |
-| `.status(handler)`         | Add a status update step           | `StatusUpdate`      |
-| `.task(handler)`           | Add a task step                    | `Task`              |
-| `.sendMessage(config)`     | Orchestrate with another agent     | `Task`              |
-| `.agent`                   | Get the agent service              | `Service`           |
-| `.engine`                  | Get the execution engine           | `A2A.Engine`        |
-| `.server`                  | Get Express app with agent         | `{ app, agent }`    |
-| `.steps`                   | Get workflow steps                 | `Array<Step>`       |
-| `.createAgent(params)`     | (Deprecated) Build agent service   | `A2A.Service`       |
-| `.createAgentEngine()`     | (Deprecated) Build just the engine | `A2A.Engine`        |
+`cr8` is the core entry point for interacting with the [_`@artinet/sdk`_](https://www.npmjs.com/package/@artinet/sdk).
 
-### Step Handler Parameters
+It provides everything you need to quickly scaffold a robust A2A agent.
+
+### Parameters
+
+| Method | Description                | Output Type |
+| ------ | -------------------------- | ----------- |
+| `text` | Add a text processing step | `TextPart`  |
+
+### Methods
+
+| Method        | Description                                 | Output Type                                        |
+| ------------- | ------------------------------------------- | -------------------------------------------------- |
+| `text`        | Add a text processing step                  | `TextPart`                                         |
+| `file`        | Add a file processing step                  | `FilePart`                                         |
+| `data`        | Add a data processing step                  | `DataPart`                                         |
+| `message`     | Add a message step                          | `Message`                                          |
+| `artifact`    | Add an artifact creation step               | `Artifact`                                         |
+| `status`      | Add a status update step                    | `StatusUpdate`                                     |
+| `task`        | Add a task step                             | `Task`                                             |
+| `sendMessage` | Send a message to another agent             | `Task`                                             |
+| `agent`       | Get the agent service                       | `Agent`                                            |
+| `engine`      | Get the execution engine                    | `Engine`                                           |
+| `server`      | Get Express app with agent                  | `{ Express, Agent, (port?: number)=> http.Server}` |
+| `steps`       | Get workflow steps                          | `Array<Step>`                                      |
+| `from`        | Create an agent with a custom engine        | `Agent`                                            |
+| `serve`       | Create an agent server with a custom engine | `{ Express, Agent, (port?: number)=> http.Server}` |
+
+### Step Parameters
 
 ```typescript
 interface StepParams<Args = any> {
-  content: string | undefined; // Extracted text from user message
+  content: string | undefined; // Extracted text from user `Message`
   message: A2A.MessageSendParams; // Full message params
   context: A2A.Context; // Execution context
-  args: Args; // Typed arguments from previous step
+  args: Args; // Typed arguments returned from previous step
   skip: () => void; // Skip this step
 }
 ```

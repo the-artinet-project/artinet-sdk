@@ -1,5 +1,13 @@
-// test-app.js
-const { createAgent, cr8 } = require("@artinet/sdk");
+const {
+  createAgent,
+  Messenger,
+  createMessenger,
+  logger,
+  describe,
+  cr8,
+  serve,
+  createMCPAgent,
+} = require("@artinet/sdk");
 console.log("✓ SDK loaded");
 const express = require("express");
 console.log("✓ Express loaded");

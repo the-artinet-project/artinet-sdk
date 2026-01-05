@@ -55,12 +55,15 @@ export class PushNotifications
     pushNotificationConfig: A2A.PushNotificationConfig
   ): Promise<void> {
     pushNotificationConfig.id = pushNotificationConfig.id ?? taskId;
-    /**Cache the configs in memory for faster access */
+    /** Cache the configs in memory for faster access */
     const configs = await this.get(taskId);
     await this.set(taskId, [
       ...(configs?.filter(
-        /**Since this is pure memory we can stomach the heavy filter operation for now*/
-        // and its unlikely that an individual task will have excessive configs
+        /**
+         * Since this is pure memory we can stomach the heavy filter operation for now,
+         * and its unlikely that an individual task will have excessive configs.
+         * @note Consider adding a warning when the filter operation is called with a large number of configs.
+         */
         (config) => config.id !== pushNotificationConfig.id
       ) ?? []),
       pushNotificationConfig,
@@ -72,7 +75,10 @@ export class PushNotifications
     let configs: A2A.PushNotificationConfig[] | undefined = await this.get(
       taskId
     );
-    /**Cache the configs in memory for faster access */
+    /**
+     * Cache the configs in memory for faster access regardless of the storage layer.
+     * @note this may be removed once we have a persistant storage layer plugin.
+     */
     if (!configs || configs.length === 0) {
       configs = await this.store?.load(taskId);
       if (configs && configs.length > 0) {

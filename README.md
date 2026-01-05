@@ -12,14 +12,23 @@
 
 Create agents that communicate across frameworks.
 
-The artinet-sdk is a TypeScript library that adds a standardized, interoperable communication layer to your agents using the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A).
+The <em><u>@artinet/sdk</u></em> is a universal, robust and production ready <code>AgentExecutor</code> library that adds a standardized, interoperable communication layer to any agent.
+
+> Runs on the <a href="https://github.com/google-a2a/A2A">Agent2Agent (A2A) Protocol</a> from the <a href="https://aaif.io/">Agentic AI Foundation</a>.
+
+## Installation
+
+```bash
+npm install @artinet/sdk express @a2a-js/sdk @modelcontextprotocol/sdk
+```
 
 ## Features
 
-- **Hassle Free:** Use the AgentBuilder to quickly setup an AgentServer.
-- **No Vendor Lock-In:** Let your agents communicate with other agents across frameworks and ecosystems.
+- **Hassle Free:** Use [**`cr8`**](./docs/create.md) to quickly spin-up an A2A compatible agent.
+- **No Vendor Lock-In:** Let your agents communicate with other agents no matter the framework and across ecosystems.
 - **Flexible Design:** Everything you need to build collaborative agents while remaining modular enough for advanced configuration.
-- **Pluggable Observability:** Bring your own logger (Pino, Winston) and tracer (OpenTelemetry) with zero-config defaults.
+- **Pluggable Observability:** Bring your own logger ([Pino](https://www.npmjs.com/package/pino), [Winston](https://www.npmjs.com/package/winston)) and/or tracer ([OpenTelemetry](https://www.npmjs.com/package/@opentelemetry/sdk-node)).
+- **Persistent Storage:** Roll your own `Task` storage or use our built-in [`SQLiteStore`](./docs/storage.md#sqlite-store) (backed by [`drizzle-orm`](https://www.npmjs.com/package/drizzle-orm)).
 
 ## Quick Start
 
@@ -29,9 +38,9 @@ The artinet-sdk is a TypeScript library that adds a standardized, interoperable 
 npx @artinet/create-agent@latest
 ```
 
-It has [several template projects](https://github.com/the-artinet-project/create-agent/tree/main/templates) to jump right into agent building.
+It has [several template projects](https://github.com/the-artinet-project/artinet/tree/main/create-agent) to jump right into agent building.
 
-**Or use [`easy-a2a`](https://github.com/the-artinet-project/easy-a2a):**
+**Or use [`easy-a2a`](https://github.com/the-artinet-project/artinet/tree/main/easy):**
 
 ```typescript
 const agent = a2a({
@@ -48,62 +57,99 @@ const agent = a2a({
 npm install easy-a2a
 ```
 
-## Installation
+## Examples
 
-```bash
-npm install @artinet/sdk
-```
+**Create an A2A Server**
 
-**Peer dependencies (required):**
-
-```bash
-npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server
-```
-
-## Requirements
-
-- [Node.js](https://nodejs.org/en/download) ≥ 18.9.1 (Recommended: 20 or ≥ 22)
-
-## Example
-
-**Server:**
+Turn your agent into an express server so it can receive messages from anywhere:
 
 ```typescript
 import { cr8 } from "@artinet/sdk";
 
 cr8("QuickStart Agent")
-  .text(async ({ content }) => `You said: ${content}`)
-//start an a2a server on port 3000
+  .text(async ({ content }) => `The user said: ${content}`)
+  //starts an express a2a server on port 3000
   .server.start(3000);
 ```
 
-**Client:**
+- _ensure that the url/path of your AgentCard matches the server._
+
+> 🚧 Coming Soon: Support for Hono.
+
+**No Servers Needed**
+
+Embed agents directly into your app:
 
 ```typescript
-import { A2AClient } from "@artinet/sdk";
+import { cr8, A2A } from "@artinet/sdk";
 
-const client = new A2AClient("http://localhost:3000/a2a");
+const agent = cr8("Local Agent").text(
+  ({ content }) => `The user said: ${content}`
+).agent;
 
-const stream = client.sendStreamingMessage("Hello World!");
+const response: A2A.Task | A2A.Message = await agent.sendMessage("Hello");
+```
+
+- _See [**`cr8`**](./docs/create.md) for more information_
+
+**Connect to Remote Agents**
+
+[`AgentMessenger`](./docs/messenger.md#agentmessenger) provides a streamlined `Client` interface for communicating with remote A2A Servers:
+
+```typescript
+import { AgentMessenger, createMessenger } from "@artinet/sdk";
+
+const messenger: AgentMessenger = await createMessenger({
+  baseUrl: "http://localhost:3000/a2a",
+  headers: {
+    Bearer: "xxxx",
+  },
+});
+
+const stream = messenger.sendMessageStream("Hello World!");
 
 for await (const update of stream) {
   console.log(update);
 }
 ```
 
+- _See [**messenger**](./docs/messenger.md#agentmessenger) for more information._
+
+**Simple Multi-Agent Orchestration**
+
+[**`cr8`**](./docs/create.md#agent-orchestration) provides easy to use tools for orchestrating multiple agents:
+
+```typescript
+import { cr8 } from "@artinet/sdk";
+import { localAgent } from "./local.ts";
+import { remoteAgentMessenger as remoteAgent } from "./remote.ts";
+
+const orchestrator = cr8("Director")
+  .text("Request Received")
+  .sendMessage({ agent: localAgent, message: "initiate billing" })
+  .text("Billing Started")
+  .sendMessage({ agent: remoteAgent, message: "Retrieve Secrets" }).agent;
+```
+
+> _For more robust multi-agent support, checkout [**orc8**](https://github.com/the-artinet-project/artinet), our dynamic agent orchestration library that can be used with any openai compatible API._
+
 ## Documentation
 
-| Topic                                       | Description                                           |
-| ------------------------------------------- | ----------------------------------------------------- |
-| [**API Reference**](docs/api-reference.md)  | Complete reference of SDK objects, types, and methods |
-| [**Configuration**](docs/configuration.md)  | Logging (Pino, Winston) and OpenTelemetry setup       |
-| [**Client Usage**](docs/client.md)          | A2AClient methods, streaming, browser support         |
-| [**Server Implementation**](docs/server.md) | AgentBuilder, AgentEngine, and AgentCard              |
-| [**Event Handling**](docs/events.md)        | Event subscriptions and custom handlers               |
-| [**Storage**](docs/storage.md)              | FileStore and custom storage backends                 |
-| [**Customization**](docs/customization.md)  | Middleware, tRPC, custom transports                   |
-| [**MCP Integration**](docs/mcp.md)          | Model Context Protocol compatibility                  |
-| [**Migration Guide**](docs/migration.md)    | Upgrading from v0.5.x to v0.6.0                       |
+| Topic                                      | Description                                           |
+| ------------------------------------------ | ----------------------------------------------------- |
+| [**Agent Creation**](docs/create.md)       | Scaffolding agents with `cr8`                         |
+| [**API Reference**](docs/api-reference.md) | Complete reference of SDK objects, types, and methods |
+| [**Execution**](docs/execution.md)         | Subscriptions and custom event handlers               |
+| [**Messenger**](docs/messenger.md)         | `Messenger` methods, streaming, browser support       |
+| [**Storage**](docs/storage.md)             | `FileStore`, `SQLiteStore`, custom storage backends   |
+| [**Configuration**](docs/configuration.md) | Logging (Pino, Winston) and OpenTelemetry setup       |
+| [**Customization**](docs/customization.md) | `native`, tRPC, and `AgentEngine`s                    |
+| [**MCP Integration**](docs/mcp.md)         | Model Context Protocol compatibility                  |
+| [**Migration Guide**](docs/migration.md)   | Upgrading from v0.5.x to v0.6.0                       |
+
+## Requirements
+
+- [Node.js](https://nodejs.org/en/download) ≥ 18.9.1 (Recommended: 20 or ≥ 22)
 
 ## Running Tests
 
@@ -119,11 +165,9 @@ Ensure code adheres to the project style and passes linting (`npm run lint`) and
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the `LICENSE` file for details.
+This project is licensed under Apache License 2.0.
 
-## Acknowledgements
-
-This SDK builds upon the concepts and specifications of the [Agent2Agent (A2A) Protocol](https://github.com/google-a2a/A2A).
+See the [`LICENSE`](./LICENSE) for details.
 
 ## Join the Community
 
