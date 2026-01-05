@@ -163,7 +163,7 @@ const streamingTestHandler: AgentEngine = async function* (
   };
 };
 
-describe.skip("Streaming API Tests", () => {
+describe("Streaming API Tests", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];

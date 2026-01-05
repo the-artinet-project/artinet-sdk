@@ -157,7 +157,7 @@ const serverImplTestHandler: AgentEngine = async function* (
   };
 };
 
-describe.skip("Server Implementation Tests", () => {
+describe("Server Implementation Tests", () => {
   let server: ExpressAgentServer;
   let app: express.Express;
   let pendingRequests: request.Test[] = [];
