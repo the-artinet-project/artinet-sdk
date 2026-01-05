@@ -196,11 +196,16 @@ class Messenger
       | describe.MessageParams,
     options?: RequestOptions
   ): AsyncGenerator<A2A.Update, void, undefined> {
-    const client = await this._client;
-    yield* client.sendMessageStream(
-      describe.messageSendParams(params),
-      options
-    );
+    try {
+      const client = await this._client;
+      yield* client.sendMessageStream(
+        describe.messageSendParams(params),
+        options
+      );
+    } catch (error) {
+      logger.error("Messenger: Failed to send message stream", { error });
+      throw error;
+    }
   }
 
   /**
@@ -295,8 +300,13 @@ class Messenger
     params: A2A.TaskQueryParams,
     options?: RequestOptions
   ): AsyncGenerator<A2A.Update> {
-    const client = await this._client;
-    yield* client.resubscribeTask(params, options);
+    try {
+      const client = await this._client;
+      yield* client.resubscribeTask(params, options);
+    } catch (error) {
+      logger.error("Messenger: Failed to resubscribe task", { error });
+      throw error;
+    }
   }
 
   /**

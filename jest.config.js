@@ -1,4 +1,5 @@
 export default {
+  maxWorkers: 1,
   errorOnDeprecated: false,
   silent: true,
   forceExit: true,
