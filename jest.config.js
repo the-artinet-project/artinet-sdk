@@ -4,6 +4,7 @@ export default {
   testEnvironment: "node",
   preset: "ts-jest",
   extensionsToTreatAsEsm: [".ts"],
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
     "^~/(.*).js$": "<rootDir>/src/$1",
