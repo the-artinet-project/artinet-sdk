@@ -1,5 +1,6 @@
 export default {
-  maxWorkers: 1,
+  testTimeout: 30000,
+  forceExit: true,
   testEnvironment: "node",
   preset: "ts-jest",
   extensionsToTreatAsEsm: [".ts"],

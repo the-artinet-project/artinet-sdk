@@ -93,6 +93,10 @@ class Messenger
       .createFromUrl(this._baseUrl)
       .catch((error) => {
         if (!this._fallbackPath) {
+          logger.error(
+            "Messenger: Failed to create client, no fallback path provided",
+            { error }
+          );
           throw error;
         }
         logger.warn(
