@@ -59,7 +59,7 @@ cr8("Multi-Step Agent", { basePath: "/a2a" })
 | `artifact`    | `Artifact`     | Persistent outputs, versioned content    |
 | `status`      | `StatusUpdate` | Progress updates, state changes          |
 | `task`        | `Task`         | Complete task objects                    |
-| `sendMessage` | `Task`         | Agent-to-agent orchestration             |
+| `sendMessage` | `Task`         | Agent2Agent orchestration             |
 
 ### Properties
 
