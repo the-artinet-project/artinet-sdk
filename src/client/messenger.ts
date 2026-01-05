@@ -103,7 +103,15 @@ class Messenger
           "Messenger: Failed to create client, falling back to fallback path: ",
           { error, fallbackPath: this._fallbackPath }
         );
-        return this._factory.createFromUrl(this._baseUrl, this._fallbackPath);
+        return this._factory
+          .createFromUrl(this._baseUrl, this._fallbackPath)
+          .catch((error) => {
+            logger.error(
+              "Messenger: Failed to create client, at fallback path: ",
+              { error, fallbackPath: this._fallbackPath }
+            );
+            throw error;
+          });
       });
     return this.clientPromise;
   }
