@@ -89,6 +89,8 @@ const messenger = createMessenger({ baseUrl: "https://example.com" });
 
 - See [messenger](./messenger.md) for more details.
 
+> Checkout [quickstart](../quickstart/) for one-to-one examples of v0.5.\* => v0.6.0
+
 ## New Features in v0.6.0
 
 ### `describe`

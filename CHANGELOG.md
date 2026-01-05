@@ -1,21 +1,23 @@
 # Changelog
 
-All notable changes to the @artinet/sdk package will be documented in this file.
+All notable changes to the `@artinet/sdk` package will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0-preview] - 2025-12-21
+## [0.6.0] - 2025-12-21
 
 ### Highlights
 
-This release represents a major architectural milestone preparing for the first LTS release. Key themes include a unified type system, pluggable observability, and tighter integration with the emerging Agent2Agent ecosystem.
+This release represents a major architectural milestone and our first LTS release. Key themes include a unified type system, pluggable observability, and tighter integration with the emerging Agent2Agent ecosystem.
 
 ### Added
 
 - **Unified Type System**: New `@artinet/types` package provides canonical A2A type definitions
+
   - All types now accessible via `A2A` namespace (e.g., `A2A.Task`, `A2A.Message`, `A2A.Context`)
   - Cleaner imports and better IDE autocomplete
+
 - **Pluggable Logger Extensions**: Bring-your-own-logger architecture with zero-config defaults
 
   - `@artinet/sdk/pino` - Pino adapter via `configurePino()`
@@ -36,7 +38,7 @@ This release represents a major architectural milestone preparing for the first 
   - `resetConfig()` - useful for testing
   - `applyDefaults()` - enable console logging with one call
 
-- **AgentBuilder Enhancements**:
+- **AgentBuilder to cr8**:
 
   - New `skip()` function to conditionally skip workflow steps
   - Simplified generic parameters for better TypeScript ergonomics
@@ -45,8 +47,8 @@ This release represents a major architectural milestone preparing for the first 
 
 ### Changed
 
-- **BREAKING**: `@modelcontextprotocol/sdk`, `@trpc/server`, and `@a2a-js/sdk` are now **peer dependencies**
-  - Install them explicitly: `npm install @a2a-js/sdk @modelcontextprotocol/sdk @trpc/server`
+- **BREAKING**: `@modelcontextprotocol/sdk`, `@trpc/server`, `express` and `@a2a-js/sdk` are now **peer dependencies**
+  - Install them explicitly: `npm install @a2a-js/sdk @modelcontextprotocol/sdk express @trpc/server`
 - **BREAKING**: `configureLogger()` replaced with `configure({ logger })`
 
   - Before: `configureLogger({ level: 'info' })`
@@ -64,7 +66,7 @@ This release represents a major architectural milestone preparing for the first 
   - Before: `import { Task, Message } from '@artinet/sdk'`
   - After: `import { A2A } from '@artinet/sdk'` then use `A2A.Task`, `A2A.Message`
 
-- **EngineBuilder Simplification**: Removed `TCommand` generic parameter
+- **EngineBuilder/AgentBuilder Simplification**: Removed `TCommand` generic parameter
 
   - Cleaner type signatures with fewer generic parameters
   - `EngineBuilder<TInboundArgs>` instead of `EngineBuilder<TCommand, TInboundArgs>`
@@ -87,26 +89,6 @@ This release represents a major architectural milestone preparing for the first 
 - OpenTelemetry packages are optional dependencies - only install if you need tracing
 - Logger extensions (pino, winston) are thin wrappers - you configure, we adapt
 - The `A2A` namespace consolidates all Agent2Agent protocol types for cleaner code
-- This preview release is the final step before v0.6 LTS
-
-### Migration Guide
-
-```typescript
-// Before (0.5.x)
-import { configureLogger, Task, Message } from "@artinet/sdk";
-configureLogger({ level: "info" });
-
-// After (0.6.0)
-import { configure, A2A } from "@artinet/sdk";
-import { configurePino } from "@artinet/sdk/pino";
-import pino from "pino";
-
-configure({
-  logger: configurePino(pino({ level: "info" })),
-});
-
-// Use A2A.Task, A2A.Message instead of Task, Message
-```
 
 ## [0.5.7] - 2025-08-30
 
