@@ -15,23 +15,8 @@ import {
   AgentEngine,
   getParts,
 } from "../src/index.js";
-import { configure } from "../src/config/index.js";
-// import { configurePino } from "../src/extensions/pino.js";
-// import pino from "pino";
-// import pinoCaller from "pino-caller";
-// configure({
-//   logger: configurePino(
-//     pinoCaller(
-//       pino({
-//         level: "info",
-//         transport: {
-//           target: "pino-pretty",
-//           options: { colorize: true },
-//         },
-//       })
-//     )
-//   ),
-// });
+import { applyDefaults } from "../src/config/default.js";
+applyDefaults();
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 
