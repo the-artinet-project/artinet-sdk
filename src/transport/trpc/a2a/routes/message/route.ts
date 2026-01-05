@@ -4,30 +4,24 @@
  */
 
 import { router, A2AProcedure } from "../../trpc.js";
-import { INVALID_PARAMS, zAsyncIterable } from "~/utils/index.js";
-import {
-  MessageSendParamsSchema,
-  SendMessageSuccessResultSchema,
-  SendStreamingMessageSuccessResultSchema,
-} from "~/types/index.js";
+import { INVALID_PARAMS } from "~/utils/errors.js";
+import { zAsyncIterable } from "~/utils/zAsyncIterable.js";
+import { A2A } from "~/types/index.js";
 
-const sendMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
-  .output(SendMessageSuccessResultSchema)
+const sendMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
+  .output(A2A.SendMessageSuccessResultSchema)
   .mutation(async (opts) => {
     const { input } = opts;
     if (!input) {
       throw INVALID_PARAMS({ input: "No request detected" });
     }
-    return await opts.ctx.service.sendMessage(input, {
-      engine: opts.ctx.engine,
-      signal: opts.signal,
-    });
+    return await opts.ctx.service.sendMessage(input, opts.ctx.context);
   });
 
-const streamMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
+const streamMessageRoute = A2AProcedure.input(A2A.MessageSendParamsSchema)
   .output(
     zAsyncIterable({
-      yield: SendStreamingMessageSuccessResultSchema,
+      yield: A2A.SendStreamingMessageSuccessResultSchema,
     })
   )
   .subscription(async function* (opts) {
@@ -35,10 +29,7 @@ const streamMessageRoute = A2AProcedure.input(MessageSendParamsSchema)
     if (!input) {
       throw INVALID_PARAMS({ input: "No request detected" });
     }
-    yield* opts.ctx.service.streamMessage(input, {
-      engine: opts.ctx.engine,
-      signal: opts.signal,
-    });
+    yield* opts.ctx.service.streamMessage(input, opts.ctx.context);
   });
 
 export const messageRouter = router({

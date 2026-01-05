@@ -3,183 +3,510 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  A2AServiceInterface,
-  A2AEngine,
-  AgentCard,
-  ContextManagerInterface,
-  ConnectionManagerInterface,
-  CancellationManagerInterface,
-  TaskManagerInterface,
-  MethodOptions,
-  TaskAndHistory,
-  TaskIdParams,
-  MessageSendParams,
-  Command,
-  State,
-  Update,
-  CoreContext,
-  EventManagerOptions,
-  MethodParams,
-  TaskQueryParams,
-  MessageSendParamsSchema,
-  TaskQueryParamsSchema,
-  TaskIdParamsSchema,
-} from "~/types/index.js";
-import { coreExecute } from "~/services/core/execution/execute.js";
-import { createMessageSendParams } from "./helpers/message-builder.js";
-import { validateSchema } from "../../utils/common/schema-validation.js";
+import { A2A } from "~/types/index.js";
+import { validateSchema } from "~/utils/schema-validation.js";
+import * as describe from "~/create/describe.js";
+import { INVALID_REQUEST, TASK_NOT_FOUND } from "~/utils/errors.js";
+import { Messenger } from "./messenger.js";
+import { execute } from "./execute.js";
+import { createService, ServiceParams } from "./factory/service.js";
+import { getReferences } from "./helpers/references.js";
+import { logger } from "~/config/index.js";
 
-export class A2AService implements A2AServiceInterface {
-  readonly agentCard: AgentCard;
-  private engine: A2AEngine;
-  private connections: ConnectionManagerInterface;
-  private cancellations: CancellationManagerInterface;
-  private tasks: TaskManagerInterface<TaskAndHistory>;
-  private contexts: ContextManagerInterface<Command, State, Update>;
-  private methods: MethodOptions;
-  readonly eventOverrides:
-    | EventManagerOptions<Command, State, Update>
-    | undefined;
-  private enforceParamValidation: boolean = false;
+const taskToMessageParams = (task: A2A.Task) => {
+  const latestUserMessage: A2A.Message | undefined = task.history
+    ?.filter((msg) => msg.role === "user")
+    ?.pop();
 
-  constructor(
-    agentCard: AgentCard,
-    engine: A2AEngine,
-    contexts: ContextManagerInterface<Command, State, Update>,
-    connections: ConnectionManagerInterface,
-    cancellations: CancellationManagerInterface,
-    tasks: TaskManagerInterface<TaskAndHistory>,
-    methods: MethodOptions,
-    eventOverrides?: EventManagerOptions<Command, State, Update>,
-    enforceParamValidation: boolean = false
-  ) {
-    this.engine = engine;
-    this.agentCard = agentCard;
-    this.contexts = contexts;
-    this.connections = connections;
-    this.cancellations = cancellations;
-    this.tasks = tasks;
-    this.methods = methods;
-    this.eventOverrides = eventOverrides;
-    this.enforceParamValidation = enforceParamValidation;
+  if (!latestUserMessage) {
+    throw INVALID_REQUEST("No user message found");
   }
 
-  async execute(
-    engine: A2AEngine,
-    context: CoreContext<Command, State, Update>
-  ): Promise<void> {
-    await coreExecute(engine ?? this.engine, context);
+  if (
+    latestUserMessage.contextId &&
+    latestUserMessage.contextId !== task.contextId
+  ) {
+    throw INVALID_REQUEST(
+      "User message context ID does not match task context ID"
+    );
+  }
+
+  const messageParams: A2A.MessageSendParams = {
+    message: {
+      ...latestUserMessage,
+      taskId: task.id,
+      contextId: latestUserMessage.contextId ?? task.contextId,
+    },
+    metadata: task.metadata,
+  };
+  return messageParams;
+};
+
+/**
+ * @note Comprehensive Extension system coming in a future release
+ */
+const getExtensions = async (
+  _extensions?: string[],
+  _forwardExtensions?: A2A.AgentExtension[]
+): Promise<A2A.AgentExtension[]> => {
+  // logger.warn("getExtensions: not implemented", { extensions });
+  return [];
+};
+
+/**
+ * Binds a notifier to a context
+ * @param notifier - The notifier to bind
+ * @param context - The context to bind the notifier to
+ * @returns A new notifier that is bound to the context
+ */
+const bindNotifier = async (
+  context: A2A.Context,
+  taskId: string,
+  config: A2A.PushNotificationConfig | undefined,
+  notifier?: A2A.Notifier
+): Promise<void> => {
+  if (!notifier || !config) {
+    return;
+  }
+  context.publisher.on("update", async (task: A2A.Task, update: A2A.Update) => {
+    await notifier.notify(task, update, context).catch((error) => {
+      logger.error("Error sending push notification: ", { error });
+    });
+  });
+
+  await notifier.register(taskId, config).catch((error) => {
+    logger.error("Error registering push notification: ", { error });
+  });
+};
+
+/**
+ * @note We endeavor to remove all optional parameters from below this class.
+ * This will allow the service to act as the boundary to our Hexagonal Architecture.
+ */
+export class Service implements A2A.Service {
+  constructor(
+    protected _agentCard: A2A.AgentCard,
+    protected _engine: A2A.Engine,
+    protected _connections: A2A.Connections,
+    protected _cancellations: A2A.Cancellations,
+    protected _tasks: A2A.Tasks,
+    protected _contexts: A2A.Contexts,
+    protected _streams: A2A.Streams,
+    protected _handles: A2A.Handles,
+    protected _overrides?: Partial<Omit<A2A.EventConsumer, "contextId">>
+  ) {}
+
+  get handles(): A2A.Handles {
+    return this._handles;
+  }
+
+  set handles(handles: Partial<A2A.Handles>) {
+    this._handles = {
+      ...this._handles,
+      ...handles,
+    };
+  }
+
+  get agentCard(): A2A.AgentCard {
+    return this._agentCard;
+  }
+
+  get engine(): A2A.Engine {
+    return this._engine;
+  }
+
+  set engine(engine: A2A.Engine) {
+    this._engine = engine;
+  }
+
+  get connections(): A2A.Connections {
+    return this._connections;
+  }
+
+  get cancellations(): A2A.Cancellations {
+    return this._cancellations;
+  }
+
+  get tasks(): A2A.Tasks {
+    return this._tasks;
+  }
+
+  get contexts(): A2A.Contexts {
+    return this._contexts;
+  }
+
+  set contexts(contexts: A2A.Contexts) {
+    this._contexts = {
+      ...this._contexts,
+      ...contexts,
+    };
+  }
+  get streams(): A2A.Streams {
+    return this._streams;
+  }
+
+  get overrides(): Partial<Omit<A2A.EventConsumer, "contextId">> | undefined {
+    return this._overrides;
+  }
+
+  set overrides(overrides: Partial<Omit<A2A.EventConsumer, "contextId">>) {
+    this._overrides = {
+      ...this._overrides,
+      ...overrides,
+    };
+  }
+
+  async execute({
+    engine,
+    context,
+  }: {
+    engine: A2A.Engine;
+    context: A2A.Context;
+  }): Promise<void> {
+    await execute(engine, context);
+  }
+
+  async getAgentCard(): Promise<A2A.AgentCard> {
+    return this.agentCard;
   }
 
   async stop(): Promise<void> {
-    const currentTasks = await this.tasks.getStates();
-    for (const id of currentTasks) {
-      this.addCancellation(id);
+    logger.info(`Service[stop]`);
+    for (const context of await this.contexts.list()) {
+      await context.publisher.onCancel(
+        describe.update.canceled({
+          contextId: context.contextId,
+          taskId: context.taskId,
+          message: describe.message("service stopped"),
+        })
+      );
     }
     return;
   }
 
-  addConnection(id: string): void {
-    this.connections.addConnection(id);
-  }
-
-  removeConnection(id: string): void {
-    this.connections.removeConnection(id);
-  }
-
-  isCancelled(id: string): boolean {
-    return this.cancellations.isCancelled(id);
-  }
-
-  addCancellation(id: string): void {
-    this.cancellations.addCancellation(id);
-  }
-
-  removeCancellation(id: string): void {
-    this.cancellations.removeCancellation(id);
-  }
-
-  async getState(id: string): Promise<TaskAndHistory | undefined> {
-    return await this.tasks.getState(id);
-  }
-
-  async setState(id: string, data: TaskAndHistory): Promise<void> {
-    await this.tasks.setState(id, data);
-  }
-
-  async getTask(input: TaskQueryParams) {
-    return await this.methods.getTask(
-      this.enforceParamValidation
-        ? await validateSchema(TaskQueryParamsSchema, input)
-        : input,
-      { service: this }
+  async getTask(
+    params: A2A.TaskQueryParams,
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.Task> {
+    const taskParams: A2A.TaskQueryParams = await validateSchema(
+      A2A.TaskQueryParamsSchema,
+      params
     );
+
+    logger.info(`Service[getTask]:`, { taskId: taskParams.id });
+    const task: A2A.Task | undefined =
+      options?.task ?? (await this.tasks.get(taskParams.id));
+
+    if (!task) {
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
+    }
+
+    const userId: string | undefined = options?.userId;
+    const messageParams: A2A.MessageSendParams = taskToMessageParams(task);
+
+    const context: A2A.Context = await this.contexts.create({
+      contextId: task.contextId,
+      service: this,
+      abortSignal: options?.signal,
+      task: task,
+      overrides: this.overrides,
+      messenger: Messenger.create(messageParams),
+      userId: userId,
+    });
+
+    return await this.handles.getTask(taskParams, context);
   }
 
-  async cancelTask(input: TaskIdParams) {
-    return await this.methods.cancelTask(
-      this.enforceParamValidation
-        ? await validateSchema(TaskIdParamsSchema, input)
-        : input,
-      {
-        service: this,
-        contextManager: this.contexts,
-      }
+  async cancelTask(
+    params: A2A.TaskIdParams,
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.Task> {
+    const taskParams: A2A.TaskIdParams = await validateSchema(
+      A2A.TaskIdParamsSchema,
+      params
     );
+
+    logger.info(`Service[cancelTask]:`, { taskId: taskParams.id });
+
+    const task: A2A.Task | undefined =
+      options?.task ?? (await this.tasks.get(taskParams.id));
+    if (!task) {
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
+    }
+
+    const userId: string | undefined = options?.userId;
+    const messageParams: A2A.MessageSendParams = taskToMessageParams(task);
+
+    const context: A2A.Context = await this.contexts.create({
+      contextId: task.contextId,
+      service: this,
+      abortSignal: options?.signal,
+      task: task,
+      overrides: this.overrides,
+      messenger: Messenger.create(messageParams),
+      userId: userId,
+      references: await getReferences(
+        this.tasks,
+        messageParams.message.referenceTaskIds
+      ),
+    });
+
+    return await this.handles.cancelTask(taskParams, context);
   }
+
+  sendMessage(
+    params: A2A.MessageSendParams,
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.SendMessageSuccessResult>;
+
+  sendMessage(
+    message: string | A2A.MessageSendParams["message"],
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.SendMessageSuccessResult>;
 
   async sendMessage(
-    message: MessageSendParams | string,
-    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
-  ) {
-    return await this.methods.sendMessage(
-      this.enforceParamValidation
-        ? await validateSchema(MessageSendParamsSchema, message)
-        : createMessageSendParams(message),
-      {
-        ...params, //we may include additional params in the future that may not need to be handled by the service
-        service: this,
-        engine: params?.engine ?? this.engine,
-        contextManager: this.contexts,
-        signal: params?.signal ?? new AbortController().signal,
-      }
-    );
+    paramsOrMessage:
+      | A2A.MessageSendParams
+      | A2A.MessageSendParams["message"]
+      | string,
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.SendMessageSuccessResult> {
+    const params = describe.messageSendParams(paramsOrMessage);
+    return await this._sendMessage(params, options);
   }
 
-  async *streamMessage(
-    message: MessageSendParams | string,
-    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
-  ) {
-    yield* this.methods.streamMessage(
-      this.enforceParamValidation
-        ? await validateSchema(MessageSendParamsSchema, message)
-        : createMessageSendParams(message),
-      {
-        ...params,
-        service: this,
-        engine: params?.engine ?? this.engine,
-        contextManager: this.contexts,
-        signal: params?.signal ?? new AbortController().signal,
-      }
+  protected async _sendMessage(
+    params: A2A.MessageSendParams,
+    options?: A2A.ServiceOptions
+  ): Promise<A2A.SendMessageSuccessResult> {
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
     );
+
+    logger.info(`Service[sendMessage]:`, {
+      messageId: messageParams.message.messageId,
+    });
+
+    logger.debug(`Service[sendMessage]:`, {
+      taskId: messageParams.message.taskId,
+    });
+
+    logger.debug(`Service[sendMessage]:`, {
+      contextId: messageParams.message.contextId,
+    });
+
+    const task: A2A.Task =
+      options?.task ??
+      (await this.tasks.create({
+        id: messageParams.message.taskId,
+        contextId: messageParams.message.contextId,
+        history: [messageParams.message],
+        metadata: {
+          ...messageParams.metadata,
+        },
+      }));
+
+    const userId: string | undefined = options?.userId;
+
+    const extensions: A2A.AgentExtension[] = await getExtensions(
+      messageParams.message.extensions,
+      options?.extensions
+    );
+
+    const context: A2A.Context = await this.contexts.create({
+      contextId: task.contextId,
+      service: this,
+      abortSignal: options?.signal,
+      task: task,
+      overrides: this.overrides,
+      messenger: Messenger.create(messageParams),
+      references: await getReferences(
+        this.tasks,
+        messageParams.message.referenceTaskIds
+      ),
+      extensions: extensions,
+      userId: userId,
+    });
+
+    if (options?.notifier) {
+      await bindNotifier(
+        context,
+        task.id,
+        messageParams.configuration?.pushNotificationConfig,
+        options.notifier
+      );
+    }
+
+    return await this.handles.sendMessage(messageParams, context);
+  }
+
+  sendMessageStream(
+    params: A2A.MessageSendParams,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update>;
+  sendMessageStream(
+    message: string,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update>;
+  sendMessageStream(
+    params: A2A.MessageSendParams["message"],
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update>;
+
+  async *sendMessageStream(
+    _params: A2A.MessageSendParams | string | A2A.MessageSendParams["message"],
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update> {
+    let params: A2A.MessageSendParams;
+    if (
+      typeof _params === "string" ||
+      (typeof _params === "object" && "parts" in _params)
+    ) {
+      params = describe.messageSendParams(_params);
+    } else {
+      params = _params;
+    }
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
+    );
+    yield* this._sendMessageStream(messageParams, options);
+  }
+
+  /**
+   * @deprecated Use sendMessageStream instead
+   */
+  async *streamMessage(
+    paramsOrMessage: A2A.MessageSendParams | string,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update> {
+    const params = describe.messageSendParams(paramsOrMessage);
+    yield* this.sendMessageStream(params, options);
+  }
+
+  protected async *_sendMessageStream(
+    params: A2A.MessageSendParams,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update> {
+    const messageParams: A2A.MessageSendParams = await validateSchema(
+      A2A.MessageSendParamsSchema,
+      params
+    );
+
+    logger.info("Service[streamMessage]:", {
+      taskId: messageParams.message.taskId,
+      contextId: messageParams.message.contextId,
+    });
+
+    const task: A2A.Task =
+      options?.task ??
+      (await this.tasks.create({
+        id: messageParams.message.taskId,
+        contextId: messageParams.message.contextId,
+        history: [messageParams.message],
+        metadata: {
+          ...messageParams.metadata,
+        },
+      }));
+
+    logger.debug("Service[streamMessage]: task created", {
+      taskId: task.id,
+      contextId: task.contextId,
+    });
+
+    const userId: string | undefined = options?.userId;
+
+    const extensions: A2A.AgentExtension[] = await getExtensions(
+      messageParams.message.extensions,
+      options?.extensions
+    );
+
+    const context: A2A.Context = await this.contexts.create({
+      contextId: task.contextId,
+      service: this,
+      abortSignal: options?.signal,
+      task: task,
+      overrides: this.overrides,
+      messenger: Messenger.create(messageParams),
+      references: await getReferences(
+        this.tasks,
+        messageParams.message.referenceTaskIds
+      ),
+      extensions: extensions,
+      userId: userId,
+    });
+
+    if (options?.notifier) {
+      await bindNotifier(
+        context,
+        task.id,
+        messageParams.configuration?.pushNotificationConfig,
+        options.notifier
+      );
+    }
+
+    yield* this.handles.streamMessage(messageParams, context);
   }
 
   async *resubscribe(
-    input: TaskIdParams,
-    params?: Partial<Omit<MethodParams, "service" | "contextManager">>
-  ) {
-    yield* this.methods.resubscribe(
-      this.enforceParamValidation
-        ? await validateSchema(TaskIdParamsSchema, input)
-        : input,
-      {
-        ...params,
-        service: this,
-        engine: params?.engine ?? this.engine,
-        contextManager: this.contexts,
-        signal: params?.signal ?? new AbortController().signal,
-      }
+    params: A2A.TaskIdParams,
+    options?: A2A.ServiceOptions
+  ): AsyncGenerator<A2A.Update> {
+    const taskParams: A2A.TaskIdParams = await validateSchema(
+      A2A.TaskIdParamsSchema,
+      params
     );
+
+    logger.info(`Service[resubscribe]:`, { taskId: taskParams.id });
+
+    const task: A2A.Task | undefined = await this.tasks.get(taskParams.id);
+    if (!task) {
+      throw TASK_NOT_FOUND({ taskId: taskParams.id });
+    }
+
+    logger.debug("Service[resubscribe]:", {
+      taskId: task.id,
+      contextId: task.contextId,
+    });
+
+    const messageParams: A2A.MessageSendParams = taskToMessageParams(task);
+
+    const userId: string | undefined = options?.userId;
+
+    const extensions: A2A.AgentExtension[] = await getExtensions(
+      messageParams.message.extensions,
+      options?.extensions
+    );
+
+    const context: A2A.Context = await this.contexts.create({
+      contextId: task.contextId,
+      service: this,
+      abortSignal: options?.signal,
+      task: task,
+      overrides: this.overrides,
+      references: await getReferences(
+        this.tasks,
+        messageParams.message.referenceTaskIds
+      ),
+      messenger: Messenger.create(messageParams),
+      extensions: extensions,
+      userId: userId,
+    });
+
+    if (options?.notifier) {
+      await bindNotifier(
+        context,
+        task.id,
+        messageParams.configuration?.pushNotificationConfig,
+        options.notifier
+      );
+    }
+
+    yield* this.handles.resubscribe(taskParams, context);
+  }
+
+  static create(params: ServiceParams): Service {
+    return createService(params);
   }
 }

@@ -1,9 +1,94 @@
 # Changelog
 
-All notable changes to the @artinet/sdk package will be documented in this file.
+All notable changes to the `@artinet/sdk` package will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.6.0] - 2025-12-21
+
+### Highlights
+
+This release represents a major architectural milestone and our first LTS release. Key themes include a unified type system, pluggable observability, and tighter integration with the emerging Agent2Agent ecosystem.
+
+### Added
+
+- **Unified Type System**: New `@artinet/types` package provides canonical A2A type definitions
+
+  - All types now accessible via `A2A` namespace (e.g., `A2A.Task`, `A2A.Message`, `A2A.Context`)
+  - Cleaner imports and better IDE autocomplete
+
+- **Pluggable Logger Extensions**: Bring-your-own-logger architecture with zero-config defaults
+
+  - `@artinet/sdk/pino` - Pino adapter via `configurePino()`
+  - `@artinet/sdk/winston` - Winston adapter via `configureWinston()`
+  - `@artinet/sdk/otel` - OpenTelemetry span-event logging via `configureOtel()`
+  - Combine loggers: logs can go to both Pino AND span events simultaneously
+
+- **OpenTelemetry Integration**: Native distributed tracing support
+
+  - `configure({ tracer })` for global tracer configuration
+  - `withSpan(tracer, name, fn)` helper for easy span creation with automatic error handling
+  - Re-exports common OTel types from `@artinet/sdk/otel`
+
+- **New Configuration API**: Centralized SDK configuration
+
+  - `configure({ logger, tracer })` - single configuration point
+  - `getLogger()`, `getTracer()` - access configured instances
+  - `resetConfig()` - useful for testing
+  - `applyDefaults()` - enable console logging with one call
+
+- **AgentBuilder to cr8**:
+
+  - New `skip()` function to conditionally skip workflow steps
+  - Simplified generic parameters for better TypeScript ergonomics
+
+- **StateMachine Architecture**: New state machine pattern for context lifecycle management
+
+### Changed
+
+- **BREAKING**: `@modelcontextprotocol/sdk`, `@trpc/server`, `express` and `@a2a-js/sdk` are now **peer dependencies**
+  - Install them explicitly: `npm install @a2a-js/sdk @modelcontextprotocol/sdk express @trpc/server`
+- **BREAKING**: `configureLogger()` replaced with `configure({ logger })`
+
+  - Before: `configureLogger({ level: 'info' })`
+  - After: `configure({ logger: configurePino(pino({ level: 'info' })) })`
+
+- **BREAKING**: Logger extensions require explicit logger instances
+
+  - SDK no longer creates loggers internally - you bring your configured instance
+  - **Logger Extension Helpers**: All logger/tracer extensions (`@artinet/sdk/pino`, `@artinet/sdk/winston`, etc) now export `configure` variants (e.g., `configurePino`) that add `.child()`, `.withSpan()`, and similar convenience utilities for advanced workflows.
+    - Use `configurePino(...)` to get SDK-ready pino loggers.
+    - Extensions remain fully compatible with plain base logger instances if you do not need helpers.
+
+- **BREAKING**: Types now use `A2A` namespace
+
+  - Before: `import { Task, Message } from '@artinet/sdk'`
+  - After: `import { A2A } from '@artinet/sdk'` then use `A2A.Task`, `A2A.Message`
+
+- **EngineBuilder/AgentBuilder Simplification**: Removed `TCommand` generic parameter
+
+  - Cleaner type signatures with fewer generic parameters
+  - `EngineBuilder<TInboundArgs>` instead of `EngineBuilder<TCommand, TInboundArgs>`
+
+- **Dependency Updates**:
+  - `zod` upgraded to `^3.25`
+  - `jest` upgraded to `^30.2.0`
+  - `@types/node` upgraded to `^25.0.3`
+  - `rimraf` upgraded to `^6.1.2`
+
+### Improved
+
+- **Zero-Overhead Defaults**: No-op logger and tracer when not configured - zero performance cost
+- **Environment Agnostic**: Observability interfaces work across Node.js, Deno, Bun, edge runtimes, and browsers
+- **Type Safety**: Enhanced type definitions with better inference and stricter contracts
+- **Bundle Size**: Moved heavy dependencies to peer/optional to reduce install footprint
+
+### Technical Notes
+
+- OpenTelemetry packages are optional dependencies - only install if you need tracing
+- Logger extensions (pino, winston) are thin wrappers - you configure, we adapt
+- The `A2A` namespace consolidates all Agent2Agent protocol types for cleaner code
 
 ## [0.5.7] - 2025-08-30
 
@@ -287,8 +372,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for streaming responses and push notifications
 - Comprehensive test suite and documentation
 
-<!-- [Unreleased]: https://github.com/artinet/sdk/compare/v0.5.6...HEAD -->
-
+[0.6.0-preview]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.18...v0.6.0-preview
+[0.5.7]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.4...v0.5.6
 [0.5.2]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/the-artinet-project/artinet-sdk/compare/v0.5.0...v0.5.1

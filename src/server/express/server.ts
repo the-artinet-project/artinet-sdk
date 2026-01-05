@@ -2,143 +2,90 @@
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
  */
-
 import express from "express";
-import { INVALID_REQUEST, PARSE_ERROR } from "~/utils/index.js";
-import {
-  Agent,
-  AgentCard,
-  FactoryParams as CreateAgentParams,
-} from "~/types/index.js";
-import { createAgent } from "~/services/index.js";
-import cors, { CorsOptions } from "cors";
-import { jsonRPCMiddleware } from "./middeware.js";
-import { errorHandler } from "./errors.js";
 
-export interface ServerParams {
+import cors, { CorsOptions } from "cors";
+import { logger } from "~/config/index.js";
+import { native } from "../adapters/a2a_request_handler.js";
+import { jsonRpcHandler, UserBuilder } from "@a2a-js/sdk/server/express";
+import {
+  ServerParams as BaseServerParams,
+  ensureAgent,
+  registerAgent,
+} from "../params.js";
+
+export type ServerParams = BaseServerParams & {
   app?: express.Express;
   corsOptions?: CorsOptions;
-  basePath?: string;
-  /* Your agentCard must have supportsAuthenticatedExtendedCard set to true */
-  extendedAgentCard?: AgentCard;
-}
+};
 
-function rpcParser(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  express.json()(req, res, (err) => {
-    if (err) {
-      if (
-        err instanceof SyntaxError &&
-        "status" in err &&
-        err.status === 400 &&
-        "body" in err
-      ) {
-        return next(
-          PARSE_ERROR({
-            data: err.message,
-          })
-        );
-      }
-      return next(err);
-    }
-    next();
-  });
-}
-
-function ensureAgent(agentOrParams: Agent | CreateAgentParams): Agent {
-  if (
-    agentOrParams &&
-    typeof agentOrParams === "object" &&
-    "agentCard" in agentOrParams &&
-    typeof agentOrParams.agentCard === "object" &&
-    "sendMessage" in agentOrParams &&
-    typeof agentOrParams.sendMessage === "function" &&
-    "streamMessage" in agentOrParams &&
-    typeof agentOrParams.streamMessage === "function" &&
-    "addConnection" in agentOrParams &&
-    typeof agentOrParams.addConnection === "function" &&
-    "removeConnection" in agentOrParams &&
-    typeof agentOrParams.removeConnection === "function" &&
-    "getState" in agentOrParams &&
-    typeof agentOrParams.getState === "function" &&
-    "setState" in agentOrParams &&
-    typeof agentOrParams.setState === "function"
-  ) {
-    return agentOrParams;
-  } else if (
-    agentOrParams &&
-    typeof agentOrParams === "object" &&
-    "engine" in agentOrParams &&
-    typeof agentOrParams.engine === "function" &&
-    "agentCard" in agentOrParams &&
-    typeof agentOrParams.agentCard === "object"
-  ) {
-    return createAgent(agentOrParams as CreateAgentParams);
-  }
-  throw new Error("invalid agent or params");
-}
-
-export function createAgentServer(
-  params: ServerParams & {
-    agent: Agent | CreateAgentParams;
-    agentCardPath?: string;
-    register?: boolean;
-  }
-) {
-  const {
-    app = express(),
-    basePath = "/",
-    agentCardPath = "/.well-known/agent-card.json",
-    agent,
-  } = params;
-
+/**
+ * @note Best used with the `cr8` builder.
+ * @param {ServerParams} params - The server parameters
+ * @returns {ExpressAgentServer} - The express agent server
+ * @example
+ * ```typescript
+ * const { app, agent, start } = serve({
+ *   agent: cr8("MyAgent")
+ *     .text("Hello, world!")
+ *     .agent,
+ *   basePath: "/a2a",
+ * });
+ * ```
+ */
+export function serve({
+  app = express(),
+  basePath = "/",
+  agentCardPath = "/.well-known/agent-card.json",
+  agent,
+  corsOptions,
+  extendedAgentCard,
+  register = false,
+  port,
+  userBuilder = UserBuilder.noAuthentication,
+}: ServerParams) {
   const agentInstance = ensureAgent(agent);
-  app.use(cors(params.corsOptions));
+  /**
+   * Now that agents are services we can wrap them in any kind of transport layer
+   * or in express we can use json-rpc, but we could also use websockets, etc
+   */
+  agentInstance.getAgentCard().then((card) => {
+    const url = new URL(card.url);
+    if (!url.pathname.startsWith(basePath)) {
+      logger.warn(
+        `AgentCard may be misconfigured: URL pathname ${url.pathname} does not start with base path ${basePath}, this may cause issues with the client.`
+      );
+    }
+  });
+
+  const router = express.Router();
+  router.use(cors(corsOptions));
+
   if (agentCardPath !== "/.well-known/agent-card.json") {
-    // mount at the root for compliance with RFC8615 standard
-    app.use("/.well-known/agent-card.json", (_, res) => {
+    // todo: align with emerging multi-agent standards
+    router.use(`/.well-known/agent-card.json`, (_, res) => {
       res.json(agentInstance.agentCard);
     });
   }
-  app.use(agentCardPath, (_, res) => {
+
+  router.use(`${agentCardPath}`, (_, res) => {
     // mount at the custom path
     res.json(agentInstance.agentCard);
   });
+
   // mount at the old agent card path for backwards compatibility
-  app.use("/.well-known/agent.json", (_, res) => {
+  router.use(`/.well-known/agent.json`, (_, res) => {
     res.json(agentInstance.agentCard);
   });
-  /**
-   * Now that agents are services we can wrap them in any kind of transport layer
-   * for express we can use json-rpc, but we could also use websockets, or any other
-   * transport layer.
-   */
-  //a standard express middleware to handle json-rpc requests
-  app.post(
-    basePath,
-    rpcParser,
-    async (
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction
-    ) => {
-      const { jsonrpc } = req.body;
-      if (jsonrpc === "2.0") {
-        return await jsonRPCMiddleware(
-          agentInstance,
-          req,
-          res,
-          next,
-          params.extendedAgentCard
-        );
-      }
-      next(INVALID_REQUEST({ data: { message: "Invalid JSON-RPC request" } }));
-    }
+
+  router.use(
+    jsonRpcHandler({
+      requestHandler: native(agentInstance, undefined, extendedAgentCard),
+      userBuilder: userBuilder,
+    })
   );
-  app.use(errorHandler);
+
+  app.use(basePath, router);
   /** this is an example of using trpc as express middleware
     app.use(
       `${basePath}`,
@@ -155,7 +102,28 @@ export function createAgentServer(
     );
    * we could also use trpc directly or any other transport layer
    */
-  return { app, agent: agentInstance };
-}
+  const start = (_port?: number) => {
+    try {
+      const listenPort = _port ?? port;
 
-export type ExpressAgentServer = ReturnType<typeof createAgentServer>;
+      const server = app.listen(listenPort, () => {
+        logger.info(`Agent server started on port ${listenPort}`);
+      });
+
+      if (register) {
+        registerAgent(agentInstance.agentCard);
+      }
+
+      return server;
+    } catch (error) {
+      logger.error(`Failed to start agent server`, error);
+      throw error;
+    }
+  };
+  return { app, agent: agentInstance, start };
+}
+/**
+ * @deprecated Use `cr8.serve` instead.
+ */
+export const createAgentServer = serve;
+export type ExpressAgentServer = ReturnType<typeof serve>;

@@ -4,18 +4,20 @@
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import {
-  MessageSendParamsSchema,
-  TaskIdParamsSchema,
-  TaskSchema,
-  AgentCardSchema,
-  MCPServiceInterface,
-} from "~/types/index.js";
+import { A2A, MCP } from "~/types/index.js";
 import { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
-import { Agent } from "~/types/index.js";
+import { Agent } from "../a2a/index.js";
+import { formatJson } from "~/utils/utils.js";
 
-export class BaseMCPService extends McpServer implements MCPServiceInterface {
+export interface MCPServiceParams {
+  serverInfo: Implementation;
+  agent: Agent;
+  options?: ServerOptions;
+  agentCardUri?: string;
+}
+
+export class BaseMCPService extends McpServer implements MCP.Service {
   readonly agent: Agent;
 
   private _registerBaseTools(uri: string = "agent://card") {
@@ -23,9 +25,9 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
       "send-message",
       {
         title: "Send Message",
-        description: MessageSendParamsSchema.description,
-        inputSchema: MessageSendParamsSchema.shape,
-        outputSchema: TaskSchema.shape, //defaulting to task because unions are not supported
+        description: A2A.MessageSendParamsSchema.description,
+        inputSchema: A2A.MessageSendParamsSchema.shape,
+        outputSchema: A2A.TaskSchema.shape, //defaulting to task because unions are not supported
       },
       async (args) => {
         const task = await this.agent.sendMessage(args);
@@ -33,7 +35,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
           content: [
             {
               type: "text",
-              text: JSON.stringify(task, null, 2),
+              text: formatJson(task),
             },
           ],
           structuredContent: task,
@@ -44,9 +46,9 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
       "get-task",
       {
         title: "Get Task",
-        description: TaskIdParamsSchema.description,
-        inputSchema: TaskIdParamsSchema.shape,
-        outputSchema: TaskSchema.shape,
+        description: A2A.TaskIdParamsSchema.description,
+        inputSchema: A2A.TaskIdParamsSchema.shape,
+        outputSchema: A2A.TaskSchema.shape,
       },
       async (args) => {
         const task = await this.agent.getTask(args);
@@ -54,7 +56,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
           content: [
             {
               type: "text",
-              text: JSON.stringify(task, null, 2),
+              text: formatJson(task),
             },
           ],
           structuredContent: task,
@@ -65,9 +67,9 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
       "cancel-task",
       {
         title: "Cancel Task",
-        description: TaskIdParamsSchema.description,
-        inputSchema: TaskIdParamsSchema.shape,
-        outputSchema: TaskSchema.shape,
+        description: A2A.TaskIdParamsSchema.description,
+        inputSchema: A2A.TaskIdParamsSchema.shape,
+        outputSchema: A2A.TaskSchema.shape,
       },
       async (args) => {
         const task = await this.agent.cancelTask(args);
@@ -75,7 +77,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
           content: [
             {
               type: "text",
-              text: JSON.stringify(task, null, 2),
+              text: formatJson(task),
             },
           ],
           structuredContent: task,
@@ -87,7 +89,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
       uri,
       {
         title: "Agent Card",
-        description: AgentCardSchema.description,
+        description: A2A.AgentCardSchema.description,
         mimeType: "application/json",
       },
       async (uri) => {
@@ -95,7 +97,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
           contents: [
             {
               uri: uri.href,
-              text: JSON.stringify(this.agent.agentCard, null, 2),
+              text: formatJson(await this.agent.getAgentCard()),
               mimeType: "application/json",
             },
           ],
@@ -109,12 +111,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
     agent,
     options,
     agentCardUri = "agent://card",
-  }: {
-    serverInfo: Implementation;
-    agent: Agent;
-    options?: ServerOptions;
-    agentCardUri?: string;
-  }) {
+  }: MCPServiceParams) {
     super(serverInfo, options);
     this.agent = agent;
     this._registerBaseTools(agentCardUri);
@@ -130,12 +127,7 @@ export class BaseMCPService extends McpServer implements MCPServiceInterface {
     agent,
     options,
     agentCardUri = "agent://card",
-  }: {
-    serverInfo: Implementation;
-    agent: Agent;
-    options?: ServerOptions;
-    agentCardUri?: string;
-  }): BaseMCPService & Agent {
+  }: MCPServiceParams): BaseMCPService & Agent {
     const instance = new BaseMCPService({
       serverInfo,
       agent,

@@ -1,3 +1,7 @@
+/**
+ * Archiving these tests as they are no longer relevant.
+ * Transport has been largely replaced with the @a2a-js/sdk please file an issue with A2A Protocol team if you encounter any bugs.
+ */
 import {
   jest,
   describe,
@@ -10,26 +14,40 @@ import express from "express";
 import request from "supertest";
 import {
   INTERNAL_ERROR,
-  AgentCard,
-  TaskState,
-  SendMessageRequest,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
-  Context,
   getParts,
 } from "../src/index.js";
-import { configureLogger } from "../src/utils/logging/index.js";
+import { configure, logger } from "../src/config/index.js";
+// import { configurePino } from "../src/extensions/pino.js";
+// import pino from "pino";
+// import pinoCaller from "pino-caller";
+// configure({
+//   logger: configurePino(
+//     pinoCaller(
+//       pino({
+//         level: "info",
+//         transport: {
+//           target: "pino-pretty",
+//           options: { colorize: true },
+//         },
+//       })
+//     )
+//   ),
+// });
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
 
 // Create a specialized task handler for more coverage testing
-const serverImplTestHandler: AgentEngine = async function* (context: Context) {
-  const params = context.command;
-  const taskId = params.message.taskId ?? "";
-  const contextId = params.message.contextId ?? "";
-  const { text } = getParts(params.message.parts);
+const serverImplTestHandler: AgentEngine = async function* (
+  context: A2A.Context
+) {
+  const message = context.userMessage;
+  const taskId = context.taskId;
+  const contextId = context.contextId;
+  const { text } = getParts(message.parts);
   // Need to specifically test error conditions
   if (text.includes("throw-internal")) {
     throw INTERNAL_ERROR({ data: { message: "Internal test error" } });
@@ -42,7 +60,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.submitted,
+        state: A2A.TaskState.submitted,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -58,7 +76,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -76,7 +94,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
         contextId: contextId,
         kind: "status-update",
         status: {
-          state: TaskState.working,
+          state: A2A.TaskState.working,
           message: {
             messageId: "test-message-id",
             kind: "message",
@@ -96,7 +114,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -115,7 +133,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -131,7 +149,7 @@ const serverImplTestHandler: AgentEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -150,7 +168,7 @@ describe("Server Implementation Tests", () => {
 
   beforeEach(() => {
     // Create a server with a custom agent card to test that code path
-    const customCard: AgentCard = {
+    const customCard: A2A.AgentCard = {
       protocolVersion: "0.3.0",
       name: "Server Impl Test Agent",
       url: "http://localhost:41241",
@@ -242,7 +260,7 @@ describe("Server Implementation Tests", () => {
 
     it("uses custom agent card", async () => {
       const response = await trackRequest(
-        request(app).get("/.well-known/agent-card.json")
+        request(app).get("/api/.well-known/agent-card.json")
       );
 
       expect(response.status).toBe(200);
@@ -287,7 +305,6 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32603);
@@ -330,7 +347,9 @@ describe("Server Implementation Tests", () => {
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32601);
-      expect(response.body.error.message).toBe("Method not found");
+      expect(response.body.error.message).toBe(
+        "Method not found: invalid/method"
+      );
     });
 
     it("returns INVALID_PARAMS error for missing params", async () => {
@@ -344,11 +363,10 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toBe("Invalid method parameters.");
     });
 
     it("returns INVALID_PARAMS error for invalid task ID", async () => {
@@ -364,16 +382,16 @@ describe("Server Implementation Tests", () => {
       const response = await trackRequest(
         request(app).post("/api").send(requestBody)
       );
-
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32602);
-      expect(response.body.error.message).toBe("Invalid parameters");
+      expect(response.body.error.message).toContain("Params Required");
     });
   });
 
   describe("Task History Management", () => {
     it("requests task with history", async () => {
+      logger.info("requests task with history");
       // First create a task
       const createBody = {
         jsonrpc: "2.0",
@@ -389,9 +407,12 @@ describe("Server Implementation Tests", () => {
           },
         },
       };
-
-      await trackRequest(request(app).post("/api").send(createBody));
-
+      logger.info("creating task with history");
+      const resp = await trackRequest(
+        request(app).post("/api").send(createBody)
+      );
+      logger.info("task created with history", resp.body);
+      logger.info("task created with history");
       // Now retrieve it with history
       const retrieveBody = {
         jsonrpc: "2.0",
@@ -402,11 +423,11 @@ describe("Server Implementation Tests", () => {
           historyLength: 2,
         },
       };
-
+      logger.info("retrieving task with history");
       const response = await trackRequest(
         request(app).post("/api").send(retrieveBody)
       );
-
+      logger.info("task retrieved with history", response.body);
       expect(response.status).toBe(200);
       expect(response.body.result).toBeDefined();
       expect(response.body.result.id).toBe("history-task-1");
@@ -473,7 +494,7 @@ describe("Server Implementation Tests", () => {
 
   describe("Task Timestamps", () => {
     it("includes timestamps in task status", async () => {
-      const requestBody: SendMessageRequest = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "timestamp-request-1",
         method: "message/send",

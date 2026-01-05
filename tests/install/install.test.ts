@@ -138,6 +138,7 @@ try {
     expect(result.success).toBe(true);
     expect(result.createAgent).toBe(true);
   }, 30000);
+  //todo negative test case for browser bundle (no A2AServer in browser)
   test("browser bundle resolves correctly via package exports", async () => {
     // Create a test file that imports from the package
     const testFile = `

@@ -2,13 +2,7 @@
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
  */
-import {
-  Part,
-  TextPart,
-  FilePart,
-  DataPart,
-  Message,
-} from "~/types/schemas/a2a/index.js";
+import { A2A } from "~/types/index.js";
 /**
  * Extracts and aggregates the text, file, and data contents from an array of Part objects.
  *
@@ -23,19 +17,19 @@ import {
  * in a structured way for downstream processing.
  */
 export const getParts = (
-  parts: Part[]
+  parts: A2A.Part[]
 ): {
-  text: TextPart["text"];
-  file: FilePart["file"][];
-  data: DataPart["data"][];
+  text: A2A.TextPart["text"];
+  file: A2A.FilePart["file"][];
+  data: A2A.DataPart["data"][];
 } => {
   const textParts = parts.filter((part) => part.kind === "text");
   const fileParts = parts.filter((part) => part.kind === "file");
   const dataParts = parts.filter((part) => part.kind === "data");
   return {
-    text: textParts.map((part) => (part as TextPart).text).join(" "),
-    file: fileParts.map((part) => (part as FilePart).file),
-    data: dataParts.map((part) => (part as DataPart).data),
+    text: textParts.map((part) => (part as A2A.TextPart).text).join(" "),
+    file: fileParts.map((part) => (part as A2A.FilePart).file),
+    data: dataParts.map((part) => (part as A2A.DataPart).data),
   };
 };
 
@@ -60,11 +54,11 @@ export const getParts = (
  * console.log(payload.data); // [<data1>, <data2>]
  */
 export const getPayload = (
-  message: Message
+  message: A2A.Message
 ): {
-  text: TextPart["text"];
-  file: FilePart["file"][];
-  data: DataPart["data"][];
+  text: A2A.TextPart["text"];
+  file: A2A.FilePart["file"][];
+  data: A2A.DataPart["data"][];
 } => {
   return getParts(message.parts);
 };

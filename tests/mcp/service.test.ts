@@ -1,43 +1,52 @@
 import { jest, describe, it, beforeEach, expect } from "@jest/globals";
 import {
-  TaskState,
-  TaskStatusUpdateEvent,
-  UpdateEvent,
+  A2A,
   AgentEngine,
-  Context,
   getParts,
-  MessageSendParams,
-  Message,
   MCPAgent,
   createMCPAgent,
   createAgent,
+  MCP,
 } from "../../src/index.js";
-import { configureLogger } from "../../src/utils/logging/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { JSONRPCMessage } from "@modelcontextprotocol/sdk/types.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-configureLogger({ level: "silent" });
-
+import { configure } from "../../src/config/index.js";
+import { configurePino } from "../../src/extensions/pino.js";
+// import pino from "pino";
+// import pinoCaller from "pino-caller";
+// configure({
+//   logger: configurePino(
+//     pinoCaller(
+//       pino({
+//         level: "info",
+//         transport: {
+//           target: "pino-pretty",
+//           options: { colorize: true },
+//         },
+//       })
+//     )
+//   ),
+// });
 const protocolEngine: AgentEngine = async function* (
-  context: Context
-): AsyncGenerator<UpdateEvent, void, unknown> {
-  const request: MessageSendParams = context.command;
-  const taskId = request.message.taskId ?? "";
-  const contextId = request.message.contextId ?? "";
-  const { text } = getParts(request.message.parts);
+  context: A2A.Context
+): AsyncGenerator<A2A.Update, void, unknown> {
+  const message: A2A.Message = context.userMessage;
+  const taskId = message.taskId ?? "";
+  const contextId = message.contextId ?? "";
+  const { text } = getParts(message.parts);
 
   if (text.includes("throw")) {
     throw new Error("Simulated task error");
   }
 
   if (text.includes("fail")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.failed,
+        state: A2A.TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -51,13 +60,13 @@ const protocolEngine: AgentEngine = async function* (
   }
 
   if (text.includes("input-required")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState["input-required"],
+        state: A2A.TaskState["input-required"],
         message: {
           messageId: "test-message-id",
           kind: "message",
@@ -72,13 +81,13 @@ const protocolEngine: AgentEngine = async function* (
   }
 
   if (text.includes("working-only")) {
-    const yieldable: TaskStatusUpdateEvent = {
+    const yieldable: A2A.TaskStatusUpdateEvent = {
       taskId: taskId,
       kind: "status-update",
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-working-only",
           kind: "message",
@@ -98,7 +107,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -117,7 +126,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id-multi-part",
           kind: "message",
@@ -146,7 +155,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: false,
       status: {
-        state: TaskState.working,
+        state: A2A.TaskState.working,
         message: {
           messageId: "test-message-id-streaming",
           kind: "message",
@@ -186,7 +195,7 @@ const protocolEngine: AgentEngine = async function* (
       contextId: contextId,
       final: true,
       status: {
-        state: TaskState.completed,
+        state: A2A.TaskState.completed,
         message: {
           messageId: "test-message-id-streaming-completed",
           kind: "message",
@@ -205,7 +214,7 @@ const protocolEngine: AgentEngine = async function* (
     contextId: contextId,
     final: false,
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id-working",
         kind: "message",
@@ -221,7 +230,7 @@ const protocolEngine: AgentEngine = async function* (
     contextId: contextId,
     final: true,
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id-completed",
         kind: "message",
@@ -299,21 +308,19 @@ describe("MCP Agent Tests", () => {
       ],
     });
   });
-  it("should be able to call the sendMessage procedure", async () => {
-    const result = await agent.sendMessage({
-      message: { parts: [{ text: "hello" }] },
-    });
+  it("should be able to call sendMessage Directly", async () => {
+    const result = await agent.sendMessage("hello");
     expect(result).toBeDefined();
-    expect(result.status.state).toEqual(TaskState.completed);
+    expect(result.status.state).toEqual(A2A.TaskState.completed);
   });
   it("should call server transport when calling mcp", async () => {
-    const message: JSONRPCMessage = {
+    const message: MCP.JSONRPCMessage = {
       jsonrpc: "2.0",
       method: "test",
       id: 1,
     };
 
-    let receivedMessage: JSONRPCMessage | undefined;
+    let receivedMessage: MCP.JSONRPCMessage | undefined;
     serverTransport.onmessage = (msg) => {
       receivedMessage = msg;
     };
@@ -327,7 +334,7 @@ describe("MCP Agent Tests", () => {
       name: "A2A Protocol Test Agent",
       version: "1.0.0",
     });
-    let receivedMessage: JSONRPCMessage | undefined;
+    let receivedMessage: MCP.JSONRPCMessage | undefined;
     serverTransport.onmessage = (msg) => {
       receivedMessage = msg;
     };
@@ -354,7 +361,7 @@ describe("MCP Agent Tests", () => {
       },
     });
     expect(result).toBeDefined();
-    expect(result.content[0].text).toEqual("Task not found");
+    expect(result.content[0].text).toContain("Task not found");
   });
   it("should call cancelTask through mcp", async () => {
     const client = new Client({
@@ -370,7 +377,7 @@ describe("MCP Agent Tests", () => {
       },
     });
     expect(result).toBeDefined();
-    expect(result.content[0].text).toEqual("Task not found");
+    expect(result.content[0].text).toContain("Task not found");
   });
   it("should call sendMessage through mcp", async () => {
     const client = new Client({
@@ -379,7 +386,7 @@ describe("MCP Agent Tests", () => {
     });
     await agent.connect(serverTransport);
     await client.connect(clientTransport);
-    const message: MessageSendParams = {
+    const message: A2A.MessageSendParams = {
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -393,6 +400,8 @@ describe("MCP Agent Tests", () => {
     });
     expect(result).toBeDefined();
     expect(result.structuredContent).toBeDefined();
-    expect(result.structuredContent.status.state).toEqual(TaskState.completed);
+    expect(result.structuredContent.status.state).toEqual(
+      A2A.TaskState.completed
+    );
   });
 });

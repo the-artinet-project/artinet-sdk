@@ -9,26 +9,21 @@ import {
 import express from "express";
 import request from "supertest";
 import {
-  MessageSendParams,
-  TaskState,
-  Message,
-  A2AEngine,
+  A2A,
   ExpressAgentServer,
   createAgentServer,
-  Context,
   getParts,
+  AgentEngine,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
-import { configureLogger } from "../src/utils/logging/index.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-configureLogger({ level: "silent" });
-
-const errorProneEngine: A2AEngine = async function* (context: Context) {
-  const params = context.command;
-  const taskId = params.message.taskId ?? "";
-  const contextId = params.message.contextId ?? "";
-  const { text } = getParts(params.message.parts);
+// applyDefaults();
+const errorProneEngine: AgentEngine = async function* (context: A2A.Context) {
+  const message = context.userMessage;
+  const taskId = message.taskId ?? "";
+  const contextId = message.contextId ?? "";
+  const { text } = getParts(message.parts);
 
   // If the message contains "throw", we'll simulate an error
   if (text.includes("throw")) {
@@ -42,13 +37,13 @@ const errorProneEngine: A2AEngine = async function* (context: Context) {
       contextId: contextId,
       kind: "status-update",
       status: {
-        state: TaskState.failed,
+        state: A2A.TaskState.failed,
         message: {
           messageId: "test-message-id",
           kind: "message",
           role: "agent",
           parts: [{ kind: "text", text: "Task failed intentionally." }],
-        } as Message,
+        } as A2A.Message,
       },
       final: true,
     };
@@ -61,7 +56,7 @@ const errorProneEngine: A2AEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.working,
+      state: A2A.TaskState.working,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -77,7 +72,7 @@ const errorProneEngine: A2AEngine = async function* (context: Context) {
     contextId: contextId,
     kind: "status-update",
     status: {
-      state: TaskState.completed,
+      state: A2A.TaskState.completed,
       message: {
         messageId: "test-message-id",
         kind: "message",
@@ -111,12 +106,14 @@ describe("A2AServer Error Handling", () => {
 
   describe("Task Handler Errors", () => {
     it("handles exceptions thrown by task handler", async () => {
-      const requestBody = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "error-request-1",
         method: "message/send",
         params: {
           message: {
+            messageId: "error-message-id",
+            kind: "message",
             taskId: "error-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This will throw an error" }],
@@ -138,18 +135,20 @@ describe("A2AServer Error Handling", () => {
       } else if (response.body.error) {
         // Or it might return an internal error
         expect(response.body.error).toBeDefined();
-        expect(response.body.error.code).toBe(-32603); // Internal error
-        expect(response.body.error.message).toBe("Internal error");
+        expect(response.body.error.code).toBe(A2A.ErrorCodeInternalError); // Internal error
+        expect(response.body.error.message).toBe("Simulated task error");
       }
     });
 
     it("correctly handles task failed state", async () => {
-      const requestBody = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "fail-request-1",
         method: "message/send",
         params: {
           message: {
+            messageId: "fail-message-id",
+            kind: "message",
             taskId: "fail-task-1",
             role: "user",
             parts: [{ kind: "text", text: "This will fail" }],
@@ -173,20 +172,18 @@ describe("A2AServer Error Handling", () => {
   });
 
   describe("Invalid JSON-RPC Request Handling", () => {
-    it.skip("handles invalid JSON in request body", async () => {
+    it("handles invalid JSON in request body", async () => {
       const response = await trackRequest(
         request(app)
           .post("/")
           .set("Content-Type", "application/json")
           .send("this is not valid json")
       );
-
       // The server might return either a 400 Bad Request or 200 with JSON-RPC error
-
-      expect(response.status).toBe(200);
+      expect([400, 200].includes(response.status)).toBe(true);
       expect(response.body.error).toBeDefined();
       expect(response.body.error.code).toBe(-32700); // JSON parse error
-      expect(response.body.error.message).toBe("Invalid JSON payload");
+      expect(response.body.error.message).toContain("Invalid JSON payload");
     });
 
     it("returns error for empty request body", async () => {
@@ -200,9 +197,8 @@ describe("A2AServer Error Handling", () => {
       expect([-32700, -32600].includes(response.body.error.code)).toBe(true);
     });
 
-    it.skip("returns error when request body is not an object", async () => {
+    it("returns error when request body is not an object", async () => {
       const response = await trackRequest(request(app).post("/").send("42"));
-
       // The server might return various status codes for invalid content types
       expect(response.status).toBe(200);
       expect(response.body.error).toBeDefined();
@@ -212,12 +208,14 @@ describe("A2AServer Error Handling", () => {
 
   describe("Content Type Handling", () => {
     it("accepts JSON-RPC requests with application/json content type", async () => {
-      const requestBody = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "content-type-test",
         method: "message/send",
         params: {
           message: {
+            messageId: "content-type-message-id",
+            kind: "message",
             taskId: "content-type-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Testing content type" }],
@@ -238,12 +236,14 @@ describe("A2AServer Error Handling", () => {
     });
 
     it("accepts JSON-RPC requests with application/json; charset=utf-8", async () => {
-      const requestBody = {
+      const requestBody: A2A.SendMessageRequest = {
         jsonrpc: "2.0",
         id: "charset-test",
         method: "message/send",
         params: {
           message: {
+            messageId: "charset-message-id",
+            kind: "message",
             taskId: "charset-task-1",
             role: "user",
             parts: [{ kind: "text", text: "Testing charset" }],

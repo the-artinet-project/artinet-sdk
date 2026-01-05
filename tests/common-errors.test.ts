@@ -10,20 +10,9 @@ import {
   UNSUPPORTED_OPERATION,
   PUSH_NOTIFICATION_NOT_SUPPORTED,
   FAILED_UPDATE,
-  ErrorCodeParseError,
-  ErrorCodeInvalidParams,
-  ErrorCodeInternalError,
-  ErrorCodeInvalidRequest,
-  ErrorCodeMethodNotFound,
-  ErrorCodeTaskNotFound,
-  ErrorCodeTaskNotCancelable,
-  ErrorCodeUnsupportedOperation,
-  ErrorCodePushNotificationNotSupported,
-  configureLogger,
+  A2A,
 } from "../src/index.js";
 import { describe, it, expect } from "@jest/globals";
-
-configureLogger({ level: "silent" });
 
 describe("Error Handling Utilities", () => {
   describe("SystemError", () => {
@@ -49,56 +38,56 @@ describe("Error Handling Utilities", () => {
     it("should create Parse Error", () => {
       const error = PARSE_ERROR("Invalid JSON payload");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeParseError);
+      expect(error.code).toBe(A2A.ErrorCodeParseError);
       expect(error.message).toBe("Invalid JSON payload");
     });
 
     it("should create Invalid Request Error", () => {
       const error = INVALID_REQUEST("Invalid request");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeInvalidRequest);
+      expect(error.code).toBe(A2A.ErrorCodeInvalidRequest);
       expect(error.message).toBe("Request payload validation error");
     });
 
     it("should create Method Not Found Error", () => {
       const error = METHOD_NOT_FOUND("Method not found");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeMethodNotFound);
+      expect(error.code).toBe(A2A.ErrorCodeMethodNotFound);
       expect(error.message).toBe("Method not found");
     });
 
     it("should create Invalid Params Error", () => {
       const error = INVALID_PARAMS("Invalid parameters");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeInvalidParams);
+      expect(error.code).toBe(A2A.ErrorCodeInvalidParams);
       expect(error.message).toBe("Invalid parameters");
     });
 
     it("should create Internal Error", () => {
       const error = INTERNAL_ERROR("Internal error");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeInternalError);
+      expect(error.code).toBe(A2A.ErrorCodeInternalError);
       expect(error.message).toBe("Internal error");
     });
 
     it("should create Task Not Found Error", () => {
       const error = TASK_NOT_FOUND("Task not found");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeTaskNotFound);
+      expect(error.code).toBe(A2A.ErrorCodeTaskNotFound);
       expect(error.message).toBe("Task not found");
     });
 
     it("should create Task Not Cancelable Error", () => {
       const error = TASK_NOT_CANCELABLE("Task cannot be canceled");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeTaskNotCancelable);
+      expect(error.code).toBe(A2A.ErrorCodeTaskNotCancelable);
       expect(error.message).toBe("Task cannot be canceled");
     });
 
     it("should create Unsupported Operation Error", () => {
       const error = UNSUPPORTED_OPERATION("This operation is not supported");
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodeUnsupportedOperation);
+      expect(error.code).toBe(A2A.ErrorCodeUnsupportedOperation);
       expect(error.message).toBe("This operation is not supported");
     });
 
@@ -107,7 +96,7 @@ describe("Error Handling Utilities", () => {
         "Push Notification is not supported"
       );
       expect(error).toBeInstanceOf(SystemError);
-      expect(error.code).toBe(ErrorCodePushNotificationNotSupported);
+      expect(error.code).toBe(A2A.ErrorCodePushNotificationNotSupported);
       expect(error.message).toBe("Push Notifications is not supported");
     });
 
@@ -137,15 +126,18 @@ describe("Error Handling Utilities", () => {
 
   describe("Error Constants", () => {
     it("should have the correct error code values", () => {
-      expect(ErrorCodeParseError).toBe(-32700);
-      expect(ErrorCodeInvalidParams).toBe(-32602);
-      expect(ErrorCodeInternalError).toBe(-32603);
-      expect(ErrorCodeInvalidRequest).toBe(-32600);
-      expect(ErrorCodeMethodNotFound).toBe(-32601);
-      expect(ErrorCodeTaskNotFound).toBe(-32001);
-      expect(ErrorCodeTaskNotCancelable).toBe(-32002);
-      expect(ErrorCodeUnsupportedOperation).toBe(-32004);
-      expect(ErrorCodePushNotificationNotSupported).toBe(-32003);
+      expect(A2A.ErrorCodeParseError).toBe(-32700);
+      expect(A2A.ErrorCodeInvalidParams).toBe(-32602);
+      expect(A2A.ErrorCodeInternalError).toBe(-32603);
+      expect(A2A.ErrorCodeInvalidRequest).toBe(-32600);
+      expect(A2A.ErrorCodeMethodNotFound).toBe(-32601);
+      expect(A2A.ErrorCodeTaskNotFound).toBe(-32001);
+      expect(A2A.ErrorCodeTaskNotCancelable).toBe(-32002);
+      expect(A2A.ErrorCodeUnsupportedOperation).toBe(-32004);
+      expect(A2A.ErrorCodePushNotificationNotSupported).toBe(-32003);
+      expect(A2A.ErrorCodeContentTypeNotSupported).toBe(-32005);
+      expect(A2A.ErrorCodeInvalidAgentResponse).toBe(-32006);
+      expect(A2A.ErrorCodeAuthenticatedExtendedCardNotConfigured).toBe(-32007);
     });
   });
 });
