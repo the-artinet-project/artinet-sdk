@@ -65,7 +65,6 @@ import { A2A } from "@artinet/sdk";
 | ------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `TaskState`               | Enum of task states (submitted, working, completed, etc.)                                            |
 | `TaskStatusUpdateEvent`   | Event fired when task status changes                                                                 |
-| `TaskStatusUpdateEvent`   | Event fired when task status changes                                                                 |
 | `TaskArtifactUpdateEvent` | Event fired when an artifact is produced                                                             |
 | `Update`                  | Union of all update event types (`Message`/`Task`/`TaskStatusUpdateEvent`/`TaskArtifactUpdateEvent`) |
 
@@ -161,12 +160,6 @@ The `AgentMessenger` provides the following methods:
 `cr8` is the core entry point for interacting with the [_`@artinet/sdk`_](https://www.npmjs.com/package/@artinet/sdk).
 
 It provides everything you need to quickly scaffold a robust A2A agent.
-
-### Parameters
-
-| Method | Description                | Output Type |
-| ------ | -------------------------- | ----------- |
-| `text` | Add a text processing step | `TextPart`  |
 
 ### Methods
 
