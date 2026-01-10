@@ -16,6 +16,8 @@ import {
   Client,
   Transport,
   RequestOptions,
+  AgentCardResolver,
+  AgentCardResolverOptions,
 } from "@a2a-js/sdk/client";
 
 class HeaderInterceptor implements CallInterceptor {
@@ -35,11 +37,46 @@ class HeaderInterceptor implements CallInterceptor {
   }
 }
 
+class NestedAgentCardResolver implements AgentCardResolver {
+  private readonly _fetchImpl: typeof fetch;
+
+  constructor(private readonly _options: AgentCardResolverOptions) {
+    this._fetchImpl = _options.fetchImpl ?? fetch;
+  }
+
+  get options(): AgentCardResolverOptions {
+    return this._options;
+  }
+
+  async resolve(baseUrl: string, _path?: string): Promise<A2A.AgentCard> {
+    const path = _path ?? this._options?.path;
+    const agentCard: A2A.AgentCard | undefined = await AgentCardResolver.default
+      .resolve(baseUrl, path)
+      .catch((error) => {
+        logger.error("Failed to fetch agent card", { error });
+        return undefined;
+      });
+    if (agentCard) {
+      return agentCard;
+    }
+    logger.warn("Fetching agent card from", { baseUrl });
+    const response = await this._fetchImpl(
+      baseUrl + (path ?? "/well-known/agent-card.json")
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch Agent Card from ${baseUrl}: ${response.status}`
+      );
+    }
+    return await validateSchema(A2A.AgentCardSchema, await response.json());
+  }
+}
+
 export interface MessengerParams {
   baseUrl: URL | string;
   headers?: Record<string, string>;
   fallbackPath?: string;
-  factory?: ClientFactoryOptions;
+  factory?: Partial<ClientFactoryOptions>;
   config?: ClientConfig;
 }
 /**
@@ -78,7 +115,7 @@ class Messenger
         },
       })
     );
-
+    //RAII
     this.clientPromise = this.reset(this._baseUrl, this._fallbackPath);
   }
 
@@ -321,7 +358,7 @@ class Messenger
       | "streaming"
       | "pushNotifications"
       | "stateTransitionHistory"
-      | "extentions"
+      | "extensions"
   ): Promise<boolean> {
     const card = await this.getAgentCard();
 
@@ -336,7 +373,7 @@ class Messenger
         return !!card.capabilities.pushNotifications;
       case "stateTransitionHistory":
         return !!card.capabilities.stateTransitionHistory;
-      case "extentions":
+      case "extensions":
         return !!card.capabilities.extensions;
       default:
         return false;
@@ -367,11 +404,18 @@ class Messenger
     factory,
     config,
   }: MessengerParams): Promise<Messenger> {
+    const _factory = {
+      ...ClientFactoryOptions.default,
+      cardResolver: new NestedAgentCardResolver({
+        path: "/.well-known/agent-card.json",
+      }),
+      ...factory,
+    };
     const messenger = new Messenger(
       baseUrl,
       headers,
       fallbackPath,
-      factory,
+      _factory,
       config
     );
     const card = await messenger.getAgentCard();
