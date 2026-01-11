@@ -943,13 +943,28 @@ export class AgentFactory<I extends A.bargs = A.empty>
       });
       const messageSendParams: A2A.MessageSendParams =
         describe.messageSendParams(
-          agent_and_message.message ?? context.userMessage
+          agent_and_message.message ?? structuredClone(context.userMessage)
         );
 
       if (args) {
-        messageSendParams.message.parts.unshift(
-          describe.part.data({ ...args })
-        );
+        /**We extract the parts of the first A2A protocol object we encounter in the args */
+        if (args.task || args.message || args.update) {
+          const parts: A2A.Part[] =
+            A2A.MessageSchema.safeParse(args.message).data?.parts ??
+            A2A.TaskSchema.safeParse(args.task).data?.status?.message?.parts ??
+            A2A.TaskStatusUpdateEventSchema.safeParse(args.update).data?.status
+              ?.message?.parts ??
+            A2A.TaskArtifactUpdateEventSchema.safeParse(args.update).data
+              ?.artifact?.parts ??
+            [];
+          parts.forEach((part) => {
+            messageSendParams.message.parts.unshift(part);
+          });
+        } else {
+          messageSendParams.message.parts.unshift(
+            describe.part.data({ ...args })
+          );
+        }
       }
 
       const response: A2A.SendMessageSuccessResult | null =
@@ -967,7 +982,6 @@ export class AgentFactory<I extends A.bargs = A.empty>
       const task: A2A.Task = response
         ? describe.task({
             ...response,
-            state: A2A.TaskState.working,
             taskId: context.taskId,
             contextId: context.contextId,
           })
@@ -977,7 +991,6 @@ export class AgentFactory<I extends A.bargs = A.empty>
             state: A2A.TaskState.working,
             message: describe.message("No response from agent"),
           });
-
       return {
         reply: task,
         args: {
