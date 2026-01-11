@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
-import { createStepEngine, cr8, A2A, describe as des6 } from "../../src/index.js";
+import {
+  createStepEngine,
+  cr8,
+  A2A,
+  describe as des6,
+  extractTextContent,
+} from "../../src/index.js";
 import { MOCK_AGENT_CARD } from "../utils/info.js";
 
 // Helper to create a mock context for testing
@@ -660,6 +666,40 @@ describe("SendMessage Step Tests", () => {
     });
 
     expect(orchestrator.steps).toHaveLength(1);
+  });
+
+  it("should forward previous agent message parts to the next agent", async () => {
+    const orchestrator = cr8("Orchestrator")
+      .text("Starting orchestration")
+      .sendMessage({
+        agent: cr8("TargetAgent").text("response").agent,
+      })
+      .sendMessage({
+        agent: cr8("TargetAgent").text(({ context }) => {
+          expect(context.userMessage.parts).toHaveLength(2);
+          return (
+            context.userMessage.parts[0].text +
+            " " +
+            context.userMessage.parts[1].text +
+            " " +
+            "response-2"
+          );
+        }).agent,
+      })
+      .text(({ context, args }) => {
+        return `Got task state: ${extractTextContent(args?.task)}`;
+      });
+
+    const results: any[] = [];
+    const mockContext = createMockContext();
+
+    for await (const result of orchestrator.engine(mockContext)) {
+      results.push(result);
+    }
+    expect(results.length).toBeGreaterThanOrEqual(5);
+    expect(results[4].status.message?.parts[0].text).toBe(
+      "Got task state: response hello world response-2"
+    );
   });
 });
 
