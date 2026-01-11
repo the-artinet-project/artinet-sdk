@@ -676,6 +676,7 @@ describe("SendMessage Step Tests", () => {
       })
       .sendMessage({
         agent: cr8("TargetAgent").text(({ context }) => {
+          expect(context.userMessage.parts).toHaveLength(2);
           return (
             context.userMessage.parts[0].text +
             " " +
@@ -686,10 +687,6 @@ describe("SendMessage Step Tests", () => {
         }).agent,
       })
       .text(({ context, args }) => {
-        console.log(
-          "args?.task?.status?.message?.parts: ",
-          JSON.stringify(args?.task?.status?.message?.parts, null, 2)
-        );
         return `Got task state: ${extractTextContent(args?.task)}`;
       });
 
@@ -699,7 +696,6 @@ describe("SendMessage Step Tests", () => {
     for await (const result of orchestrator.engine(mockContext)) {
       results.push(result);
     }
-    // console.log(JSON.stringify(results, null, 2));
     expect(results.length).toBeGreaterThanOrEqual(5);
     expect(results[4].status.message?.parts[0].text).toBe(
       "Got task state: response hello world response-2"
