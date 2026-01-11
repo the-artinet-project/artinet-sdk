@@ -3,7 +3,7 @@
 <a href="https://www.npmjs.com/package/@artinet/sdk"><img src="https://img.shields.io/npm/v/@artinet/sdk?color=black" alt="Version"></a>
 <a href="https://www.npmjs.com/package/@artinet/sdk"><img src="https://img.shields.io/npm/dt/@artinet/sdk?color=black" alt="Downloads"></a>
 <a><img src="https://img.shields.io/badge/License-Apache_2.0-black.svg" alt="License"></a>
-<a href="https://reddit.com/r/artinet"><img src="https://img.shields.io/reddit/subreddit-subscribers/theartinet?label=reddit&style=flat&color=black" alt="Subreddit"></a>
+<a href="https://reddit.com/r/theartinet"><img src="https://img.shields.io/reddit/subreddit-subscribers/theartinet?label=reddit&style=flat&color=black" alt="Subreddit"></a>
 <a><img src="https://img.shields.io/github/stars/the-artinet-project/artinet-sdk?style=social&color=black" alt="Github"></a>
 <a href="https://snyk.io/test/npm/@artinet/sdk"><img src="https://snyk.io/test/npm/@artinet/sdk/badge.svg" alt="Known Vulnerabilities"></a>
 </p>

@@ -14,9 +14,10 @@ import { getReferences } from "./helpers/references.js";
 import { logger } from "~/config/index.js";
 
 const taskToMessageParams = (task: A2A.Task) => {
-  const latestUserMessage: A2A.Message | undefined = task.history
-    ?.filter((msg) => msg.role === "user")
-    ?.pop();
+  const latestUserMessage: A2A.Message | undefined =
+    task.history?.filter((msg) => msg.role === "user")?.pop() ??
+    /**fallback to the first message if no user message is found */
+    task.history?.[0];
 
   if (!latestUserMessage) {
     throw INVALID_REQUEST("No user message found");

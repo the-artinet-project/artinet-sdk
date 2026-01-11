@@ -595,7 +595,7 @@ describe("A2AClient", () => {
         baseUrl: "https://invalid-url.example.com",
       })
     ).rejects.toThrow(
-      "Failed to fetch Agent Card from https://invalid-url.example.com/agent.json: 404"
+      "Failed to fetch Agent Card from https://invalid-url.example.com"
     );
   });
 

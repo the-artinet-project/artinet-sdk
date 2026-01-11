@@ -7,6 +7,9 @@ import { validateSchema } from "./schema-validation.js";
 import { logger } from "~/config/index.js";
 
 export function safeParse<T = any>(json: string): T {
+  if (!json || json === "{}" || json === "[]" || json === "") {
+    return {} as T;
+  }
   try {
     return JSON.parse(json);
   } catch (error) {

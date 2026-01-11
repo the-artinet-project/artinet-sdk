@@ -267,6 +267,11 @@ function _buildUpdate(
   params: BuildStatusParams,
   final?: boolean
 ): A2A.TaskStatusUpdateEvent {
+  if (params.message) {
+    params.message.contextId = params.contextId;
+    params.message.taskId = params.taskId;
+  }
+
   return strict_update({
     taskId: params.taskId,
     contextId: params.contextId,
