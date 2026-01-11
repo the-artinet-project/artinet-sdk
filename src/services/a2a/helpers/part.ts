@@ -27,7 +27,11 @@ export const getParts = (
   const fileParts = parts.filter((part) => part.kind === "file");
   const dataParts = parts.filter((part) => part.kind === "data");
   return {
-    text: textParts.map((part) => (part as A2A.TextPart).text).join(" "),
+    text: textParts
+      .map((part) => (part as A2A.TextPart).text)
+      .filter((text) => text !== undefined && text !== null && text !== "")
+      .join(" ")
+      .trim(),
     file: fileParts.map((part) => (part as A2A.FilePart).file),
     data: dataParts.map((part) => (part as A2A.DataPart).data),
   };
