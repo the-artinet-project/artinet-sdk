@@ -95,7 +95,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-artinet-project/artinet"
+    "url": "https://github.com/the-artinet-project/artinet-sdk.git"
   },
   "bugs": {
     "url": "https://github.com/the-artinet-project/artinet/issues"
