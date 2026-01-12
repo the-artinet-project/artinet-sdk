@@ -949,14 +949,28 @@ export class AgentFactory<I extends A.bargs = A.empty>
       if (args) {
         /**We extract the parts of the first A2A protocol object we encounter in the args */
         if (args.task || args.message || args.update) {
-          const parts: A2A.Part[] =
-            A2A.MessageSchema.safeParse(args.message).data?.parts ??
-            A2A.TaskSchema.safeParse(args.task).data?.status?.message?.parts ??
-            A2A.TaskStatusUpdateEventSchema.safeParse(args.update).data?.status
-              ?.message?.parts ??
-            A2A.TaskArtifactUpdateEventSchema.safeParse(args.update).data
-              ?.artifact?.parts ??
-            [];
+          const parts: A2A.Part[] = [];
+          if (args.message) {
+            parts.push(
+              ...(A2A.MessageSchema.safeParse(args.message).data?.parts ?? [])
+            );
+          }
+          if (args.task) {
+            parts.push(
+              ...(A2A.TaskSchema.safeParse(args.task).data?.status?.message
+                ?.parts ?? [])
+            );
+          }
+          if (args.update) {
+            parts.push(
+              ...(A2A.TaskStatusUpdateEventSchema.safeParse(args.update).data
+                ?.status?.message?.parts ?? [])
+            );
+            parts.push(
+              ...(A2A.TaskArtifactUpdateEventSchema.safeParse(args.update).data
+                ?.artifact?.parts ?? [])
+            );
+          }
           parts.forEach((part) => {
             messageSendParams.message.parts.unshift(part);
           });
