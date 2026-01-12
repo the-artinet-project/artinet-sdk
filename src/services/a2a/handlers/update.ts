@@ -56,7 +56,7 @@ export const handleTaskUpdate: Updater<A2A.Task> = async ({
   task,
   update,
 }: UpdateParams<A2A.Task>) => {
-  const validated = await validateSchema(A2A.TaskSchema, update);
+  const validated: A2A.Task = await validateSchema(A2A.TaskSchema, update);
 
   if (task.id !== validated.id) {
     throw new Error(
@@ -66,12 +66,16 @@ export const handleTaskUpdate: Updater<A2A.Task> = async ({
       }
     );
   }
-
+  //TODO: Enforce State Transitions
+  if (validated.status?.message) {
+    updateHistory(task, validated.status.message);
+  }
   task = { ...task, ...validated };
 
   if (context.userMessage) {
     updateHistory(task, context.userMessage);
   }
+
   return task;
 };
 
