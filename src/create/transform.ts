@@ -163,7 +163,7 @@ export function Task(): Builder.Transform<Builder.Stateless<TaskParams>> {
       throw new Error("Array of tasks is not supported");
     }
     const task = typeof payload === "string" ? describe.task(payload) : payload;
-    yield describe.task({ ...task, taskId, contextId });
+    yield describe.task({ ...task, id: taskId, contextId });
     return;
   };
 }
