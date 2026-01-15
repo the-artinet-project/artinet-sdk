@@ -45,7 +45,7 @@ There are several ways to handle incoming/outgoing messages:
 ```typescript
 import { cr8, A2A, describe } from "@artinet/sdk";
 
-const agent = cr8("Message Agent")from(async function* (context: A2A.Context) {
+const agent = cr8("Message Agent").from(async function* (context: A2A.Context) {
   // Handle message streams directly within an agent
   for await (const message of context.messages) {
     console.log("new message received: ", message);
