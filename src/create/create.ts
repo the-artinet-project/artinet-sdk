@@ -1196,6 +1196,7 @@ export function createStepEngine(stepsList: A.Resolved[]): A2A.Engine {
         task.id
       }]: ${formatJson(task)}`
     );
+    task.status.state = A2A.TaskState.completed;
     yield task;
   };
 }
