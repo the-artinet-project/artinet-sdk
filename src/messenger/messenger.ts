@@ -19,6 +19,8 @@ import {
   AgentCardResolver,
   AgentCardResolverOptions,
 } from "@a2a-js/sdk/client";
+import { Runtime } from "@artinet/types";
+import { z } from "zod/v4";
 
 class HeaderInterceptor implements CallInterceptor {
   constructor(private _getCustomHeaders: () => Record<string, string>) {}
@@ -72,13 +74,32 @@ class NestedAgentCardResolver implements AgentCardResolver {
   }
 }
 
-export interface MessengerParams {
+export const MessengerParamsSchema = Runtime.ServerConfigSchema.pick({
+  headers: true,
+  authToken: true,
+}).extend({
+  baseUrl: z.url(),
+  fallbackPath: z.string().optional(),
+});
+type BaseMessengerParams = z.infer<typeof MessengerParamsSchema>;
+
+/**
+ * Checks if the given parameters are a valid MessengerParams object.
+ * @param params The parameters to check.
+ * @returns True if the parameters are a valid MessengerParams object, false otherwise.
+ */
+export const isMessengerParams = (
+  params: unknown
+): params is MessengerParams => {
+  return MessengerParamsSchema.safeParse(params).success;
+};
+
+export interface MessengerParams extends Omit<BaseMessengerParams, "baseUrl"> {
   baseUrl: URL | string;
-  headers?: Record<string, string>;
-  fallbackPath?: string;
   factory?: Partial<ClientFactoryOptions>;
   config?: ClientConfig;
 }
+
 /**
  * Messenger is the main communication client for interacting with remote A2A-compatible services.
  * It provides methods for sending messages, retrieving tasks, canceling operations, and handling streaming responses.
