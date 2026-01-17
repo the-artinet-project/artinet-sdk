@@ -110,18 +110,18 @@
     "zod": "^3.25"
   },
   "peerDependencies": {
-    "express": "^5.1.0",
     "@a2a-js/sdk": "^0.3.7",
     "@modelcontextprotocol/sdk": "^1.24.3",
     "@trpc/server": "^11.4.3",
-    "drizzle-orm": "^0.45.1"
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.1.0"
   },
   "peerDependenciesMeta": {
     "express": {
-      "optional": false
+      "optional": true
     },
     "@modelcontextprotocol/sdk": {
-      "optional": false
+      "optional": true
     },
     "@a2a-js/sdk": {
       "optional": false
@@ -140,8 +140,6 @@
     }
   },
   "devDependencies": {
-    "better-sqlite3": "^12.5.0",
-    "drizzle-orm": "^0.45.1",
     "@a2a-js/sdk": "^0.3.7",
     "@cfworker/json-schema": "^4.1.1",
     "@eslint/js": "^9.25.1",
@@ -154,24 +152,26 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^25.0.3",
     "@types/supertest": "latest",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
     "eslint": "^9.25.1",
-    "globals": "^16.0.0",
+    "globals": "^17.0.0",
     "jest": "^30.2.0",
     "msw": "^2.7.5",
+    "nock": "^15.0.0",
     "pino": "^10.1.0",
     "pino-caller": "^4.0.0",
     "pino-pretty": "^13.1.3",
     "rimraf": "^6.1.2",
     "supertest": "latest",
-    "ts-jest": "^29.3.2",
-    "ts-node": "^10.9.1",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
     "ts-patch": "^3.3.0",
-    "tsx": "^4.20.4",
-    "typescript": "^5.2.2",
-    "typescript-eslint": "^8.31.0",
-    "typescript-transform-paths": "^3.5.5",
-    "winston": "^3.19.0",
-    "nock": "^14.0.10"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.0",
+    "typescript-transform-paths": "^3.5.6",
+    "winston": "^3.19.0"
   },
   "engines": {
     "node": ">=18.9.1"
