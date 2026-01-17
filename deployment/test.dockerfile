@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /test
 
 # Copy package tarball
-COPY ../artinet-sdk-*.tgz  /tmp/sdk.tgz
+COPY artinet-sdk-*.tgz /tmp/sdk.tgz
 
 # Create test project
 RUN npm init -y && \
