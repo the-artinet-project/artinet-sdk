@@ -453,6 +453,26 @@ describe("Agent Builder Tests", () => {
       expect(results[4].status).toBeDefined();
     });
 
+    it("should mark final task as completed when using cr8", async () => {
+      const agent = cr8("TestAgent").text("hello there");
+      const results: any[] = [];
+      const mockContext = createMockContext({
+        getTask: async () =>
+          ({
+            id: "test-task-id",
+            contextId: "test-context-id",
+            status: { state: "working" },
+          } as any),
+      });
+
+      for await (const result of agent.engine(mockContext)) {
+        results.push(result);
+      }
+
+      const finalResult = results[results.length - 1];
+      expect(finalResult.status.state).toBe(A2A.TaskState.completed);
+    });
+
     it("should run with multiple kinds of steps", async () => {
       const agent = cr8("TestAgent")
         .text(({ message }) => {
