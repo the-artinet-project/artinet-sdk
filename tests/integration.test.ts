@@ -1,12 +1,15 @@
 import {
   jest,
   describe,
+  beforeAll,
   beforeEach,
+  afterAll,
   afterEach,
   test,
   expect,
 } from "@jest/globals";
 import express from "express";
+import nock from "nock";
 import {
   AgentMessenger,
   A2A,
@@ -131,6 +134,11 @@ describe("Client-Server Integration Tests", () => {
   let port: number;
   let client: AgentMessenger;
 
+  beforeAll(() => {
+    nock.restore();
+    nock.enableNetConnect();
+  });
+
   beforeEach(async () => {
     // Get an available port by listening on 0, then close and reuse
     const tempApp = express();
@@ -172,6 +180,14 @@ describe("Client-Server Integration Tests", () => {
       expressServer.close(() => {
         resolve();
       });
+    });
+  });
+
+  afterAll(() => {
+    nock.activate();
+    nock.disableNetConnect();
+    nock.enableNetConnect((host) => {
+      return host.includes("localhost") || host.includes("127.0.0.1");
     });
   });
 
