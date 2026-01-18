@@ -40,19 +40,6 @@ npx @artinet/create-agent@latest
 
 It has [several template projects](https://github.com/the-artinet-project/artinet/tree/main/create-agent) to jump right into agent building.
 
-**Or use [`easy-a2a`](https://github.com/the-artinet-project/artinet/tree/main/easy):**
-
-```typescript
-const agent = a2a({
-  baseURL: "https://your-api.com/api/v1",
-  apiKey: "your-api-key",
-})
-  .ai("You are a helpful assistant.")
-  .createAgent({
-    agentCard: "MyAgent",
-  });
-```
-
 ```bash
 npm install easy-a2a
 ```
