@@ -17,9 +17,11 @@ import {
   ExpressAgentServer,
   createAgentServer,
   AgentEngine,
+  applyDefaults,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configure } from "../src/config/index.js";
+applyDefaults();
 // import { configurePino } from "../src/extensions/pino.js";
 // import pino from "pino";
 // import pinoCaller from "pino-caller";

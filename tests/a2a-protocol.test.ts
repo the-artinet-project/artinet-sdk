@@ -23,7 +23,7 @@ import { configure } from "../src/config/index.js";
 // });
 // import { A2AError } from "@a2a-js/sdk/server";
 // With options
-// applyDefaults();
+applyDefaults();
 jest.setTimeout(10000);
 
 // Define a comprehensive task handler for A2A protocol testing

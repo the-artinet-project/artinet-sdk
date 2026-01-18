@@ -14,6 +14,8 @@ import { createAgentServer } from "../../src/index.js";
 import { TestAgentLogic as engine } from "../utils/engine.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 import { createA2ARouter } from "../../src/transport/trpc/index.js";
+import { applyDefaults } from "../../src/config/default.js";
+applyDefaults();
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 const agentRouter = createA2ARouter();

@@ -21,6 +21,7 @@ import {
   getParts,
 } from "../src/index.js";
 import { configure, logger } from "../src/config/index.js";
+import { applyDefaults } from "../src/config/default.js";
 // import { configurePino } from "../src/extensions/pino.js";
 // import pino from "pino";
 // import pinoCaller from "pino-caller";
@@ -39,7 +40,7 @@ import { configure, logger } from "../src/config/index.js";
 // });
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-
+applyDefaults();
 // Create a specialized task handler for more coverage testing
 const serverImplTestHandler: AgentEngine = async function* (
   context: A2A.Context

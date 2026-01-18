@@ -16,9 +16,10 @@ import {
   AgentEngine,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
+import { applyDefaults } from "../src/config/default.js";
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-// applyDefaults();
+applyDefaults();
 const errorProneEngine: AgentEngine = async function* (context: A2A.Context) {
   const message = context.userMessage;
   const taskId = message.taskId ?? "";
