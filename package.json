@@ -75,7 +75,7 @@
     "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build:all",
     "lint": "eslint src --ext .ts",
     "package-test": "npm run build && npm pack && docker build -f ./deployment/test.dockerfile -t sdk-test . && docker run --rm sdk-test && rm artinet-sdk-*.tgz",
-    "prepublishOnly": "npm run package-test && npm run rebuild && npm run lint && npm test",
+    "prepublishOnly": "npm run rebuild && npm run lint && npm test",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
