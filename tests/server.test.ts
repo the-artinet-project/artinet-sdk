@@ -21,23 +21,13 @@ import {
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
 import { configure } from "../src/config/index.js";
-applyDefaults();
-// import { configurePino } from "../src/extensions/pino.js";
-// import pino from "pino";
-// import pinoCaller from "pino-caller";
-// configure({
-//   logger: configurePino(
-//     pinoCaller(
-//       pino({
-//         level: "info",
-//         transport: {
-//           target: "pino-pretty",
-//           options: { colorize: true },
-//         },
-//       })
-//     )
-//   ),
-// });
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({ logger: configurePino(pinoCaller(pino({ level: "warn",  transport: {
+  target: "pino-pretty",
+  options: { colorize: true },
+}, }),)) });
 jest.setTimeout(10000);
 // Define test task handler
 const basicTaskHandler: AgentEngine = async function* (context: A2A.Context) {

@@ -21,26 +21,14 @@ import {
   getParts,
 } from "../src/index.js";
 import { configure, logger } from "../src/config/index.js";
-import { applyDefaults } from "../src/config/default.js";
-// import { configurePino } from "../src/extensions/pino.js";
-// import pino from "pino";
-// import pinoCaller from "pino-caller";
-// configure({
-//   logger: configurePino(
-//     pinoCaller(
-//       pino({
-//         level: "info",
-//         transport: {
-//           target: "pino-pretty",
-//           options: { colorize: true },
-//         },
-//       })
-//     )
-//   ),
-// });
-// Set a reasonable timeout for all tests
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({ logger: configurePino(pinoCaller(pino({ level: "warn",  transport: {
+  target: "pino-pretty",
+  options: { colorize: true },
+}, }),)) });
 jest.setTimeout(10000);
-applyDefaults();
 // Create a specialized task handler for more coverage testing
 const serverImplTestHandler: AgentEngine = async function* (
   context: A2A.Context

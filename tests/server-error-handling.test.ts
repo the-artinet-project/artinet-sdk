@@ -16,10 +16,16 @@ import {
   AgentEngine,
 } from "../src/index.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "./utils/info.js";
-import { applyDefaults } from "../src/config/default.js";
+import { configure } from "../src/config/index.js";
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({ logger: configurePino(pinoCaller(pino({ level: "warn",  transport: {
+  target: "pino-pretty",
+  options: { colorize: true },
+}, }),)) });
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
-applyDefaults();
 const errorProneEngine: AgentEngine = async function* (context: A2A.Context) {
   const message = context.userMessage;
   const taskId = message.taskId ?? "";

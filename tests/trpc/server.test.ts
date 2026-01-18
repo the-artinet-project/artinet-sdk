@@ -14,8 +14,16 @@ import { createAgentServer } from "../../src/index.js";
 import { TestAgentLogic as engine } from "../utils/engine.js";
 import { MOCK_AGENT_CARD as defaultAgentCard } from "../utils/info.js";
 import { createA2ARouter } from "../../src/transport/trpc/index.js";
-import { applyDefaults } from "../../src/config/default.js";
-applyDefaults();
+
+import { configure } from "../../src/config/index.js";
+import { configurePino } from "../../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({ logger: configurePino(pinoCaller(pino({ level: "warn",  transport: {
+  target: "pino-pretty",
+  options: { colorize: true },
+}, }),)) });
+
 // Set a reasonable timeout for all tests
 jest.setTimeout(10000);
 const agentRouter = createA2ARouter();

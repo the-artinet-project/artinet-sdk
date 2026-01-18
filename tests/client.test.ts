@@ -15,13 +15,18 @@ import {
   A2AClient,
   A2A,
   createMessenger,
-  AgentMessenger,
-  applyDefaults,
 } from "../src/index.js";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
-applyDefaults();
+import { configure } from "../src/config/index.js";
+import { configurePino } from "../src/extensions/pino.js";
+import pino from "pino";
+import pinoCaller from "pino-caller";
+configure({ logger: configurePino(pinoCaller(pino({ level: "warn",  transport: {
+  target: "pino-pretty",
+  options: { colorize: true },
+}, }),)) });
 
 const MOCK_AGENT_CARD: A2A.AgentCard = {
   protocolVersion: "0.3.0",
@@ -131,6 +136,7 @@ const server = setupServer(
 
   // Mock message/send endpoint
   http.post("https://test-agent.example.com/api", async ({ request }) => {
+    console.log(">>> DEFAULT HANDLER HIT");
     const body = (await request.json()) as {
       method: string;
       id: string | number;
@@ -329,7 +335,7 @@ describe("A2AClient", () => {
         });
       })
     );
-    await expect(messenger.reset(undefined, "agent-card")).rejects.toThrow();
+    await expect(messenger.reset(undefined, "/agent-card")).rejects.toThrow();
     await server.resetHandlers();
   });
 
@@ -469,8 +475,9 @@ describe("A2AClient", () => {
 
   // Test error handling - invalid JSON response
   test("should handle invalid JSON response", async () => {
-    server.use(
+    server.use (
       http.post("https://test-agent.example.com/api", () => {
+        console.log(">>> OVERRIDE HANDLER HIT");
         return new HttpResponse("This is not JSON", {
           headers: { "Content-Type": "text/plain" },
         });
@@ -484,6 +491,7 @@ describe("A2AClient", () => {
   test("should handle invalid JSON-RPC structure", async () => {
     server.use(
       http.post("https://test-agent.example.com/api", () => {
+        console.log(">>> OVERRIDE HANDLER HIT");
         return HttpResponse.json({ not: "valid-jsonrpc" });
       })
     );
@@ -602,7 +610,7 @@ describe("A2AClient", () => {
   // Test error handling
   test("should handle JSON-RPC errors", async () => {
     server.use(
-      http.post("https://test-agent.example.com", () => {
+      http.post("https://test-agent.example.com/api", () => {
         return HttpResponse.json({
           jsonrpc: "2.0",
           id: "123",
@@ -615,7 +623,7 @@ describe("A2AClient", () => {
     );
 
     await expect(messenger.getTask({ id: "nonexistent-task" })).rejects
-      .toThrowError;
+      .toThrow();
   });
 
   // Test capability check
