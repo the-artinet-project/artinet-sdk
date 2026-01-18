@@ -1,6 +1,5 @@
 export default {
   errorOnDeprecated: false,
-  silent: true,
   forceExit: true,
   testEnvironment: "node",
   preset: "ts-jest",
