@@ -136,7 +136,7 @@ describe("Client-Server Integration Tests", () => {
 
   beforeAll(() => {
     nock.restore();
-    nock.enableNetConnect();
+    nock.cleanAll();
   });
 
   beforeEach(async () => {
@@ -185,10 +185,6 @@ describe("Client-Server Integration Tests", () => {
 
   afterAll(() => {
     nock.activate();
-    nock.disableNetConnect();
-    nock.enableNetConnect((host) => {
-      return host.includes("localhost") || host.includes("127.0.0.1");
-    });
   });
 
   test("client can retrieve agent card", async () => {
