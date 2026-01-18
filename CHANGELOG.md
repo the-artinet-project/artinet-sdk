@@ -1,3 +1,7 @@
+## 0.6.5 (2026-01-18)
+
+This was a version bump only for @artinet/sdk to align it with other projects, there were no code changes.
+
 # Changelog
 
 All notable changes to the `@artinet/sdk` package will be documented in this file.
