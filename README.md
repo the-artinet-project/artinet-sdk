@@ -40,10 +40,6 @@ npx @artinet/create-agent@latest
 
 It has [several template projects](https://github.com/the-artinet-project/artinet/tree/main/create-agent) to jump right into agent building.
 
-```bash
-npm install easy-a2a
-```
-
 ## Examples
 
 **Create an A2A Server**
