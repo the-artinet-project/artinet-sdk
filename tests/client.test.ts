@@ -136,7 +136,6 @@ const server = setupServer(
 
   // Mock message/send endpoint
   http.post("https://test-agent.example.com/api", async ({ request }) => {
-    console.log(">>> DEFAULT HANDLER HIT");
     const body = (await request.json()) as {
       method: string;
       id: string | number;
@@ -477,7 +476,6 @@ describe("A2AClient", () => {
   test("should handle invalid JSON response", async () => {
     server.use (
       http.post("https://test-agent.example.com/api", () => {
-        console.log(">>> OVERRIDE HANDLER HIT");
         return new HttpResponse("This is not JSON", {
           headers: { "Content-Type": "text/plain" },
         });
@@ -491,7 +489,6 @@ describe("A2AClient", () => {
   test("should handle invalid JSON-RPC structure", async () => {
     server.use(
       http.post("https://test-agent.example.com/api", () => {
-        console.log(">>> OVERRIDE HANDLER HIT");
         return HttpResponse.json({ not: "valid-jsonrpc" });
       })
     );

@@ -76,7 +76,7 @@
     "lint": "eslint src --ext .ts",
     "package-test": "npm run build && npm pack && docker build -f ./deployment/test.dockerfile -t sdk-test . && docker run --rm sdk-test && rm artinet-sdk-*.tgz",
     "prepublishOnly": "npm run rebuild && npm run lint && npm test",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --testPathIgnorePatterns=integration.test.ts && NODE_OPTIONS=--experimental-vm-modules jest --runInBand --runTestsByPath tests/integration.test.ts",
+    "test":"NODE_OPTIONS=--experimental-vm-modules jest --testPathIgnorePatterns='integration.test.ts|client.test.ts' && NODE_OPTIONS=--experimental-vm-modules jest --runInBand --runTestsByPath tests/integration.test.ts tests/client.test.ts",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "dev:quickstart": "tsx watch quickstart/quick-server.ts"
