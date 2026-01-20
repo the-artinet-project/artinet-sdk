@@ -122,3 +122,41 @@ cr8("Custom Server")
   })
   .start(3000);
 ```
+
+## Serverless Deployment
+
+Deploy your agents to serverless environments like AWS Lambda using the `createServerlessHandler` factory.
+
+### Required
+
+```bash
+npm install serverless-http
+```
+
+### Basic Usage
+
+```typescript
+import { Handler } from "aws-lambda";
+import { cr8 } from "@artinet/sdk";
+import { createServerlessHandler } from "@artinet/sdk/serverless";
+
+const agent = cr8("Serverless Agent")
+  .text(({ content }) => `You said: ${content}`)
+  .agent;
+
+export const handler: Handler = createServerlessHandler(
+  { agent, basePath: "/a2a" },
+  { provider: "aws" }
+);
+```
+
+> Streaming capabilities are not supported in serverless-http handlers.
+
+### Supported Providers
+
+The serverless handler supports multiple cloud providers via [serverless-http](https://github.com/dougmoscrop/serverless-http):
+
+| Provider         | Value       |
+| ---------------- | ----------- |
+| AWS Lambda       | `"aws"`     |
+| Azure Functions  | `"azure"`   |
