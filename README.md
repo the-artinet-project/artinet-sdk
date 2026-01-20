@@ -59,6 +59,23 @@ cr8("QuickStart Agent")
 
 > 🚧 Coming Soon: Support for Hono.
 
+**Serverless Deployment**
+
+Deploy your agent to AWS Lambda or other serverless platforms:
+
+```typescript
+import { Handler } from "aws-lambda";
+import { createServerlessHandler } from "@artinet/sdk/serverless";
+import { agent } from "./my-agent.js";
+
+export const handler: Handler = createServerlessHandler(
+  { agent, basePath: "/a2a" },
+  { provider: "aws" }
+);
+```
+
+- _See [**Serverless Deployment**](./docs/customization.md#serverless-deployment) for more information._
+
 **No Servers Needed**
 
 Embed agents directly into your app:
@@ -126,7 +143,7 @@ const orchestrator = cr8("Director")
 | [**Messenger**](docs/messenger.md)         | `Messenger` methods, streaming, browser support       |
 | [**Storage**](docs/storage.md)             | `FileStore`, `SQLiteStore`, custom storage backends   |
 | [**Configuration**](docs/configuration.md) | Logging (Pino, Winston) and OpenTelemetry setup       |
-| [**Customization**](docs/customization.md) | `native`, tRPC, and `AgentEngine`s                    |
+| [**Customization**](docs/customization.md) | `native`, tRPC, `AgentEngine`s, and serverless        |
 | [**MCP Integration**](docs/mcp.md)         | Model Context Protocol compatibility                  |
 | [**Migration Guide**](docs/migration.md)   | Upgrading from v0.5.x to v0.6.0                       |
 
