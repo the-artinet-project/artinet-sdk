@@ -1,5 +1,9 @@
+/**
+ * Copyright 2025 The Artinet Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import serverless from "serverless-http";
-import { ServerParams, serve } from "../server.js";
+import { ServerParams, serve as serveExpress } from "../server.js";
 import { logger } from "~/config/index.js";
 
 /**
@@ -12,9 +16,9 @@ import { logger } from "~/config/index.js";
  * @example
  * ```typescript
  * import { Handler } from "aws-lambda";
- * import { createServerlessHandler } from "@a2a-js/sdk/serverless";
+ * import { serve } from "@a2a-js/sdk/serverless";
  * 
- * const handler: Handler = createServerlessHandler({
+ * const handler: Handler = serve({
  *   agent: cr8("MyAgent")
  *     .text("Hello, world!")
  *     .agent,
@@ -23,13 +27,18 @@ import { logger } from "~/config/index.js";
  * ```
  * @returns - {@link serverless.Handler}
  */
-export function createServerlessHandler(params: ServerParams, options: serverless.Options): serverless.Handler {
-    if(typeof params.agent.agentCard !== "string" && params.agent.agentCard.capabilities?.streaming) {
+export function serve(params: ServerParams, options: serverless.Options): serverless.Handler {
+    if(typeof params.agent.agentCard !== "string" && params.agent.agentCard.capabilities?.streaming === true) {
         logger.warn("Streaming capabilities are not supported in serverless handlers");
     }
-    const { app } = serve(params);
+    const { app } = serveExpress(params);
     return serverless(app, {
         ...options,
         provider: options.provider ?? "aws",
     });
 }
+
+/**
+ * @deprecated Use `serve` instead.
+ */
+export const createServerlessHandler = serve;
