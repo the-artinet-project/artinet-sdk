@@ -40,7 +40,7 @@ export type Engine = (
 export interface BaseContext extends core.Context<Task> {
   readonly service: Service;
   /**
-   * Considering ommit OnStart & OnComplete from Context consumers.
+   * Considering omitting OnStart & OnComplete from Context consumers.
    * That way the user cannot inadvertently trigger a start/completion out of band.
    */
   readonly publisher: EventPublisher;
