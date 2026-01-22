@@ -5,7 +5,7 @@
 
 import { A2A } from "~/types/index.js";
 import { Tasks } from "~/services/a2a/managers.js";
-import { eq, like, or } from "drizzle-orm";
+import { eq, like, or, /*Table, TableConfig*/ } from "drizzle-orm";
 import { BaseSQLiteDatabase, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { logger } from "~/config/index.js";
 
@@ -22,6 +22,9 @@ export const createTaskTable = async (
 ): Promise<void> => {
   await db.run(CREATE_TASKS_TABLE_SQL);
 };
+
+/*export type TTable = Table<TableConfig>; //TODO: Unwind Config/Column types */
+
 export const TaskTable = sqliteTable(TABLE_NAME, {
   id: text().primaryKey(),
   contextId: text().notNull(),
