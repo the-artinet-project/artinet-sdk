@@ -1,8 +1,8 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import lambdaLocal from "lambda-local";
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
+import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context, Handler } from "aws-lambda";
 import { cr8, A2A } from "../../src/index.js";
-import { createServerlessHandler } from "../../src/server/express/serverless/serverless.js";
+import { serve } from "../../src/server/express/serverless/index.js";
 import { configure } from "../../src/config/index.js";
 import { configurePino } from "../../src/extensions/pino.js";
 import pino from "pino";
@@ -94,7 +94,7 @@ describe("createServerlessHandler", () => {
     capabilities: { streaming: false },
   }).text(({ content }) => `Echo: ${content}`).agent;
 
-  const handler = createServerlessHandler(
+  const handler: Handler = serve(
     { agent, basePath: "/a2a" },
     { provider: "aws"}
   );
@@ -104,7 +104,7 @@ describe("createServerlessHandler", () => {
       const event = createMockEvent("GET", "/a2a/.well-known/agent.json");
       const context = createMockContext();
       const result = (await lambdaLocal.execute({
-        lambdaFunc: { handler: () => handler(event, context) },
+        lambdaFunc: { handler: () => handler(event, context, () => {}) },
         lambdaHandler: "handler",
         event: {},
         timeoutMs: 10000,
@@ -139,7 +139,7 @@ describe("createServerlessHandler", () => {
       const context = createMockContext();
 
       const result = (await lambdaLocal.execute({
-        lambdaFunc: { handler: () => handler(event, context)},
+        lambdaFunc: { handler: () => handler(event, context, () => {})},
         lambdaHandler: "handler",
         event: {},
         timeoutMs: 10000,
