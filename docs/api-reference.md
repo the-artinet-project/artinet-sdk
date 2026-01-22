@@ -135,7 +135,7 @@ const submitted: : A2A.TaskStatusUpdateEvent = describe.update.submitted({
 | Export                    | Description                            | Import                                                        |
 | ------------------------- | -------------------------------------- | ------------------------------------------------------------- |
 | [`createAgentRouter`](customization.md#using-custom-transport-layers)       | Creates a tRPC router for the agent    | `import { createAgentRouter } from "@artinet/sdk/trpc"`            |
-| [`createServerlessHandler`](customization.md#serverless-deployment) | Creates a serverless handler for the agent | `import { createServerlessHandler } from "@artinet/sdk/serverless"` |
+| [`serve`](customization.md#serverless-deployment) | Creates a serverless handler for the agent | `import { serve } from "@artinet/sdk/serverless"` |
 
 > 🚧 Coming Soon: Support for Hono Servers.
 

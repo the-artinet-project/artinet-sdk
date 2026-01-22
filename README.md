@@ -59,16 +59,16 @@ cr8("QuickStart Agent")
 
 > 🚧 Coming Soon: Support for Hono.
 
-**Serverless Deployment**
+**Or a Serverless Function**
 
 Deploy your agent to AWS Lambda or other serverless platforms:
 
 ```typescript
 import { Handler } from "aws-lambda";
-import { createServerlessHandler } from "@artinet/sdk/serverless";
+import { serve } from "@artinet/sdk/serverless";
 import { agent } from "./my-agent.js";
 
-export const handler: Handler = createServerlessHandler(
+export const handler: Handler = serve(
   { agent, basePath: "/a2a" },
   { provider: "aws" }
 );

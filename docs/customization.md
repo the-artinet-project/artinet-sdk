@@ -125,7 +125,7 @@ cr8("Custom Server")
 
 ## Serverless Deployment
 
-Deploy your agents to serverless environments like AWS Lambda using the `createServerlessHandler` factory.
+Deploy your agents to serverless environments like AWS Lambda using the `serve` factory.
 
 ### Required
 
@@ -138,13 +138,13 @@ npm install serverless-http
 ```typescript
 import { Handler } from "aws-lambda";
 import { cr8 } from "@artinet/sdk";
-import { createServerlessHandler } from "@artinet/sdk/serverless";
+import { serve } from "@artinet/sdk/serverless";
 
 const agent = cr8("Serverless Agent")
   .text(({ content }) => `You said: ${content}`)
   .agent;
 
-export const handler: Handler = createServerlessHandler(
+export const handler: Handler = serve(
   { agent, basePath: "/a2a" },
   { provider: "aws" }
 );
