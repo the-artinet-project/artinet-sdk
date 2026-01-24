@@ -4,18 +4,33 @@
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { A2A, MCP } from "~/types/index.js";
 import { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { Agent } from "../a2a/index.js";
+import { A2A, MCP } from "~/types/index.js";
 import { formatJson } from "~/utils/utils.js";
 
 export interface MCPServiceParams {
-  serverInfo: Implementation;
   agent: Agent;
+  serverInfo?: Implementation;
   options?: ServerOptions;
   agentCardUri?: string;
 }
+
+const toImplementation = (agentCard: A2A.AgentCard): Implementation => {
+  return {
+    name: agentCard.name,
+    version: agentCard.version,
+    websiteUrl: agentCard.url,
+    description: agentCard.description,
+    title: agentCard.name,
+    icons: agentCard.iconUrl ? [
+      {
+        src: agentCard.iconUrl,
+      },
+    ] : undefined,
+  };
+};
 
 export class BaseMCPService extends McpServer implements MCP.Service {
   readonly agent: Agent;
@@ -112,7 +127,7 @@ export class BaseMCPService extends McpServer implements MCP.Service {
     options,
     agentCardUri = "agent://card",
   }: MCPServiceParams) {
-    super(serverInfo, options);
+    super(serverInfo ?? toImplementation(agent.agentCard), options);
     this.agent = agent;
     this._registerBaseTools(agentCardUri);
   }
@@ -167,3 +182,5 @@ export type MCPService = ReturnType<typeof BaseMCPService.create>;
 export type MCPAgent = MCPService;
 export const createMCPService = BaseMCPService.create;
 export const createMCPAgent = createMCPService;
+export const mcp = createMCPService;
+ 
