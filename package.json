@@ -17,6 +17,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./mcp": {
+      "types": "./dist/services/mcp/index.d.ts",
+      "import": "./dist/services/mcp/index.js",
+      "default": "./dist/services/mcp/index.js"
+    },
     "./serverless": {
       "types": "./dist/server/express/serverless/serverless.d.ts",
       "import": "./dist/server/express/serverless/serverless.js",
