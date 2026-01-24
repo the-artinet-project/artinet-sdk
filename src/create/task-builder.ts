@@ -10,7 +10,6 @@ import {
   isMessageParams,
   Message,
   type MessageParams,
-  // type BuilderMessageParams,
 } from "./message-builder.js";
 import { Kindless } from "./base.js";
 // ============================================================================
