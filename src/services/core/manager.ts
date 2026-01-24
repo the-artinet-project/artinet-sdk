@@ -80,7 +80,7 @@ export abstract class Manager<T> implements core.Manager<T> {
         return listed;
     }
 
-    async search(query: string, filter?: (item: T) => boolean): Promise<T[]> {
+    async search(query: string, filter?: (item: T) => Promise<boolean>): Promise<T[]> {
         if (!filter && !this.storage) {
             return [];
         }
@@ -89,8 +89,8 @@ export abstract class Manager<T> implements core.Manager<T> {
             results.concat(Array.from(this.cache.values()).filter(filter));
         }
         if (this.storage) {
-            const storageFilter = (item: T) => {
-                return (filter?.(item) ?? true) && !results.includes(item);
+            const storageFilter = async (item: T) => {
+                return ((await filter?.(item)) ?? true) && !results.includes(item);
             };
             results.concat((await this.storage.search?.(query, storageFilter)) ?? []);
         }
