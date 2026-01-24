@@ -52,8 +52,9 @@ import {
 } from "./task-builder.js";
 import { logger } from "~/config/index.js";
 import { v4 as uuidv4 } from "uuid";
-import { formatJson } from "~/utils/index.js";
+import { formatJson } from "~/utils/utils.js";
 import { ServerParams, serve } from "~/server/express/server.js";
+import { isProcessing } from "~/utils/constants.js";
 
 export interface MessageSender {
   sendMessage(
@@ -1196,7 +1197,7 @@ export function createStepEngine(stepsList: A.Resolved[]): A2A.Engine {
         task.id
       }]: ${formatJson(task)}`
     );
-    task.status.state = A2A.TaskState.completed;
+    task.status.state = isProcessing(task.status.state) ? A2A.TaskState.completed : task.status.state;
     yield task;
   };
 }

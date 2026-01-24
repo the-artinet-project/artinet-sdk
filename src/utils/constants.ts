@@ -10,3 +10,9 @@ export const FINAL_STATES: A2A.TaskState[] = [
   A2A.TaskState.canceled,
   A2A.TaskState.rejected,
 ];
+
+export const PROCESSING_STATES: A2A.TaskState[] = [
+  A2A.TaskState.working,
+  A2A.TaskState.submitted,
+];
+export const isProcessing = (state: A2A.TaskState) => PROCESSING_STATES.includes(state);
