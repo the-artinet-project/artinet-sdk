@@ -79,5 +79,22 @@ export abstract class Manager<T> implements core.Manager<T> {
         }
         return listed;
     }
+
+    async search(query: string, filter?: (item: T) => boolean): Promise<T[]> {
+        if (!filter && !this.storage) {
+            return [];
+        }
+        let results: T[] = [];
+        if (filter) {
+            results.concat(Array.from(this.cache.values()).filter(filter));
+        }
+        if (this.storage) {
+            const storageFilter = (item: T) => {
+                return (filter?.(item) ?? true) && !results.includes(item);
+            };
+            results.concat((await this.storage.search?.(query, storageFilter)) ?? []);
+        }
+        return results;
+    }
 }
 export const ResourceManager = Manager;
