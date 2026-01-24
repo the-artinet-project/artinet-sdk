@@ -34,7 +34,7 @@ export interface Manager<T = object> extends IStore<T> {
     delete: (id: string) => Promise<void>;
     has?: (id: string) => Promise<boolean>;
     list?: () => Promise<T[]>;
-    search?: (query: string) => Promise<T[]>;
+    search?: (query: string, filter?: (item: T) => boolean) => Promise<T[]>;
 }
 
 export type Optional<T extends object = object> = Partial<T> & {
