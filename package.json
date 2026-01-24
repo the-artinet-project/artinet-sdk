@@ -23,9 +23,9 @@
       "default": "./dist/services/mcp/index.js"
     },
     "./serverless": {
-      "types": "./dist/server/express/serverless/serverless.d.ts",
-      "import": "./dist/server/express/serverless/serverless.js",
-      "default": "./dist/server/express/serverless/serverless.js"
+      "types": "./dist/server/express/serverless/index.d.ts",
+      "import": "./dist/server/express/serverless/index.js",
+      "default": "./dist/server/express/serverless/index.js"
     },
     "./sqlite": {
       "types": "./dist/storage/sqlite.d.ts",
