@@ -1,190 +1,190 @@
 {
-  "name": "@artinet/sdk",
-  "version": "0.6.5",
-  "description": "A TypeScript SDK for building collaborative AI agents.",
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "browser": {
-        "types": "./dist/browser.d.ts",
-        "import": "./dist/browser/browser.js",
-        "default": "./dist/browser/browser.js"
-      },
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+    "name": "@artinet/sdk",
+    "version": "0.6.6",
+    "description": "A TypeScript SDK for building collaborative AI agents.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "browser": {
+                "types": "./dist/browser.d.ts",
+                "import": "./dist/browser/browser.js",
+                "default": "./dist/browser/browser.js"
+            },
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        },
+        "./mcp": {
+            "types": "./dist/services/mcp/index.d.ts",
+            "import": "./dist/services/mcp/index.js",
+            "default": "./dist/services/mcp/index.js"
+        },
+        "./serverless": {
+            "types": "./dist/server/express/serverless/index.d.ts",
+            "import": "./dist/server/express/serverless/index.js",
+            "default": "./dist/server/express/serverless/index.js"
+        },
+        "./sqlite": {
+            "types": "./dist/storage/sqlite.d.ts",
+            "import": "./dist/storage/sqlite.js",
+            "default": "./dist/storage/sqlite.js"
+        },
+        "./express": {
+            "types": "./dist/server/express/server.d.ts",
+            "import": "./dist/server/express/server.js",
+            "default": "./dist/server/express/server.js"
+        },
+        "./trpc": {
+            "types": "./dist/transport/trpc/index.d.ts",
+            "import": "./dist/transport/trpc/index.js",
+            "default": "./dist/transport/trpc/index.js"
+        },
+        "./types": {
+            "types": "./dist/types/index.d.ts",
+            "import": "./dist/types/index.js",
+            "default": "./dist/types/index.js"
+        },
+        "./pino": {
+            "types": "./dist/extensions/pino.d.ts",
+            "node": {
+                "import": "./dist/extensions/pino.js",
+                "default": "./dist/extensions/pino.js"
+            }
+        },
+        "./winston": {
+            "types": "./dist/extensions/winston.d.ts",
+            "node": {
+                "import": "./dist/extensions/winston.js",
+                "default": "./dist/extensions/winston.js"
+            }
+        },
+        "./otel": {
+            "types": "./dist/extensions/opentelemetry.d.ts",
+            "node": {
+                "import": "./dist/extensions/opentelemetry.js",
+                "default": "./dist/extensions/opentelemetry.js"
+            }
+        }
     },
-    "./mcp": {
-      "types": "./dist/services/mcp/index.d.ts",
-      "import": "./dist/services/mcp/index.js",
-      "default": "./dist/services/mcp/index.js"
+    "rootDir": ".",
+    "files": [
+        "dist",
+        "package.json",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "prepare": "ts-patch install -s",
+        "build": "tsc --project tsconfig.json",
+        "build:browser": "tsc --project tsconfig.browser.json",
+        "build:all": "npm run build && npm run build:browser",
+        "clean": "rimraf dist",
+        "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build:all",
+        "lint": "eslint src --ext .ts",
+        "package-test": "npm run build && npm pack && docker build -f ./deployment/test.dockerfile -t sdk-test . && docker run --rm sdk-test && rm artinet-sdk-*.tgz",
+        "prepublishOnly": "npm run rebuild && npm run lint && npm test",
+        "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+        "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+        "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+        "dev:quickstart": "tsx watch quickstart/quick-server.ts"
     },
-    "./serverless": {
-      "types": "./dist/server/express/serverless/index.d.ts",
-      "import": "./dist/server/express/serverless/index.js",
-      "default": "./dist/server/express/serverless/index.js"
+    "keywords": [
+        "agent2agent",
+        "a2a",
+        "artinet",
+        "ai",
+        "agent",
+        "artificial intelligence",
+        "mcp",
+        "modelcontextprotocol"
+    ],
+    "author": "artinet",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/the-artinet-project/artinet-sdk.git"
     },
-    "./sqlite": {
-      "types": "./dist/storage/sqlite.d.ts",
-      "import": "./dist/storage/sqlite.js",
-      "default": "./dist/storage/sqlite.js"
+    "bugs": {
+        "url": "https://github.com/the-artinet-project/artinet/issues"
     },
-    "./express": {
-      "types": "./dist/server/express/server.d.ts",
-      "import": "./dist/server/express/server.js",
-      "default": "./dist/server/express/server.js"
+    "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
+    "dependencies": {
+        "@artinet/types": "^0.1.4",
+        "@opentelemetry/api": "^1.9.0",
+        "cors": "^2.8.5",
+        "eventemitter3": "^5.0.1",
+        "uuid": "^13.0.0",
+        "zod": "^3.25"
     },
-    "./trpc": {
-      "types": "./dist/transport/trpc/index.d.ts",
-      "import": "./dist/transport/trpc/index.js",
-      "default": "./dist/transport/trpc/index.js"
+    "peerDependencies": {
+        "@a2a-js/sdk": "^0.3.7",
+        "@modelcontextprotocol/sdk": "^1.24.3",
+        "@trpc/server": "^11.4.3",
+        "drizzle-orm": "^0.45.1",
+        "express": "^5.1.0"
     },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js",
-      "default": "./dist/types/index.js"
+    "peerDependenciesMeta": {
+        "express": {
+            "optional": true
+        },
+        "@modelcontextprotocol/sdk": {
+            "optional": true
+        },
+        "@a2a-js/sdk": {
+            "optional": false
+        },
+        "@trpc/server": {
+            "optional": true
+        },
+        "pino": {
+            "optional": true
+        },
+        "winston": {
+            "optional": true
+        },
+        "drizzle-orm": {
+            "optional": true
+        }
     },
-    "./pino": {
-      "types": "./dist/extensions/pino.d.ts",
-      "node": {
-        "import": "./dist/extensions/pino.js",
-        "default": "./dist/extensions/pino.js"
-      }
+    "devDependencies": {
+        "@a2a-js/sdk": "^0.3.7",
+        "@cfworker/json-schema": "^4.1.1",
+        "@eslint/js": "^9.25.1",
+        "@modelcontextprotocol/sdk": "^1.24.3",
+        "@opentelemetry/api": "^1.9.0",
+        "@trpc/server": "^11.4.3",
+        "@types/cors": "^2.8.17",
+        "@types/escape-html": "^1.0.4",
+        "@types/express": "^5.0.1",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^25.0.3",
+        "@types/supertest": "latest",
+        "better-sqlite3": "^12.6.2",
+        "drizzle-orm": "^0.45.1",
+        "eslint": "^9.25.1",
+        "globals": "^17.0.0",
+        "jest": "^30.2.0",
+        "lambda-local": "^2.2.0",
+        "msw": "^2.7.5",
+        "pino": "^10.1.0",
+        "pino-caller": "^4.0.0",
+        "pino-pretty": "^13.1.3",
+        "rimraf": "^6.1.2",
+        "serverless-http": "^4.0.0",
+        "supertest": "latest",
+        "ts-jest": "^29.4.6",
+        "ts-node": "^10.9.2",
+        "ts-patch": "^3.3.0",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.53.0",
+        "typescript-transform-paths": "^3.5.6",
+        "winston": "^3.19.0"
     },
-    "./winston": {
-      "types": "./dist/extensions/winston.d.ts",
-      "node": {
-        "import": "./dist/extensions/winston.js",
-        "default": "./dist/extensions/winston.js"
-      }
-    },
-    "./otel": {
-      "types": "./dist/extensions/opentelemetry.d.ts",
-      "node": {
-        "import": "./dist/extensions/opentelemetry.js",
-        "default": "./dist/extensions/opentelemetry.js"
-      }
+    "engines": {
+        "node": ">=20.0.0"
     }
-  },
-  "rootDir": ".",
-  "files": [
-    "dist",
-    "package.json",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "prepare": "ts-patch install -s",
-    "build": "tsc --project tsconfig.json",
-    "build:browser": "tsc --project tsconfig.browser.json",
-    "build:all": "npm run build && npm run build:browser",
-    "clean": "rimraf dist",
-    "rebuild": "rimraf dist node_modules/ package-lock.json && npm i && npm run build:all",
-    "lint": "eslint src --ext .ts",
-    "package-test": "npm run build && npm pack && docker build -f ./deployment/test.dockerfile -t sdk-test . && docker run --rm sdk-test && rm artinet-sdk-*.tgz",
-    "prepublishOnly": "npm run rebuild && npm run lint && npm test",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "dev:quickstart": "tsx watch quickstart/quick-server.ts"
-  },
-  "keywords": [
-    "agent2agent",
-    "a2a",
-    "artinet",
-    "ai",
-    "agent",
-    "artificial intelligence",
-    "mcp",
-    "modelcontextprotocol"
-  ],
-  "author": "artinet",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/the-artinet-project/artinet-sdk.git"
-  },
-  "bugs": {
-    "url": "https://github.com/the-artinet-project/artinet/issues"
-  },
-  "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
-  "dependencies": {
-    "@artinet/types": "^0.1.4",
-    "@opentelemetry/api": "^1.9.0",
-    "cors": "^2.8.5",
-    "eventemitter3": "^5.0.1",
-    "uuid": "^13.0.0",
-    "zod": "^3.25"
-  },
-  "peerDependencies": {
-    "@a2a-js/sdk": "^0.3.7",
-    "@modelcontextprotocol/sdk": "^1.24.3",
-    "@trpc/server": "^11.4.3",
-    "drizzle-orm": "^0.45.1",
-    "express": "^5.1.0"
-  },
-  "peerDependenciesMeta": {
-    "express": {
-      "optional": true
-    },
-    "@modelcontextprotocol/sdk": {
-      "optional": true
-    },
-    "@a2a-js/sdk": {
-      "optional": false
-    },
-    "@trpc/server": {
-      "optional": true
-    },
-    "pino": {
-      "optional": true
-    },
-    "winston": {
-      "optional": true
-    },
-    "drizzle-orm": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "@a2a-js/sdk": "^0.3.7",
-    "@cfworker/json-schema": "^4.1.1",
-    "@eslint/js": "^9.25.1",
-    "@modelcontextprotocol/sdk": "^1.24.3",
-    "@opentelemetry/api": "^1.9.0",
-    "@trpc/server": "^11.4.3",
-    "@types/cors": "^2.8.17",
-    "@types/escape-html": "^1.0.4",
-    "@types/express": "^5.0.1",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25.0.3",
-    "@types/supertest": "latest",
-    "better-sqlite3": "^12.6.2",
-    "drizzle-orm": "^0.45.1",
-    "eslint": "^9.25.1",
-    "globals": "^17.0.0",
-    "jest": "^30.2.0",
-    "lambda-local": "^2.2.0",
-    "msw": "^2.7.5",
-    "pino": "^10.1.0",
-    "pino-caller": "^4.0.0",
-    "pino-pretty": "^13.1.3",
-    "rimraf": "^6.1.2",
-    "serverless-http": "^4.0.0",
-    "supertest": "latest",
-    "ts-jest": "^29.4.6",
-    "ts-node": "^10.9.2",
-    "ts-patch": "^3.3.0",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.0",
-    "typescript-transform-paths": "^3.5.6",
-    "winston": "^3.19.0"
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  }
 }
