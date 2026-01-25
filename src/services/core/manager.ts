@@ -6,6 +6,7 @@
 import { logger } from '~/config/index.js';
 import { core } from '~/types/index.js';
 
+//TODO: Turn Manager into an LRU cache.
 export abstract class Manager<T> implements core.Manager<T> {
     constructor(
         private _cache: Map<string, T> = new Map(),
@@ -19,7 +20,10 @@ export abstract class Manager<T> implements core.Manager<T> {
         return this._cache;
     }
 
-    /** @deprecated use cache instead */
+    /**
+     * @deprecated use cache instead
+     * @note removing in v0.7
+     */
     get data(): Map<string, T> {
         return this.cache;
     }
@@ -72,10 +76,12 @@ export abstract class Manager<T> implements core.Manager<T> {
     }
 
     async list(): Promise<T[]> {
-        const listed = Array.from(this.cache.values());
+        let listed: T[] = Array.from(this.cache.values());
         if (this.storage) {
             /** Could be an expensive operation */
-            return (await this.storage.list?.()) ?? [];
+            listed = listed.concat(
+                (await this.storage.list?.())?.filter((item) => item !== undefined && !listed.includes(item)) ?? [],
+            );
         }
         return listed;
     }
