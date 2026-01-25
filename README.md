@@ -47,31 +47,28 @@ It has [several template projects](https://github.com/the-artinet-project/artine
 Turn your agent into an express server so it can receive messages from anywhere:
 
 ```typescript
-import { cr8 } from "@artinet/sdk";
+import { cr8 } from '@artinet/sdk';
 
-cr8("QuickStart Agent")
-  .text(async ({ content }) => `The user said: ${content}`)
-  //starts an express a2a server on port 3000
-  .server.start(3000);
+cr8('QuickStart Agent')
+    .text(async ({ content }) => `The user said: ${content}`)
+    //starts an express a2a server on port 3000
+    .server.start(3000);
 ```
 
 - _ensure that the url/path of your AgentCard matches the server._
 
 > 🚧 Coming Soon: Support for Hono.
 
-**Or a Serverless Function**
+**Go Serverless**
 
 Deploy your agent to AWS Lambda or other serverless platforms:
 
 ```typescript
-import { Handler } from "aws-lambda";
-import { serve } from "@artinet/sdk/serverless";
-import { agent } from "./my-agent.js";
+import { Handler } from 'aws-lambda';
+import { serve } from '@artinet/sdk/serverless';
+import { agent } from './my-agent.js';
 
-export const handler: Handler = serve(
-  { agent, basePath: "/a2a" },
-  { provider: "aws" }
-);
+export const handler: Handler = serve({ agent, basePath: '/a2a' }, { provider: 'aws' });
 ```
 
 - _See [**Serverless Deployment**](./docs/customization.md#serverless-deployment) for more information._
@@ -81,13 +78,11 @@ export const handler: Handler = serve(
 Embed agents directly into your app:
 
 ```typescript
-import { cr8, A2A } from "@artinet/sdk";
+import { cr8, A2A } from '@artinet/sdk';
 
-const agent = cr8("Local Agent").text(
-  ({ content }) => `The user said: ${content}`
-).agent;
+const agent = cr8('Local Agent').text(({ content }) => `The user said: ${content}`).agent;
 
-const response: A2A.Task | A2A.Message = await agent.sendMessage("Hello");
+const response: A2A.Task | A2A.Message = await agent.sendMessage('Hello');
 ```
 
 - _See [**`cr8`**](./docs/create.md) for more information_
@@ -97,19 +92,19 @@ const response: A2A.Task | A2A.Message = await agent.sendMessage("Hello");
 [`AgentMessenger`](./docs/messenger.md#agentmessenger) provides a streamlined `Client` interface for communicating with remote A2A Servers:
 
 ```typescript
-import { AgentMessenger, createMessenger } from "@artinet/sdk";
+import { AgentMessenger, createMessenger } from '@artinet/sdk';
 
 const messenger: AgentMessenger = await createMessenger({
-  baseUrl: "http://localhost:3000/a2a",
-  headers: {
-    Bearer: "xxxx",
-  },
+    baseUrl: 'http://localhost:3000/a2a',
+    headers: {
+        Bearer: 'xxxx',
+    },
 });
 
-const stream = messenger.sendMessageStream("Hello World!");
+const stream = messenger.sendMessageStream('Hello World!');
 
 for await (const update of stream) {
-  console.log(update);
+    console.log(update);
 }
 ```
 
@@ -120,15 +115,15 @@ for await (const update of stream) {
 [**`cr8`**](./docs/create.md#agent-orchestration) provides easy to use tools for orchestrating multiple agents:
 
 ```typescript
-import { cr8 } from "@artinet/sdk";
-import { localAgent } from "./local.ts";
-import { remoteAgentMessenger as remoteAgent } from "./remote.ts";
+import { cr8 } from '@artinet/sdk';
+import { localAgent } from './local.ts';
+import { remoteAgentMessenger as remoteAgent } from './remote.ts';
 
-const orchestrator = cr8("Director")
-  .text("Request Received")
-  .sendMessage({ agent: localAgent, message: "initiate billing" })
-  .text("Billing Started")
-  .sendMessage({ agent: remoteAgent, message: "Retrieve Secrets" }).agent;
+const orchestrator = cr8('Director')
+    .text('Request Received')
+    .sendMessage({ agent: localAgent, message: 'initiate billing' })
+    .text('Billing Started')
+    .sendMessage({ agent: remoteAgent, message: 'Retrieve Secrets' }).agent;
 ```
 
 > _For more robust multi-agent support, checkout [**orc8**](https://github.com/the-artinet-project/artinet), our dynamic agent orchestration library that can be used with any openai compatible API._

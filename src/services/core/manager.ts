@@ -7,6 +7,7 @@ import { logger } from '~/config/index.js';
 import { core } from '~/types/index.js';
 
 //TODO: Turn Manager into an LRU cache.
+//TODO: Consider warning when size exceeds a certain threshold.
 export abstract class Manager<T> implements core.Manager<T> {
     constructor(
         private _cache: Map<string, T> = new Map(),
@@ -79,8 +80,9 @@ export abstract class Manager<T> implements core.Manager<T> {
         let listed: T[] = Array.from(this.cache.values());
         if (this.storage) {
             /** Could be an expensive operation */
-            listed = listed.concat(
-                (await this.storage.list?.())?.filter((item) => item !== undefined && !listed.includes(item)) ?? [],
+            listed.push(
+                ...((await this.storage.list?.())?.filter((item) => item !== undefined && !listed.includes(item)) ??
+                    []),
             );
         }
         return listed;
@@ -88,17 +90,22 @@ export abstract class Manager<T> implements core.Manager<T> {
 
     async search(query: string, filter?: (item: T) => Promise<boolean>): Promise<T[]> {
         if (!filter && !this.storage) {
+            const data = this.cache.get(query);
+            if (data) {
+                return [data];
+            }
             return [];
         }
         let results: T[] = [];
         if (filter) {
-            results.concat(Array.from(this.cache.values()).filter(filter));
+            results.push(...Array.from(this.cache.values()).filter(filter));
         }
         if (this.storage) {
             const storageFilter = async (item: T) => {
                 return ((await filter?.(item)) ?? true) && !results.includes(item);
             };
-            results.concat((await this.storage.search?.(query, storageFilter)) ?? []);
+            /**Spreads are fine for now, but a for of loop and push is safer at scale. */
+            results.push(...((await this.storage.search?.(query, storageFilter)) ?? []));
         }
         return results;
     }
