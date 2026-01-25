@@ -87,6 +87,27 @@ const response: A2A.Task | A2A.Message = await agent.sendMessage('Hello');
 
 - _See [**`cr8`**](./docs/create.md) for more information_
 
+**Any Agent, Any Framework**
+
+Docks agents from any framework into the <em>@artinet/sdk</em>. Letting your OpenAI, Claude, and LangChain agents collaborate.
+
+```typescript
+import { Agent } from '@openai/agents';
+import { dock } from '@artinet/cruiser/openai';
+import { serve } from '@artinet/sdk';
+
+const openaiAgent = new Agent({
+    name: 'assistant',
+    instructions: 'You are a helpful assistant',
+});
+
+const agent = await dock(agent, { name: 'My Assistant' });
+
+await agent.sendMessage('Hello, World!');
+```
+
+- _See [**`cruiser`**](https://github.com/the-artinet-project/artinet/tree/main/cruiser) for more information_
+
 **Connect to Remote Agents**
 
 [`AgentMessenger`](./docs/messenger.md#agentmessenger) provides a streamlined `Client` interface for communicating with remote A2A Servers:
