@@ -77,7 +77,7 @@ export abstract class Manager<T> implements core.Manager<T> {
     }
 
     async list(): Promise<T[]> {
-        let listed: T[] = Array.from(this.cache.values());
+        const listed: T[] = Array.from(this.cache.values());
         if (this.storage) {
             /** Could be an expensive operation */
             listed.push(
@@ -96,7 +96,7 @@ export abstract class Manager<T> implements core.Manager<T> {
             }
             return [];
         }
-        let results: T[] = [];
+        const results: T[] = [];
         if (filter) {
             results.push(...Array.from(this.cache.values()).filter(filter));
         }
