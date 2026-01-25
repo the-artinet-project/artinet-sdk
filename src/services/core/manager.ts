@@ -79,11 +79,11 @@ export abstract class Manager<T> implements core.Manager<T> {
     async list(): Promise<T[]> {
         const listed: T[] = Array.from(this.cache.values());
         if (this.storage) {
-            /** Could be an expensive operation */
-            listed.push(
-                ...((await this.storage.list?.())?.filter((item) => item !== undefined && !listed.includes(item)) ??
-                    []),
+            const storedList = (await this.storage.list?.())?.filter(
+                (item) => item !== undefined && !listed.includes(item),
             );
+            /** Could be an expensive operation */
+            listed.push(...(storedList ?? []));
         }
         return listed;
     }
