@@ -64,6 +64,59 @@ const result = await client.callTool({
 | `cancel-task`  | Tool     | Cancel a running task          |
 | `agent://card` | Resource | Retrieve the AgentCard         |
 
+## In-Memory MCP Servers
+
+Mount MCP servers in-memory for testing, embedding, or direct integration without network overhead.
+
+### Basic Usage
+
+```typescript
+import { mountMemServer } from "@artinet/sdk/mcp/mem";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+
+// Mount a server from a module
+const { server, clientTransport } = await mountMemServer(
+  {
+    type: "factory",
+    target: "createServer",
+    module: "@modelcontextprotocol/server-everything/dist/everything.js",
+  },
+  (module) => module.createServer().server
+);
+
+// Connect a client
+const client = new Client({ name: "my-client", version: "1.0.0" });
+await client.connect(clientTransport);
+
+// Use MCP features
+const tools = await client.listTools();
+const result = await client.callTool({ name: "echo", arguments: { message: "Hello!" } });
+
+// Cleanup
+await client.close();
+await server.close();
+```
+
+### Configuration Options
+
+| Parameter | Type                         | Description                                      |
+| --------- | ---------------------------- | ------------------------------------------------ |
+| `type`    | `"factory"` \| `"constructor"` | How to invoke the target export                  |
+| `target`  | `string`                     | Name of the exported factory function or class   |
+| `module`  | `string`                     | Module path to dynamically import                |
+| `args`    | `Record<string, unknown>`    | Optional arguments for the factory/constructor   |
+
+### Custom Extraction
+
+When a module's export structure doesn't match standard patterns, use the `extract` function:
+
+```typescript
+const { server, clientTransport } = await mountMemServer(
+  { type: "factory", target: "createServer", module: "./my-server.js" },
+  (module) => module.createServer().server  // Custom extraction logic
+);
+```
+
 ## Limitations
 
 The following A2A features are not supported by default in MCP:

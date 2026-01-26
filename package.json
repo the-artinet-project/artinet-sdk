@@ -1,6 +1,6 @@
 {
     "name": "@artinet/sdk",
-    "version": "0.6.6",
+    "version": "0.6.7",
     "description": "A TypeScript SDK for building collaborative AI agents.",
     "type": "module",
     "main": "./dist/index.js",
@@ -21,6 +21,11 @@
             "types": "./dist/services/mcp/index.d.ts",
             "import": "./dist/services/mcp/index.js",
             "default": "./dist/services/mcp/index.js"
+        },
+        "./mcp/mem": {
+            "types": "./dist/services/mcp/modules/mem.d.ts",
+            "import": "./dist/services/mcp/modules/mem.js",
+            "default": "./dist/services/mcp/modules/mem.js"
         },
         "./serverless": {
             "types": "./dist/server/express/serverless/index.d.ts",
