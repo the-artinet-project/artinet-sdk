@@ -117,7 +117,7 @@ await client.close();
 await server.close();
 ```
 
-- _The target server must be installed on the System_
+- _The target server must be installed on the System (interested in trying the advanced version with dynamic installation? email us: humans@artinet.io)_
 
 ```bash
 npm i -D @modelcontextprotocol/server-everything
