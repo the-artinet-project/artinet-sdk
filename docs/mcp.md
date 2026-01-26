@@ -119,6 +119,10 @@ await server.close();
 
 - _The target server must be installed on the System_
 
+```bash
+npm i -D @modelcontextprotocol/server-everything
+```
+
 ### Configuration Options
 
 | Parameter | Type                           | Description                                    |
