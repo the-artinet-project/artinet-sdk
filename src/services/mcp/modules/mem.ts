@@ -113,6 +113,12 @@ export async function mountMemServer(
         server = new constructor(params.args) as McpServer;
     }
 
+    if (!server?.connect) {
+        const error = new Error(`Server ${params.target} does not have a connect method`);
+        logger.error(error.message, error);
+        throw error;
+    }
+
     await server.connect(serverTransport).catch((error: any) => {
         logger.error(`Failed to connect to server ${params.target}`, error);
         throw error;
