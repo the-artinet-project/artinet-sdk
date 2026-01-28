@@ -8,7 +8,7 @@
  * @returns The current timestamp as a string.
  */
 export function getCurrentTimestamp(): string {
-  return new Date().toISOString();
+    return new Date().toISOString();
 }
 
 /**
@@ -22,16 +22,22 @@ export function getCurrentTimestamp(): string {
  * ```
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
  * Formats a JSON object into a string with indentation.
  * @param json - The JSON object to format.
+ * @param replacer - A function that transforms the results.
+ * @param space - Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
  * @returns A string representation of the JSON object.
  */
-export function formatJson(json: object): string {
-  return JSON.stringify(json, null, 2);
+export function formatJson(
+    json: object,
+    replacer: (number | string)[] | null = null,
+    space: string | number = 2,
+): string {
+    return JSON.stringify(json, replacer, space);
 }
 
 /**
@@ -40,8 +46,8 @@ export function formatJson(json: object): string {
  * @returns A standard error object.
  */
 export function formatError(error: unknown): Error {
-  if (error instanceof Error) {
-    return error;
-  }
-  return new Error(String(error));
+    if (error instanceof Error) {
+        return error;
+    }
+    return new Error(String(error));
 }
