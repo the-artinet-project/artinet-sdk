@@ -51,3 +51,28 @@ export function formatError(error: unknown): Error {
     }
     return new Error(String(error));
 }
+
+/**
+ * Executes a function immediately.
+ * @param fn - The function to execute.
+ * @returns The result of the function.
+ *
+ * @example
+ * ```typescript
+ * const result = iife(() => {
+ *   return 1 + 1;
+ * });
+ * console.log(result); // 2
+ * ```
+ * LangChain <3
+ * @see https://github.com/langchain-ai/langchainjs/blob/981cf9c480925187a524fd6ad1dbf0488d2758eb/libs/langchain-core/src/language_models/utils.ts#L5
+ */
+export const iife = <T>(fn: () => T): T => fn();
+
+export function encodeBase64(data: string): string {
+    return Buffer.from(data).toString('base64');
+}
+
+export function decodeBase64(data: string): string {
+    return Buffer.from(data, 'base64').toString();
+}
