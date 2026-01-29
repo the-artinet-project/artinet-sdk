@@ -44,6 +44,17 @@ export class SQLiteStore extends Tasks {
         createTaskTable(db);
     }
 
+    async has(id: string): Promise<boolean> {
+        return (
+            (await super.has(id)) ||
+            (await this.db.select().from(TaskTable).where(eq(TaskTable.id, id)).get()) !== undefined
+        );
+    }
+
+    async list(): Promise<A2A.Task[]> {
+        return await this.db.select().from(TaskTable).execute();
+    }
+
     async get(id: string): Promise<A2A.Task | undefined> {
         let task = await super.get(id);
         if (task) {
