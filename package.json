@@ -152,6 +152,9 @@
         },
         "drizzle-orm": {
             "optional": true
+        },
+        "serverless-http": {
+            "optional": true
         }
     },
     "devDependencies": {
