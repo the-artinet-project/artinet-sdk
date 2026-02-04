@@ -34,8 +34,9 @@
  * ```
  */
 
-import { ILogger, noopLogger } from "./observability.js";
-import { trace, Tracer } from "@opentelemetry/api";
+import { ILogger, noopLogger } from './observability.js';
+import { trace, Tracer } from '@opentelemetry/api';
+export type { ILogger } from './observability.js';
 
 /**
  * Artinet SDK configuration interface.
@@ -44,17 +45,17 @@ import { trace, Tracer } from "@opentelemetry/api";
  * Configure only what you need.
  */
 export interface ArtinetConfig {
-  /**
-   * Logger implementation for structured logging.
-   * @default noopLogger (no logging)
-   */
-  logger?: ILogger;
+    /**
+     * Logger implementation for structured logging.
+     * @default noopLogger (no logging)
+     */
+    logger?: ILogger;
 
-  /**
-   * Tracer implementation for distributed tracing.
-   * @default trace.getTracer('artinet') (no tracing)
-   */
-  tracer?: Tracer;
+    /**
+     * Tracer implementation for distributed tracing.
+     * @default trace.getTracer('artinet') (no tracing)
+     */
+    tracer?: Tracer;
 }
 
 /**
@@ -103,7 +104,7 @@ let _config: ArtinetConfig = {};
  * ```
  */
 export function configure(config: ArtinetConfig): void {
-  _config = { ..._config, ...config };
+    _config = { ..._config, ...config };
 }
 
 /**
@@ -119,7 +120,7 @@ export function configure(config: ArtinetConfig): void {
  * ```
  */
 export function resetConfig(): void {
-  _config = {};
+    _config = {};
 }
 
 /**
@@ -130,7 +131,7 @@ export function resetConfig(): void {
  * @returns Current configuration (readonly copy)
  */
 export function getConfig(): Readonly<ArtinetConfig> {
-  return { ..._config };
+    return { ..._config };
 }
 
 /**
@@ -145,7 +146,7 @@ export function getConfig(): Readonly<ArtinetConfig> {
  * ```
  */
 export function getLogger(): ILogger {
-  return _config.logger ?? noopLogger;
+    return _config.logger ?? noopLogger;
 }
 
 /**
@@ -169,18 +170,15 @@ export function getLogger(): ILogger {
  * ```
  */
 export function getTracer(): Tracer {
-  return _config.tracer ?? trace.getTracer("artinet");
+    return _config.tracer ?? trace.getTracer('artinet');
 }
 
 export const logger = {
-  debug: (msg: string, ...args: unknown[]) =>
-    getLogger()?.debug?.(msg, ...args),
-  info: (msg: string, ...args: unknown[]) => getLogger()?.info?.(msg, ...args),
-  warn: (msg: string, ...args: unknown[]) => getLogger()?.warn?.(msg, ...args),
-  error: (msg: string, err: unknown) => getLogger()?.error?.(msg, err),
-  setLevel: (level: "debug" | "info" | "warn" | "error") =>
-    getLogger()?.setLevel?.(level),
-  getLevel: () => getLogger()?.getLevel?.() ?? "info",
-  child: (context: Record<string, unknown>) =>
-    getLogger()?.child?.(context) ?? noopLogger,
+    debug: (msg: string, ...args: unknown[]) => getLogger()?.debug?.(msg, ...args),
+    info: (msg: string, ...args: unknown[]) => getLogger()?.info?.(msg, ...args),
+    warn: (msg: string, ...args: unknown[]) => getLogger()?.warn?.(msg, ...args),
+    error: (msg: string, err: unknown) => getLogger()?.error?.(msg, err),
+    setLevel: (level: 'debug' | 'info' | 'warn' | 'error') => getLogger()?.setLevel?.(level),
+    getLevel: () => getLogger()?.getLevel?.() ?? 'info',
+    child: (context: Record<string, unknown>) => getLogger()?.child?.(context) ?? noopLogger,
 };
