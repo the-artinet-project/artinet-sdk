@@ -2,6 +2,16 @@
  * Copyright 2025 The Artinet Project
  * SPDX-License-Identifier: Apache-2.0
  */
+import escapeHtml from 'escape-html';
+
+/**
+ * Sanitizes a string by escaping HTML characters to prevent XSS attacks.
+ * @param str - The string to sanitize.
+ * @returns The sanitized string.
+ */
+export function sanitizeString(str: string): string {
+    return escapeHtml(str).trim();
+}
 
 /**
  * Generates a timestamp in ISO 8601 format.
