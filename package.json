@@ -38,9 +38,9 @@
             "default": "./dist/storage/sqlite.js"
         },
         "./express": {
-            "types": "./dist/server/express/server.d.ts",
-            "import": "./dist/server/express/server.js",
-            "default": "./dist/server/express/server.js"
+            "types": "./dist/server/express/module.d.ts",
+            "import": "./dist/server/express/module.js",
+            "default": "./dist/server/express/module.js"
         },
         "./trpc": {
             "types": "./dist/transport/trpc/index.d.ts",
