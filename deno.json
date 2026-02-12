@@ -1,0 +1,6 @@
+{
+    "imports": {
+        "~/": "./src/"
+    },
+    "exclude": ["src/server/bun/", "tests/", "dist/"]
+}

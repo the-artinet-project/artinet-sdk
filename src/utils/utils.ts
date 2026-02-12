@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import escapeHtml from 'escape-html';
+import { Buffer } from 'node:buffer';
 
 /**
  * Sanitizes a string by escaping HTML characters to prevent XSS attacks.
