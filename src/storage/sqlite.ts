@@ -10,15 +10,18 @@ import { BaseSQLiteDatabase, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { logger } from '~/config/index.js';
 
 export const TABLE_NAME = 'artinet_tasks';
-const CREATE_TASKS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME}\
+const CREATE_TASKS_TABLE_SQL = (tableName: string = TABLE_NAME) => `CREATE TABLE IF NOT EXISTS ${tableName}\
  (id TEXT PRIMARY KEY, contextId TEXT NOT NULL,\
   kind TEXT NOT NULL, status TEXT NOT NULL,\
   history TEXT NOT NULL,\
   artifacts TEXT NOT NULL,\
   metadata TEXT NOT NULL)`;
 
-export const createTaskTable = async (db: BaseSQLiteDatabase<`sync` | `async`, any, TaskTable>): Promise<void> => {
-    await db.run(CREATE_TASKS_TABLE_SQL);
+export const createTaskTable = async (
+    db: BaseSQLiteDatabase<`sync` | `async`, any, TaskTable>,
+    tableName: string = TABLE_NAME,
+): Promise<void> => {
+    await db.run(CREATE_TASKS_TABLE_SQL(tableName));
 };
 
 /*export type TTable = Table<TableConfig>; //TODO: Unwind Config/Column types */
@@ -36,12 +39,15 @@ export const TaskTable = sqliteTable(TABLE_NAME, {
 export type TaskTable = typeof TaskTable.$inferSelect;
 
 export class SQLiteStore extends Tasks {
+    //TODO: better for this to be a factory function? We're forcing the table/table name onto the user.
     constructor(
         private db: BaseSQLiteDatabase<`sync` | `async`, any, TaskTable>,
         tasks: Map<string, A2A.Task> = new Map(),
+        tableName: string = TABLE_NAME,
     ) {
+        //TODO: we're inverting the dependency injection pattern here. Tasks should take the storage instance
         super(tasks);
-        createTaskTable(db);
+        createTaskTable(db, tableName);
     }
 
     async has(id: string): Promise<boolean> {

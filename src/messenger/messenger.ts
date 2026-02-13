@@ -121,7 +121,7 @@ class Messenger implements Omit<Transport, 'getAuthenticatedExtendedAgentCard' |
                 },
             }),
         );
-        //RAII
+        //RAII: to try and maintain backwards compatibility with the old client?
         this.clientPromise = this.reset(this._baseUrl, this._fallbackPath);
     }
 

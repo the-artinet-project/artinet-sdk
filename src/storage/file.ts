@@ -21,6 +21,7 @@ export class Files extends Tasks {
      * @param baseDir The base directory to store task files in.
      */
     constructor(baseDir: string) {
+        //TODO: we're inverting the dependency injection pattern here. Tasks should take the storage instance
         super(new Map());
         this.baseDir = baseDir;
         logger.info(`FileStore[init]: baseDir`, { baseDir });

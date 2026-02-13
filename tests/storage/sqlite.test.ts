@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, beforeAll, afterAll, afterEach } from '@jest/globals';
 import { TaskTable, SQLiteStore, createTaskTable, TABLE_NAME } from '../../src/storage/sqlite.js';
 import { A2A } from '../../src/types/index.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 const isBun = typeof globalThis.Bun !== 'undefined';
 
