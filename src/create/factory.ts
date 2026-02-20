@@ -99,7 +99,7 @@ const toFunction = <Ret extends A.AcceptedReturnValues, I extends A.bargs, C ext
  */
 export class AgentFactory<
     ServerParams extends BaseServerParams,
-    ServerType extends unknown,
+    ServerType,
     I extends A.bargs = A.empty,
 > implements A.AgentBuilder<I> {
     /**
