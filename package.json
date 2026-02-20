@@ -1,6 +1,6 @@
 {
     "name": "@artinet/sdk",
-    "version": "0.6.11",
+    "version": "0.6.12",
     "description": "A TypeScript SDK for building collaborative AI agents.",
     "type": "module",
     "main": "./dist/index.js",
@@ -117,7 +117,7 @@
     },
     "homepage": "https://github.com/the-artinet-project/artinet-sdk#readme",
     "dependencies": {
-        "@artinet/types": "^0.1.4",
+        "@artinet/types": "^0.1.6",
         "@opentelemetry/api": "^1.9.0",
         "cors": "^2.8.5",
         "eventemitter3": "^5.0.1",
