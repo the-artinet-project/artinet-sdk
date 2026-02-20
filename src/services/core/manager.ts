@@ -98,16 +98,11 @@ export abstract class Manager<T> implements core.Manager<T> {
         }
         const results: T[] = [];
         if (filter) {
-            const items = Array.from(this.cache.values());
-            const filterResults = await Promise.all(
-                items.map(async (item) => {
-                    if (await filter(item)) {
-                        return item;
-                    }
-                    return undefined;
-                }),
-            );
-            results.push(...filterResults.filter((item) => item !== undefined));
+            for (const item of this.cache.values()) {
+                if (await filter(item)) {
+                    results.push(item);
+                }
+            }
         }
         if (this.storage) {
             const storageFilter = async (item: T) => {
